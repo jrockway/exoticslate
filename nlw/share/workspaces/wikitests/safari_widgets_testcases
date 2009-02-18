@@ -1,0 +1,16 @@
+* Fixture: SocialWidgets
+
+* [Test Case: My Conversations Widget]
+* [Test Case: RSS Feed Widget]
+* [Test Case: Tag Cloud Widget]
+* [Test Case: OnePage Widget]
+* [Test Case: Signals Widget]
+* [Test Case: Multiple Widgets]
+
+3rd Party Widgets
+
+* [Test Case: ToDoWidget]
+
+Non-Safari TC
+
+Test Case: Workspace Widget clicks link=new page which opens in a new browser and Safari + Selenium bombs

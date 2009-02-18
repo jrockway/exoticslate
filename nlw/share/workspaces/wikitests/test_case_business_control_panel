@@ -362,15 +362,7 @@ text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_t
 | text_like | qr/Work phone.+(Edit).+work_phone/ |  |
 | text_like | qr/Yahoo!™.+(Edit).+yahoo_sn/ |  |
 
-| *Comment* | TC: BCP because Edit buttons are indistinguishable, only check that one works and don't worry which one. Note that the existence of the buttons is checked above. |  |
-| click_and_wait | link=Edit |  |
-| text_like | qr/Field Title.+Field Name.+Data Source.+Field Type.+Hidden/ |  |
-| select_ok | data-source-select | label=External |
-| select_ok | field-type-select | label=Regular |
-| click_ok | //input[@name='is_hidden' and @value='1'] |  |
-| click_and_wait | //input[@value='Cancel'] |  |
-
-| *Comment* | TC: BCP check Cancel, then check Save Field. We don't care about setting the fields back. Setting them at all proves the controls work, so no need to set them back. |  |
+| *Comment* | TC: BCP check Save Field. We don't care about setting the fields back. Setting them at all proves the controls work, so no need to set them back. |  |
 | click_and_wait | link=Edit |  |
 | text_like | qr/Field Title.+Field Name.+Data Source.+Field Type.+Hidden/ |  |
 | select_ok | data-source-select | label=External |
@@ -401,5 +393,20 @@ text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_t
 | st-admin | delete-workspace --workspace 0-sort-3-workspace3-%%start_time%% --no-export | workspace has been deleted |
 | st-admin | delete-workspace --workspace %%new_workspace%% --no-export | workspace has been deleted |
 | st-admin | delete-workspace --workspace ws-n%%start_time%% --no-export | workspace has been deleted |
+
+| *Comment* | TC: BCP. CHECK CANCEL AFTER TEARDOWN BECAUSE SAFARI BOMBS OUT ON CANCEL FOR SOME REASON, even though there are no error messages. |  |
+| open_ok | /nlw/control/account |  |
+| wait_for_element_visible_ok | link=Socialtext | 60000 |
+| clickAndWait | link=Socialtext |  |
+| wait_for_element_visible_ok | link=Profile Fields | 30000 |
+| click_and_wait | link=Profile Fields |  |
+| wait_for_element_visible_ok | link=Edit | 30000 |
+| click_and_wait | link=Edit |  |
+| text_like | qr/Field Title.+Field Name.+Data Source.+Field Type.+Hidden/ |  |
+| select_ok | data-source-select | label=External |
+| select_ok | field-type-select | label=Regular |
+| click_ok | //input[@name='is_hidden' and @value='1'] |  |
+| click_and_wait | //input[@value='Cancel'] |  |
+| wait_for_text_present_ok | Account Profile Fields | 30000 |
 
 | *Comment* | Test case: Business Control Panel COMPLETED |  |

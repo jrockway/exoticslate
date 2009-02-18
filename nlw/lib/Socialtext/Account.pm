@@ -81,6 +81,12 @@ sub Resolve {
     return $account;
 }
 
+sub PluginsEnabledForAny {
+    my $class = shift;
+    my $sth = sql_execute('SELECT distinct plugin FROM account_plugin');
+    return map{ $_->[0] } @{ $sth->fetchall_arrayref };
+}
+
 sub EnablePluginForAll {
     my ($class, $plugin) = @_;
     my $all = $class->All;

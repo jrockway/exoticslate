@@ -1,4 +1,5 @@
 package Socialtext::WikiText::Emitter::Messages::HTML;
+# @COPYRIGHT@
 use strict;
 use warnings;
 

@@ -37,7 +37,7 @@ S3_SOURCE_FILES= \
 		timestamp.js \
 		info.js \
 		Debug.js \
-		$(COMMON_JAVASCRIPT)/jquery-1.3.1.js \
+		$(COMMON_JAVASCRIPT)/jquery-1.2.6.js \
 		lightbox.js \
 		jquery-patch.js \
 		jquery-plugin.js \

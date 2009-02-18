@@ -22,5 +22,5 @@ import_libs:
   - ../../wikiwyg/javascript/lib/Wikiwyg/Wysiwyg.js
   - ../../wikiwyg/javascript/lib/Wikiwyg/Wikitext.js
 template_include_path:
-  - ./template
   - ../common/template
+  - ./template

@@ -1,0 +1,5 @@
+---
+- description: Displays a single page from any of your workspaces within a Socialtext Widget.
+  socialtext: 1
+  src: file:widgets/share/widgets/one_page.xml
+  title: Wiki Page

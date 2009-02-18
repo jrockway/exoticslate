@@ -52,6 +52,7 @@ sub name {
 
 sub plugins {
     my $self = shift;
+    return @{$self->{_plugins}} if $self->{_plugins};
     my $code_base = $self->code_base;
     return grep { s{$code_base/plugin/}{} }
            glob("$code_base/plugin/*");

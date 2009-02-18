@@ -25,6 +25,12 @@
  *           return val + '.*(We)?blog$'
  *       },
  *
+ *       // OPTIONAL: use this function to change the way the result is
+ *       // displayed in the input box
+ *       displayAs: function (item) {
+ *           return item.title;
+ *       }
+ *
  *       // OPTIONAL: use a different filter argument than 'filter'
  *       filterName: 'title_filter',
  *
@@ -180,7 +186,12 @@
                 var item = this;
                 $('<a href="#">' + item.title + '</a>')
                     .click(function () {
-                        $(self.input).val(item.value);
+                        if (opts.displayAs) {
+                            $(self.input).val(self.opts.displayAs(item));
+                        }
+                        else {
+                            $(self.input).val(item.value);
+                        }
                         self.clearLookahead();
                         if (opts.onAccept) {
                             opts.onAccept.call(self.input, item.value);

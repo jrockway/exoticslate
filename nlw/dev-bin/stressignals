@@ -7,159 +7,9 @@ import simplejson
 import urllib
 import sys
 import string
-import pprint
+import datetime
 
 from eventlet import coros, httpc, util, api
-print "# PARAMS: "+ string.join(sys.argv[1:]," ")
-pages=[u'http://dev8.socialtext.net/help-en/index.cgi?advanced_formatting',
-        u'http://dev8.socialtext.net/help-en/index.cgi?advanced_getting_around',
-        u'http://dev8.socialtext.net/help-en/index.cgi?aerospace_market_news',
-        u'http://dev8.socialtext.net/help-en/index.cgi?all_shook_up',
-        u'http://dev8.socialtext.net/help-en/index.cgi?announcements_and_links',
-        u'http://dev8.socialtext.net/help-en/index.cgi?apache',
-        u'http://dev8.socialtext.net/help-en/index.cgi?attached_files',
-        u'http://dev8.socialtext.net/help-en/index.cgi?authentication_authorization_and_access_control_in_socialtext',
-        u'http://dev8.socialtext.net/help-en/index.cgi?browse',
-        u'http://dev8.socialtext.net/help-en/index.cgi?business_class_jet_november_2008',
-        u'http://dev8.socialtext.net/help-en/index.cgi?can_i_change_something',
-        u'http://dev8.socialtext.net/help-en/index.cgi?central_page_important_links',
-        u'http://dev8.socialtext.net/help-en/index.cgi?changing_the_workspace',
-        u'http://dev8.socialtext.net/help-en/index.cgi?click_links',
-        u'http://dev8.socialtext.net/help-en/index.cgi?comment',
-        u'http://dev8.socialtext.net/help-en/index.cgi?congratulations_you_know_how_to_use_a_workspace',
-        u'http://dev8.socialtext.net/help-en/index.cgi?connections',
-        u'http://dev8.socialtext.net/help-en/index.cgi?conversations',
-        u'http://dev8.socialtext.net/help-en/index.cgi?coordinated_universal_time',
-        u'http://dev8.socialtext.net/help-en/index.cgi?create_a_new_workspace',
-        u'http://dev8.socialtext.net/help-en/index.cgi?d_school',
-        u'http://dev8.socialtext.net/help-en/index.cgi?dashboard',
-        u'http://dev8.socialtext.net/help-en/index.cgi?document_library_template',
-        u'http://dev8.socialtext.net/help-en/index.cgi?document_templates',
-        u'http://dev8.socialtext.net/help-en/index.cgi?documents_that_people_are_working_on',
-        u'http://dev8.socialtext.net/help-en/index.cgi?editing',
-        u'http://dev8.socialtext.net/help-en/index.cgi?email',
-        u'http://dev8.socialtext.net/help-en/index.cgi?email_notification_of_recent_changes',
-        u'http://dev8.socialtext.net/help-en/index.cgi?expense_report_template',
-        u'http://dev8.socialtext.net/help-en/index.cgi?export_multiple_pages_to_pdf_or_word',
-        u'http://dev8.socialtext.net/help-en/index.cgi?exterior_design_meeting_august_20_2007',
-        u'http://dev8.socialtext.net/help-en/index.cgi?finding_your_way_around',
-        u'http://dev8.socialtext.net/help-en/index.cgi?glossary',
-        u'http://dev8.socialtext.net/help-en/index.cgi?go_to_market_plan_india_2008',
-        u'http://dev8.socialtext.net/help-en/index.cgi?how_do_i_find_my_way_around',
-        u'http://dev8.socialtext.net/help-en/index.cgi?how_do_i_make_a_new_page',
-        u'http://dev8.socialtext.net/help-en/index.cgi?how_do_i_make_links',
-        u'http://dev8.socialtext.net/help-en/index.cgi?ie_mixed_content_instructions',
-        u'http://dev8.socialtext.net/help-en/index.cgi?include_page',
-        u'http://dev8.socialtext.net/help-en/index.cgi?insert_menu_catalog',
-        u'http://dev8.socialtext.net/help-en/index.cgi?intimacy_gradient',
-        u'http://dev8.socialtext.net/help-en/index.cgi?learning_resources',
-        u'http://dev8.socialtext.net/help-en/index.cgi?linking',
-        u'http://dev8.socialtext.net/help-en/index.cgi?list_views',
-        u'http://dev8.socialtext.net/help-en/index.cgi?lists_of_pages',
-        u'http://dev8.socialtext.net/help-en/index.cgi?log_in',
-        u'http://dev8.socialtext.net/help-en/index.cgi?make_a_link',
-        u'http://dev8.socialtext.net/help-en/index.cgi?marketing_team_calendar',
-        u'http://dev8.socialtext.net/help-en/index.cgi?meeting_agendas',
-        u'http://dev8.socialtext.net/help-en/index.cgi?meeting_minutes_template',
-        u'http://dev8.socialtext.net/help-en/index.cgi?member_directory',
-        u'http://dev8.socialtext.net/help-en/index.cgi?miki_the_mobile_wiki',
-        u'http://dev8.socialtext.net/help-en/index.cgi?page_revision_history',
-        u'http://dev8.socialtext.net/help-en/index.cgi?people',
-        u'http://dev8.socialtext.net/help-en/index.cgi?people_directory',
-        u'http://dev8.socialtext.net/help-en/index.cgi?profile',
-        u'http://dev8.socialtext.net/help-en/index.cgi?project_plans',
-        u'http://dev8.socialtext.net/help-en/index.cgi?project_summary_template',
-     u'http://dev8.socialtext.net/help-en/index.cgi?props',
-     u'http://dev8.socialtext.net/help-en/index.cgi?public_workspaces',
-     u'http://dev8.socialtext.net/help-en/index.cgi?quick_start',
-     u'http://dev8.socialtext.net/help-en/index.cgi?reading_the_workspace',
-     u'http://dev8.socialtext.net/help-en/index.cgi?recent_changes',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_0',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_1',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_10',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_3',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_4',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_5',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_5_5',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_6',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_6_5',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_7',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_7_1',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_7_2',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_8',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_8_2',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_8_3',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_8_4',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_8_6',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_9',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_9_4',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_1_9_6',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_2_0',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_2_11_export_to_word_and_pdf',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_2_12_wikiwidgets',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_2_15_unplugged',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_2_16_inter_wiki_search',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_2_17_skins_and_miki_the_mobile_wiki',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_2_18_2_editor_upgrade',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_2_18_feed_improvements',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_2_2',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_2_20_3_new_edit_toolbar',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_2_20_interaction_upgrade',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_2_21_improved_searching_and_summary_views',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_2_6_3_kinosearch',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_3_0_personal_dashboard_social_networking_new_design',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_3_1_2_people_search_search_paging_who_s_following_me_and_more',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_3_2_0_improved_table_editing_page_templates',
-     u'http://dev8.socialtext.net/help-en/index.cgi?release_notes_for_socialtext_3_3_0_socialtext_signals_social_messaging',
-     u'http://dev8.socialtext.net/help-en/index.cgi?reports',
-     u'http://dev8.socialtext.net/help-en/index.cgi?rich_text_mode',
-     u'http://dev8.socialtext.net/help-en/index.cgi?roles_and_permission_sets',
-     u'http://dev8.socialtext.net/help-en/index.cgi?rss_tutorial',
-     u'http://dev8.socialtext.net/help-en/index.cgi?s2_transition_guide',
-     u'http://dev8.socialtext.net/help-en/index.cgi?sam_clemens',
-     u'http://dev8.socialtext.net/help-en/index.cgi?sample_pages_and_templates',
-     u'http://dev8.socialtext.net/help-en/index.cgi?searching',
-     u'http://dev8.socialtext.net/help-en/index.cgi?settings_and_administration',
-     u'http://dev8.socialtext.net/help-en/index.cgi?shared_language',
-     u'http://dev8.socialtext.net/help-en/index.cgi?sidebar',
-     u'http://dev8.socialtext.net/help-en/index.cgi?socialtext_2_0_released',
-     u'http://dev8.socialtext.net/help-en/index.cgi?socialtext_announcements',
-     u'http://dev8.socialtext.net/help-en/index.cgi?socialtext_announces_rss_support',
-     u'http://dev8.socialtext.net/help-en/index.cgi?socialtext_announces_simple_editing',
-     u'http://dev8.socialtext.net/help-en/index.cgi?socialtext_dashboard',
-     u'http://dev8.socialtext.net/help-en/index.cgi?socialtext_data_security_and_privacy_policy',
-     u'http://dev8.socialtext.net/help-en/index.cgi?socialtext_documentation',
-     u'http://dev8.socialtext.net/help-en/index.cgi?socialtext_people',
-     u'http://dev8.socialtext.net/help-en/index.cgi?socialtext_releases_simple_editing',
-     u'http://dev8.socialtext.net/help-en/index.cgi?socialtext_signals',
-     u'http://dev8.socialtext.net/help-en/index.cgi?socialtext_workspace',
-     u'http://dev8.socialtext.net/help-en/index.cgi?spike',
-     u'http://dev8.socialtext.net/help-en/index.cgi?start_here',
-     u'http://dev8.socialtext.net/help-en/index.cgi?table_of_contents',
-     u'http://dev8.socialtext.net/help-en/index.cgi?tags',
-     u'http://dev8.socialtext.net/help-en/index.cgi?template_retrospective',
-     u'http://dev8.socialtext.net/help-en/index.cgi?third_party_widgets',
-     u'http://dev8.socialtext.net/help-en/index.cgi?top_page',
-     u'http://dev8.socialtext.net/help-en/index.cgi?ultralite_turboprop_technologies',
-     u'http://dev8.socialtext.net/help-en/index.cgi?utc',
-     u'http://dev8.socialtext.net/help-en/index.cgi?walkthrough_to_unplug_recent_changes',
-     u'http://dev8.socialtext.net/help-en/index.cgi?watchlist',
-     u'http://dev8.socialtext.net/help-en/index.cgi?weblogs',
-     u'http://dev8.socialtext.net/help-en/index.cgi?welcome',
-     u'http://dev8.socialtext.net/help-en/index.cgi?welcome_widget',
-     u'http://dev8.socialtext.net/help-en/index.cgi?what_else_is_here',
-     u'http://dev8.socialtext.net/help-en/index.cgi?what_if_i_make_a_mistake',
-     u'http://dev8.socialtext.net/help-en/index.cgi?what_s_a_wiki',
-     u'http://dev8.socialtext.net/help-en/index.cgi?what_s_new',
-     u'http://dev8.socialtext.net/help-en/index.cgi?what_s_the_funny_punctuation',
-     u'http://dev8.socialtext.net/help-en/index.cgi?what_s_web_2_0',
-     u'http://dev8.socialtext.net/help-en/index.cgi?where_did_my_workspace_dashboard_go',
-     u'http://dev8.socialtext.net/help-en/index.cgi?wiki_101',
-     u'http://dev8.socialtext.net/help-en/index.cgi?wiki_text_mode',
-     u'http://dev8.socialtext.net/help-en/index.cgi?working_offline_with_unplugged',
-     u'http://dev8.socialtext.net/help-en/index.cgi?workspace_tour_table_of_contents',
-     u'http://dev8.socialtext.net/help-en/index.cgi?workspaces',
-     u'http://dev8.socialtext.net/help-en/index.cgi?wysiwyg']
 
 parser = optparse.OptionParser()
 
@@ -170,13 +20,166 @@ parser.add_option("-c", "--clients", dest="clients", type="int", help="Number of
 parser.add_option("-p", "--postclients", dest="postclients", type="int", help="Number of signals posting clients", default=10)
 parser.add_option("-G", "--background-clients", dest="backclients", type="int", help="Number of background page load clients", default=100)
 parser.add_option("-u", "--use-at", dest="useat", action="store_true", help="Use the at paramete on signals")
-parser.add_option("-l", "--url", dest="url", help="URL to request", default="http://dev8.socialtext.net/data/signals")
+parser.add_option("-a", "--get-avs", dest="getavs", action="store_true", help="Get avatars listed in a signal, forcing 304s")
+parser.add_option("-l", "--server", dest="serverurl", help="Server base url to request (no trailing slash)", default="http://dev8.socialtext.net")
 parser.add_option("-L", "--limit", dest="limit", type="int", help="limit for each request", default=10)
 parser.add_option("-r", "--rampup", dest="rampup", type="int", help="number of clients to start per second (rampup)", default=10)
 parser.add_option("-f", "--followers", dest="followpercent", type="int", help="Percentage of signals getters to be requesting follow-only", default=100)
 
 (options, args) = parser.parse_args()
 print "# OPTIONS:",options
+print "# PARAMS: "+ string.join(sys.argv[1:]," ")
+
+pages=[u'/help-en/index.cgi?advanced_formatting',
+        u'/help-en/index.cgi?advanced_getting_around',
+        u'/help-en/index.cgi?aerospace_market_news',
+        u'/help-en/index.cgi?all_shook_up',
+        u'/help-en/index.cgi?announcements_and_links',
+        u'/help-en/index.cgi?apache',
+        u'/help-en/index.cgi?attached_files',
+        u'/help-en/index.cgi?authentication_authorization_and_access_control_in_socialtext',
+        u'/help-en/index.cgi?browse',
+        u'/help-en/index.cgi?business_class_jet_november_2008',
+        u'/help-en/index.cgi?can_i_change_something',
+        u'/help-en/index.cgi?central_page_important_links',
+        u'/help-en/index.cgi?changing_the_workspace',
+        u'/help-en/index.cgi?click_links',
+        u'/help-en/index.cgi?comment',
+        u'/help-en/index.cgi?congratulations_you_know_how_to_use_a_workspace',
+        u'/help-en/index.cgi?connections',
+        u'/help-en/index.cgi?conversations',
+        u'/help-en/index.cgi?coordinated_universal_time',
+        u'/help-en/index.cgi?create_a_new_workspace',
+        u'/help-en/index.cgi?d_school',
+        u'/help-en/index.cgi?dashboard',
+        u'/help-en/index.cgi?document_library_template',
+        u'/help-en/index.cgi?document_templates',
+        u'/help-en/index.cgi?documents_that_people_are_working_on',
+        u'/help-en/index.cgi?editing',
+        u'/help-en/index.cgi?email',
+        u'/help-en/index.cgi?email_notification_of_recent_changes',
+        u'/help-en/index.cgi?expense_report_template',
+        u'/help-en/index.cgi?export_multiple_pages_to_pdf_or_word',
+        u'/help-en/index.cgi?exterior_design_meeting_august_20_2007',
+        u'/help-en/index.cgi?finding_your_way_around',
+        u'/help-en/index.cgi?glossary',
+        u'/help-en/index.cgi?go_to_market_plan_india_2008',
+        u'/help-en/index.cgi?how_do_i_find_my_way_around',
+        u'/help-en/index.cgi?how_do_i_make_a_new_page',
+        u'/help-en/index.cgi?how_do_i_make_links',
+        u'/help-en/index.cgi?ie_mixed_content_instructions',
+        u'/help-en/index.cgi?include_page',
+        u'/help-en/index.cgi?insert_menu_catalog',
+        u'/help-en/index.cgi?intimacy_gradient',
+        u'/help-en/index.cgi?learning_resources',
+        u'/help-en/index.cgi?linking',
+        u'/help-en/index.cgi?list_views',
+        u'/help-en/index.cgi?lists_of_pages',
+        u'/help-en/index.cgi?log_in',
+        u'/help-en/index.cgi?make_a_link',
+        u'/help-en/index.cgi?marketing_team_calendar',
+        u'/help-en/index.cgi?meeting_agendas',
+        u'/help-en/index.cgi?meeting_minutes_template',
+        u'/help-en/index.cgi?member_directory',
+        u'/help-en/index.cgi?miki_the_mobile_wiki',
+        u'/help-en/index.cgi?page_revision_history',
+        u'/help-en/index.cgi?people',
+        u'/help-en/index.cgi?people_directory',
+        u'/help-en/index.cgi?profile',
+        u'/help-en/index.cgi?project_plans',
+        u'/help-en/index.cgi?project_summary_template',
+     u'/help-en/index.cgi?props',
+     u'/help-en/index.cgi?public_workspaces',
+     u'/help-en/index.cgi?quick_start',
+     u'/help-en/index.cgi?reading_the_workspace',
+     u'/help-en/index.cgi?recent_changes',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_0',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_1',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_10',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_3',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_4',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_5',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_5_5',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_6',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_6_5',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_7',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_7_1',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_7_2',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_8',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_8_2',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_8_3',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_8_4',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_8_6',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_9',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_9_4',
+     u'/help-en/index.cgi?release_notes_for_socialtext_1_9_6',
+     u'/help-en/index.cgi?release_notes_for_socialtext_2_0',
+     u'/help-en/index.cgi?release_notes_for_socialtext_2_11_export_to_word_and_pdf',
+     u'/help-en/index.cgi?release_notes_for_socialtext_2_12_wikiwidgets',
+     u'/help-en/index.cgi?release_notes_for_socialtext_2_15_unplugged',
+     u'/help-en/index.cgi?release_notes_for_socialtext_2_16_inter_wiki_search',
+     u'/help-en/index.cgi?release_notes_for_socialtext_2_17_skins_and_miki_the_mobile_wiki',
+     u'/help-en/index.cgi?release_notes_for_socialtext_2_18_2_editor_upgrade',
+     u'/help-en/index.cgi?release_notes_for_socialtext_2_18_feed_improvements',
+     u'/help-en/index.cgi?release_notes_for_socialtext_2_2',
+     u'/help-en/index.cgi?release_notes_for_socialtext_2_20_3_new_edit_toolbar',
+     u'/help-en/index.cgi?release_notes_for_socialtext_2_20_interaction_upgrade',
+     u'/help-en/index.cgi?release_notes_for_socialtext_2_21_improved_searching_and_summary_views',
+     u'/help-en/index.cgi?release_notes_for_socialtext_2_6_3_kinosearch',
+     u'/help-en/index.cgi?release_notes_for_socialtext_3_0_personal_dashboard_social_networking_new_design',
+     u'/help-en/index.cgi?release_notes_for_socialtext_3_1_2_people_search_search_paging_who_s_following_me_and_more',
+     u'/help-en/index.cgi?release_notes_for_socialtext_3_2_0_improved_table_editing_page_templates',
+     u'/help-en/index.cgi?release_notes_for_socialtext_3_3_0_socialtext_signals_social_messaging',
+     u'/help-en/index.cgi?reports',
+     u'/help-en/index.cgi?rich_text_mode',
+     u'/help-en/index.cgi?roles_and_permission_sets',
+     u'/help-en/index.cgi?rss_tutorial',
+     u'/help-en/index.cgi?s2_transition_guide',
+     u'/help-en/index.cgi?sam_clemens',
+     u'/help-en/index.cgi?sample_pages_and_templates',
+     u'/help-en/index.cgi?searching',
+     u'/help-en/index.cgi?settings_and_administration',
+     u'/help-en/index.cgi?shared_language',
+     u'/help-en/index.cgi?sidebar',
+     u'/help-en/index.cgi?socialtext_2_0_released',
+     u'/help-en/index.cgi?socialtext_announcements',
+     u'/help-en/index.cgi?socialtext_announces_rss_support',
+     u'/help-en/index.cgi?socialtext_announces_simple_editing',
+     u'/help-en/index.cgi?socialtext_dashboard',
+     u'/help-en/index.cgi?socialtext_data_security_and_privacy_policy',
+     u'/help-en/index.cgi?socialtext_documentation',
+     u'/help-en/index.cgi?socialtext_people',
+     u'/help-en/index.cgi?socialtext_releases_simple_editing',
+     u'/help-en/index.cgi?socialtext_signals',
+     u'/help-en/index.cgi?socialtext_workspace',
+     u'/help-en/index.cgi?spike',
+     u'/help-en/index.cgi?start_here',
+     u'/help-en/index.cgi?table_of_contents',
+     u'/help-en/index.cgi?tags',
+     u'/help-en/index.cgi?template_retrospective',
+     u'/help-en/index.cgi?third_party_widgets',
+     u'/help-en/index.cgi?top_page',
+     u'/help-en/index.cgi?ultralite_turboprop_technologies',
+     u'/help-en/index.cgi?utc',
+     u'/help-en/index.cgi?walkthrough_to_unplug_recent_changes',
+     u'/help-en/index.cgi?watchlist',
+     u'/help-en/index.cgi?weblogs',
+     u'/help-en/index.cgi?welcome',
+     u'/help-en/index.cgi?welcome_widget',
+     u'/help-en/index.cgi?what_else_is_here',
+     u'/help-en/index.cgi?what_if_i_make_a_mistake',
+     u'/help-en/index.cgi?what_s_a_wiki',
+     u'/help-en/index.cgi?what_s_new',
+     u'/help-en/index.cgi?what_s_the_funny_punctuation',
+     u'/help-en/index.cgi?what_s_web_2_0',
+     u'/help-en/index.cgi?where_did_my_workspace_dashboard_go',
+     u'/help-en/index.cgi?wiki_101',
+     u'/help-en/index.cgi?wiki_text_mode',
+     u'/help-en/index.cgi?working_offline_with_unplugged',
+     u'/help-en/index.cgi?workspace_tour_table_of_contents',
+     u'/help-en/index.cgi?workspaces',
+     u'/help-en/index.cgi?wysiwyg']
+
 
 util.wrap_socket_with_coroutine_socket()
 
@@ -204,11 +207,27 @@ def fetchsignals(url, threadnum):
         if (random.randint(1,100) <= options.followpercent):
             urlstring=urlstring+";following=1"
         result=httpc.get_(urlstring, headers=theaders)
+        now=time.time()
         if options.useat:
             res=simplejson.loads(result[2])
             if (len(res) > 0):
                 lastat=res[0]['at']
-        now=time.time()
+        if options.getavs:
+            for signal in res:
+                user = signal['user_id']
+                
+                avthen=time.time()
+                imstime=(datetime.datetime.utcnow() - datetime.timedelta(seconds=1)).strftime("%a, %d %b %Y %H:%M:%S +0000")
+
+                avheaders={'Accept': 'image/png', 'accept':'image/png', 
+                        'Authorization':'Basic %s' % auth,
+                        'If-Modified-Since':imstime
+                        }
+                avurl=options.serverurl+"/data/people/"+user+"/small_photo"
+                avresult=httpc.get_(avurl, headers=avheaders, ok=(200, 201, 204, 304))
+                avnow=time.time()
+                print "At %f, avatar-signals-%d fetched %s as user %s with time %.3f result code %s" % (avnow, threadnum, avurl, user, avnow-avthen, avresult[0])
+            
         print "At %f, signals-%d fetched %s as user %s with time %.3f result code %s" % (now, threadnum, urlstring, user, now-then, result[0])
         api.sleep(options.sleep)
 
@@ -219,10 +238,8 @@ def postsignals(url, threadnum):
         (user, auth) = genuserauth()
         theaders={}
         theaders['Authorization']=("Basic %s" % auth)
-        theaders['Content-Type']="application/json"
-        theaders['content-type']="application/json"
         then = time.time()
-        jsonstring='{"signal":"Signal at %f"}' % time.time()
+        jsonstring='Signal at %f' % time.time()
         result=httpc.post_(url, data=jsonstring, headers=theaders)
         now = time.time()
         print "At %f, postsignal-%d posted to %s as user %s with time %.3f result code %s" % (now, threadnum, url, user, now-then, result[0])
@@ -230,7 +247,7 @@ def postsignals(url, threadnum):
 
 
 
-def fetchpages(urllist, threadnum):
+def fetchpages(pagelist, threadnum):
     api.sleep(random.random() * (options.backclients / options.rampup))
     while True:
         (user, auth) = genuserauth()
@@ -238,7 +255,8 @@ def fetchpages(urllist, threadnum):
         theaders['Authorization']=("Basic %s" % auth)
         theaders['accept']="application/json"
         theaders['Accept']="application/json"
-        url=random.choice(urllist) 
+        page=random.choice(pagelist) 
+        url=options.serverurl+page
         then = time.time()
         result=httpc.get_(url, headers=theaders)
         now=time.time()
@@ -251,11 +269,11 @@ for x in range(0, options.backclients):
    pool.execute(fetchpages, pages, x)
 
 for x in range(0, options.postclients):
-   pool.execute(postsignals, options.url, x)
+   pool.execute(postsignals, options.serverurl+'/data/signals', x)
 
 waiters = []
 for x in range(0,options.clients):
-    waiters.append(pool.execute(fetchsignals, options.url, x))
+    waiters.append(pool.execute(fetchsignals, options.serverurl+'/data/signals', x))
 
 
 for waiter in waiters:

@@ -67,5 +67,6 @@ sub Category { $_[0]{category} || $_[0]{tags} || ['mock_category'] }
 sub original_revision { shift } # hack - return ourself
 sub datetime_for_user { 'Mon 12 12:00am' }
 sub last_edited_by { Socialtext::User->new(username => 'mocked_user') }
+sub edit_summary { 'awesome' }
 
 1;

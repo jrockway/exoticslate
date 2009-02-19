@@ -9,6 +9,8 @@ use Socialtext::User;
 use Socialtext::Pluggable::Adapter;
 use Socialtext::Timer;
 use Class::Field qw/field/;
+use Socialtext::WikiText::Parser::Messages;
+use Socialtext::WikiText::Emitter::Messages::HTML;
 
 field 'viewer';
 
@@ -144,6 +146,16 @@ sub _expand_context {
     $row->{context} = $c;
 }
 
+sub _extract_signal {
+    my $self = shift;
+    my $row = shift;
+    return unless $row->{event_class} eq 'signal';
+    my $parser = Socialtext::WikiText::Parser::Messages->new(
+       receiver => Socialtext::WikiText::Emitter::Messages::HTML->new,
+    );
+    $row->{context}{body} = $parser->parse($row->{context}{body});
+}
+
 sub decorate_event_set {
     my $self = shift;
     my $sth = shift;
@@ -155,6 +167,7 @@ sub decorate_event_set {
         $self->_extract_person($row, 'person');
         $self->_extract_page($row);
         $self->_expand_context($row);
+        $self->_extract_signal($row);
 
         delete $row->{person} 
             if (!defined($row->{person}) and $row->{event_class} ne 'person');

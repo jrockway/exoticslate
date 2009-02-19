@@ -16,13 +16,23 @@ ALTER TABLE rollup_user_signal
     REFERENCES users (user_id)
     ON DELETE CASCADE;
 
--- populate the rollup as follows:
+-- first, populate the rollup with users that have sent signals
 INSERT INTO rollup_user_signal (user_id, sent_latest, sent_earliest, sent_count)
 SELECT user_id, MAX(at) AS sent_latest, MIN(at) AS sent_earliest, COUNT(1) AS sent_count
   FROM signal
 GROUP BY user_id;
 
--- create a trigger to add a rollup entry for each user
+-- next, bring in everybody that hasn't signalled yet
+SET enable_seqscan TO off; -- don't use SeqScans if possible
+INSERT INTO rollup_user_signal (user_id)
+SELECT user_id
+  FROM users
+  JOIN rollup_user_signal r USING (user_id)
+ WHERE r.user_id IS NULL; -- anti-join
+SET enable_seqscan TO DEFAULT;
+
+-- create a trigger to maintain a rollup entry for each user created after
+-- this migration
 CREATE FUNCTION auto_vivify_user_rollups() RETURNS "trigger"
 AS $$
     BEGIN

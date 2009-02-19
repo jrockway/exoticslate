@@ -10,7 +10,7 @@ my $schema_dir  = "$FindBin::Bin/../etc/socialtext/db/";
 my $schema_file = "$schema_dir/socialtext-schema.sql";
 my @sql_patches = glob("$schema_dir/*-to-*.sql");
 
-plan tests => @sql_patches * 4 + 9;
+plan tests => @sql_patches * 4 + 8;
 
 Schema_is_okay: {
     ok -d $schema_dir;
@@ -47,19 +47,6 @@ Schema_is_okay: {
     like $schema,
         qr/ADD CONSTRAINT page_last_editor_id_fk[^;]+ON DELETE RESTRICT;/,
         "foreign key on page.last_editor_id doesn't cascade deletes";
-
-    Truncate_trouble: {
-        # We take advantage of TRUNCATE during appliance restore.  We should
-        # make sure to not add new dependencies on the `page` table without
-        # updating the appliance restore code.  If this test fails, make sure
-        # appliance is updated before you fix this test.
-        my @page_deps;
-        while($schema =~ m/ALTER TABLE ONLY (\w+)[^;]+ REFERENCES page\(/smg) {
-            push @page_deps, $1;
-        }
-        is join(', ', @page_deps), 'event, page_tag',
-            'page table dependencies match appliance expectations';
-    }
 }
 
 Migrations_are_okay: {

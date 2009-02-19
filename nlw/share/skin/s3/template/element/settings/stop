@@ -8,7 +8,7 @@
       </li>
     [% END %]
     <li class="flexButton">
-      <a class="genericOrangeButton" id="[% ns %]-savelink" href="#" onclick="document.forms['settings'].reset(); return false">
+      <a class="genericOrangeButton" id="[% ns %]-cancellink" href="#" onclick="document.forms['settings'].reset(); return false">
         [% loc('Cancel') %]
       </a>
     </li>

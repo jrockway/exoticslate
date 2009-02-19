@@ -27,7 +27,7 @@ SET enable_seqscan TO off; -- don't use SeqScans if possible
 INSERT INTO rollup_user_signal (user_id)
 SELECT user_id
   FROM users
-  JOIN rollup_user_signal r USING (user_id)
+  LEFT JOIN rollup_user_signal r USING (user_id)
  WHERE r.user_id IS NULL; -- anti-join
 SET enable_seqscan TO DEFAULT;
 

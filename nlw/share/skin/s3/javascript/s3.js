@@ -157,6 +157,23 @@ $(function() {
         }
     }
 
+    function get_plugin_lightbox (plugin, lightbox, cb) {
+        Socialtext.plugin_lightbox_loaded =
+            Socialtext.plugin_lightbox_loaded || {};
+        if (Socialtext.plugin_lightbox_loaded[lightbox]) {
+            cb()
+        }
+        else {
+            var uri = nlw_make_plugin_path(
+                '/' + plugin + '/javascript/lightbox-' + lightbox + '.js' + _gz
+            ).replace(/(\d+\.\d+\.\d+\.\d+)/,'$1.'+Socialtext.make_time);
+            $.ajaxSettings.cache = true;
+            $.getScript(uri, cb);
+            $.ajaxSettings.cache = false;
+        }
+    }
+    window.get_plugin_lightbox = get_plugin_lightbox;
+
     $("#st-comment-button-link, #bottomButtons .commentButton")
         .click(function () {
             if ($('div.commentWrapper').length) {

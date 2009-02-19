@@ -40,6 +40,7 @@ S3_SOURCE_FILES= \
 LIGHTBOX_TEMPLATES=$(wildcard lightbox/*.tt2)
 LIGHTBOX_OUTPUT=$(LIGHTBOX_TEMPLATES:lightbox/%.tt2=lightbox-%.js)
 LIGHTBOX_OUTPUT_GZIPS=$(LIGHTBOX_OUTPUT:%=%.gz)
+PLUGIN_LIGHTBOXES=$(wildcard ../../../plugin/*/share/javascript/lightbox-*.js)
 
 all: \
     $(LIGHTBOX_OUTPUT_GZIPS) \
@@ -69,6 +70,10 @@ clean:
 
 .js-mini.js:
 	$(MINIFY) $< > $@
+
+$(PLUGIN_LIGHTBOXES):
+	# Do nothing. But this avoids us messing up plugin lightboxes in the
+	# folowing section
 
 lightbox-%.js: st-lightbox.js lightbox/%.tt2 lightbox/%.js
 	jemplate --compile $(@:lightbox-%.js=lightbox/%.tt2) > $@; \
@@ -102,7 +107,7 @@ info.js: ../info.yaml
 	perl -MYAML -MTemplate -e \
 	    'Template->new->process("template/$@", YAML::LoadFile("$<"))' > $@
 
-timestamp.js: $(ST_EDITOR_FILE) $(S3_SOURCE_FILES:timestamp.js%=%) $(LIGHTBOX_OUTPUT)
+timestamp.js: $(ST_EDITOR_FILE) $(S3_SOURCE_FILES:timestamp.js%=%) $(LIGHTBOX_OUTPUT) $(PLUGIN_LIGHTBOXES)
 	echo 'var Socialtext = Socialtext || {};' > $@
 	perl -le 'print "Socialtext.make_time = \"" . time . "\";"' >> $@
 

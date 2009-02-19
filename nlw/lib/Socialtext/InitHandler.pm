@@ -26,8 +26,8 @@ sub handler {
                 open M, "> $stamp_file";
                 print M time();
                 close M;
-                _regen_combined_js($r);
                 Socialtext::Pluggable::Adapter->make;
+                _regen_combined_js($r);
             }
             local $Socialtext::System::SILENT_RUN = 1;
             shell_run '-st-widgets update-all --noremote';

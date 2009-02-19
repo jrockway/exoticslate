@@ -34,19 +34,19 @@ Test case for `/data/events`(GET and POST).
 | *Comment*       | ensure that madlibs from signals are evaluated |                                                                                                    |
 | http-user-pass  | %%tester1%%                                    | password                                                                                           |
 | st-clear-events |                                                |                                                                                                    |
-| post-json       | /data/events                                   | {"actor":{"id":%%tester1_id%%},"event_class":"signal","action":"signal", "context":{"body":"foo"}} |
+| post-json       | /data/signals                                  | {"signal":"signal1 at %%start_time%%"} |
 | code-is         | 201                                            |                                                                                                    |
 | get             | /data/events                                   | text/html                                                                                          |
 | has-header      | Content-type                                   | qr/text\/html/                                                                                     |
 | code-is         | 200                                            |                                                                                                    |
-| body-like       | "foo"                                          |                                                                                                    |
+| body-like       | "signal1 at %%start_time%%"                    |                                                                                                    |
 
 | *Comment*      | ensure that signals are appearing in 'followed' api  |                                    |
 | http-user-pass | %%tester2%%                                          | password                           |
 | post-json      | /data/people/%%tester2_id%%/watchlist                | {"person":{"id":"%%tester1_id%%"}} |
 | code-is        | 204                                                  |                                    |
 | get            | /data/events/followed/%%tester2_id%%                 | application/json                   |
-| body-like      | "body":"foo"                                         |                                    |
+| body-like      | "body":"signal1 at %%start_time%%"                   |                                    |
 | delete         | /data/people/%%tester2_id%%/watchlist/%%tester1_id%% |                                    |
 
 | *Comment*       | Clear all events |                  |

@@ -31,7 +31,7 @@ ALTER TABLE ONLY gadget
     ADD COLUMN description TEXT;
 
 UPDATE "System"
-    SET value = '34'
+    SET value = '35'
     WHERE field = 'socialtext-schema-version';
 
 COMMIT;

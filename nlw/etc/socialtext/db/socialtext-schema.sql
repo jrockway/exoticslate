@@ -72,7 +72,8 @@ CREATE TABLE "Account" (
     name varchar(250) NOT NULL,
     is_system_created boolean DEFAULT false NOT NULL,
     skin_name varchar(30) DEFAULT 's3'::varchar NOT NULL,
-    email_addresses_are_hidden boolean
+    email_addresses_are_hidden boolean,
+    is_exportable boolean DEFAULT false NOT NULL
 );
 
 CREATE SEQUENCE "Account___account_id"
@@ -1166,4 +1167,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '35');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '36');

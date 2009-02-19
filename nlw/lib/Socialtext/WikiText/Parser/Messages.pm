@@ -1,4 +1,5 @@
 package Socialtext::WikiText::Parser::Messages;
+# @COPYRIGHT@
 use strict;
 use warnings;
 

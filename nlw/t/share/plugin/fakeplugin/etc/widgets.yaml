@@ -1,5 +1,11 @@
 ---
-- description: Displays a single page from any of your workspaces within a Socialtext Widget.
+- description: Does some wiki stuff
+  plugin: widgets
   socialtext: 1
   src: file:widgets/share/widgets/one_page.xml
+  title: Wiki Page
+- description: Does some signals stuff
+  plugin: signals
+  socialtext: 1
+  src: file:signals/share/signals.xml
   title: Wiki Page

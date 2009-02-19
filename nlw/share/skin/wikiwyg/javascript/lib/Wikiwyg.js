@@ -1289,17 +1289,23 @@ function setup_wikiwyg() {
         if (! jQuery('#st-edit-summary').is(':hidden')) return;
         var $input = jQuery('#st-edit-summary .input');
 
-        // position cursor at the end of the input field
-        var r = $input[0].createTextRange && $input[0].createTextRange();
-        if (r) {
-            r.collapse(true);
-            r.select();
-        }
-
         if (ww.edit_summary() == '')
             $input.val('');
         jQuery('#st-edit-summary').show();
         $input.focus();
+
+        // position cursor at the end of the input field
+        var len = $input[0].value.length;
+        if ($input[0].createTextRange) {
+            var range = $input[0].createTextRange();
+            range.collapse(true);
+            range.moveEnd('character', len);
+            range.moveStart('character', len);
+            range.select();
+        }
+        else if ($input[0].setSelectionRange) {
+            $input[0].setSelectionRange(len, len);
+        }
     }
 
     var hide_edit_summary = function () {

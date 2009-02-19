@@ -23,7 +23,7 @@ field recent_changes_query =>
 field category => Prefix.'/tags/%{category}/pages';
 field weblog   => Prefix.'/tags/%{category}/pages';
 field file     => Prefix.'/attachments/%{page_uri}:%{id}/files/%{filename}';
-field image    => Prefix.'/attachments/%{page_uri}:%{id}/files/%{filename}';
+field image    => Prefix.'/attachments/%{page_uri}:%{id}/%{size}/%{filename}';
 
 field people_profile => '%{url_prefix}/?profile/%{user_id}';
 field people_photo => '%{url_prefix}/data/people/%{user_id}/photo';

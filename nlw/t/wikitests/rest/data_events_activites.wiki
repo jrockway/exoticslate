@@ -48,7 +48,7 @@ This test case assumes a logged in user.
 | code-is         | 201                                               |                    |
 | get             | /data/events/activities/%%username%%              | application/json   |
 | code-is         | 200                                               |                    |
-| body-like       | "booya"                                             |                    |
+| body-like       | "body":"booya"                                             |                    |
 | st-clear-events |                                                   |                    |
 
 | comment | post a person event | . | .. |

@@ -62,7 +62,8 @@ Create_from_row: {
         page_uri => 'page_id',
         page_id => 'page_id',
         revision_count => 'revision_count',
-        is_spreadsheet => ''
+        is_spreadsheet => '',
+        edit_summary => undef,
     };
 
     is $page->title, 'name';

@@ -10,7 +10,7 @@ my $schema_dir  = "$FindBin::Bin/../etc/socialtext/db/";
 my $schema_file = "$schema_dir/socialtext-schema.sql";
 my @sql_patches = glob("$schema_dir/*-to-*.sql");
 
-plan tests => @sql_patches * 4 + 9;
+plan tests => @sql_patches * 4 + 8;
 
 Schema_is_okay: {
     ok -d $schema_dir;

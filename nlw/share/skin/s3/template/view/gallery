@@ -27,7 +27,7 @@
         [% END %]
 
         <tr>
-            <th colspan="1">[% loc('Third Party') %]</th>
+            <th style="padding-top: 20px" colspan="1">[% loc('Third Party') %]</th>
         </tr>
         [% FOREACH widget IN widgets %]
         [% NEXT IF widget.plugin %]

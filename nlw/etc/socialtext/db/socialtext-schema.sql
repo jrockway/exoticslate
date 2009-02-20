@@ -250,7 +250,8 @@ CREATE TABLE container_type (
     path_args text[],
     links_template text,
     hello_template text,
-    layout_template text
+    layout_template text,
+    last_update timestamptz DEFAULT now() NOT NULL
 );
 
 CREATE TABLE default_gadget (
@@ -1134,4 +1135,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '34');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '35');

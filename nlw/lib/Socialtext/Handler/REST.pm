@@ -44,7 +44,7 @@ sub handler ($$) {
         # WebKit in Adobe AIR has a bug where "401" will trigger a
         # non-suppressable re-authenticate dialog that doesn't work
         # well for Socialtext Desktop, so handle it as a special case.
-        return $class->_webkit_air_unauthorized_handler();
+        return $class->_webkit_air_unauthorized_handler($r);
     }
 
     $user ||= $class->guest($r, $auth_info);
@@ -56,6 +56,9 @@ sub handler ($$) {
 }
 
 sub _webkit_air_unauthorized_handler {
+    my $class = shift;
+    my $r     = shift;
+
     if ($r->header_in('Authorization')) {
         # Special case: Rewrite 401 as 403 to prevent re-authentication.
         $r->status_line(HTTP_403_Forbidden);

@@ -16,6 +16,7 @@ use Socialtext::AppConfig;
 use Socialtext::TT2::Renderer;
 use Socialtext::URI;
 use Socialtext::JSON qw/encode_json/;
+use Socialtext::Timer;
 
 use constant MAX_EVENT_COUNT => 500;
 use constant DEFAULT_EVENT_COUNT => 25;
@@ -149,21 +150,45 @@ sub code_base {
    return Socialtext::AppConfig->code_base;
 }
 
-sub template_render {
-    my ($self, $tmpl, $vars) = @_;
-    my $renderer = Socialtext::TT2::Renderer->instance;
-    my $paths = $self->hub->skin->template_paths;
-    push @$paths, glob($self->code_base . "/plugin/*/template");
-    return $renderer->render(
-        template => $tmpl,
-        paths => $paths,
-        vars => {
+sub _renderer_load {
+    my $self = shift;
+
+    if (!$self->{_renderer}) {
+        Socialtext::Timer->Continue('event_tt2_prep');
+
+        $self->{_renderer} = Socialtext::TT2::Renderer->instance;
+
+        if (!$self->{_template_paths}) {
+            my $paths = $self->hub->skin->template_paths;
+            push @$paths, glob($self->code_base . "/plugin/*/template");
+            $self->{_template_paths} = $paths;
+        }
+
+        $self->{_template_vars} = [
             collection_name => $self->collection_name,
             link => Socialtext::URI::uri(path => $self->rest->request->uri),
             minutes_ago => sub { int((time - str2time(shift)) / 60) },
             round => sub { int($_[0] + .5) },
+
+            # XXX: can we avoid calling this, if possible?
             $self->hub->helpers->global_template_vars,
-            %$vars,
+        ];
+
+        Socialtext::Timer->Pause('event_tt2_prep');
+    }
+
+    return @$self{qw(_renderer _template_paths _template_vars)};
+}
+
+sub template_render {
+    my ($self, $tmpl, $add_vars) = @_;
+    my ($renderer, $paths, $vars) = $self->_renderer_load();
+    return $renderer->render(
+        template => $tmpl,
+        paths => $paths,
+        vars => {
+            @$vars,
+            %$add_vars,
         },
     );
 }

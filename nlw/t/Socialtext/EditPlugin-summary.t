@@ -7,7 +7,7 @@ use mocked 'Apache';
 use mocked 'Apache::Cookie';
 use mocked 'Socialtext::Events', qw( event_ok is_event_count );
 
-use Test::Socialtext tests => 50;
+use Test::Socialtext tests => 41;
 use Socialtext::Signal;
 
 fixtures( 'admin_no_pages' );
@@ -92,21 +92,17 @@ edit_summary_signal: {
 
     signal_ok (
         viewer => $hub->current_user,
-        body => $user->best_full_name .', "where you at, dog" (edited Save Page in Admin Wiki)',
+        body => '"where you at, dog" (edited {link: admin [Save Page]} in Admin Wiki)',
         signaler => $hub->current_user,
-        topic => {
-            page_id => $page_id,
-            workspace_id => $hub->current_workspace->workspace_id,
-        },
         msg => 'normal length edit summary'
-    );
-    event_ok (
-        event_class => 'signal',
-        action => 'page_edit',
     );
     event_ok (
         event_class => 'page',
         action => 'edit_save',
+    );
+    event_ok (
+        event_class => 'signal',
+        action => 'page_edit',
     );
     is_event_count(0);
 }
@@ -125,21 +121,17 @@ long_edit_summary_signal: {
 
     signal_ok (
         viewer => $hub->current_user,
-        body => $user->best_full_name . ', "' . 'ten chars!' x 13 . 'we are..." (edited Save Page in Admin Wiki)',
+        body => '"' . 'ten chars!' x 13 . 'we are..." (edited {link: admin [Save Page]} in Admin Wiki)',
         signaler => $hub->current_user,
-        topic => {
-            page_id => $page_id,
-            workspace_id => $hub->current_workspace->workspace_id,
-        },
         msg => 'edit summary over max signal length'
-    );
-    event_ok (
-        event_class => 'signal',
-        action => 'page_edit',
     );
     event_ok (
         event_class => 'page',
         action => 'edit_save',
+    );
+    event_ok (
+        event_class => 'signal',
+        action => 'page_edit',
     );
     is_event_count(0);
 }
@@ -156,21 +148,17 @@ no_edit_summary_signal: {
 
     signal_ok (
         viewer => $user,
-        body => $user->best_full_name . ' wants you to know about an edit of Save Page in Admin Wiki',
+        body => 'wants you to know about an edit of {link: admin [Save Page]} in Admin Wiki',
         signaler => $user,
-        topic => {
-            page_id => $page_id,
-            workspace_id => $hub->current_workspace->workspace_id,
-        },
         msg => 'edit summary over max signal length'
-    );
-    Socialtext::Events::event_ok (
-        event_class => 'signal',
-        action => 'page_edit',
     );
     Socialtext::Events::event_ok (
         event_class => 'page',
         action => 'edit_save',
+    );
+    Socialtext::Events::event_ok (
+        event_class => 'signal',
+        action => 'page_edit',
     );
     is_event_count(0);
 }
@@ -205,10 +193,6 @@ sub signal_ok {
     my %opts = @_;
     my @signals = Socialtext::Signal->All(viewer => $opts{viewer});
     ok scalar(@signals), "$opts{msg} - got signal(s)";
-    ok my $topic = $signals[0]->topic, "$opts{msg} - got topic";
-    is $topic->{workspace_id}, $opts{topic}{workspace_id},
-        "$opts{msg} - got the correct workspace";
-    is $topic->{page_id}, $opts{topic}{page_id}, "$opts{msg} - got the correct page";
     is $signals[0]->body, $opts{body}, "$opts{msg} - signal body ok";
 }
 

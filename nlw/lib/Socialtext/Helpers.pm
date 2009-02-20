@@ -12,6 +12,7 @@ use Socialtext::Search::Set;
 use Socialtext::TT2::Renderer;
 use Socialtext::l10n qw/loc/;
 use Socialtext::Stax;
+use Socialtext::Timer;
 use Apache::Cookie;
 
 sub class_id { 'helpers' }
@@ -190,6 +191,8 @@ sub _get_people_watchlist_for_people
 sub global_template_vars {
     my $self = shift;
 
+    Socialtext::Timer->Continue('global_tt2_vars');
+
     my $show_search_set = (
         ( $self->hub->current_user->is_authenticated )
             || ( $self->hub->current_user->is_guest
@@ -268,6 +271,8 @@ sub global_template_vars {
 #     }
 
     $result{is_workspace_admin}=1 if ($self->hub->checker->check_permission('admin_workspace'));
+
+    Socialtext::Timer->Pause('global_tt2_vars');
 
     return %result;
 }

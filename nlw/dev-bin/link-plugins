@@ -8,6 +8,7 @@ use lib "$FindBin::Bin/../lib";
 use File::Find 'find';
 use File::Basename qw(basename);
 use Socialtext::System qw/shell_run/;
+use Term::ANSIColor;
 
 sub usage {
     my $msg = shift;
@@ -40,9 +41,11 @@ sub link_directory {
             }
             else {
                 unlink $to if -l $to;
-                die "$to already exists and is a file! Remove it first\n" if -e $to;
+                error("$to already exists and is a file! Remove it first\n")
+                    if -e $to;
 
-                symlink $from, $to or die "Cannot link $from to $to: $!";
+                symlink $from, $to 
+                    or error("Cannot link $from to $to: $!");
 
                 # add an entry to the local .gitignore if it's missing
                 $to =~ s{^$todir/}{};
@@ -67,4 +70,16 @@ while (my $plugin = shift) {
 
     local $Socialtext::System::SILENT_RUN = 1;
     shell_run("cd $plugin_dir && make") if -f "$plugin_dir/Makefile";
+}
+
+exit;
+
+sub error {
+    my $error = shift;
+
+    print color 'yellow';
+    print "\n\n$error\n\n";
+    print color 'reset';
+
+    exit;
 }

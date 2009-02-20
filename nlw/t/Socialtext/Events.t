@@ -15,7 +15,7 @@ BEGIN {
     use_ok('Socialtext::Events');
 }
 
-my $insert_re = qr/^INSERT INTO event \( at, event_class, action, actor_id, person_id, page_id, page_workspace_id, tag_name, context \) VALUES/;
+my $insert_re = qr/^INSERT INTO event \( at, event_class, action, actor_id, person_id, page_id, page_workspace_id, signal_id, tag_name, context \) VALUES/;
 
 my $user = Socialtext::User->new(
     user_id => 2345, 
@@ -352,7 +352,7 @@ Creating_events: {
             name => "Record valid event",
             sql => $insert_re,
             args => [ 'whenevs', 'page', 'view', 1, undef,
-                      'hello_world', 22, undef, undef ],
+                      'hello_world', 22, undef, undef, undef ],
         );
         ok_no_more_sql();
     }
@@ -367,8 +367,8 @@ Creating_events: {
             name => "Record event with page object",
             sql => $insert_re,
             args => ['now', 'page', 'view', 2345, 
-                     undef, 'example_page',  348798, undef,
-                     '{"revision_id":"abcd","revision_count":56}'],
+                     undef, 'example_page',  348798, undef, undef,
+                     '{"revision_id":"abcd","edit_summary":"awesome","revision_count":56}'],
         );
         ok_no_more_sql();
     }
@@ -387,7 +387,7 @@ Creating_events: {
             name => 'Record event specified timestamp',
             sql => $insert_re,
             args => ['yesterday', 'page', 'tag', 4376, undef,
-                     'woot_woot',  832, undef, '{"a":"b"}'],
+                     'woot_woot',  832, undef, undef, '{"a":"b"}'],
         );
         ok_no_more_sql();
     }
@@ -407,7 +407,7 @@ Creating_events: {
             name => 'Record event with user object',
             sql => $insert_re,
             args => ['yesterday', 'page', 'tag', 42, 123,
-                     'yee_haw', 832111, undef, '[{"c":"d"}]'],
+                     'yee_haw', 832111, undef, undef, '[{"c":"d"}]'],
         );
         ok_no_more_sql();
     }

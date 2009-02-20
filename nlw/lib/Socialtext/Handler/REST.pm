@@ -39,12 +39,39 @@ sub handler ($$) {
     Socialtext::Timer->Continue('web_auth');
     my $auth_info = $class->getAuthForURI($r->uri);
 
-    my $user = $class->authenticate($r) || $class->guest($r, $auth_info);
+    my $user = $class->authenticate($r);
+    if (!$user and $r->header_in('User-agent') =~ /\bAppleWebKit\b.*\bAdobeAIR\b/) {
+        # WebKit in Adobe AIR has a bug where "401" will trigger a
+        # non-suppressable re-authenticate dialog that doesn't work
+        # well for Socialtext Desktop, so handle it as a special case.
+        return $class->_webkit_air_unauthorized_handler($r);
+    }
+
+    $user ||= $class->guest($r, $auth_info);
     Socialtext::Timer->Pause('web_auth');
 
     return $class->challenge(request => $r, auth_info => $auth_info) unless $user;
 
     return $class->real_handler($r, $user);
+}
+
+sub _webkit_air_unauthorized_handler {
+    my $class = shift;
+    my $r     = shift;
+
+    if ($r->header_in('Authorization')) {
+        # Special case: Rewrite 401 as 403 to prevent re-authentication.
+        $r->status_line(HTTP_403_Forbidden);
+    }
+    else {
+        # Special case: Make realm a nonce, so the client won't re-use
+        # credentials from its last successful login.
+        $r->status_line(HTTP_401_Unauthorized);
+        $r->header_out('WWW-Authenticate' => 'Basic realm="Socialtext-'.time().'"');
+    }
+
+    $r->send_http_header;
+    return AUTH_REQUIRED;
 }
 
 sub guest {

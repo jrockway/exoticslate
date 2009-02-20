@@ -9,9 +9,9 @@ use Test::Socialtext;
 fixtures( 'admin' );
 
 my @tests = (
-  [ qr{\Q<a class="saveButton" onclick="document.forms['settings'].submit(); return false" href="#">Save</a>},
+  [ qr{\Q<a class="genericOrangeButton" id="-savelink" href="#" onclick="document.forms['settings'].submit(); return false">\E\s+Save\s+</a>},
     'Submit button is submit' ],
-  [ qr{\Q<a class="cancelButton" onclick="document.forms['settings'].reset(); return false" href="#">Cancel</a>},
+  [ qr{\Q<a class="genericOrangeButton" id="-cancellink" href="#" onclick="document.forms['settings'].reset(); return false">\E\s+Cancel\s+</a>},
     'Cancel button is reset' ],
 );
 

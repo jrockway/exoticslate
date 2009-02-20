@@ -251,7 +251,8 @@ CREATE TABLE container_type (
     path_args text[],
     links_template text,
     hello_template text,
-    layout_template text
+    layout_template text,
+    last_update timestamptz DEFAULT now() NOT NULL
 );
 
 CREATE TABLE default_gadget (

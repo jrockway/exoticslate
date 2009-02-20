@@ -177,3 +177,4 @@ t/widget/lang/Test_en.xml
 t/widget/lang/Test_es.xml
 lib/Socialtext/Gadgets/Gallery.pm
 t/Socialtext/Gadgets/Gallery.t
+lib/Socialtext/Rest/Gadgets/Gallery.pm

@@ -9,7 +9,7 @@ ALTER TABLE "Account"
     ADD COLUMN is_exportable bool NOT NULL DEFAULT false;
 
 UPDATE "System"
-    SET value = '36'
+    SET value = '37'
     WHERE field = 'socialtext-schema-version';
 
 COMMIT;

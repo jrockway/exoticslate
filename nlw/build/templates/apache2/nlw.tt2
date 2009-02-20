@@ -161,6 +161,7 @@ Listen [% config.custom_http_port %]
 <VirtualHost *:[% config.custom_http_port %]> 
 [% END %]
 [% IF config.ssl_only %]
+    RewriteEngine On
     RewriteCond %{REQUEST_METHOD} ^TRACE
     RewriteRule .* - [F,L]
     RewriteRule ^(.*) https://%{SERVER_NAME}:[% config.ports.https %]$1 [R,L,NE]

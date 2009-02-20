@@ -285,7 +285,7 @@ CREATE TABLE event (
 
 CREATE TABLE gadget (
     gadget_id bigint NOT NULL,
-    src text NOT NULL,
+    src text,
     plugin text,
     href text NOT NULL,
     last_update timestamptz DEFAULT now() NOT NULL,
@@ -297,7 +297,10 @@ CREATE TABLE gadget (
     thumbnail text,
     scrolling boolean DEFAULT false,
     height integer,
-    description text
+    description text,
+    uploaded boolean DEFAULT false,
+    CONSTRAINT gadget_src_or_uploaded
+            CHECK ((src IS NOT NULL) OR uploaded)
 );
 
 CREATE SEQUENCE gadget_id

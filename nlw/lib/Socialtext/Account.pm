@@ -509,8 +509,14 @@ sub update {
 sub Count {
     my ( $class, %p ) = @_;
 
-    my $sth = sql_execute('SELECT COUNT(*) FROM "Account"');
-    return $sth->fetchall_arrayref->[0][0];
+    my @bind  = ();
+    my $where = '';
+    if ( $p{is_exportable} ) {
+        $where = 'WHERE "Account".is_exportable = ?';
+        push @bind, $p{is_exportable};
+    }
+
+    return sql_singlevalue("SELECT COUNT(*) FROM \"Account\" $where", @bind);
 }
 
 sub CountByName {

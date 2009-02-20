@@ -27,7 +27,8 @@ Readonly our @ACCT_COLS => (
     'name',
     'skin_name',
     'is_system_created',
-    'email_addresses_are_hidden'
+    'email_addresses_are_hidden',
+    'is_exportable',
 );
 
 my %ACCT_COLS = map { $_ => 1 } @ACCT_COLS;

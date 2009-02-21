@@ -8,11 +8,11 @@ SET search_path = public, pg_catalog;
 
 CREATE FUNCTION auto_vivify_user_rollups() RETURNS "trigger"
     AS $$
-        BEGIN
-            INSERT INTO rollup_user_signal (user_id) VALUES (NEW.user_id);
-            RETURN NULL; -- after trigger
-        END
-    $$
+    BEGIN
+        INSERT INTO rollup_user_signal (user_id) VALUES (NEW.user_id);
+        RETURN NULL; -- trigger return val is ignored
+    END
+$$
     LANGUAGE plpgsql;
 
 CREATE FUNCTION cleanup_sessions() RETURNS "trigger"
@@ -41,19 +41,19 @@ $$
 
 CREATE FUNCTION signal_sent() RETURNS "trigger"
     AS $$
-        BEGIN
+    BEGIN
 
-            UPDATE rollup_user_signal
-               SET sent_count = sent_count + 1,
-                   sent_latest = GREATEST(NEW."at", sent_latest),
-                   sent_earliest = LEAST(NEW."at", sent_earliest)
-             WHERE user_id = NEW.user_id;
+        UPDATE rollup_user_signal
+           SET sent_count = sent_count + 1,
+               sent_latest = GREATEST(NEW."at", sent_latest),
+               sent_earliest = LEAST(NEW."at", sent_earliest)
+         WHERE user_id = NEW.user_id;
 
-            NOTIFY new_signal;
+        NOTIFY new_signal; -- not strictly needed yet
 
-            RETURN NULL;
-        END
-    $$
+        RETURN NULL; -- trigger return val is ignored
+    END
+$$
     LANGUAGE plpgsql;
 
 CREATE AGGREGATE array_accum (

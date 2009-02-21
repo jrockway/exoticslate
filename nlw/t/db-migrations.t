@@ -10,8 +10,6 @@ use File::Path 'mkpath';
 use Socialtext::System qw/shell_run/;
 use Socialtext::Schema;
 
-shell_run("nlwctl -1 stop");
-
 my $real_dir = 'etc/socialtext/db';
 my $fake_dir = 't/tmp/etc/socialtext/db';
 my $log_dir = 't/tmp/log';

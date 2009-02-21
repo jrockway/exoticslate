@@ -11,9 +11,13 @@ my $schema = Socialtext::Schema->new;
 my $schema_file = $schema->_schema_filename;
 $schema_file =~ s#.+/(etc/socialtext.+)#$1#;
 my $schema_name = $schema->schema_name;
+my %connect_params = $schema->connect_params();
+
+# Allow specifying an output file instead of overriding the schema file
+$schema_file = shift if @ARGV;
 
 # Re-create the base schema
-$ENV{PGDATABASE} = "NLW_$ENV{USER}";
+$ENV{PGDATABASE} = $connect_params{db_name};
 shell_run("pglist public "
     . " | grep -v 'COMMENT ON ' "
     . " | egrep -v 'STARTS? WITH 1' > $schema_file");

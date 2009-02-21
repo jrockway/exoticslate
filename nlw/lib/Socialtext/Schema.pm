@@ -179,6 +179,7 @@ sub sync {
 
 sub _add_required_data {
     my $self = shift;
+    return if $self->{no_add_required_data};
     return unless $self->schema_name eq 'socialtext';
     require Socialtext::Data;
 
@@ -356,7 +357,7 @@ sub _display {
     my $self = shift;
     my $msg = shift;
 
-    print $self->schema_name . ": $msg";
+    print $self->schema_name . ": $msg" unless $self->{quiet};
 }
 
 =head2 run_sql_file 

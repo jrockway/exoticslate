@@ -108,6 +108,19 @@ sub big_db {
     shell_run('really-big-db.pl', @args);
 }
 
+=head2 stress_for <secs>
+
+Run the stress test code for this many seconds.
+
+=cut
+
+sub stress_for {
+    my $self = shift;
+    my $secs = shift;
+
+    system("stressignals --sleeptime $secs");
+}
+
 sub create_account {
     my $self = shift;
     my $name = shift;

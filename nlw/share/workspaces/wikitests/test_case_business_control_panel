@@ -28,7 +28,7 @@
 | text_like | The %%new_acct%% account has been created. |  |
 | st-admin | disable-plugin --p dashboard --acc "%%new_acct%%" | The dashboard plugin is now disabled for account %%new_acct%% |
 | st-admin | disable-plugin --p people --acc "%%new_acct%%" | The people plugin is now disabled for account %%new_acct%% |
-| st-admin | disable-plugin --p signals --acc "%%new_acct%%" | The signals plugin is now disabled for account %%new_acct%% |
+| st-admin | disable-plugin --p signals --acc "%%new_acct%%" |  |
 
 | *Comment* | Test case: Business Control Panel validate plugins are disabled. |  |
 | *Comment* | Test case: Business Control Panel show new account |  |
@@ -336,7 +336,7 @@ text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_t
 
 | *Comment* | TC: BCP This section tests the custom Profile fields. |  |
 | click_and_wait | link=Accounts |  |
-| st-admin | enable-plugin --p people --account "0 sort 3 account %%start_time%%" | The people plugin is now enabled for account 0 sort 3 account %%start_time%% |
+| st-admin | enable-plugin --p people --account "0 sort 3 account %%start_time%%" |  |
 | click_and_wait | link=0 sort 3 account %%start_time%% |  |
 | wait_for_element_visible_ok | link=Profile Fields | 30000 |
 

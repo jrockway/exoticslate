@@ -1,7 +1,7 @@
 | *Comment* | Test Case: Calc New Page |  |
 
 | *Comment* | Test Case: Calc New Page |  |
-| st-admin | enable-plugin --p socialcalc --w %%workspace%% | The socialcalc plugin is now enabled for workspace %%workspace%% |
+| st-admin | enable-plugin --p socialcalc --w %%workspace%% |  |
 
 | open_ok | /%%workspace%%/index.cgi?action=display;page_type=spreadsheet;page_name=ns%20%%start_time%%#edit |  |
 | wait_for_element_visible_ok | st-save-button-link |  |

@@ -57,7 +57,7 @@ $schema->recreate('schema-file' => 't/test-data/socialtext-schema.sql');
 
 # Check each schema
 for ( $START_SCHEMA+1 .. $latest_schema ) {
-    lives_ok { $schema->sync( to_version => $_ ) }
+    lives_ok { $schema->sync( to_version => $_, no_dump => 1, no_create => 1) }
              "Schema migration $_";
     die "Can't continue" if $@;
 }

@@ -78,6 +78,36 @@ sub http_user_pass {
     $self->{http}->password($pass) if $pass;
 }
 
+=head2 big_db
+
+Loads the database with records.  Configured through wiki 
+variables as follows:
+
+=over 4
+
+=item db_accounts
+
+=item db_users
+
+=item db_pages
+
+=item db_events
+
+=item db_signals
+
+=back
+
+=cut
+
+sub big_db {
+    my $self = shift;
+    my @args = map { ("--$_" => $self->{"db_$_"}) }
+        grep { exists $self->{"db_$_"} }
+        qw(accounts users pages events signals);
+
+    shell_run('really-big-db.pl', @args);
+}
+
 sub create_account {
     my $self = shift;
     my $name = shift;

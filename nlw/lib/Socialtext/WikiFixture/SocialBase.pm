@@ -10,7 +10,7 @@ use Socialtext::SQL qw/sql_execute/;
 use Socialtext::JSON qw/decode_json encode_json/;
 use URI::Escape qw(uri_unescape uri_escape);
 use Socialtext::File;
-use Time::HiRes qw/gettimeofday tv_interval/;
+use Time::HiRes qw/gettimeofday tv_interval time/;
 use Socialtext::System qw/shell_run/;
 
 =head1 NAME
@@ -281,7 +281,16 @@ sub cond_get {
     push @headers, 'If-None-Match', $inm if $inm;
 
     warn "Calling get on $uri";
+    my $start = time();
     $self->{http}->get($self->{browser_url} . $uri, \@headers);
+    $self->{_last_http_time} = time() - $start;
+}
+
+sub was_faster_than {
+    my ($self, $secs) = @_;
+
+    my $elapsed = delete $self->{_last_http_time} || -1;
+    cmp_ok $elapsed, '<=', $secs, "timer was faster than $secs";
 }
 
 =head2 delete ( uri, accept )
@@ -496,18 +505,24 @@ sub _call_method {
             } split m/\s*,\s*/, $headers
         ];
     }
+    my $start = time();
     $self->{http}->$method($self->{browser_url} . $uri, $headers, $body);
+    $self->{_last_http_time} = time() - $start;
 }
 
 sub _get {
     my ($self, $uri, $opts) = @_;
-    warn "GET: $self->{browser_url}$uri";
+    warn "GET: $self->{browser_url}$uri"; # intentional warn
+    my $start = time();
     $self->{http}->get( $self->{browser_url} . $uri, $opts );
+    $self->{_last_http_time} = time() - $start;
 }
 
 sub _delete {      
-        my ($self, $uri, $opts) = @_;
-            $self->{http}->delete( $self->{browser_url} . $uri, $opts );
+    my ($self, $uri, $opts) = @_;
+    my $start = time();
+    $self->{http}->delete( $self->{browser_url} . $uri, $opts );
+    $self->{_last_http_time} = time() - $start;
 }
 
 sub edit_page {

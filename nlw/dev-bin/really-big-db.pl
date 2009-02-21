@@ -2,23 +2,35 @@
 # @COPYRIGHT@
 use warnings;
 use strict;
-
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use Socialtext::SQL qw/get_dbh/;
 use List::Util qw(shuffle);
-
-my $now = time;
-my $nowish = substr("$now",-5);
+use Getopt::Long;
 
 my $ACCOUNTS = 1000;
 my $USERS = 2000; # _Must_ be bigger than $ACCOUNTS
 my $PAGES = 1000;
-my $MAX_WS_ASSIGN = 50; # must be much smaller than accounts (at least 20x smaller)
-my $PAGE_VIEW_EVENTS = 45000;
-my $OTHER_EVENTS = 50000;
 my $WRITES_PER_COMMIT = 5000;
+my $EVENTS = 100_000;
+my $VIEW_EVENT_RATIO = 0.85;
 my $SIGNALS = 100_000;
+
+GetOptions(
+    'accounts|a=i' => \$ACCOUNTS,
+    'users|u=i' => \$USERS,
+    'pages|p=i' => \$PAGES,
+    'events|e=i' => \$EVENTS,
+    'view-event-ratio|v=s' => \$VIEW_EVENT_RATIO,
+    'signals|s=i' => \$SIGNALS,
+);
+
+my $MAX_WS_ASSIGN = int($ACCOUNTS / 20); 
+my $PAGE_VIEW_EVENTS = int($VIEW_EVENT_RATIO * $EVENTS);
+my $OTHER_EVENTS = $EVENTS - $PAGE_VIEW_EVENTS;
+
+my $now = time;
+my $nowish = substr("$now",-5);
 
 my $create_ts = '2007-01-01 00:00:00+0000';
 my @accounts;

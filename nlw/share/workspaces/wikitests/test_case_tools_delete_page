@@ -22,14 +22,16 @@
 
 | *Comment* | Tools: Delete Page: delete the page |  |
 | open_ok | /%%workspace%%/?Delete Page %%start_time%% |  |
-| click_and_wait | link=Delete Page |  |
-| confirmation_like | Are you sure you want to delete this page? |  |
+| click_ok | link=Delete Page |  |
+| wait_for_element_visible_ok | st-delete-deletelink | 20000 |
+| click_and_wait | st-delete-deletelink |  |
 | text_like | contentTitle | Deleted "Delete Page %%start_time%%" |
 | text_like | contentColumns | The page had these Backlinks: |
 | text_like | contentColumns | Backlink Page %%start_time%% |
 
 | *Comment* | Tools: Delete Page: restore the page |  |
-| click_and_wait | //input[@value='Restore Page'] |  |
+| wait_for_element_visible_ok | link=Restore Page |  |
+| click_and_wait | link=Restore Page |  |
 | text_like | contentContainer | Delete Page Content %%start_time%% |
 
 | *Comment* | Tools: Delete Page: three revisions, all revision 1 |  |
@@ -38,8 +40,9 @@
 | click_and_wait | link=Compare Revisions |  |
 | text_like | contentContainer | Delete Page Content %%start_time%% |
 | click_and_wait | //a[contains(@href,'index.cgi?delete_page_%%start_time%%')] |  |
-| click_and_wait | link=Delete Page |  |
-| confirmation_like | Are you sure you want to delete this page? |  |
+| click_ok | link=Delete Page |  |
+| wait_for_element_visible_ok | st-delete-deletelink | 20000 |
+| click_and_wait | st-delete-deletelink |  |
 
 | open_ok | /%%workspace%%/?Backlink Page %%start_time%% |  |
 | text_like | contentContainer | Delete Page %%start_time%% |

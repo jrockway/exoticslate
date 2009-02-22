@@ -24,7 +24,7 @@
 | type_ok | email_page_add_note | Note %%start_time%% from Test Case: Email |
 
 | *Comment* | Test Case: Email attachment email sending page to %%workspace%%@%%wikiemail%% |  |
-| click_ok | //input[@value='Send'] |  |
+| click_ok | email_send |  |
 
 | *Comment* | Pausing 60 seconds for email delivery |
 | pause | 60000 |

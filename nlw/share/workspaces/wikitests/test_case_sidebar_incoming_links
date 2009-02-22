@@ -1,6 +1,6 @@
 | *Comment* | Starting Test Case: Sidebar: Incoming Links |  |
 
- Add a link to a non-existent page in an existing page | incipient page link appears in existing page | incipient page link has dotted underline 
+ Add a link to a non-existent page in an existing page | incipient page link appears in existing page | incipient page link has dotted underline
 Navigate to a page known to have zero incoming links | system displays "There are no pages that link to this page yet."
 
 | open_ok | /%%workspace%%/index.cgi?action=new_page |  |
@@ -15,8 +15,8 @@ Navigate to a page known to have zero incoming links | system displays "There ar
 | text_like | link=TC Incoming Links New Page %%start_time%% | TC Incoming Links New Page %%start_time%% |
 | text_like | contentRight | There are no pages that link to this page yet |
 
- Click non-existent link | new page appears ready for editing 
- edit and save new page | existing page appears in new page incoming links
+ Click non-existent link | new page appears ready for editing
+edit and save new page | existing page appears in new page incoming links
 
 | click_ok | link=TC Incoming Links New Page %%start_time%% |  |
 | wait_for_element_visible_ok | blank-radio | 20000 |
@@ -29,23 +29,25 @@ Navigate to a page known to have zero incoming links | system displays "There ar
 
 | text_like | link=TC Incoming Links %%start_time%% | TC Incoming Links %%start_time%% |
 
- navigate to and delete existing page | page is gone 
- navigate to new page | Incoming link to old page is gone
+ navigate to and delete existing page | page is gone
+navigate to new page | Incoming link to old page is gone
 
 | clickAndWait | link=TC Incoming Links %%start_time%% |  |
-| clickAndWait | link=Delete Page |  |
-| confirmation_like | Are you sure you want to delete this page? |  |
+| click_ok | link=Delete Page |  |
+| wait_for_element_visible_ok | st-delete-deletelink | 20000 |
+| click_and_wait | st-delete-deletelink |  |
 
 | open_ok | /%%workspace%%/?TC Incoming Links New Page %%start_time%% |  |
 | text_like | There are no pages that link to this page yet. |  |
 
 | *Comment* | Starting Test Case: Sidebar: Incoming Links Teardown |
 
-| clickAndWait | link=Delete Page |  |
-| confirmation_like | Are you sure you want to delete this page? |  |
+| click_ok | link=Delete Page |  |
+| wait_for_element_visible_ok | st-delete-deletelink | 20000 |
+| click_and_wait | st-delete-deletelink |  |
 
- Navigate to a page known to have incoming links | incoming links appear in sidepanel 
- Navigate to a page known to have many incoming links | all incoming links appear in sidepanel | Help workspace central page is a good page
+ Navigate to a page known to have incoming links | incoming links appear in sidepanel
+Navigate to a page known to have many incoming links | all incoming links appear in sidepanel | Help workspace central page is a good page
 
 | open_ok | /%%workspace%%/?Start Here |
 

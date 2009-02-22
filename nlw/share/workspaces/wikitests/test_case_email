@@ -1,8 +1,6 @@
 TODO: Get Selenium to select more than one user simultaneously
-
-TODO: Figure out why verifyChecked doesn't work. Note that there may be a bug in the form that is causing verifyChecked
-to not work: type an email into the additional recipients box and uncheck the box. The additional recipient is added to
-the recipient list as if the Add Additional User button had been pushed. Do the button and the checkbox have the same ID or name?
+TODO: email_page_add_note_check
+TODO: email_page_keep_attachments
 
 | *Comment* | Test Case: Email |  |
 | st-admin | create-user --email %%start_time%%_one@ken.socialtext.net --password 123456 |  |
@@ -18,14 +16,17 @@ the recipient list as if the Add Additional User button had been pushed. Do the 
 | type_ok | st-newpage-pagename-edit | Email title %%start_time%% |
 | click_and_wait | st-save-button-link |  |
 
+| *Comment* | Test Case: Email. No recipient, then cancel |  |
+| click_ok | link=Email |  |
+| wait_for_element_visible_ok | email_send | 30000 |
+| click_ok | email_send |  |
+| verifyAlert | Error: To send email, you must specify a recipient. |  |
+| wait_for_element_visible_ok | email_cancel | 30000 |
+| click_ok | email_cancel |  |
+
 | *Comment* | Test Case: Email Popup Functionality |  |
 | click_ok | link=Email |  |
-| wait_for_element_visible_ok | st-email-lightbox | 30000 |
-| click_ok | //input[@value='Cancel'] |  |
-| click_ok | link=Email |  |
-| wait_for_element_visible_ok | st-email-lightbox | 30000 |
-| click_ok | //input[@value='Send'] |  |
-| verifyAlert | Error: To send email, you must specify a recipient. |
+| wait_for_element_visible_ok | email_send | 30000 |
 | value_like | email_page_subject | Email title %%start_time%% |
 | text_like | st-email-lightbox | From |
 | text_like | st-email-lightbox | <%%email%%> |
@@ -61,15 +62,14 @@ the recipient list as if the Add Additional User button had been pushed. Do the 
 | text_like | email_page_user_choices | %%workspace%%@%%wikiemail%% |
 | type_ok | email_page_add_one | foobar2ken.socialtext.net |
 | click_ok | email_addone |  |
-| verifyAlert | "foobar2ken.socialtext.net" is not a valid email address. |
+| verifyAlert | "foobar2ken.socialtext.net" is not a valid email address. |  |
 
 | *Comment* | Test Case: Email Note and Attachments |  |
 | text_like | email_page_add_note | Hello, this is a page from the workspace that I wanted you to see. This page is also available for viewing or editing on the web at: |
 | text_like | email_page_add_note | /%%workspace%%/?email_title_%%start_time%% |
 | type_ok | email_page_add_note | Note %%start_time%% from Test Case: Email |
-
 | *Comment* | Test Case: Email sending page to %%workspace%%@%%wikiemail%% |  |
-| click_ok | //input[@value='Send'] |  |
+| click_ok | email_send |  |
 
 | *Comment* | Pausing 60 seconds for email delivery |
 | pause | 60000 |
@@ -80,78 +80,59 @@ the recipient list as if the Add Additional User button had been pushed. Do the 
 | text_like | st-page-titletext | Email subject %%start_time%% |
 | text_like | st-page-content | qr/^\s*Announcements and Links àèéìòù$/m |
 
-| *Comment* | Test Case: Email RT 27006 |  |
 | *Comment* | Test Case: Email Send an email to add to page contents the normal way |  |
-
 | click_ok | link=Email |  |
 | wait_for_element_visible_ok | st-email-lightbox | 30000 |
-
 | type_ok | email_page_add_one | %%workspace%%@%%wikiemail%% |
 | click_ok | email_addone |  |
 | text_like | email_page_user_choices | %%workspace%%@%%wikiemail%% |
-
 | type_ok | email_page_subject | Email subject %%start_time%% |
-
-| click_ok | //input[@value='Send'] |  |
+| click_ok | email_send |  |
 
 | *Comment* | Pausing 60 seconds for email delivery |
 | pause | 60000 |
 
 | *Comment* | Test Case: Email Check that the new page is there |  |
 | open_ok | /%%workspace%%/index.cgi?Email_subject_%%start_time%% |  |
-| wait_for_element_visible_ok | st-page-titletext | 10000 |
+| wait_for_element_visible_ok | st-page-titletext | 30000 |
 | text_like | st-page-titletext | Email subject %%start_time%% |
 | text_like | st-page-content | qr/Announcements and Links àèéìòù/ |
 
 | *Comment* | Test Case: Email send another email with Fwd: Fw: Re: in front of the title |  |
-
 | click_ok | link=Email |  |
 | wait_for_element_visible_ok | st-email-lightbox | 30000 |
-
 | type_ok | email_page_add_one | %%workspace%%@%%wikiemail%% |
 | click_ok | email_addone |  |
 | text_like | email_page_user_choices | %%workspace%%@%%wikiemail%% |
-
 | type_ok | email_page_subject | Fw: Fwd: Re: Email subject %%start_time%% |
-
-| click_ok | //input[@value='Send'] |  |
+| click_ok | email_send |  |
 | wait_for_element_not_visible_ok | email_send | 30000 |
 
 | click_ok | link=Email |  |
 | wait_for_element_visible_ok | st-email-lightbox | 30000 |
-
 | type_ok | email_page_add_one | %%workspace%%@%%wikiemail%% |
 | click_ok | email_addone |  |
 | text_like | email_page_user_choices | %%workspace%%@%%wikiemail%% |
-
 | type_ok | email_page_subject | Re: Fw: Fwd: Email subject %%start_time%% |
-
-| click_ok | //input[@value='Send'] |  |
+| click_ok | email_send |  |
 | wait_for_element_not_visible_ok | email_send | 30000 |
 
 | click_ok | link=Email |  |
 | wait_for_element_visible_ok | st-email-lightbox | 30000 |
-
 | type_ok | email_page_add_one | %%workspace%%@%%wikiemail%% |
 | click_ok | email_addone |  |
 | text_like | email_page_user_choices | %%workspace%%@%%wikiemail%% |
-
 | type_ok | email_page_subject | Fwd: Fw: Re: Email subject %%start_time%% |
-
-| click_ok | //input[@value='Send'] |  |
+| click_ok | email_send |  |
 
 | *Comment* | Pausing 60 seconds for email delivery |
 | pause | 60000 |
 
 | *Comment* | Test Case: Email check that the new content from both mailings are added to the original page |  |
-
 | open_ok | /%%workspace%%/index.cgi?Email_subject_%%start_time%% |  |
 | wait_for_element_visible_ok | st-page-titletext | 10000 |
 | text_like | st-page-titletext | Email subject %%start_time%% |
-
 | text_like | st-page-content | qr/Announcements and Links àèéìòù.+Announcements and Links.+Announcements and Links.+Announcements and Links.+Announcements and Links.+Announcements and Links.+Announcements and Links àèéìòù/ |
-
-| *Comment* | end RT 27006 |  |
 
 | *Comment* | Test Case: Email Teardown |  |
 | st-admin | purge-page --w %%workspace%% --page email_title_%%start_time%% | page was purged |

@@ -55,7 +55,7 @@ use or create a workspace with several tags and tagged pages
 | clickAndWait | st-save-button-link |  |
 
  click on several tag links | Category (Tag) page with table containing links to tagged pages appears
- click on several page links | Pages appear; each page has its that tag displayed in Tags sidebar.
+click on several page links | Pages appear; each page has its that tag displayed in Tags sidebar.
 
 | *Comment* | Test Case: Tags Checking tag2 links and pages |  |
 | open_ok | /%%workspace%%/index.cgi?action=category_list |  |
@@ -83,16 +83,16 @@ use or create a workspace with several tags and tagged pages
 
 | *Comment* | Test Case: Tags post to category by email not implemented |
 
- return to Category (Tag) page | sortable table of tagged pages appears 
- Toggle sort link at top of each column | tables sort and reverse sort correctly
+ return to Category (Tag) page | sortable table of tagged pages appears
+Toggle sort link at top of each column | tables sort and reverse sort correctly
 
 TOO: restore the following test when tag listview sorting is implemented
 
  *Comment* | Test Case: Tags Checking tag sorting | |
- open_ok | /%%workspace%%/index.cgi?action=category_list | |
- text_like | qr/Tag 1 %%start_time%%.+Tag 2 %%start_time%%/ | |
- click_ok | link=Add Tag | |
- text_like | qr/Tag 2 %%start_time%%.+Tag 1 %%start_time%%/ | |
+open_ok | /%%workspace%%/index.cgi?action=category_list | |
+text_like | qr/Tag 1 %%start_time%%.+Tag 2 %%start_time%%/ | |
+click_ok | link=Add Tag | |
+text_like | qr/Tag 2 %%start_time%%.+Tag 1 %%start_time%%/ | |
 
 Delete tag from pages until tag is gone from all pages.
 Go to All Tags | The deleted tag should not appear in list
@@ -115,14 +115,15 @@ Go to All Tags | The deleted tag should not appear in list
 | text_unlike | contentContainer | Tag 1 %%start_time%% |
 | text_like | contentContainer | Tag 2 %%start_time%% |
 
-Make a new page and add a new tag (a tag not already in use in workspace) | tag is added 
- Delete this page. | Page is deleted. This tag now has zero pages. 
- Go to All Tags | The tag from the deleted page should not appear in list.
+Make a new page and add a new tag (a tag not already in use in workspace) | tag is added
+Delete this page. | Page is deleted. This tag now has zero pages.
+Go to All Tags | The tag from the deleted page should not appear in list.
 
 | *Comment* | Test Case: Tags. Tags with zero pages should not appear in the tag list |  |
 | open_ok | /%%workspace%%/index.cgi?Tag 2 Content Title %%start_time%% |  |
-| click_and_wait | link=Delete Page |  |
-| confirmation_like | Are you sure you want to delete this page? |  |
+| click_ok | link=Delete Page |  |
+| wait_for_element_visible_ok | st-delete-deletelink | 30000 |
+| click_and_wait | st-delete-deletelink |  |
 | open_ok | /%%workspace%%/index.cgi?action=category_list |  |
 | text_unlike | contentContainer | Tag 2 %%start_time%% |
 

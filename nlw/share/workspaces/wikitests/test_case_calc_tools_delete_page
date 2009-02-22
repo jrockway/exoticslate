@@ -17,11 +17,8 @@
 | *Comment* | Calc Tools: Delete Page: Test functions |  |
 | open_ok | /%%workspace%%/index.cgi?to_be_deleted_spreadsheet_%%start_time%% |  |
 | click_ok | link=Delete Page |  |
-
- confirmation_like | Are you sure you want to delete this page? | |
-
 | wait_for_element_visible_ok | st-delete-deletelink | 20000 |
-| click_ok | st-delete-deletelink |  |
+| click_and_wait | st-delete-deletelink |  |
 | wait_for_element_visible_ok | link=Restore Page |  |
 | text_like | st-page-titletext | Deleted "to_be_deleted_spreadsheet_%%start_time%%" |
 | click_and_wait | link=Restore Page |  |
@@ -31,11 +28,8 @@
 
 | click_and_wait | link=Back To Current Revision |  |
 | click_ok | link=Delete Page |  |
-
- confirmation_like | Are you sure you want to delete this page? | |
-
 | wait_for_element_visible_ok | st-delete-deletelink | 20000 |
-| click_ok | st-delete-deletelink |  |
+| click_and_wait | st-delete-deletelink |  |
 
 | open_ok | /%%workspace%%/index.cgi?delete_spreadsheet_%%start_time%% |  |
 | click_and_wait | controls-right-revisions |  |

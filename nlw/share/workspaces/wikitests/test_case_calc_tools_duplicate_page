@@ -10,19 +10,19 @@ Note: Cannot automate attachments, test is slightly reduced
 
 | *Comment* | Test Case: Calc Tools: Duplicate Page Test Duplicate popup, duplicate the page |  |
 | click_ok | link=Duplicate Page |  |
-| wait_for_element_visible_ok | st-duplicate-submit | 30000 |
-| click_and_wait | st-duplicate-submit |  |
+| wait_for_element_visible_ok | st-duplicate-savelink | 30000 |
+| click_and_wait | st-duplicate-savelink |  |
 | wait_for_element_visible_ok | st-page-titletext |
 | text_like | st-page-titletext | Duplicate of Dupe Spreadsheet %%start_time%% |
 
 | *Comment* | Test Case: Calc Tools: Duplicate Page Edit first page, save over second page |  |
 | open_ok | /%%workspace%%/index.cgi?dupe_spreadsheet_%%start_time%% |  |
 | click_ok | link=Duplicate Page |  |
-| wait_for_element_visible_ok | st-duplicate-submit | 30000 |
-| click_ok | st-duplicate-submit |  |
+| wait_for_element_visible_ok | st-duplicate-savelink | 30000 |
+| click_ok | st-duplicate-savelink |  |
 | wait_for_element_visible_ok | st-duplicate-error | 30000 |
 | text_like | st-duplicate-error | The new page name you selected, "Duplicate of Dupe Spreadsheet %%start_time%%", is already in use. Please choose a different name. |
-| click_and_wait | st-duplicate-submit |  |
+| click_and_wait | st-duplicate-savelink |  |
 | wait_for_element_visible_ok | st-page-titletext |
 | text_like | st-page-titletext | Duplicate of Dupe Spreadsheet %%start_time%% |
 

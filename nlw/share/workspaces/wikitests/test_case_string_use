@@ -71,7 +71,7 @@ Set default values if they are not defined by the caller
 | wait_for_element_visible_ok | st-duplicate-form | 30000 |
 | wait_for_element_visible_ok | st-duplicate-newname | 30000 |
 | type_ok | st-duplicate-newname | %%test_string%% dupe |
-| click_and_wait | st-duplicate-submit |  |
+| click_and_wait | st-duplicate-savelink |  |
 
 | open_ok | /%%workspace%%/index.cgi?%%test_id%%_dupe |  |
 | wait_for_element_visible_ok | st-page-titletext | 30000 |

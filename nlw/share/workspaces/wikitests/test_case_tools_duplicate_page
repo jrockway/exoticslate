@@ -25,7 +25,7 @@
 
 | *Comment* | Deliberately use non-space containing pagename for location_like_ok test |
 | type_ok | st-duplicate-newname | Page_Duplicated_%%start_time%% |
-| click_and_wait | st-duplicate-submit |  |
+| click_and_wait | st-duplicate-savelink |  |
 
 | *Comment* | Test Case: Tools: Duplicate Page. verify duplicate |  |
 | location_like | `/%%workspace%%/index.cgi?Page_Duplicated_%%start_time%%` |  |
@@ -47,25 +47,25 @@
 | wait_for_element_visible_ok | st-duplicate-form | 30000 |
 | wait_for_element_visible_ok | st-duplicate-newname | 30000 |
 | type_ok | st-duplicate-newname | Untitled Page |
-| click_ok | st-duplicate-submit |  |
+| click_ok | st-duplicate-savelink |  |
 | wait_for_element_visible_ok | st-duplicate-error | 30000 |
 | text_like | st-duplicate-error | The page name you selected, "Untitled Page", is not allowed. Please enter or change the page name. |
-| click_ok | st-duplicate-cancel |  |
+| click_ok | st-duplicate-cancellink |  |
 | wait_for_element_not_visible_ok | st-duplicate-form | 30000 |
 
-TODO: come back and finish this test when {bz: 1039} is fixed. Can't seem to click st-duplicate-submit multiple times. That could be a problem with Selenium or with the dialog boxes.
+TODO: come back and finish this test when {bz: 1039} is fixed. Can't seem to click st-duplicate-savelink multiple times. That could be a problem with Selenium or with the dialog boxes.
 
 | *Comment* | Test Case: Tools: Duplicate Page. Duplicate the edited page |  |
 | click_and_wait | link=Home | navigate away and back |
 | open_ok | /%%workspace%%/?Duplicate This Page %%start_time%% |  |
 | click_ok | link=Duplicate Page |  |
-| wait_for_element_visible_ok | st-duplicate-submit | 30000 |
+| wait_for_element_visible_ok | st-duplicate-savelink | 30000 |
 | wait_for_element_visible_ok | st-duplicate-newname | 30000 |
 | type_ok | st-duplicate-newname | Page_Duplicated_%%start_time%% |
-| click_ok | st-duplicate-submit |  |
+| click_ok | st-duplicate-savelink |  |
 | wait_for_element_visible_ok | st-duplicate-error | 30000 |
 | text_like | st-duplicate-error | The new page name you selected, "Page_Duplicated_%%start_time%%", is already in use |
-| click_and_wait | st-duplicate-submit |  |
+| click_and_wait | st-duplicate-savelink |  |
 
 | *Comment* | Test Case: Tools: Duplicate Page. verify 2nd duplicate using space-containing URL |  |
 | location_like | `/%%workspace%%/index.cgi?Page_Duplicated_%%start_time%%` |  |

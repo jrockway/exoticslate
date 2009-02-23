@@ -6,8 +6,8 @@ This test is designed to test global navigation changes as people/dashboard is e
 
 | *Comment* | Test Case: People Dashboard Plugins |  |
 | *Comment* | Enable people and dashboard. See "Home" (is dashboard), "People", "Workspaces" |  |
-| st-admin | enable-plugin --plugin people --all-accounts | is now enabled |
-| st-admin | enable-plugin --plugin dashboard --all-accounts | is now enabled |
+| st-admin | enable-plugin --plugin people --all-accounts |  |
+| st-admin | enable-plugin --plugin dashboard --all-accounts |  |
 | open_ok | / |  |
 | wait_for_element_visible_ok | link=Home | 4000 |
 | wait_for_element_visible_ok | link=People | 4000 |

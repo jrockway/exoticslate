@@ -38,7 +38,7 @@
 | text_like | Socialtext Signals (click to enable) |  |
 
 | *Comment* | added check for Dashboard once {bz: 1782} was fixed |  |
-| st-admin | enable-plugin --p dashboard --acc "%%new_acct%%" | The dashboard plugin is now enabled for account %%new_acct%% |
+| st-admin | enable-plugin --p dashboard --acc "%%new_acct%%" |  |
 | text_like | Socialtext Dashboard |  |
 
 | *Comment* | Test case: Business Control Panel plugin one at a time, click the confirmation, validate that plugin is enabled. |  |

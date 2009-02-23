@@ -119,7 +119,7 @@ TODO: make blank, template, and copied spreadsheets if Selenium can handle it
 | wait_for_element_not_visible_ok | st-create-content-cancellink | 5000 |
 
 | *Comment* | Test Case: Create Content. Teardown |  |
-| st-admin | enable-plugin --w %%workspace%% --plugin socialcalc | The socialcalc plugin is now enabled for workspace %%workspace%% |
+| st-admin | enable-plugin --w %%workspace%% --plugin socialcalc |  |
 
 | *Comment* | Test Case: Create Content. COMPLETED |  |
 

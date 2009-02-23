@@ -1,6 +1,6 @@
 | *Comment* | Test Case: Gadgets Galore |  |
 
-| st-admin | enable-plugin --p dashboard --all-accounts | The dashboard plugin is now enabled for all accounts |
+| st-admin | enable-plugin --p dashboard --all-accounts |  |
 
 | *Comment* | Test Case: Gadgets Galore. Make one of each |  |
 

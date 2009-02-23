@@ -25,6 +25,7 @@ parser.add_option("-l", "--server", dest="serverurl", help="Server base url to r
 parser.add_option("-L", "--limit", dest="limit", type="int", help="limit for each request", default=10)
 parser.add_option("-r", "--rampup", dest="rampup", type="int", help="number of clients to start per second (rampup)", default=10)
 parser.add_option("-f", "--followers", dest="followpercent", type="int", help="Percentage of signals getters to be requesting follow-only", default=100)
+parser.add_option("-z", "--sleeptime", dest="sleeptime", type="int", help="How long to run for", default=60)
 
 (options, args) = parser.parse_args()
 print "# OPTIONS:",options
@@ -199,7 +200,7 @@ def fetchsignals(url, threadnum):
     theaders['accept']="application/json"
     theaders['Accept']="application/json"
     lastat=None
-    for x in range(100):
+    while True:
         then = time.time()
         urlstring=url+("?limit=%d" % options.limit)
         if lastat and options.useat:
@@ -263,7 +264,10 @@ def fetchpages(pagelist, threadnum):
         print "At %f, fetchpages-%d fetched %s as user %s with time %.3f result code %s" % (now, threadnum, url, user, now-then, result[0])
         api.sleep(options.backsleep)
 
-pool = coros.CoroutinePool(max_size=options.clients+options.backclients+options.postclients+1)
+def sleepa(delay):
+    api.sleep(delay)
+
+pool = coros.CoroutinePool(max_size=options.clients+options.backclients+options.postclients+2)
 
 for x in range(0, options.backclients):
    pool.execute(fetchpages, pages, x)
@@ -275,6 +279,6 @@ waiters = []
 for x in range(0,options.clients):
     waiters.append(pool.execute(fetchsignals, options.serverurl+'/data/signals', x))
 
+sleepawaita=pool.execute(sleepa, options.sleeptime)
 
-for waiter in waiters:
-    waiter.wait()
+sleepawaita.wait()

@@ -10,7 +10,7 @@ use Socialtext::SQL qw/sql_execute/;
 use Socialtext::JSON qw/decode_json encode_json/;
 use URI::Escape qw(uri_unescape uri_escape);
 use Socialtext::File;
-use Time::HiRes qw/gettimeofday tv_interval/;
+use Time::HiRes qw/gettimeofday tv_interval time/;
 use Socialtext::System qw/shell_run/;
 
 =head1 NAME
@@ -76,6 +76,49 @@ sub http_user_pass {
     $self->{http} = Test::HTTP->new($name);
     $self->{http}->username($user) if $user;
     $self->{http}->password($pass) if $pass;
+}
+
+=head2 big_db
+
+Loads the database with records.  Configured through wiki 
+variables as follows:
+
+=over 4
+
+=item db_accounts
+
+=item db_users
+
+=item db_pages
+
+=item db_events
+
+=item db_signals
+
+=back
+
+=cut
+
+sub big_db {
+    my $self = shift;
+    my @args = map { ("--$_" => $self->{"db_$_"}) }
+        grep { exists $self->{"db_$_"} }
+        qw(accounts users pages events signals);
+
+    shell_run('really-big-db.pl', @args);
+}
+
+=head2 stress_for <secs>
+
+Run the stress test code for this many seconds.
+
+=cut
+
+sub stress_for {
+    my $self = shift;
+    my $secs = shift;
+
+    system("stressignals --sleeptime $secs");
 }
 
 sub create_account {
@@ -281,7 +324,16 @@ sub cond_get {
     push @headers, 'If-None-Match', $inm if $inm;
 
     warn "Calling get on $uri";
+    my $start = time();
     $self->{http}->get($self->{browser_url} . $uri, \@headers);
+    $self->{_last_http_time} = time() - $start;
+}
+
+sub was_faster_than {
+    my ($self, $secs) = @_;
+
+    my $elapsed = delete $self->{_last_http_time} || -1;
+    cmp_ok $elapsed, '<=', $secs, "timer was faster than $secs";
 }
 
 =head2 delete ( uri, accept )
@@ -496,18 +548,24 @@ sub _call_method {
             } split m/\s*,\s*/, $headers
         ];
     }
+    my $start = time();
     $self->{http}->$method($self->{browser_url} . $uri, $headers, $body);
+    $self->{_last_http_time} = time() - $start;
 }
 
 sub _get {
     my ($self, $uri, $opts) = @_;
-    warn "GET: $self->{browser_url}$uri";
+    warn "GET: $self->{browser_url}$uri"; # intentional warn
+    my $start = time();
     $self->{http}->get( $self->{browser_url} . $uri, $opts );
+    $self->{_last_http_time} = time() - $start;
 }
 
 sub _delete {      
-        my ($self, $uri, $opts) = @_;
-            $self->{http}->delete( $self->{browser_url} . $uri, $opts );
+    my ($self, $uri, $opts) = @_;
+    my $start = time();
+    $self->{http}->delete( $self->{browser_url} . $uri, $opts );
+    $self->{_last_http_time} = time() - $start;
 }
 
 sub edit_page {

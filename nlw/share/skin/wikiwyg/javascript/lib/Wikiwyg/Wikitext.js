@@ -1955,7 +1955,7 @@ proto.format_ol = function(elem) {
 
 proto.format_table = function(elem) {
     elem.top_level_block = true;
-    return elem.wikitext;
+    return (jQuery(elem).hasClass('sort') ? '|| sort\n' : '') + elem.wikitext;
 }
 
 proto.format_tr = function(elem) {

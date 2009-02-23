@@ -34,6 +34,30 @@ function nlw_name_to_id(name) {
 push_onload_function = function (fcn) { jQuery(fcn) }
 
 $(function() {
+    $('div.wiki table.sort')
+        .each(function() {
+            var $tbl = $(this);
+            var $row = $tbl
+                .children('tbody:first')
+                .children('tr:first');
+            if ($row.length) {
+                var $newRow = $('<tr />');
+                $row.children('td').each(function() {
+                    var $col = $(this);
+                    $newRow.append(
+                        $('<th />')
+                            .html($col.html())
+                            .attr('style', $col.attr('style'))
+                    );
+                });
+                $row.remove();
+                $tbl.prepend(
+                    $('<thead />').append($newRow)
+                );
+                $tbl.tablesorter();
+            }
+        });
+
     $('#st-page-boxes-toggle-link')
         .bind('click', function() {
             var hidden = $('#contentColumns').hasClass('hidebox');

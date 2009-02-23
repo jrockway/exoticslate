@@ -279,6 +279,23 @@ const html_start =>
     qq{<table style="border-collapse: collapse;" class="formatter_table">\n};
 const html_end => "</table>\n";
 
+sub match {
+    my $self = shift;
+    $self->SUPER::match(@_) or return;
+    if ($self->{text} =~ s/^\|\| *([^\|\n]+?) *\n//) {
+        $self->{options} = $1;
+    }
+    return 1;
+}
+
+sub html_start {
+    my $self = shift;
+    my $sort = (defined($self->{options}) and $self->{options} =~ /\bsort\b/)
+        ? ' sort' : '';
+    qq{<table style="border-collapse: collapse;" class="formatter_table$sort">\n};
+
+}
+
 ################################################################################
 package Socialtext::Formatter::TableRow;
 

@@ -16,6 +16,13 @@ our $k;
 # We punt to the permission handling stuff below.
 sub permission { +{ GET => undef } }
 sub entity_name { "User " . $_[0]->username }
+sub accounts { undef };
+
+sub attribute_table_row {
+    my ($self, $name, $value) = @_;
+    return '' if $name eq 'accounts';
+    return $self->SUPER::attribute_table_row($name, $value);
+}
 
 sub get_resource {
     my ( $self, $rest ) = @_;
@@ -31,7 +38,16 @@ sub get_resource {
         && (   $acting_user->is_business_admin()
             || $user->username eq $acting_user->username )
         ) {
-        return +{ hgrep { $k ne 'password' } %{ $user->to_hash } };
+            my %hash = %{$user->to_hash};
+            delete $hash{password};
+            $hash{accounts} = [
+                map { {
+                    account_name    => $_->name,
+                    account_id      => $_->account_id,
+                    plugins_enabled => [ $_->plugins_enabled ]
+                } } $user->accounts
+            ];
+        return \%hash;
     }
     return undef;
 }

@@ -1,9 +1,0 @@
----
-- description: Does some wiki stuff
-  socialtext: 1
-  src: file:widgets/share/widgets/one_page.xml
-  title: Wiki Page
-- description: Does some signals stuff
-  socialtext: 1
-  src: file:signals/share/signals.xml
-  title: Wiki Page

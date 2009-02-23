@@ -11,6 +11,7 @@ share/html/502.html.en
 share/html/502.html.html
 share/html/502.html.ja
 t/test-data/ja/mecabif
+t/share/plugin/fakeplugin/etc/widgets.yaml
 blib
 share/l10n/mecab/char.bin
 share/l10n/mecab/dicrc

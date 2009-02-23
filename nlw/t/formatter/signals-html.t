@@ -26,11 +26,11 @@ sub format {
 __DATA__
 === Strikethrough phrase wikitext supported
 --- wikitext: I mean to say -hello- goodbye.
---- html: I mean to say <del>-hello-</del> goodbye.
+--- html: I mean to say <del>hello</del> goodbye.
 
 === Bold actually does work here
 --- wikitext: I mean to say *hello* goodbye.
---- html: I mean to say <b>*hello*</b> goodbye.
+--- html: I mean to say <b>hello</b> goodbye.
 
 === Plain is plain
 --- wikitext: Plain text is plain text!

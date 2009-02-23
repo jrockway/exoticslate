@@ -25,10 +25,7 @@ CREATE TABLE gallery_gadget (
     
 ALTER TABLE ONLY gadget
     ADD COLUMN description TEXT,
-    ADD COLUMN uploaded BOOLEAN DEFAULT FALSE,
-    ALTER COLUMN src DROP NOT NULL,
-    ADD CONSTRAINT gadget_src_or_uploaded
-            CHECK (src IS NOT NULL OR uploaded);
+    ALTER COLUMN src DROP NOT NULL;
 
 UPDATE "System"
     SET value = '35'

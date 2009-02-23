@@ -298,10 +298,7 @@ CREATE TABLE gadget (
     thumbnail text,
     scrolling boolean DEFAULT false,
     height integer,
-    description text,
-    uploaded boolean DEFAULT false,
-    CONSTRAINT gadget_src_or_uploaded
-            CHECK ((src IS NOT NULL) OR uploaded)
+    description text
 );
 
 CREATE SEQUENCE gadget_id

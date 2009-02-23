@@ -2,9 +2,9 @@ Test edit summaries via the REST API
 
 * Fixture: SocialRest
 
-| comment | STARTING Test case: REST event activites |                                    |
-| set     | user_a                                   | %%start_time%%a@ken.socialtext.com |
-| set     | ws                                       | ws%%start_time%%                   |
+| comment | STARTING Test case: rest edit summaries |                                    |
+| set     | user_a                                  | %%start_time%%a@ken.socialtext.com |
+| set     | ws                                      | ws%%start_time%%                   |
 
 | comment          | create a bunch of workspaces and users and stuff |            |            |
 | create-workspace | %%ws%%                                           | Socialtext |            |

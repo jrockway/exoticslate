@@ -35,6 +35,7 @@
               <li><a href="?action=workspaces_listall">[% loc('My Workspaces') %]</a></li>
               [% IF perm_admin %]
               <li><a href="?action=workspaces_create">[% loc('Create New Workspace') %]</a></li>
+              <li><a href="?action=workspace_clone">[% loc('Clone This Workspace') %]</a></li>
               [% END %]
               [% IF workspace_present %]
               <li><a href="?action=workspaces_unsubscribe">[% loc('Unsubscribe') %]</a></li>

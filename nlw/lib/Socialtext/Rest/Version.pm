@@ -7,7 +7,10 @@ use base 'Socialtext::Rest';
 use Socialtext::JSON;
 use Readonly;
 
-Readonly our $API_VERSION => 1.00;
+# Starting from 1 onward, $API_VERSION should be a simple incrementing integer:
+# 1: iteration-2008-06-27
+# 2: iteration-2009-02-13 (release-3.4)
+Readonly our $API_VERSION => 2;
 Readonly our $MTIME       => ( stat(__FILE__) )[9];
 
 sub allowed_methods {'GET, HEAD'}

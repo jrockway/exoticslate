@@ -64,11 +64,7 @@
                         <div id="st-editing-prefix-container">
                             <div id="st-page-editing-toolbar-container">
 
-                                <div id="st-page-editing-toolbar">
-                                    <div id="st-page-editing-widget-menu">
-                                        [% INCLUDE insert_widget_menu %]
-                                    </div>
-                                </div>
+                                [% INCLUDE st_page_editing_toolbar %]
 
                                 <div id="st-page-editing-button-toolbar">
                                     <div id="st-page-editing-uploadbutton">

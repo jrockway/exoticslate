@@ -271,8 +271,8 @@ if (window.wikiwyg_nlw_debug)
     proto.default_config.modeClasses.push(WW_HTML_MODE);
 
 proto.placeToolbar = function(toolbar_div) {
-    jQuery('#st-page-editing-toolbar')
-        .prepend(toolbar_div);
+//     jQuery('#st-page-editing-toolbar')
+//         .prepend(toolbar_div);
 }
 
 proto.hideScrollbars = function () {

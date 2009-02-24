@@ -4,7 +4,7 @@
 
 <dl class="form">
 <dt><label>[% loc('Clone Workspace') %]</label></dt>
-<dd>[% loc('Make a clone of the [_1] workspace, including all pages, tags, and attachments.', workspace.title) %]</dd>
+<dd>[% loc('Make a clone of the [_1] workspace, including all pages, tags, and attachments. Next, you will need to invite members into the new workspace', workspace.title) %]</dd>
 </dl>
 
 <dl class="form">

@@ -195,18 +195,32 @@ my $FIELDS = <<'EOSQL';
     e.context AS context
 EOSQL
 
+my $SIGNAL_VIS_SQL = <<'EOSQL';
+     AND account_id IN (
+        SELECT account_id 
+        FROM signal_account sa 
+        WHERE sa.signal_id = signal_id
+    )
+EOSQL
+
 sub visible_exists {
     my ($plugin, $event_field) = @_;
-    return <<EOSQL;
-        EXISTS (
+    my $sql = <<EOSQL;
+       EXISTS (
             SELECT 1
             FROM account_user viewer
             JOIN account_plugin USING (account_id)
             JOIN account_user othr USING (account_id)
             WHERE plugin = '$plugin' AND viewer.user_id = ?
               AND othr.user_id = $event_field
+              -- signal vis
         )
 EOSQL
+
+    if ($plugin eq 'signals') {
+        $sql =~ s/-- signal vis/$SIGNAL_VIS_SQL/;
+    }
+    return $sql;
 }
 
 my $VISIBILITY_SQL = join "\n",

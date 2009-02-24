@@ -108,6 +108,11 @@ WHERE ((
                 JOIN account_user othr USING (account_id)
                 WHERE plugin = 'signals' AND viewer.user_id = ?
                   AND othr.user_id = evt.actor_id
+                  AND account_id IN (
+                      SELECT account_id 
+                      FROM signal_account sa 
+                      WHERE sa.signal_id = signal_id
+    )
             )
         )
     ))

@@ -59,7 +59,10 @@ $schema->recreate('schema-file' => 't/test-data/socialtext-schema.sql');
 for ( $START_SCHEMA+1 .. $latest_schema ) {
     lives_ok { $schema->sync( to_version => $_, no_dump => 1, no_create => 1) }
              "Schema migration $_";
-    die "Can't continue" if $@;
+    if ($@) {
+        system("tail -n 20 $log_dir/st-db.log");
+        die "Can't continue";
+    }
 }
 
 # Now check that the final result is the same as socialtext-schema.sql

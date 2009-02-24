@@ -32,6 +32,7 @@ sub register {
     $registry->add(action => 'workspaces_created');
     $registry->add(action => 'workspaces_unsubscribe');
     $registry->add(action => 'workspaces_permissions');
+    $registry->add(action => 'workspace_clone');
 }
 
 sub workspaces_listall {
@@ -413,18 +414,41 @@ sub _process_logo_upload {
     );
 }
 
+sub workspace_clone {
+    my $self = shift;
+
+    return $self->_workspace_clone_or_create(
+        loc('Workspaces: Clone This Workspace'),
+        'workspace_clone_section',
+    );
+}
+
 sub workspaces_create {
     my $self = shift;
+
+    return $self->_workspace_clone_or_create(
+        loc('Workspaces: Create New Workspace'),
+        'workspaces_create_section',
+    );
+}
+
+sub _workspace_clone_or_create {
+    my $self          = shift;
+    my $display_title = shift;
+    my $section       = shift;
+
     $self->hub->assert_current_user_is_admin;
 
     if ( $self->cgi->Button ) {
         my $ws = $self->_create_workspace();
-        $self->redirect( 'action=workspaces_created;workspace_id=' . $ws->workspace_id )
-            if $ws;
+        my $url = 'action=workspaces_created;workspace_id='
+            . $ws->workspace_id;
+
+        $self->redirect( $url ) if $ws;
     }
 
     my $settings_section = $self->template_process(
-        'element/settings/workspaces_create_section',
+        "element/settings/$section",
         workspace => $self->hub->current_workspace,
         $self->status_messages_for_template,
     );
@@ -434,54 +458,55 @@ sub workspaces_create {
         settings_table_id => 'settings-table',
         settings_section  => $settings_section,
         hub               => $self->hub,
-        display_title     => loc('Workspaces: Create New Workspace'),
+        display_title     => $display_title,
         pref_list         => $self->_get_pref_list,
     );
 }
 
 sub _create_workspace {
-    my $self = shift;
+    my $self       = shift;
+    my $cgi        = $self->cgi;
+    my $hub        = $self->hub;
+    my $clone_from = $cgi->clone_pages_from || '';
+    my $account_id = shift 
+        || $cgi->account_id
+        || $hub->current_workspace->account_id;
     my $ws;
-    my $account_id = shift || $self->cgi->account_id;
-    $account_id ||= $self->hub->current_workspace->account_id;
 
     eval {
-        my $current_ws = $self->hub->current_workspace;
+        my $cws  = $hub->current_workspace;
+        my $skin = $hub->skin;
+
         $ws = Socialtext::Workspace->create(
-            name    => $self->cgi->name,
-            title   => $self->cgi->title,
-            created_by_user_id => $self->hub->current_user->user_id,
-            #
+            name                            => $cgi->name,
+            title                           => $cgi->title,
+            clone_pages_from                => $clone_from,
+            created_by_user_id              => $hub->current_user->user_id,
+            account_id                      => $account_id,
+            enable_unplugged                => 1,
+
             # begin customization inheritances
-            #
-            cascade_css => $self->hub->skin->cascade_css,
-            customjs_name => $self->hub->skin->customjs_name,
-            skin_name  => $self->hub->skin->skin_name,
-            #
-            customjs_uri => $current_ws->customjs_uri,
-            uploaded_skin => $current_ws->uploaded_skin,
-            no_max_image_size => $current_ws->no_max_image_size,
-            invitation_filter => $current_ws->invitation_filter,
-            email_notification_from_address => $current_ws->email_notification_from_address,
-            restrict_invitation_to_search => $current_ws->restrict_invitation_to_search,
-            invitation_template => $current_ws->invitation_template,
-            show_welcome_message_below_logo => $current_ws->show_welcome_message_below_logo,
-            show_title_below_logo => $current_ws->show_title_below_logo,
-            header_logo_link_uri => $current_ws->header_logo_link_uri,
-            #
-            # end customization inheritances
-            #
-            account_id => $account_id,
-            enable_unplugged => 1,
+            cascade_css                     => $skin->cascade_css,
+            customjs_name                   => $skin->customjs_name,
+            skin_name                       => $skin->skin_name,
+            customjs_uri                    => $cws->customjs_uri,
+            uploaded_skin                   => $cws->uploaded_skin,
+            no_max_image_size               => $cws->no_max_image_size,
+            invitation_filter               => $cws->invitation_filter,
+            email_notification_from_address => $cws->email_notification_from_address,
+            restrict_invitation_to_search   => $cws->restrict_invitation_to_search,
+            invitation_template             => $cws->invitation_template,
+            show_welcome_message_below_logo => $cws->show_welcome_message_below_logo,
+            show_title_below_logo           => $cws->show_title_below_logo,
+            header_logo_link_uri            => $cws->header_logo_link_uri,
         );
 
-        $ws->set_logo_from_uri( uri => $self->cgi->logo_uri )
-            if $self->cgi->logo_uri;
-
-        # XXX - need to give child workspace its parents permissions
+        $ws->set_logo_from_uri( uri => $cgi->logo_uri ) if $cgi->logo_uri;
     };
 
-    if ( my $e = Exception::Class->caught('Socialtext::Exception::DataValidation') ) {
+    if ( my $e = Exception::Class->caught(
+        'Socialtext::Exception::DataValidation') 
+    ) {
         $self->add_error($_) for $e->messages;
         return;
     }
@@ -648,5 +673,6 @@ cgi 'enable_unplugged';
 cgi 'uploaded_skin';
 cgi 'skin_reset';
 cgi skin_file => '-upload';
+cgi 'clone_pages_from';
 
 1;

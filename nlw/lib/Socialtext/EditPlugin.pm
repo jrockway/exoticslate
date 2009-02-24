@@ -60,10 +60,10 @@ sub _signal_edit_summary {
         ? loc('"[_1]" (edited [_2] in [_3])', $edit_summary, $page_link, $workspace->title)
         : loc('wants you to know about an edit of [_1] in [_2]', $page_link, $workspace->title);
 
-
     my $signal = Socialtext::Signal->Create(
         user_id => $user->user_id,
         body    => $body,
+        account_ids => [ $workspace->account_id ],
         topic   => {
             page_id      => $page->id,
             workspace_id => $workspace->workspace_id,

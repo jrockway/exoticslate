@@ -180,6 +180,7 @@ $(function() {
             $.ajaxSettings.cache = false;
         }
     }
+    window.get_lightbox = get_lightbox;
 
     function get_plugin_lightbox (plugin, lightbox, cb) {
         Socialtext.plugin_lightbox_loaded =

@@ -1,4 +1,4 @@
-<div id="result-lightbox">
+<div id="simple-lightbox">
     <div class="title">[% title %]</div>
     <br/>
     <div class="msg">[% msg %]</div>

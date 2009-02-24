@@ -1152,6 +1152,40 @@ proto._do_table_manip = function(callback) {
     }, 100);
 }
 
+proto.do_table_settings = function() {
+    var self = this;
+
+    this._do_table_manip(function($cell) {
+        jQuery.showLightbox({
+            content: '#st-table-settings',
+            callback: function() {
+                var $table = $cell.parents("table:eq(0)");
+                var $form = jQuery("#st-table-settings form");
+
+                if ($table.is(".sort") ){
+                    $form.find("input[name=sort]").attr("checked", "checked");
+                }
+
+                jQuery("#st-table-settings form").one("reset", function() {
+                    jQuery.hideLightbox();
+                });
+
+                jQuery("#st-table-settings form").one("submit", function() {
+                    if ( $("input[name=sort]", this).is(":checked") ) {
+                        $table.addClass("sort");
+                    }
+                    else {
+                        $table.removeClass("sort");
+                    }
+
+                    jQuery.hideLightbox();
+                    return false;
+                });
+            }
+        });
+    });
+}
+
 proto.do_add_row_below = function() {
     var self = this;
     this._do_table_manip(function($cell) {

@@ -346,5 +346,17 @@
     </table>
 </div>
 
+<div id="st-table-settings" class="lightbox">
+    <form action="#">
+        <div> 
+            <input type="checkbox" name="sort"> Table is Sortable
+        </div>
+        <div> 
+            <input type="submit" value="Save">
+            <input type="reset" value="Cancel">
+        </div>
+    </form>
+</div>
+
 <iframe style="height: 1px; position: absolute; top: -2px;" frameborder="0" id="pastebin" src="[% wiki.skin_uri() %]/html/wikiwyg.html"></iframe>
 

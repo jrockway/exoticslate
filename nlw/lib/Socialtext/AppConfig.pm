@@ -830,8 +830,8 @@ Optional.
 
 =head2 web_services_proxy
 
-The URI to a proxy to be used for web services (like Google search,
-Technorati search, etc).
+The URI to a proxy to be used for web services (like Dashboard widgets, 
+Google search, RSS feeds).
 
 Optional.
 

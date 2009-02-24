@@ -17,16 +17,18 @@ TODO: email_page_keep_attachments
 | click_and_wait | st-save-button-link |  |
 
 | *Comment* | Test Case: Email. No recipient, then cancel |  |
-| click_ok | link=Email |  |
+| click_ok | st-pagetools-email |  |
 | wait_for_element_visible_ok | email_send | 30000 |
 | click_ok | email_send |  |
 | verifyAlert | Error: To send email, you must specify a recipient. |  |
 | wait_for_element_visible_ok | email_cancel | 30000 |
 | click_ok | email_cancel |  |
+| wait_for_element_not_visible_ok | st-email-lightbox | 30000 |
 
 | *Comment* | Test Case: Email Popup Functionality |  |
-| click_ok | link=Email |  |
-| wait_for_element_visible_ok | email_send | 30000 |
+| click_ok | st-pagetools-email |  |
+| wait_for_element_visible_ok | st-email-lightbox | 30000 |
+| wait_for_element_visible_ok |  email_page_subject | 30000 |
 | value_like | email_page_subject | Email title %%start_time%% |
 | text_like | st-email-lightbox | From |
 | text_like | st-email-lightbox | <%%email%%> |
@@ -76,13 +78,14 @@ TODO: email_page_keep_attachments
 
 | *Comment* | Test Case: Email Check Reception |  |
 | open_ok | /%%workspace%%/index.cgi?Email subject %%start_time%% |  |
-| wait_for_element_visible_ok | st-page-titletext | 10000 |
+| wait_for_element_visible_ok | st-page-titletext | 30000 |
 | text_like | st-page-titletext | Email subject %%start_time%% |
 | text_like | st-page-content | qr/^\s*Announcements and Links àèéìòù$/m |
 
 | *Comment* | Test Case: Email Send an email to add to page contents the normal way |  |
-| click_ok | link=Email |  |
-| wait_for_element_visible_ok | st-email-lightbox | 30000 |
+| wait_for_element_visible_ok | st-pagetools-email | 30000 |
+| click_ok | st-pagetools-email |  |
+| wait_for_element_visible_ok | email_page_add_one | 30000 |
 | type_ok | email_page_add_one | %%workspace%%@%%wikiemail%% |
 | click_ok | email_addone |  |
 | text_like | email_page_user_choices | %%workspace%%@%%wikiemail%% |
@@ -99,26 +102,29 @@ TODO: email_page_keep_attachments
 | text_like | st-page-content | qr/Announcements and Links àèéìòù/ |
 
 | *Comment* | Test Case: Email send another email with Fwd: Fw: Re: in front of the title |  |
-| click_ok | link=Email |  |
+| click_ok | st-pagetools-email |  |
 | wait_for_element_visible_ok | st-email-lightbox | 30000 |
+| wait_for_element_visible_ok | email_page_add_one | 30000 |
 | type_ok | email_page_add_one | %%workspace%%@%%wikiemail%% |
 | click_ok | email_addone |  |
 | text_like | email_page_user_choices | %%workspace%%@%%wikiemail%% |
 | type_ok | email_page_subject | Fw: Fwd: Re: Email subject %%start_time%% |
 | click_ok | email_send |  |
-| wait_for_element_not_visible_ok | email_send | 30000 |
+| wait_for_element_not_visible_ok | st-email-lightbox | 30000 |
 
-| click_ok | link=Email |  |
+| click_ok | st-pagetools-email |  |
 | wait_for_element_visible_ok | st-email-lightbox | 30000 |
+| wait_for_element_visible_ok | email_page_add_one | 30000 |
 | type_ok | email_page_add_one | %%workspace%%@%%wikiemail%% |
 | click_ok | email_addone |  |
 | text_like | email_page_user_choices | %%workspace%%@%%wikiemail%% |
 | type_ok | email_page_subject | Re: Fw: Fwd: Email subject %%start_time%% |
 | click_ok | email_send |  |
-| wait_for_element_not_visible_ok | email_send | 30000 |
+| wait_for_element_not_visible_ok | st-email-lightbox | 30000 |
 
-| click_ok | link=Email |  |
+| click_ok | st-pagetools-email |  |
 | wait_for_element_visible_ok | st-email-lightbox | 30000 |
+| wait_for_element_visible_ok | email_page_add_one | 30000 |
 | type_ok | email_page_add_one | %%workspace%%@%%wikiemail%% |
 | click_ok | email_addone |  |
 | text_like | email_page_user_choices | %%workspace%%@%%wikiemail%% |

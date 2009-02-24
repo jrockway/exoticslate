@@ -39,6 +39,7 @@ rm_dir "formatter_cache_dir";
 
 set -x
 NLWCTL_QUIET=1 dev-bin/nlwctl stop
+dev-bin/st-bootstrap-openldap stop
 dev-bin/_fresh-dev-env
 
 # Setup robots.txt file to prevent dev-env heat death

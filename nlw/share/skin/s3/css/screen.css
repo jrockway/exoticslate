@@ -4059,6 +4059,7 @@ body div#globalNav div input.searchText {
 
 .other_buttons, .table_buttons { }
 
+.table_buttons img.disabled,
 .table_buttons.disabled {
     opacity: 0.3;
 }

@@ -752,15 +752,25 @@ proto.toolbarStyling = function() {
         return;
     this.busy_styling = true;
     try {
-        var selection = this.get_edit_document().selection
-            ? this.get_edit_document().selection
-            : this.get_edit_window().getSelection();
-        var anchor = selection.anchorNode
-            ? selection.anchorNode
-            : selection.createRange().parentElement();
+        var cursor_state = this.get_cursor_state();
+        if( cursor_state.inside_table ) {
+            jQuery(".table_buttons, .table_buttons img").removeClass("disabled");
 
-        if( jQuery(anchor, this.get_edit_window()).parents("table").size() > 0 ) {
-            jQuery(".table_buttons").removeClass("disabled");
+            if (cursor_state.header_row) {
+                jQuery("#wikiwyg_button_move-row-down, #wikiwyg_button_move-row-up, #wikiwyg_button_add-row-above").addClass("disabled");
+            }
+            if (cursor_state.first_row) {
+                jQuery("#wikiwyg_button_move-row-up").addClass("disabled");
+            }
+            if (cursor_state.last_row) {
+                jQuery("#wikiwyg_button_move-row-down").addClass("disabled");
+            }
+            if (cursor_state.first_column) {
+                jQuery("#wikiwyg_button_move-col-left").addClass("disabled");
+            }
+            if (cursor_state.last_column) {
+                jQuery("#wikiwyg_button_move-col-right").addClass("disabled");
+            }
         }
         else {
             jQuery(".table_buttons").addClass("disabled");
@@ -771,6 +781,54 @@ proto.toolbarStyling = function() {
         }
     } catch(e) {}
     this.busy_styling = false;
+}
+
+proto.get_cursor_state = function() {
+    var selection = this.get_edit_document().selection
+        ? this.get_edit_document().selection
+        : this.get_edit_window().getSelection();
+    var anchor = selection.anchorNode
+        ? selection.anchorNode
+        : selection.createRange().parentElement();
+
+    var cursor_state = {
+        sortable_table: false,
+        inside_table: false,
+        header_row: false,
+        first_row: false,
+        last_row: false,
+        last_column: false
+    };
+
+    var $table = jQuery(anchor, this.get_edit_window()).parents("table");
+    if( $table.size() == 0 ) {
+        return cursor_state;
+    }
+
+    cursor_state.inside_table = true;
+    cursor_state.sortable_table = $table.is(".sort");
+
+    var $tr = jQuery(anchor, this.get_edit_window()).parents("tr");
+
+    if ($tr.size() == 0) return cursor_state;
+
+    if ($tr.prev("tr").size() == 0) cursor_state.first_row = true;
+    if ($tr.next("tr").size() == 0) cursor_state.last_row = true;
+
+    var $td = jQuery(anchor, this.get_edit_window()).parents("td");
+    var $th = jQuery(anchor, this.get_edit_window()).parents("th");
+
+    if ($td.size() > 0) {
+        if ($td.prev("td").size() == 0) cursor_state.first_column = true;
+        if ($td.next("td").size() == 0) cursor_state.last_column = true;
+    }
+    if ($th.size() > 0) {
+        if ($th.prev("th").size() == 0) cursor_state.first_column = true;
+        if ($th.next("th").size() == 0) cursor_state.last_column = true;
+        cursor_state.header_row = true;
+    }
+
+    return cursor_state;
 }
 
 proto.set_clear_handler = function () {

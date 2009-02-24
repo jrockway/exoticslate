@@ -472,6 +472,11 @@ CREATE TABLE signal (
     body text NOT NULL
 );
 
+CREATE TABLE signal_account (
+    signal_id bigint NOT NULL,
+    account_id bigint NOT NULL
+);
+
 CREATE SEQUENCE signal_id_seq
     INCREMENT BY 1
     NO MAXVALUE
@@ -792,6 +797,9 @@ CREATE INDEX ix_rollup_user_signal_user
 
 CREATE INDEX ix_session_last_updated
 	    ON sessions (last_updated);
+
+CREATE INDEX ix_signal_account
+	    ON signal (signal_id);
 
 CREATE INDEX ix_signal_at
 	    ON signal ("at");
@@ -1117,6 +1125,16 @@ ALTER TABLE ONLY rollup_user_signal
             FOREIGN KEY (user_id)
             REFERENCES users(user_id) ON DELETE CASCADE;
 
+ALTER TABLE ONLY signal_account
+    ADD CONSTRAINT signal_account_fk
+            FOREIGN KEY (signal_id)
+            REFERENCES signal (signal_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY signal_account
+    ADD CONSTRAINT signal_account_signal_fk
+            FOREIGN KEY (account_id)
+            REFERENCES "Account" (account_id) ON DELETE CASCADE;
+
 ALTER TABLE ONLY signal
     ADD CONSTRAINT signal_user_id_fk
             FOREIGN KEY (user_id)
@@ -1168,4 +1186,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '37');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '38');

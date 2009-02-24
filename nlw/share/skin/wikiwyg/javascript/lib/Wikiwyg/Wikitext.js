@@ -63,7 +63,11 @@ proto.clear_inner_text = function() {
 }
 
 proto.enableStarted = function() {
+    jQuery("#wikiwyg_button_table").removeClass("disabled");
+    jQuery("#wikiwyg_button_table-settings").addClass("disabled");
+    jQuery(".table_buttons img").removeClass("disabled");
     jQuery(".table_buttons").addClass("disabled");
+
     jQuery('#st-mode-wikitext-button').addClass('disabled');
 }
 
@@ -1151,6 +1155,8 @@ proto.enableThis = function() {
     if (jQuery('#contentRight').is(':visible')) {
         jQuery('#st-page-maincontent').css('marginRight', '240px');
     }
+
+
 }
 
 proto.toHtml = function(func) {

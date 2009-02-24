@@ -699,6 +699,12 @@ proto.enableThis = function() {
 
 }
 
+proto.disableThis = function() {
+    Wikiwyg.Mode.prototype.disableThis.call(this);
+    clearInterval( this.__toolbar_styling_interval );
+    this.__toolbar_styling_interval = null;
+}
+
 proto.on_pasted = function(html) {
     var self = this;
 
@@ -750,11 +756,16 @@ proto.paste_buffer_is_simple = function(buffer) {
 proto.toolbarStyling = function() {
     if (this.busy_styling)
         return;
+
     this.busy_styling = true;
+
     try {
         var cursor_state = this.get_cursor_state();
         if( cursor_state.inside_table ) {
             jQuery(".table_buttons, .table_buttons img").removeClass("disabled");
+
+            jQuery("#wikiwyg_button_table").addClass("disabled");
+            jQuery("#wikiwyg_button_table-settings").removeClass("disabled");
 
             if (cursor_state.header_row) {
                 jQuery("#wikiwyg_button_move-row-down, #wikiwyg_button_move-row-up, #wikiwyg_button_add-row-above").addClass("disabled");
@@ -774,12 +785,14 @@ proto.toolbarStyling = function() {
         }
         else {
             jQuery(".table_buttons").addClass("disabled");
+            jQuery("#wikiwyg_button_table").removeClass("disabled");
+            jQuery("#wikiwyg_button_table-settings").addClass("disabled");
         }
 
         if (Wikiwyg.is_gecko) {
             this.get_edit_document().execCommand("enableInlineTableEditing", false, false);
         }
-    } catch(e) {}
+    } catch(e) { }
     this.busy_styling = false;
 }
 

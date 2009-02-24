@@ -3499,7 +3499,6 @@ html .wiki a:hover {
 .wiki th {
     font-weight: bold;
     background: #CCC;
-    text-decoration: underline;
 }
 .wiki th,
 .wiki td {
@@ -4059,7 +4058,7 @@ body div#globalNav div input.searchText {
 
 .other_buttons, .table_buttons { }
 
-.table_buttons img.disabled,
+#wikiwyg_toolbar img.disabled,
 .table_buttons.disabled {
     opacity: 0.3;
 }
@@ -4211,3 +4210,26 @@ ul li.flexButtonBlue a.addButton:hover {
 #lightbox .edit-summary-explanation .close-area {
     float: right;
 }
+
+.wiki table.sort th {
+    padding-right: 24px !important;
+    background-position: top right;
+    background-repeat: no-repeat;
+    background-image: url(../images/unsorted.png);
+}
+.wiki table.sort th.headerSortUp {
+    background-image: url(../images/sorted-up.png);
+}
+.wiki table.sort th.headerSortDown {
+    background-image: url(../images/sorted-down.png);
+}
+.wiki table.sort th:hover {
+    background-image: url(../images/unsorted-hover.png);
+}
+.wiki table.sort th.headerSortUp:hover {
+    background-image: url(../images/sort-up-hover.png);
+}
+.wiki table.sort th.headerSortDown:hover {
+    background-image: url(../images/sort-down-hover.png);
+}
+

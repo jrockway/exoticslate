@@ -224,6 +224,8 @@ proto.displayMode = function() {
     this.toolbarObject.disableThis();
     this.div.style.display = 'block';
     this.divHeight = this.div.offsetHeight;
+
+    Socialtext.make_table_sortable();
 }
 
 proto.switchMode = function(new_mode_key) {

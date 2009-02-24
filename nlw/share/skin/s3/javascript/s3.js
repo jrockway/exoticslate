@@ -33,30 +33,37 @@ function nlw_name_to_id(name) {
 
 push_onload_function = function (fcn) { jQuery(fcn) }
 
-$(function() {
-    $('div.wiki table.sort')
+Socialtext.make_table_sortable = function(doc) {
+    $('div.wiki table.sort', doc)
         .each(function() {
-            var $tbl = $(this);
-            var $row = $tbl
+            var $table = $(this);
+            var $row = $table
                 .children('tbody:first')
                 .children('tr:first');
             if ($row.length) {
-                var $newRow = $('<tr />');
-                $row.children('td').each(function() {
-                    var $col = $(this);
-                    $newRow.append(
-                        $('<th />')
-                            .html($col.html())
-                            .attr('style', $col.attr('style'))
+                if ($table.find("th").size() == 0) {
+                    var $newRow = $('<tr />');
+                    $row.children('td').each(function() {
+                        var $col = $(this);
+                        $newRow.append(
+                            $('<th />')
+                                .html($col.html())
+                                .attr('style', $col.attr('style'))
+                        );
+                    });
+                    $row.remove();
+                    $table.prepend(
+                        $('<thead />').append($newRow)
                     );
-                });
-                $row.remove();
-                $tbl.prepend(
-                    $('<thead />').append($newRow)
-                );
-                $tbl.tablesorter();
+                }
+                $table.tablesorter();
             }
         });
+}
+
+
+$(function() {
+    Socialtext.make_table_sortable();
 
     $('#st-page-boxes-toggle-link')
         .bind('click', function() {

@@ -640,6 +640,8 @@ proto.enableThis = function() {
             }, 100);
         }
 
+        Socialtext.make_table_sortable(  self.get_edit_document() );
+
         self.is_ready = true;
     };
     if (self.is_ready)
@@ -694,6 +696,7 @@ proto.enableThis = function() {
         .bind("mousedown", function() {
             jQuery("#st-edit-summary").hide(); 
         });
+
 }
 
 proto.on_pasted = function(html) {

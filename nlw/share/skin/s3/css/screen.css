@@ -3498,7 +3498,8 @@ html .wiki a:hover {
 }
 .wiki th {
     font-weight: bold;
-    background: #C3D9FF;
+    background: #CCC;
+    text-decoration: underline;
 }
 .wiki th,
 .wiki td {

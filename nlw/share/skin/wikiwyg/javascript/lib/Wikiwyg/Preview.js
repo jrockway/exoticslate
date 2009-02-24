@@ -42,6 +42,11 @@ proto.initializeObject = function() {
     this.div.style.backgroundColor = 'lightyellow';
 }
 
+proto.enableThis = function() {
+    Wikiwyg.Mode.prototype.enableThis.apply(this, arguments);
+    Socialtext.make_table_sortable();
+}
+
 proto.toHtml = function(func) {
     func(this.div.innerHTML);
 }

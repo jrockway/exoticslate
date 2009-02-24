@@ -145,6 +145,12 @@ sub account_config {
     diag "Set account $account_name config: $key to $val";
 }
 
+sub get_account_id {
+    my ($self, $name, $variable) = @_;
+    my $acct = Socialtext::Account->new(name => $name);
+    $self->{$variable} = $acct->account_id;
+}
+
 sub workspace_config {
     my $self = shift;
     my $ws_name = shift;

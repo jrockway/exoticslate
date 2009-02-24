@@ -1128,12 +1128,12 @@ ALTER TABLE ONLY rollup_user_signal
 ALTER TABLE ONLY signal_account
     ADD CONSTRAINT signal_account_fk
             FOREIGN KEY (signal_id)
-            REFERENCES signal (signal_id) ON DELETE CASCADE;
+            REFERENCES signal(signal_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY signal_account
     ADD CONSTRAINT signal_account_signal_fk
             FOREIGN KEY (account_id)
-            REFERENCES "Account" (account_id) ON DELETE CASCADE;
+            REFERENCES "Account"(account_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY signal
     ADD CONSTRAINT signal_user_id_fk

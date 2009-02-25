@@ -367,16 +367,23 @@ CREATE SEQUENCE gadget_user_pref_id
     CACHE 1;
 
 CREATE TABLE gallery (
-    account_id bigint NOT NULL,
-    last_update timestamptz DEFAULT now() NOT NULL
+    gallery_id bigint NOT NULL,
+    last_update timestamptz DEFAULT now() NOT NULL,
+    account_id bigint
 );
 
 CREATE TABLE gallery_gadget (
     gadget_id bigint NOT NULL,
-    account_id bigint NOT NULL,
+    gallery_id bigint NOT NULL,
     "position" integer NOT NULL,
     socialtext boolean NOT NULL
 );
+
+CREATE SEQUENCE gallery_id
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
 
 CREATE TABLE page (
     workspace_id bigint NOT NULL,
@@ -646,8 +653,12 @@ ALTER TABLE ONLY gadget_user_pref
             PRIMARY KEY (user_pref_id);
 
 ALTER TABLE ONLY gallery
+    ADD CONSTRAINT gallery_account_uniq
+            UNIQUE (account_id);
+
+ALTER TABLE ONLY gallery
     ADD CONSTRAINT gallery_pk
-            PRIMARY KEY (account_id);
+            PRIMARY KEY (gallery_id);
 
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_pkey
@@ -1101,8 +1112,8 @@ ALTER TABLE ONLY gallery
 
 ALTER TABLE ONLY gallery_gadget
     ADD CONSTRAINT gallery_gadget_account_fk
-            FOREIGN KEY (account_id)
-            REFERENCES gallery(account_id) ON DELETE CASCADE;
+            FOREIGN KEY (gallery_id)
+            REFERENCES gallery(gallery_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY gallery_gadget
     ADD CONSTRAINT gallery_gadget_fk

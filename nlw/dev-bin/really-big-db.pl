@@ -8,13 +8,16 @@ use Socialtext::SQL qw/get_dbh/;
 use List::Util qw(shuffle);
 use Getopt::Long;
 
-my $ACCOUNTS = 1000;
-my $USERS = 2000; # _Must_ be bigger than $ACCOUNTS
+my $ACCOUNTS = 200;
+my $USERS = 5000; # _Must_ be bigger than $ACCOUNTS - should be more than 10x to get secondary account variations
 my $PAGES = 1000;
 my $WRITES_PER_COMMIT = 5000;
-my $EVENTS = 100_000;
+my $EVENTS = 500_000;
 my $VIEW_EVENT_RATIO = 0.85;
 my $SIGNALS = 100_000;
+
+my $now = time;
+my $base = substr("$now",-5);
 
 GetOptions(
     'accounts|a=i' => \$ACCOUNTS,
@@ -23,14 +26,13 @@ GetOptions(
     'events|e=i' => \$EVENTS,
     'view-event-ratio|v=s' => \$VIEW_EVENT_RATIO,
     'signals|s=i' => \$SIGNALS,
+    'base|b=s' => \$base,
 );
 
 my $MAX_WS_ASSIGN = int($ACCOUNTS / 20); 
 my $PAGE_VIEW_EVENTS = int($VIEW_EVENT_RATIO * $EVENTS);
 my $OTHER_EVENTS = $EVENTS - $PAGE_VIEW_EVENTS;
 
-my $now = time;
-my $nowish = substr("$now",-5);
 
 my $create_ts = '2007-01-01 00:00:00+0000';
 my @accounts;
@@ -78,8 +80,8 @@ sub maybe_commit {
     });
 
     for (my $i=1; $i<=$ACCOUNTS; $i++) {
-        $acct_sth->execute("Test Account $nowish $i");
-        $ws_sth->execute("test_workspace_${nowish}_$i", "Test Workspace $nowish $i");
+        $acct_sth->execute("Test Account $base $i");
+        $ws_sth->execute("test_workspace_${base}_$i", "Test Workspace $base $i");
         $writes += 2;
         
         my ($acct_id) = $dbh->selectrow_array(q{SELECT currval('"Account___account_id"')});
@@ -96,7 +98,7 @@ sub maybe_commit {
 
 
 {
-    print "enable people & dashboard for 5% of the accounts";
+    print "enable people & dashboard & signals for all of the accounts";
 
     my $pd_sth = $dbh->prepare_cached(qq{
         INSERT INTO account_plugin (
@@ -106,9 +108,9 @@ sub maybe_commit {
         )
     });
 
-    my $pd_enabled = int(@accounts * 0.05);
-    foreach my $acct_id (@accounts[0 .. $pd_enabled]) {
-        for my $plugin ( 'people', 'dashboard', 'widgets' ) {
+    my $pd_enabled = int(@accounts ); # Assume every account has pd enabled
+    foreach my $acct_id (@accounts[0 .. $pd_enabled-1]) {
+        for my $plugin ( 'people', 'dashboard', 'widgets', 'signals' ) {
             $pd_sth->execute( $acct_id, $plugin );
             $writes++;
         }
@@ -146,7 +148,7 @@ sub maybe_commit {
 
         for (my $j=0; $j<$m; $j++) {
             $name++;
-            $ws_sth->execute("test_workspace_${nowish}_$name", "Test Workspace $nowish $name", $acct_id);
+            $ws_sth->execute("test_workspace_${base}_$name", "Test Workspace $base $name", $acct_id);
             $writes++;
             my ($ws_id) = $dbh->selectrow_array(q{SELECT currval('"Workspace___workspace_id"')});
             push @workspaces, $ws_id;
@@ -182,7 +184,7 @@ sub maybe_commit {
     });
 
     for (my $user=1; $user<=$USERS; $user++) {
-        my $uname = "user-$user-$nowish\@ken.socialtext.net";
+        my $uname = "user-$user-$base\@ken.socialtext.net";
         $user_sth->execute('Default', $uname, $uname, "password", "First$user", "Last$user");
         $user_meta_sth->execute( $uname );
         my ($user_id) = $dbh->selectrow_array(q{SELECT currval('users___user_id')});
@@ -228,7 +230,6 @@ sub maybe_commit {
             $assign_sth->execute($user_id, $ws_id);
             $writes++;
             $done{$ws_id} = 1;
-
             last if keys(%done) >= $number;
         }
         maybe_commit();
@@ -272,9 +273,9 @@ print "\n";
         my $ws = $workspaces[int(rand(scalar @workspaces))];
         my $editor = $users[int(rand(scalar @users))];
         my $creator = $users[int(rand(scalar @users))];
-        my $page_id = "page_${nowish}_$p";
+        my $page_id = "page_${base}_$p";
         $page_sth->execute(
-            $ws, $page_id, "Page: $nowish $p!",
+            $ws, $page_id, "Page: $base $p!",
             $editor, $creator,
             $create_ts, rand(int($PAGES)).' seconds', $create_ts,
             '20070101000000',
@@ -353,10 +354,39 @@ print "\n";
     }
     print " done!\n";
 }
+print "CHECK >>> system-wide page view events: ";
+print $dbh->selectrow_array(q{select count(*) from event where event_class = 'page' and action = 'view'});
+print "\n";
+
+print "CHECK >>> system-wide non-page view events: ";
+print $dbh->selectrow_array(q{select count(*) from event where not (event_class = 'page' and action = 'view')});
+print "\n";
 
 {
     print "Generating $SIGNALS signals";
 
+    print "\n\tGetting accounts for each created users";
+    my %useraccounts = ();
+    my @signalusers = ();
+    my $ua_sth= $dbh->prepare_cached(q{
+        SELECT DISTINCT account_id 
+                FROM account_user JOIN account_plugin USING (account_id)
+                WHERE user_id = ? AND plugin = 'signals'
+                });
+
+    for (my $user=1; $user<=$USERS; $user++) {
+        my @accountids=();
+        my $rc = $ua_sth->execute($user);
+        my $results = $ua_sth->fetchall_arrayref();
+        foreach (@$results) {
+            push(@accountids, $_->[0]);
+        }
+        if (@$results) {
+            $useraccounts{$user}=\@accountids;
+            push (@signalusers, $user);
+        }
+    }
+    print " done!\n";
     my $sig_sth = $dbh->prepare_cached(q{
         INSERT INTO signal (signal_id, user_id, body, at) 
         VALUES (nextval('signal_id_seq'), ?, ?, 'now'::timestamptz + ?::interval)
@@ -378,27 +408,45 @@ print "\n";
         VALUES (currval('signal_id_seq'), ?, ?)
     });
 
+
+    my $account_signal_sth = $dbh->prepare_cached(q{
+        INSERT INTO signal_account (signal_id, account_id)
+        VALUES (currval('signal_id_seq'), ?)
+        });
+
     for ( my $i = 0; $i < $SIGNALS; $i++ ) {
-        my $is_page_edit = int(rand(2));
-        my $user         = $users[int(rand(scalar @users))];
+        my $is_page_edit = (rand(10) < 2 || 0);
+        my $user         = $signalusers[int(rand(scalar @signalusers))];
         my $page         = $pages[int(rand(scalar @pages))];
         my $action       = ( $is_page_edit ) ? 'edit_save' : 'signal';
         my $interval     = rand(int($SIGNALS)).' seconds';
 
-        $sig_sth->execute($user, "booty $is_page_edit", $interval);
+        $sig_sth->execute($user, "signal $i $is_page_edit", $interval);
         $writes++;
 
         if ($is_page_edit) {
             $topic_sth->execute($page->[0], $page->[1]);
             $writes++;
+            $account_signal_sth->execute($ws_to_acct{$page->[0]});
+            $writes++;
         }
-
-        $ev_sth->execute(
-            $create_ts, $interval,
-            'signal', $action,    $user,
-            $user,    $page->[0], $page->[1]
-        );
-        $writes++;
+        else {
+            $ev_sth->execute(
+                $create_ts, $interval,
+                'signal', $action,    $user,
+                $user,    $page->[0], $page->[1]
+            );
+            $writes++;
+            my $accounts = $useraccounts{$user};
+            # Select a random (1-n) list of accounts belonging to the posting user
+            my @shuffled = shuffle @{$accounts};
+            my $numaccounts = int(rand(scalar(@shuffled)))+1; # 1 to $#shuffled
+            my @signaled_accounts = @shuffled[0..($numaccounts-1)];
+            foreach (@signaled_accounts) {
+                $account_signal_sth->execute($_);
+                $writes++
+            }
+        }
 
         maybe_commit();
     }
@@ -406,12 +454,8 @@ print "\n";
     print " done!\n";
 }
 
-print "CHECK >>> system-wide page view events: ";
-print $dbh->selectrow_array(q{select count(*) from event where event_class = 'page' and action = 'view'});
-print "\n";
-
-print "CHECK >>> system-wide non-page view events: ";
-print $dbh->selectrow_array(q{select count(*) from event where not (event_class = 'page' and action = 'view')});
+print "CHECK >>> system-wide signals: ";
+print $dbh->selectrow_array(q{select count(*) from signal});
 print "\n";
 
 # page tags?

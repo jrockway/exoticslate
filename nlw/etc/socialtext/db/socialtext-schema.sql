@@ -685,6 +685,10 @@ ALTER TABLE ONLY sessions
     ADD CONSTRAINT sessions_pkey
             PRIMARY KEY (id);
 
+ALTER TABLE ONLY signal_account
+    ADD CONSTRAINT signal_account_pkey
+            PRIMARY KEY (signal_id, account_id);
+
 ALTER TABLE ONLY signal
     ADD CONSTRAINT signal_pkey
             PRIMARY KEY (signal_id);
@@ -851,7 +855,10 @@ CREATE INDEX ix_session_last_updated
 	    ON sessions (last_updated);
 
 CREATE INDEX ix_signal_account
-	    ON signal (signal_id);
+	    ON signal_account (signal_id);
+
+CREATE UNIQUE INDEX ix_signal_account_account
+	    ON signal_account (account_id, signal_id);
 
 CREATE INDEX ix_signal_at
 	    ON signal ("at");

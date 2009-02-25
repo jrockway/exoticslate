@@ -640,7 +640,7 @@ proto.enableThis = function() {
             }, 100);
         }
 
-        Socialtext.make_table_sortable(  self.get_edit_document() );
+        Socialtext.make_table_sortable(self.get_edit_document());
 
         self.is_ready = true;
     };
@@ -1223,6 +1223,9 @@ proto._do_table_manip = function(callback) {
                 r.select();
             }
         }
+        setTimeout(function() {
+            Socialtext.make_table_sortable(self.get_edit_document());
+        }, 500);
     }, 100);
 }
 
@@ -1266,7 +1269,7 @@ proto.do_add_row_below = function() {
         var doc = this.get_edit_document();
         var $tr = jQuery(doc.createElement('tr'));
         $cell.parents("tr").find("td").each(function() {
-            $tr.append('<td><span style=\"padding:0.5em\"></span></td>');
+            $tr.append('<td style="border: 1px solid black; padding: 0.2em;">&nbsp;</td>');
         });
         $tr.insertAfter( $cell.parents("tr") );
     });
@@ -1279,7 +1282,7 @@ proto.do_add_row_above = function() {
         var $tr = jQuery(doc.createElement('tr'));
 
         $cell.parents("tr").find("td").each(function() {
-            $tr.append('<td><span style=\"padding:0.5em\"></span></td>');
+            $tr.append('<td style="border: 1px solid black; padding: 0.2em;">&nbsp;</td>');
         });
         $tr.insertBefore( $cell.parents("tr") );
     });
@@ -1291,9 +1294,11 @@ proto.do_add_col_left = function() {
         var doc = this.get_edit_document();
         self._traverse_column($cell, function($td) {
             $td.before(
-                $(doc.createElement('td'))
-                    .html('<span style=\"padding:0.5em\"></span>')
+                $(doc.createElement( $td.get(0).tagName ))
+                    .attr({style: 'border: 1px solid black;', padding: '0.2em'})
+                    .html("&nbsp;")
             );
+            delete $td.parents("table").get(0).config;
         });
     });
 }
@@ -1304,10 +1309,12 @@ proto.do_add_col_right = function() {
         var doc = this.get_edit_document();
         self._traverse_column($cell, function($td) {
             $td.after(
-                $(doc.createElement('td'))
-                    .html('<span style=\"padding:0.5em\"></span>')
+                $(doc.createElement( $td.get(0).tagName ))
+                    .attr({style: 'border: 1px solid black;', padding: '0.2em'})
+                    .html("&nbsp;")
             );
         });
+        delete $td.parents("table").get(0).config;
     });
 }
 
@@ -1343,14 +1350,14 @@ proto._traverse_column_with_next = function($cell, callback) {
 proto._traverse_column = function($cell, callback, offset) {
     var $table = $cell.parents("table");
     var col = this._find_column_index($cell);
-    var trs = $table.find('tr');
-    for (var i = 0; i < trs.length; i++) {
-        var tds = $(trs[i]).find('td');
-        if (tds.length >= col) {
-            var $td = $(tds.get(col-1));
+    var $trs = $table.find('tr');
+    for (var i = 0; i < $trs.length; i++) {
+        var $tds = $($trs[i]).find('td,th');
+        if ($tds.length >= col) {
+            var $td = $($tds.get(col-1));
             if (offset) {
-                if (tds.length >= col+offset && col+offset >= 1) {
-                    var $td2 = $(tds.get(col+offset-1));
+                if ($tds.length >= col+offset && col+offset >= 1) {
+                    var $td2 = $($tds.get(col+offset-1));
                     callback($td, $td2);
                 }
             }

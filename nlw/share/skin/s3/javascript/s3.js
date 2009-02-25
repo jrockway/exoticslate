@@ -36,6 +36,11 @@ push_onload_function = function (fcn) { jQuery(fcn) }
 Socialtext.make_table_sortable = function(doc) {
     $('div.wiki table.sort', doc)
         .each(function() {
+            if (this.config) {
+                $(this).trigger("update");
+                return;
+            }
+
             var $table = $(this);
             var $row = $table
                 .children('tbody:first')

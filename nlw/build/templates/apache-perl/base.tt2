@@ -15,8 +15,7 @@ Listen [% config.apache_perl_port %]
 Listen [% config.apache_perl_port + config.ssl_port_difference %]
 [% END %]
 
-[% PROCESS 'shared/common.tt2' 
-   keepalives = 'off' %]
+[% PROCESS 'shared/common.tt2' %]
 
 Include [% config.apache_perl_etc_dir %]/auto-generated.d/*.conf
 [% IF !config.is_dev %]

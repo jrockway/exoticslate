@@ -5,13 +5,12 @@ ScoreBoardFile  [% config.pid_dir %]/[% config.app_prefix %][% config.apache_sho
 Timeout 90
 TraceEnable off
 
-[% IF keepalives == 'off' %]
-KeepAlive               Off
-[% ELSE %]
+# NOTE: KeepAlives *need* to be enabled on *both* the front-end and the
+# back-end.  ST::InitHandler will disable them in the back-end by default, but
+# in such a way that they _could_ be re-enabled as needed (e.g. for NTLM Auth)
 KeepAlive               On
 MaxKeepAliveRequests    100
 KeepAliveTimeout        15
-[% END %]
 
 MinSpareServers     [% config.servers.min_spare %]
 MaxSpareServers     [% config.servers.max_spare %]

@@ -1250,9 +1250,26 @@ proto.do_table_settings = function() {
                 jQuery("#st-table-settings form").one("submit", function() {
                     if ( $("input[name=sort]", this).is(":checked") ) {
                         $table.addClass("sort");
+                        setTimeout(function() {
+                            Socialtext.make_table_sortable( self.get_edit_document() );
+                        }, 100);
                     }
                     else {
+                        $table.each(function() {
+                            delete this.config;
+                        });
+
                         $table.removeClass("sort");
+
+                        $table.find("thead tr").prependTo( $table.find("tbody") );
+                        $table.find("thead").remove();
+
+                        $table.find("th").each(function() {
+                            var $td = jQuery("<td></td>");
+                            $td.html( jQuery(this).html() ).attr("style", jQuery(this).attr('style'));
+
+                            jQuery(this).replaceWith($td);
+                        });
                     }
 
                     jQuery.hideLightbox();

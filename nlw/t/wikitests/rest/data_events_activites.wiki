@@ -212,11 +212,11 @@ This test case assumes a logged in user.
 | get              | /data/events/activities/%%username%% | application/json    |    |
 | code-is         | 200                                             |   |    |
 | json-parse      |                                                 |   |    |
-| json-array-size | 20                                              |   |    |
+| json-array-size | 21                                              |   |    |
 | body-unlike       | "testkey":"1"                                   |   |    |
 | body-unlike       | "testkey":"2"                                   |   |    |
 | body-like       | "testkey":"3"                                   |   |    |
-| body-unlike     | "testkey":"4"                                   |   |    |
+| body-like       | "testkey":"4"                                   |   |    |
 | body-unlike     | "testkey":"5"                                   |   |    |
 | body-like       | "testkey":"6"                                   |   |    |
 | body-unlike     | "testkey":"7"                                   |   |    |

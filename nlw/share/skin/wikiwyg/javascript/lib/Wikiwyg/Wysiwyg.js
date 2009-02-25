@@ -1223,9 +1223,11 @@ proto._do_table_manip = function(callback) {
                 r.select();
             }
         }
+
         setTimeout(function() {
             Socialtext.make_table_sortable(self.get_edit_document());
         }, 500);
+
     }, 100);
 }
 
@@ -1255,20 +1257,10 @@ proto.do_table_settings = function() {
                         }, 100);
                     }
                     else {
+                        $table.removeClass("sort");
                         $table.each(function() {
                             delete this.config;
-                        });
-
-                        $table.removeClass("sort");
-
-                        $table.find("thead tr").prependTo( $table.find("tbody") );
-                        $table.find("thead").remove();
-
-                        $table.find("th").each(function() {
-                            var $td = jQuery("<td></td>");
-                            $td.html( jQuery(this).html() ).attr("style", jQuery(this).attr('style'));
-
-                            jQuery(this).replaceWith($td);
+                            Socialtext.make_table_unsortable(this);
                         });
                     }
 
@@ -1315,8 +1307,8 @@ proto.do_add_col_left = function() {
                     .attr({style: 'border: 1px solid black;', padding: '0.2em'})
                     .html("&nbsp;")
             );
-            delete $td.parents("table").get(0).config;
         });
+        Socialtext.make_table_unsortable( $cell.parents("table").get(0) );
     });
 }
 
@@ -1331,7 +1323,7 @@ proto.do_add_col_right = function() {
                     .html("&nbsp;")
             );
         });
-        delete $td.parents("table").get(0).config;
+        Socialtext.make_table_unsortable( $cell.parents("table").get(0) );
     });
 }
 

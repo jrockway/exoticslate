@@ -33,12 +33,30 @@ function nlw_name_to_id(name) {
 
 push_onload_function = function (fcn) { jQuery(fcn) }
 
+Socialtext.make_table_unsortable = function(table) {
+    var $table = jQuery(table);
+
+    delete table.config;
+
+    $table.find("thead tr").prependTo( $table.find("tbody") );
+    $table.find("thead").remove();
+
+    $table.find("th").each(function() {
+        var $td = jQuery("<td></td>");
+        $td.html( jQuery(this).html() ).attr("style", jQuery(this).attr('style'));
+
+        jQuery(this).replaceWith($td);
+    });
+
+}
+
 Socialtext.make_table_sortable = function(doc) {
     $('div.wiki table.sort', doc)
         .each(function() {
             if (this.config) {
-                $(this).trigger("update");
-                return;
+                delete this.config;
+                // $(this).trigger("update");
+                // return;
             }
 
             var $table = $(this);

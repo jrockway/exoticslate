@@ -264,19 +264,6 @@ my $FOLLOWED_PEOPLE_ONLY = <<'EOSQL';
 )
 EOSQL
 
-my $ACTIVITIES_FOR_A_USER = <<'EOSQL';
-    (event_class = 'person' AND 
-     action IN ('tag_add', 'edit_save') AND 
-     (person_id = ? OR actor_id = ?)
-    )
-    OR
-    (event_class = 'page' AND 
-     is_page_contribution(action) AND
-     actor_id = ?)
-    OR
-    (event_class = 'signal' AND actor_id = ?)
-EOSQL
-
 my $CONTRIBUTIONS = <<'EOSQL';
     (event_class = 'person') 
     OR

@@ -357,24 +357,6 @@ Popup and pulldown dialogs:
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | wait_for_element_visible_ok | st-save-button-link |
-| pause | %%pt%% |  |
-| MouseOver | st-save-button-link |  |
-| *Comment* | SlideShow SEE Edit Summaries Dialog |  |
-| wait_for_element_visible_ok | st-edit-summary-text-area | 5000 |
-| click_ok | st-edit-summary-text-area |  |
-| type_ok | st-edit-summary-text-area | Edit Summary In |
-| pause | %%pt%% |  |
-| *Comment* | SlideShow SEE Edit Summaries Disappear when I click the X |  |
-| wait_for_element_visible_ok | st-close-edit-summaries |  |
-| click_ok | st-close-edit-summaries |  |
-| pause | %%pt%% |  |
-| *Comment* | SlideShow SEE Edit Summaries re-appears when it gains focus |  |
-| MouseOver | st-save-button-link |  |
-| wait_for_element_visible_ok | st-edit-summary-text-area | 5000 |
-| click_ok | st-edit-summary-text-area |  |
-| type_ok | st-edit-summary-text-area | Edit Summary In Slideshow |
-| *Comment* | SlideShow SEE Edit Summaries full sentance "Edit Summary In Slideshow" |  |
-| pause | %%pt%% |  |
 | clickAndWait | link=Save |  |
 | clickAndWait | //a[contains(@href,'?action=revision_list')] |  |
 | *Comment* | SlideShow: SEE Revisions List |  |

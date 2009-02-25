@@ -39,6 +39,18 @@ END;
 $$
     LANGUAGE plpgsql IMMUTABLE;
 
+CREATE FUNCTION is_profile_contribution("action" text) RETURNS boolean
+    AS $$
+BEGIN
+    IF action IN ('edit_save', 'tag_add', 'tag_delete')
+    THEN
+        RETURN true;
+    END IF;
+    RETURN false;
+END;
+$$
+    LANGUAGE plpgsql IMMUTABLE;
+
 CREATE FUNCTION signal_sent() RETURNS "trigger"
     AS $$
     BEGIN
@@ -762,9 +774,49 @@ CREATE INDEX ix_event_for_page
 	    ON event (page_workspace_id, page_id, "at")
 	    WHERE (event_class = 'page');
 
+CREATE INDEX ix_event_noview_at
+	    ON event ("at")
+	    WHERE ("action" <> 'view');
+
+CREATE INDEX ix_event_noview_at_page
+	    ON event ("at")
+	    WHERE (("action" <> 'view') AND (event_class = 'page'));
+
+CREATE INDEX ix_event_noview_at_person
+	    ON event ("at")
+	    WHERE (("action" <> 'view') AND (event_class = 'person'));
+
+CREATE INDEX ix_event_noview_class_at
+	    ON event (event_class, "at")
+	    WHERE ("action" <> 'view');
+
+CREATE INDEX ix_event_page_contribs
+	    ON event ("at")
+	    WHERE ((event_class = 'page') AND is_page_contribution("action"));
+
+CREATE INDEX ix_event_person_contribs
+	    ON event ("at")
+	    WHERE ((event_class = 'person') AND is_profile_contribution("action"));
+
+CREATE INDEX ix_event_person_contribs_actor
+	    ON event (actor_id, "at")
+	    WHERE ((event_class = 'person') AND is_profile_contribution("action"));
+
+CREATE INDEX ix_event_person_contribs_person
+	    ON event (person_id, "at")
+	    WHERE ((event_class = 'person') AND is_profile_contribution("action"));
+
 CREATE INDEX ix_event_person_time
 	    ON event (person_id, "at")
 	    WHERE (event_class = 'person');
+
+CREATE INDEX ix_event_signal_actor_at
+	    ON event (actor_id, "at")
+	    WHERE (event_class = 'signal');
+
+CREATE INDEX ix_event_signal_at
+	    ON event ("at")
+	    WHERE (event_class = 'signal');
 
 CREATE INDEX ix_event_signal_id_at
 	    ON event (signal_id, "at");
@@ -1186,4 +1238,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '38');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '39');

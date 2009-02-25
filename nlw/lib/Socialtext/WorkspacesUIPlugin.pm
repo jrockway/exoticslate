@@ -441,10 +441,12 @@ sub _workspace_clone_or_create {
 
     if ( $self->cgi->Button ) {
         my $ws = $self->_create_workspace();
-        my $url = 'action=workspaces_created;workspace_id='
-            . $ws->workspace_id;
 
-        $self->redirect( $url ) if $ws;
+        if ( $ws ) {
+            my $url = 'action=workspaces_created;workspace_id='
+                . $ws->workspace_id;
+            $self->redirect( $url );
+        }
     }
 
     my $settings_section = $self->template_process(

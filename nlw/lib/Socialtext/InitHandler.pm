@@ -40,6 +40,9 @@ sub handler {
         $Socialtext::User::Cache::Enabled = 1;
     }
 
+    if (my $proxy = Socialtext::AppConfig->web_services_proxy) {
+        $ENV{http_proxy} = $ENV{HTTP_proxy} = $proxy;
+    }
 }
 
 sub _regen_combined_js {

@@ -226,7 +226,7 @@ EOSQL
 
     $self->_update_aliases_file();
 
-    my $msg = 'CREATE,WORKSPACE,workspace:' . $self->name  
+    my $msg = 'CREATE,WORKSPACE,workspace:' . $self->name
               . '(' . $self->workspace_id . '),'
               . '[' . $timer->elapsed . ']';
     st_log()->info($msg);
@@ -254,9 +254,13 @@ sub _clone_workspace_pages {
     my @pages = $clone_hub->pages->all();
 
     my ( $main, $hub ) = $self->_main_and_hub();
-    my $homepage = $hub->pages->new_from_name( $ws->title )->id;
+    my $homepage_id = $hub->pages->new_from_name( $ws->title )->id;
 
-    $self->_add_workspace_pages( $homepage, @pages );
+    $self->_add_workspace_pages(
+        homepage_id              => $homepage_id,
+        keep_homepage_categories => 1,
+        pages                    => \@pages
+    );
 }
 
 sub _copy_default_pages {
@@ -275,7 +279,10 @@ sub _copy_default_pages {
         ? '%E3%83%88%E3%83%83%E3%83%97%E3%83%9A%E3%83%BC%E3%82%B8'
         : 'top_page';
 
-    $self->_add_workspace_pages( $homepage_id,  @pages );
+    $self->_add_workspace_pages(
+        homepage_id => $homepage_id,
+        pages       => \@pages
+    );
 }
 
 sub _hub_for_workspace {
@@ -297,9 +304,11 @@ sub _hub_for_workspace {
 # workspace, not "Top Page", and we need to add the current workspace
 # title to the page content (there's some TT2 in the wikitext).
 sub _add_workspace_pages {
-    my $self        = shift;
-    my $top_page_id = shift;
-    my @pages       = @_;
+    my $self            = shift;
+    my %params          = @_;
+    my $top_page_id     = $params{homepage_id};
+    my $keep_categories = $params{keep_homepage_categories};
+    my @pages           = @{ $params{pages} };
 
     my ( $main, $hub ) = $self->_main_and_hub();
 
@@ -315,7 +324,8 @@ sub _add_workspace_pages {
                 workspace_title => $self->title
             );
             $page->content($content_formatted);
-            $page->metadata->Category([]);
+
+            $page->metadata->Category([]) unless $keep_categories;
         } else {
             $page->delete_tag("Top Page");
         }
@@ -1252,7 +1262,7 @@ sub users {
 
     my $sth = sql_execute(<<EOSQL, $self->workspace_id);
 SELECT user_id, driver_username
-    FROM users 
+    FROM users
     JOIN "UserWorkspaceRole" uwr USING (user_id)
     WHERE uwr.workspace_id = ?
     ORDER BY driver_username
@@ -1287,7 +1297,7 @@ sub users_with_roles {
         $p{name} ||= $self->name;
         $p{name} = lc $p{name};
 
-        die loc("Export directory [_1] does not exist.\n", $p{dir}) 
+        die loc("Export directory [_1] does not exist.\n", $p{dir})
 	    if defined $p{dir} && ! -d $p{dir};
 
         die loc("Export directory [_1] is not writeable.\n", $p{dir})
@@ -1418,7 +1428,7 @@ EOT
     for my $r (@$rows) {
         push @dump, {
             role_name => Socialtext::Role->new( role_id => $r->[0] )->name,
-            permission_name => Socialtext::Permission->new( 
+            permission_name => Socialtext::Permission->new(
                 permission_id => $r->[1])->name,
         }
     }
@@ -2222,7 +2232,7 @@ methods returns that file's absolute path, otherwise it returns false.
 =head2 $workspace->set_logo_from_file(PARAMS)
 
 This method expects one parameter, a "filename". The specified file
-should contain the image data, and will be used for determining the 
+should contain the image data, and will be used for determining the
 file's type, which must be a GIF, JPEG or PNG.
 
 The image is resized to a maximum size of 200px wide by 60px high, and

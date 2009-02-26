@@ -27,11 +27,10 @@ use File::Spec;
 use File::Slurp ();
 use Getopt::Long;
 use Socialtext::AppConfig;
-use Socialtext::HTTPPorts qw(SSL_PORT_DIFFERENCE);
+use Socialtext::HTTP::Ports;
 use Socialtext::Build qw(get_prefixed_dir get_build_setting);
 use Sys::Hostname;
 use Socialtext::Hostname;
-use Socialtext::HTTPPorts;
 use Socialtext::Paths;
 use Socialtext::System qw(shell_run);
 use Template ();
@@ -635,13 +634,17 @@ sub apache2_params {
 }
 
 sub _frontend_ports {
-    if ( $opts{ports_start_at} ) {
-        my $port = $user->uid + $opts{ports_start_at};
-        return { http => $port, https => $port + SSL_PORT_DIFFERENCE};
-    }
-    else {
-        return { http => 80, https => 443 };
-    }
+    return {
+        http    => Socialtext::HTTP::Ports->http_port(),
+        https   => Socialtext::HTTP::Ports->https_port(),
+    };
+}
+
+sub _backend_ports {
+    return {
+        http    => Socialtext::HTTP::Ports->backend_http_port(),
+        https   => Socialtext::HTTP::Ports->backend_https_port(),
+    };
 }
 
 sub _use_ssl {
@@ -694,6 +697,7 @@ sub apache_perl_params {
         use_canonical_name => 'On',
     );
     $config{backend_port} = $single ? $config{apache2_port} : $config{apache_perl_port};
+    $config{backend_ssl_port} = $single ? $config{apache2_ssl_port} : $config{apache_perl_ssl_port};
 
     $config{inc} = _get_inc();
 
@@ -795,7 +799,6 @@ sub standard_params {
         apache_proxy        => _bool( $opts{'apache-proxy'} ),
         apache_status       => $opts{'apache-status'},
         server_admin        => get_build_setting('server-admin'),
-        ssl_port_difference => SSL_PORT_DIFFERENCE,
     );
 
     $config{nlw_server_hostname} = $opts{hostname} 
@@ -810,13 +813,11 @@ sub standard_params {
     $config{cache_dir} = $dirs{cache};
     $config{ssl_base_dir} = $dirs{ssl_base};
 
-    $config{apache2_port} = _frontend_ports()->{http};
+    $config{apache2_port}     = _frontend_ports()->{http};
     $config{apache2_ssl_port} = _frontend_ports()->{https};
 
-    $config{apache_perl_port} =
-        $opts{ports_start_at}
-        ? $user->uid + $opts{ports_start_at} + 2000
-        : 8080;
+    $config{apache_perl_port}     = _backend_ports()->{http};
+    $config{apache_perl_ssl_port} = _backend_ports()->{https};
 
     $config{static_dir} = _static_dir();
 

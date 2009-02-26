@@ -12,7 +12,7 @@ Listen [% config.apache2_ssl_port %]
 [% ELSE %]
 Port [% config.apache_perl_port %]
 Listen [% config.apache_perl_port %]
-Listen [% config.apache_perl_port + config.ssl_port_difference %]
+Listen [% config.apache_perl_ssl_port %]
 [% END %]
 
 [% PROCESS 'shared/common.tt2' %]

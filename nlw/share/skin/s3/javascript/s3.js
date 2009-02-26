@@ -33,6 +33,35 @@ function nlw_name_to_id(name) {
 
 push_onload_function = function (fcn) { jQuery(fcn) }
 
+Socialtext.make_table_sortable = function(table) {
+    if (table.config) {
+        delete table.config;
+    }
+
+    var $table = $(table);
+    var $row = $table
+        .children('tbody:first')
+        .children('tr:first');
+    if ($row.length) {
+        if ($table.find("th").size() == 0) {
+            var $newRow = $('<tr />');
+            $row.children('td').each(function() {
+                var $col = $(this);
+                $newRow.append(
+                    $('<th />')
+                        .html($col.html())
+                        .attr('style', $col.attr('style'))
+                );
+            });
+            $row.remove();
+            $table.prepend(
+                $('<thead />').append($newRow)
+            );
+        }
+        $table.tablesorter();
+    }
+}
+
 Socialtext.make_table_unsortable = function(table) {
     var $table = jQuery(table);
 
@@ -50,43 +79,9 @@ Socialtext.make_table_unsortable = function(table) {
 
 }
 
-Socialtext.make_table_sortable = function(doc) {
-    $('div.wiki table.sort', doc)
-        .each(function() {
-            if (this.config) {
-                delete this.config;
-                // $(this).trigger("update");
-                // return;
-            }
-
-            var $table = $(this);
-            var $row = $table
-                .children('tbody:first')
-                .children('tr:first');
-            if ($row.length) {
-                if ($table.find("th").size() == 0) {
-                    var $newRow = $('<tr />');
-                    $row.children('td').each(function() {
-                        var $col = $(this);
-                        $newRow.append(
-                            $('<th />')
-                                .html($col.html())
-                                .attr('style', $col.attr('style'))
-                        );
-                    });
-                    $row.remove();
-                    $table.prepend(
-                        $('<thead />').append($newRow)
-                    );
-                }
-                $table.tablesorter();
-            }
-        });
-}
-
-
 $(function() {
-    Socialtext.make_table_sortable();
+    $('table.sort')
+        .each(function() { Socialtext.make_table_sortable(this) });
 
     $('#st-page-boxes-toggle-link')
         .bind('click', function() {

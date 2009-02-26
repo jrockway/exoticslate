@@ -640,7 +640,10 @@ proto.enableThis = function() {
             }, 100);
         }
 
-        Socialtext.make_table_sortable(self.get_edit_document());
+        jQuery('div.wiki table.sort', self.get_edit_document())
+            .each(function() {
+                Socialtext.make_table_sortable(this);
+            });
 
         self.is_ready = true;
     };
@@ -1225,7 +1228,7 @@ proto._do_table_manip = function(callback) {
         }
 
         setTimeout(function() {
-            Socialtext.make_table_sortable(self.get_edit_document());
+            Socialtext.make_table_sortable($cell.parents("table").get(0));
         }, 500);
 
     }, 100);
@@ -1253,15 +1256,14 @@ proto.do_table_settings = function() {
                     if ( $("input[name=sort]", this).is(":checked") ) {
                         $table.addClass("sort");
                         setTimeout(function() {
-                            Socialtext.make_table_sortable( self.get_edit_document() );
+                            Socialtext.make_table_sortable($table.get(0));
                         }, 100);
                     }
                     else {
                         $table.removeClass("sort");
-                        $table.each(function() {
-                            delete this.config;
-                            Socialtext.make_table_unsortable(this);
-                        });
+                        var table = $table.get(0);
+                        delete table.config;
+                        Socialtext.make_table_unsortable(table);
                     }
 
                     jQuery.hideLightbox();

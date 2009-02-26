@@ -126,6 +126,7 @@ sub GET_json {
                     -status => HTTP_200_OK,
                     -type   => 'application/json; charset=UTF-8',
                 );
+                $self->hub->pages->current($page);
                 my $page_hash      = $page->hash_representation();
 
                 my $addtional_content = sub {

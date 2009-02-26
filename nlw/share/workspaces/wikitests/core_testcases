@@ -73,6 +73,7 @@ test env properly and are not testing the test-workspace
 * [Test Case: Email Attachment]
 * [Test Case: Include Page]
 * [Test Case: Create Content]
+* [Test Case: Edit Summaries]
 
 Put tests that don't use the browser here
 

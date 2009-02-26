@@ -181,3 +181,4 @@ t/Socialtext/Gadgets/Gallery.t
 lib/Socialtext/Rest/Gadgets/Gallery.pm
 lib/Socialtext/Gadgets/UserAgent.pm
 lib/Socialtext/Rest/Gadgets/GadgetInstance.pm
+t/Socialtext/Rest/Gadgets/GadgetInstance.t

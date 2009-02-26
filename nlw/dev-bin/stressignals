@@ -26,8 +26,12 @@ parser.add_option("-L", "--limit", dest="limit", type="int", help="limit for eac
 parser.add_option("-r", "--rampup", dest="rampup", type="int", help="number of clients to start per second (rampup)", default=10)
 parser.add_option("-f", "--followers", dest="followpercent", type="int", help="Percentage of signals getters to be requesting follow-only", default=100)
 parser.add_option("-z", "--sleeptime", dest="sleeptime", type="int", help="How long to run for", default=60)
+parser.add_option("-b", "--base", dest="base", type="string", help="the base string for constructing usernames, accounts, etc", default=None)
 
 (options, args) = parser.parse_args()
+if options.base is None:
+    sys.exit("Must supply a -b/--base base value")
+
 print "# OPTIONS:",options
 print "# PARAMS: "+ string.join(sys.argv[1:]," ")
 
@@ -185,7 +189,7 @@ pages=[u'/help-en/index.cgi?advanced_formatting',
 util.wrap_socket_with_coroutine_socket()
 
 def genuserauth():
-    username="user-%d-33414@ken.socialtext.net" % random.randrange(1, 2000)
+    username="user-%d-%s@ken.socialtext.net" % (random.randrange(1, 2000), options.base)
     password="password"
     base64string=base64.encodestring('%s:%s' % (username, password))[:-1]
     return (username, base64string)

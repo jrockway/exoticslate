@@ -17,13 +17,12 @@ sub get_resource {
                    $self->extract_page_args(),
                    $self->extract_people_args());
     my %args = @in_args;
-    $args{followed} = 1;
-    $args{contributions} = 1;
 
     die "user must be specified" unless defined $self->user;
     
     my $user = Socialtext::User->Resolve( $self->user );
-    my $events = Socialtext::Events->Get($user, %args);
+    my $reporter = Socialtext::Events::Reporter->new(viewer => $user);
+    my $events = $reporter->get_events_followed(\%args);
     $events ||= [];
     return $events;
 }

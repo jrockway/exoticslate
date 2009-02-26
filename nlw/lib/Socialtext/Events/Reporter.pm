@@ -265,10 +265,9 @@ my $FOLLOWED_PEOPLE_ONLY = <<'EOSQL';
 EOSQL
 
 my $CONTRIBUTIONS = <<'EOSQL';
-    (event_class = 'person') 
+    (event_class = 'person' AND is_profile_contribution(action)) 
     OR
-    (event_class = 'page' AND 
-     is_page_contribution(action))
+    (event_class = 'page' AND is_page_contribution(action))
     OR
     (event_class = 'signal') 
 EOSQL
@@ -584,7 +583,7 @@ EOSQL
 sub get_events_conversations {
     my $self = shift;
     my $maybe_user = shift;
-    my $opts = {@_};
+    my $opts = (@_==1) ? $_[0] : {@_};
 
     # First we need to get the user id in case this was email or username used
     my $user = Socialtext::User->Resolve($maybe_user);
@@ -605,6 +604,33 @@ sub get_events_conversations {
     Socialtext::Timer->Pause('get_convos');
 
     return @$result if wantarray;
+    return $result;
+}
+
+sub get_events_followed {
+    my $self = shift;
+    my $opts = (@_ == 1) ? $_[0] : {@_};
+
+    $opts->{followed} = 1;
+    $opts->{contributions} = 1;
+    die "no limit?!" unless $opts->{count};
+
+    if ($opts->{action} && $opts->{action} eq 'view') {
+        return []; # view events aren't contributions
+    }
+    else {
+        # by using non-view indexes, we can get a simple perf boost until we
+        # devise something better
+        $self->prepend_condition(q{action <> 'view'});
+    }
+    my ($followed_sql, $followed_args) = $self->_build_standard_sql($opts);
+
+    Socialtext::Timer->Continue('get_followed_events');
+    #$Socialtext::SQL::PROFILE_SQL = 1;
+    my $sth = sql_execute($followed_sql, @$followed_args);
+    #$Socialtext::SQL::PROFILE_SQL = 0;
+    my $result = $self->decorate_event_set($sth);
+    Socialtext::Timer->Pause('get_followed_events');
     return $result;
 }
 

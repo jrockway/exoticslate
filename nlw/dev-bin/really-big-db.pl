@@ -125,7 +125,7 @@ sub maybe_commit {
     my $m = $n;
     my $name = $ACCOUNTS;
     my %rand_accounts = map {$_=>1} @accounts;
-
+    
     my $ws_sth = $dbh->prepare_cached(qq{
         INSERT INTO "Workspace" (
             workspace_id, name, title, 
@@ -179,14 +179,17 @@ sub maybe_commit {
            user_id, email_address_at_import, 
            created_by_user_id, primary_account_id
         ) VALUES (
-           currval('users___user_id'), ?, NULL, 1
+           currval('users___user_id'), ?, NULL, ?
         )
     });
 
     for (my $user=1; $user<=$USERS; $user++) {
         my $uname = "user-$user-$base\@ken.socialtext.net";
-        $user_sth->execute('Default', $uname, $uname, "password", "First$user", "Last$user");
-        $user_meta_sth->execute( $uname );
+        # salted hash for 'password' as password 
+        $user_sth->execute('Default', $uname, $uname, "sa3tHJ3/KuYvI", "First$user", "Last$user"); 
+        my $priacctid = $accounts[rand(@accounts)];
+        $user_meta_sth->execute( $uname, $priacctid );
+        # choose a random primary account id
         my ($user_id) = $dbh->selectrow_array(q{SELECT currval('users___user_id')});
         push @users, $user_id;
         $writes += 3;

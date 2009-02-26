@@ -17,7 +17,7 @@ use Test::Socialtext::Fixture;
 
 field 'root_dir';
 field 'base_dir';
-field 'ports_start_at' => 30000;
+field 'ports_start_at' => 20000;
 field 'verbose' => 1;
 field 'wiki_url_base';
 field 'fixtures' => [];

@@ -769,6 +769,9 @@ proto.toolbarStyling = function() {
 
             jQuery("#wikiwyg_button_table").addClass("disabled");
             jQuery("#wikiwyg_button_table-settings").removeClass("disabled");
+            if (jQuery(cursor_state.table).find('tr').size() < 2) {
+                jQuery("#wikiwyg_button_table-settings").addClass("disabled");
+            }
 
             if (cursor_state.header_row) {
                 jQuery("#wikiwyg_button_move-row-down, #wikiwyg_button_move-row-up, #wikiwyg_button_add-row-above").addClass("disabled");
@@ -822,6 +825,7 @@ proto.get_cursor_state = function() {
     }
 
     cursor_state.inside_table = true;
+    cursor_state.table = $table.get(0);
     cursor_state.sortable_table = $table.is(".sort");
 
     var $tr = jQuery(anchor, this.get_edit_window()).parents("tr");
@@ -1228,8 +1232,11 @@ proto._do_table_manip = function(callback) {
         }
 
         setTimeout(function() {
-            Socialtext.make_table_sortable($cell.parents("table").get(0));
-        }, 500);
+            var $table = $cell.parents("table.sort:eq(0)");
+            if ($table.size()) {
+                Socialtext.make_table_sortable($table[0]);
+            }
+        }, 50);
 
     }, 100);
 }
@@ -1238,6 +1245,9 @@ proto.do_table_settings = function() {
     var self = this;
 
     this._do_table_manip(function($cell) {
+        if ($cell.parents('table:eq(0)').find('tr').size() < 2) {
+            return;
+        }
         jQuery.showLightbox({
             content: '#st-table-settings',
             callback: function() {

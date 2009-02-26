@@ -564,4 +564,11 @@ sub format_link {
     );
 }
 
+# grants access to the low-level Apache::Request
+sub request {
+    my $self = shift;
+    my $rest = $self->rest || $self->hub->rest;
+    return $rest->request;
+}
+
 1;

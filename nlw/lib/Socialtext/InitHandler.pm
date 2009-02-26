@@ -16,9 +16,10 @@ use Fcntl ':flock';
 use Socialtext::User::Cache;
 
 sub handler {
+    my $r = shift;
+
     # This env var is set in the apache-perl config file (nlw.conf)
     if ($ENV{NLW_DEV_MODE} && ! Socialtext::AppConfig->benchmark_mode) {
-        my $r = shift;
         if ($r->uri !~ m{^/data}) {
             my $stamp_file = Socialtext::Paths::storage_directory('make_ran');
             my $mod = (stat $stamp_file)[9] || 0;
@@ -43,6 +44,16 @@ sub handler {
     if (my $proxy = Socialtext::AppConfig->web_services_proxy) {
         $ENV{http_proxy} = $ENV{HTTP_proxy} = $proxy;
     }
+
+    # Disable KeepAlive requests by default, by setting the "nokeepalive"
+    # environment var (just like how BrowserMatch does it in Apache configs)
+    #
+    # This turns them off by default, *but* makes it possible for another part
+    # of the system to turn them back on again if needed (by setting
+    # 'nokeepalive=>undef').
+    $r->subprocess_env(nokeepalive => 1);
+
+    return;
 }
 
 sub _regen_combined_js {
@@ -92,6 +103,15 @@ It does the following:
 =item *
 
 Re-generates the javascript files if in a development mode.
+
+=item *
+
+Disables KeepAlive requests, but in such a way that they I<could> be re-enabled
+by another part of the system if necessary.  This allows for us to default to
+"no KeepAlives", but to turn them back on when needed.
+
+Although Apache2 provides a way to default KeepAlives to off and then turn
+them on when needed, Apache1 does B<not>.  Thus, this work-around.
 
 =back
 

@@ -2,8 +2,7 @@ BEGIN;
 
 CREATE TABLE signal_account (
     signal_id bigint NOT NULL,
-    account_id bigint NOT NULL,
-    PRIMARY KEY (signal_id, account_id)
+    account_id bigint NOT NULL
 );
 
 ALTER TABLE ONLY signal_account

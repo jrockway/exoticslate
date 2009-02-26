@@ -308,7 +308,6 @@ CREATE SEQUENCE gadget_id
 CREATE TABLE gadget_instance (
     gadget_instance_id bigint NOT NULL,
     container_id bigint NOT NULL,
-    default_gadget_id bigint,
     gadget_id bigint NOT NULL,
     col integer NOT NULL,
     "row" integer NOT NULL,
@@ -893,11 +892,6 @@ ALTER TABLE ONLY container
     ADD CONSTRAINT container_workspace_id_fk
             FOREIGN KEY (workspace_id)
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
-
-ALTER TABLE ONLY gadget_instance
-    ADD CONSTRAINT default_gadget_id_fk
-            FOREIGN KEY (default_gadget_id)
-            REFERENCES default_gadget(default_gadget_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY event
     ADD CONSTRAINT event_actor_id_fk

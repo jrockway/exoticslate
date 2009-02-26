@@ -696,10 +696,6 @@ ALTER TABLE ONLY sessions
     ADD CONSTRAINT sessions_pkey
             PRIMARY KEY (id);
 
-ALTER TABLE ONLY signal_account
-    ADD CONSTRAINT signal_account_pkey
-            PRIMARY KEY (signal_id, account_id);
-
 ALTER TABLE ONLY signal
     ADD CONSTRAINT signal_pkey
             PRIMARY KEY (signal_id);
@@ -1256,4 +1252,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '39');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '40');

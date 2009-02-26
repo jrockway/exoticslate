@@ -225,7 +225,10 @@ proto.displayMode = function() {
     this.div.style.display = 'block';
     this.divHeight = this.div.offsetHeight;
 
-    Socialtext.make_table_sortable();
+    jQuery('table.sort')
+        .each(function() {
+            Socialtext.make_table_sortable(this);
+        });
 }
 
 proto.switchMode = function(new_mode_key) {

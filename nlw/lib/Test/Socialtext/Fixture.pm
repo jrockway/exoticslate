@@ -241,7 +241,6 @@ sub _run_custom_generator {
     if (-r "$dir/generate") {
         local $ENV{NLW_DIR} = $env->nlw_dir;
         local $ENV{NLW_ROOT_DIR} = $env->root_dir;
-        local $ENV{NLW_STARTING_PORT} = $env->ports_start_at;
 
         (system "$dir/generate") == 0
             or die $self->name . "/generate exit ", $? >> 8;

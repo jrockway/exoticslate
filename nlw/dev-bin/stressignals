@@ -15,9 +15,11 @@ parser = optparse.OptionParser()
 
 parser.add_option("-s", "--sleep", dest="sleep", type="int", help="Time to sleep between requests", default=3)
 parser.add_option("-P", "--postsleep", dest="postsleep", type="int", help="Time to sleep between signal post requests", default=5)
+parser.add_option("-E", "--eventsleep", dest="eventsleep", type="int", help="Time to sleep between event polling requests", default=5)
 parser.add_option("-S", "--background-sleep", dest="backsleep", type="int", help="Time to sleep between background page load requests", default=3)
 parser.add_option("-c", "--clients", dest="clients", type="int", help="Number of clients", default=100)
 parser.add_option("-p", "--postclients", dest="postclients", type="int", help="Number of signals posting clients", default=10)
+parser.add_option("-e", "--eventclients", dest="eventclients", type="int", help="Number of event polling clients", default=100)
 parser.add_option("-G", "--background-clients", dest="backclients", type="int", help="Number of background page load clients", default=100)
 parser.add_option("-u", "--use-at", dest="useat", action="store_true", help="Use the at paramete on signals")
 parser.add_option("-a", "--get-avs", dest="getavs", action="store_true", help="Get avatars listed in a signal, forcing 304s")
@@ -27,6 +29,7 @@ parser.add_option("-r", "--rampup", dest="rampup", type="int", help="number of c
 parser.add_option("-f", "--followers", dest="followpercent", type="int", help="Percentage of signals getters to be requesting follow-only", default=100)
 parser.add_option("-z", "--sleeptime", dest="sleeptime", type="int", help="How long to run for", default=60)
 parser.add_option("-b", "--base", dest="base", type="string", help="the base string for constructing usernames, accounts, etc", default=None)
+parser.add_option("-n", "--users", dest="users", type="int", help="the number of test users in the system", default=2000)
 
 (options, args) = parser.parse_args()
 if options.base is None:
@@ -189,7 +192,7 @@ pages=[u'/help-en/index.cgi?advanced_formatting',
 util.wrap_socket_with_coroutine_socket()
 
 def genuserauth():
-    username="user-%d-%s@ken.socialtext.net" % (random.randrange(1, 2000), options.base)
+    username="user-%d-%s@ken.socialtext.net" % (random.randrange(1, options.users), options.base)
     password="password"
     base64string=base64.encodestring('%s:%s' % (username, password))[:-1]
     return (username, base64string)
@@ -226,7 +229,8 @@ def fetchsignals(url, threadnum):
 
                 avheaders={'Accept': 'image/png', 'accept':'image/png', 
                         'Authorization':'Basic %s' % auth,
-                        'If-Modified-Since':imstime
+                        'If-Modified-Since':imstime,
+                        'User-Agent':'Torture'
                         }
                 avurl=options.serverurl+"/data/people/"+user+"/small_photo"
                 avresult=httpc.get_(avurl, headers=avheaders, ok=(200, 201, 204, 304))
@@ -243,6 +247,7 @@ def postsignals(url, threadnum):
         (user, auth) = genuserauth()
         theaders={}
         theaders['Authorization']=("Basic %s" % auth)
+        theaders['User-Agent']='Torture'
         then = time.time()
         jsonstring='Signal at %f' % time.time()
         result=httpc.post_(url, data=jsonstring, headers=theaders)
@@ -260,6 +265,7 @@ def fetchpages(pagelist, threadnum):
         theaders['Authorization']=("Basic %s" % auth)
         theaders['accept']="application/json"
         theaders['Accept']="application/json"
+        theaders['User-Agent']='Torture'
         page=random.choice(pagelist) 
         url=options.serverurl+page
         then = time.time()
@@ -267,6 +273,31 @@ def fetchpages(pagelist, threadnum):
         now=time.time()
         print "At %f, fetchpages-%d fetched %s as user %s with time %.3f result code %s" % (now, threadnum, url, user, now-then, result[0])
         api.sleep(options.backsleep)
+
+def fetchevents(threadnum):
+    # startup clients jittered over a period of CLIENTS/20 seconds
+    api.sleep(random.random() * (options.eventclients / options.rampup)) 
+    while True:
+        (user, auth) = genuserauth()
+        theaders={}
+        theaders['Authorization']=("Basic %s" % auth)
+        theaders['accept']="application/json"
+        theaders['Accept']="application/json"
+        theaders['User-Agent']='Torture'
+        quoteduser=urllib.quote_plus(user)
+        page=random.choice(
+                ('/data/events', 
+                    '/data/events/followed/'+quoteduser, 
+                    '/data/events/conversations/'+quoteduser,
+                    '/data/events/activities/'+quoteduser )
+                )
+        since=time.strftime("%Y-%m-%d %H:%M:%SZ",time.gmtime(time.time()-10))
+        url=options.serverurl+page+"?after="+urllib.quote_plus(since)
+        then = time.time()
+        result = httpc.get_(url, headers=theaders)
+        now = time.time()
+        print "At %f, fetchevents-%d fetched %s as user %s with time %.3f result code %s" % (now, threadnum, url, user, now-then, result[0])
+        api.sleep(options.eventsleep)
 
 def sleepa(delay):
     api.sleep(delay)
@@ -279,9 +310,12 @@ for x in range(0, options.backclients):
 for x in range(0, options.postclients):
    pool.execute(postsignals, options.serverurl+'/data/signals', x)
 
-waiters = []
+for x in range(0, options.eventclients):
+   pool.execute(fetchevents, x)
+
 for x in range(0,options.clients):
-    waiters.append(pool.execute(fetchsignals, options.serverurl+'/data/signals', x))
+   pool.execute(fetchsignals, options.serverurl+'/data/signals', x)
+
 
 sleepawaita=pool.execute(sleepa, options.sleeptime)
 

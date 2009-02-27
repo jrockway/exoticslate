@@ -43,8 +43,14 @@ Test /data/users via the REST API
 | comment | we can't see the /data/users for other users unless we're an admin |
 | get     | /data/users/%%user_b%% | application/json |
 | code-is | 404                    |                  |
-| body-like | qr/"accounts":\[(\{"plugins_enabled":\["signals"."people","widgets"\].*?"account_name":"%%acct_a%%".*?\})*\]/ |
+| body-like | The requested resource does not exist |
 | body-unlike | qr/csskit/ |
+| st-admin | give-accounts-admin --email %%user_a%% |
+| get     | /data/users/%%user_b%% | application/json |
+| code-is | 200 |
+| body-like | "email_address":"%%user_b%%" |
+| body-like | qr/csskit/ |
+
 
 | comment | log in as user b and check you can see plugins in acct_c |
 | http-user-pass | %%user_b%%             | password         |

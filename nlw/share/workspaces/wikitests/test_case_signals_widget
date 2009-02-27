@@ -3,6 +3,27 @@
 * Fixture: SocialWidgets
 
 | *Comment* | Test Case: Signals Widget |  |
+| set_default | pt | 8000 |
+| st-admin | update-page --workspace %%workspace%% --email %%email%% --page "Edit Summary Signal %%start_time%%" < %%wikitest_client_files%%wikitest_toc.txt | The "Edit Summary Signal %%start_time%%" page has been created. |
+
+| *Comment* | Test Case: Signals Widget. Create one edit summary from signal |  |
+| open_ok | /%%workspace%%/index.cgi?Edit Summary Signal %%start_time%% |  |
+| wait_for_element_visible_ok | st-edit-button-link | 30000 |
+| click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| wait_for_element_visible_ok | st-save-button-link | 30000 |
+| pause | %%pt%% |  |
+| MouseOver | st-save-button-link |  |
+| pause | %%pt%% |  |
+| wait_for_element_present_ok | st-edit-summary-text-area | 30000 |
+| click_ok | st-edit-summary-text-area |  |
+| type_ok | st-edit-summary-text-area | Super Edit Summary From Signal %%start_time%% |
+| click_ok | st-edit-summary-signal-checkbox |  |
+| click_and_wait | st-save-button-link |  |
+
+| *Comment* | Test Case: Signals Widget. Go to dashboard |  |
 | open_ok | /?dashboard | 60000 |
 | st-empty-container |  |  |
 | wait_for_element_visible_ok | link=Add Content |  |
@@ -11,8 +32,9 @@
 | wait_for_element_visible_ok | link=Add Content |  |
 
 | st-name-widget | 1 | signals_widget |
-| st-widget-title-like | signals_widget | Socialtext Signals |
+| st-widget-title-like | signals_widget | Signals |
 | st-select-widget-frame | signals_widget |  |
+| text_like | //body | Super Edit Summary From Signal %%start_time%% |
 | type_ok | signal-field | She rocks in the treehouse, %%start_time%% |
 | click_ok | post |  |
 | pause | 1000 |  |
@@ -42,13 +64,13 @@
 
 | *Comment* | Test Case: Signals widget. Wait for automatic refresh in Updates |  |
 | wait_for_text_present_ok | (one minute ago) | 120000 |
-| text_unlike | //body | (2 minutes ago) |
+| text_unlike | //body | (3 minutes ago) |
 | select-frame | relative=parent |  |
 
 | *Comment* | Test case: Signals Widget. Check Dashboard, then wait for auto refresh |  |
 | open_ok | / |  |
 | st-name-widget | 1 | signals_widget |
-| st-widget-title-like | signals_widget | Socialtext Signals |
+| st-widget-title-like | signals_widget | Signals |
 | st-select-widget-frame | signals_widget |  |
 
 | wait_for_text_present_ok | She rocks in the treehouse, %%start_time%% | 120000 |

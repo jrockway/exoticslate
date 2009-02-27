@@ -116,9 +116,11 @@ Run the stress test code for this many seconds.
 
 sub stress_for {
     my $self = shift;
-    my $secs = shift;
+    my @args = map { ("--$_" => $self->{"torture_$_"}) }
+        grep { exists $self->{"torture_$_"} }
+        qw(signalsleep postsleep eventsleep background-sleep signalsclients postclients eventclients background-clients use-at get-avs server limit rampup followers sleeptime base users);
 
-    system("stressignals --sleeptime $secs");
+    shell_run('torture', @args);
 }
 
 sub create_account {

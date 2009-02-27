@@ -338,11 +338,11 @@ print "\n";
         my @classes = (('page') x 8, 'person');
         my $class = $classes[int(rand(scalar @classes))];
         if ($class eq 'page') {
-            my $page = $pages[int(rand(scalar @pages))];
-            @actions = qw(tag_add watch_add watch_delete rename edit_save comment duplicate edit_contention delete);
+            $page = $pages[int(rand(scalar @pages))];
+            @actions = qw(tag_add watch_add watch_delete rename edit_save comment duplicate tag_delete delete);
         }
         else {
-            my $person = $users[int(rand(scalar @users))];
+            $person = $users[int(rand(scalar @users))];
             @actions = qw(tag_add watch_add tag_delete watch_delete edit_save);
         }
         my $action = $actions[int(rand(scalar @actions))];
@@ -363,6 +363,10 @@ print "\n";
 
 print "CHECK >>> system-wide non-page view events: ";
 print $dbh->selectrow_array(q{select count(*) from event where not (event_class = 'page' and action = 'view')});
+print "\n";
+
+print "CHECK >>> page events with null page_id (should be zero): ";
+print $dbh->selectrow_array(q{select count(*) from event where event_class='page' AND page_id IS NULL});
 print "\n";
 
 {
@@ -459,6 +463,10 @@ print "\n";
 
 print "CHECK >>> system-wide signals: ";
 print $dbh->selectrow_array(q{select count(*) from signal});
+print "\n";
+
+print "CHECK >>> signal events with null signal_id (should be zero): ";
+print $dbh->selectrow_array(q{select count(*) from event where event_class='signal' AND signal_id IS NULL});
 print "\n";
 
 # page tags?

@@ -108,7 +108,7 @@ sub all_revision_ids {
     my $datadir = $self->directory_path;
 
     my @files = Socialtext::File::all_directory_files( $datadir );
-    my @ids = grep defined, map { /(\d+)\.txt$/; $1; } @files;
+    my @ids = grep defined, map { /(\d+)\.txt$/ ? $1 : () } @files;
 
     # No point in sorting if the caller only wants a count.
     return wantarray ? sort( @ids ) : scalar( @ids );

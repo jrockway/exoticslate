@@ -25,7 +25,7 @@ CREATE UNIQUE INDEX ix_signal_account_account
 SET enable_seqscan TO off; -- don't use SeqScans if possible
 
 INSERT INTO signal_account (signal_id, account_id)
-    SELECT signal.signal_id, au.account_id
+    SELECT DISTINCT ON (signal.signal_id, au.account_id) signal.signal_id, au.account_id
     FROM signal
         LEFT JOIN signal_account sa USING (signal_id)
         LEFT JOIN account_user au USING (user_id)

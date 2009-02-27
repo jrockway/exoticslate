@@ -311,7 +311,8 @@ CREATE TABLE gadget_instance (
     gadget_id bigint NOT NULL,
     col integer NOT NULL,
     "row" integer NOT NULL,
-    minimized boolean DEFAULT false
+    minimized boolean DEFAULT false,
+    fixed boolean DEFAULT false
 );
 
 CREATE SEQUENCE gadget_instance_id
@@ -1129,4 +1130,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '36');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '37');

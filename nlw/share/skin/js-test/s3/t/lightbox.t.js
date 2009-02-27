@@ -25,9 +25,9 @@ t.runAsync([
         t.diag("Showing lightbox now");
         t.$.showLightbox({
             html: '<span>foo</span><input type="button" id="close"/>',
-            close: '#close',
-            callback: t.nextStep()
+            close: '#close'
         });
+        t.callNextStep(4000);
     },
 
     function() {

@@ -9,10 +9,12 @@ ST.SimpleLightbox.prototype = {
             close: '#simple-lightbox .close'
         });
         
-        $('#simple-lightbox .close').unbind('click').click(function () {
-            if ($.isFunction(cb)) cb()
-            return false;
-        });
+        if ($.isFunction(cb)) {
+            $('#simple-lightbox .close').unbind('click').click(function () {
+                cb();
+                return false;
+            });
+        }
     }
 }
 

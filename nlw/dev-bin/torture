@@ -13,11 +13,11 @@ from eventlet import coros, httpc, util, api
 
 parser = optparse.OptionParser()
 
-parser.add_option("-s", "--sleep", dest="sleep", type="int", help="Time to sleep between requests", default=3)
+parser.add_option("-s", "--signalsleep", dest="signalsleep", type="int", help="Time to sleep between requests", default=3)
 parser.add_option("-P", "--postsleep", dest="postsleep", type="int", help="Time to sleep between signal post requests", default=5)
 parser.add_option("-E", "--eventsleep", dest="eventsleep", type="int", help="Time to sleep between event polling requests", default=5)
 parser.add_option("-S", "--background-sleep", dest="backsleep", type="int", help="Time to sleep between background page load requests", default=3)
-parser.add_option("-c", "--clients", dest="clients", type="int", help="Number of clients", default=100)
+parser.add_option("-c", "--signalsclients", dest="signalsclients", type="int", help="Number of clients", default=100)
 parser.add_option("-p", "--postclients", dest="postclients", type="int", help="Number of signals posting clients", default=10)
 parser.add_option("-e", "--eventclients", dest="eventclients", type="int", help="Number of event polling clients", default=100)
 parser.add_option("-G", "--background-clients", dest="backclients", type="int", help="Number of background page load clients", default=100)
@@ -200,7 +200,7 @@ def genuserauth():
 def fetchsignals(url, threadnum):
     # startup clients jittered over a period of CLIENTS/10 seconds (rampup of
     # 20 clients per second)
-    api.sleep(random.random() * (options.clients / options.rampup)) 
+    api.sleep(random.random() * (options.signalsclients / options.rampup)) 
     (user, auth) = genuserauth()
     theaders={}
     theaders['Authorization']=("Basic %s" % auth)
@@ -238,7 +238,7 @@ def fetchsignals(url, threadnum):
                 print "At %f, avatar-signals-%d fetched %s as user %s with time %.3f result code %s" % (avnow, threadnum, avurl, user, avnow-avthen, avresult[0])
             
         print "At %f, signals-%d fetched %s as user %s with time %.3f result code %s" % (now, threadnum, urlstring, user, now-then, result[0])
-        api.sleep(options.sleep)
+        api.sleep(options.signalsleep)
 
 def postsignals(url, threadnum):
     # startup clients jittered over a period of CLIENTS/20 seconds
@@ -302,7 +302,7 @@ def fetchevents(threadnum):
 def sleepa(delay):
     api.sleep(delay)
 
-pool = coros.CoroutinePool(max_size=options.clients+options.backclients+options.postclients+2)
+pool = coros.CoroutinePool(max_size=options.signalsclients+options.backclients+options.postclients+options.eventclients+2)
 
 for x in range(0, options.backclients):
    pool.execute(fetchpages, pages, x)
@@ -313,7 +313,7 @@ for x in range(0, options.postclients):
 for x in range(0, options.eventclients):
    pool.execute(fetchevents, x)
 
-for x in range(0,options.clients):
+for x in range(0,options.signalsclients):
    pool.execute(fetchsignals, options.serverurl+'/data/signals', x)
 
 

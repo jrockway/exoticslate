@@ -696,6 +696,10 @@ ALTER TABLE ONLY sessions
     ADD CONSTRAINT sessions_pkey
             PRIMARY KEY (id);
 
+ALTER TABLE ONLY signal_account
+    ADD CONSTRAINT signal_account_pkey
+            PRIMARY KEY (signal_id, account_id);
+
 ALTER TABLE ONLY signal
     ADD CONSTRAINT signal_pkey
             PRIMARY KEY (signal_id);

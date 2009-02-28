@@ -17,7 +17,7 @@ t.runAsync([
     function() {
         t.ok(
             t.$("#spreadsheet-radio").length,
-            "SocialCalc is enabled for the admin workspace"
+            'SocialCalc is enabled for the admin workspace - NOTE: Please run "st-socialcalc enable" BEFORE running socialcalc tests!'
         );
 
         t.endAsync();

@@ -369,7 +369,9 @@ CREATE SEQUENCE gadget_user_pref_id
 CREATE TABLE gallery (
     gallery_id bigint NOT NULL,
     last_update timestamptz DEFAULT now() NOT NULL,
-    account_id bigint
+    account_id bigint,
+    CONSTRAINT gallery_id_or_account_id
+            CHECK (((gallery_id = 0) AND (account_id IS NULL)) OR ((gallery_id <> 0) AND (account_id IS NOT NULL)))
 );
 
 CREATE TABLE gallery_gadget (

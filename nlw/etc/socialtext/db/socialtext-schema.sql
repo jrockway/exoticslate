@@ -322,11 +322,11 @@ CREATE SEQUENCE gadget_id
 CREATE TABLE gadget_instance (
     gadget_instance_id bigint NOT NULL,
     container_id bigint NOT NULL,
-    default_gadget_id bigint,
     gadget_id bigint NOT NULL,
     col integer NOT NULL,
     "row" integer NOT NULL,
-    minimized boolean DEFAULT false
+    minimized boolean DEFAULT false,
+    fixed boolean DEFAULT false
 );
 
 CREATE SEQUENCE gadget_instance_id
@@ -990,11 +990,6 @@ ALTER TABLE ONLY container
             FOREIGN KEY (workspace_id)
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
-ALTER TABLE ONLY gadget_instance
-    ADD CONSTRAINT default_gadget_id_fk
-            FOREIGN KEY (default_gadget_id)
-            REFERENCES default_gadget(default_gadget_id) ON DELETE CASCADE;
-
 ALTER TABLE ONLY event
     ADD CONSTRAINT event_actor_id_fk
             FOREIGN KEY (actor_id)
@@ -1256,4 +1251,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '40');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '41');

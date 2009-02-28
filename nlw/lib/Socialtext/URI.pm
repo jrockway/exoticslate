@@ -9,6 +9,7 @@ use Socialtext::HTTP::Ports;
 use URI::FromHash;
 use Socialtext::Cache;
 
+# Default scheme, which *is* over-ridden by at least one module (ST::CLI)
 our $default_scheme = 'http';
 
 sub uri {

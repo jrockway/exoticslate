@@ -1,54 +1,44 @@
 BEGIN;
 
--- partition page view events.  We have another on (actor_id,at), but having a
--- general one is handy too.
+CREATE TABLE signal_account (
+    signal_id bigint NOT NULL,
+    account_id bigint NOT NULL
+);
 
-CREATE INDEX ix_event_page_contribs ON event (at)
-    WHERE event_class = 'page' AND is_page_contribution(action);
+ALTER TABLE ONLY signal_account
+    ADD CONSTRAINT signal_account_pkey
+            PRIMARY KEY (signal_id, account_id);
 
--- partition profile contrib events
+ALTER TABLE ONLY signal_account
+    ADD CONSTRAINT signal_account_fk
+        FOREIGN KEY (signal_id)
+        REFERENCES signal (signal_id) ON DELETE CASCADE;
 
-CREATE FUNCTION is_profile_contribution("action" text) RETURNS boolean
-    AS $$
-BEGIN
-    IF action IN ('edit_save', 'tag_add', 'tag_delete')
-    THEN
-        RETURN true;
-    END IF;
-    RETURN false;
-END;
-$$
-    LANGUAGE plpgsql IMMUTABLE;
+ALTER TABLE ONLY signal_account
+    ADD CONSTRAINT signal_account_signal_fk
+        FOREIGN KEY (account_id)
+        REFERENCES "Account" (account_id) ON DELETE CASCADE;
 
-CREATE INDEX ix_event_person_contribs_actor ON event (actor_id,at)
-    WHERE event_class = 'person' AND is_profile_contribution(action);
-CREATE INDEX ix_event_person_contribs_person ON event (person_id,at)
-    WHERE event_class = 'person' AND is_profile_contribution(action);
-CREATE INDEX ix_event_person_contribs ON event (at)
-    WHERE event_class = 'person' AND is_profile_contribution(action);
+CREATE INDEX ix_signal_account
+    ON signal_account (signal_id);
 
--- predict some useful signal indexes
+CREATE UNIQUE INDEX ix_signal_account_account
+    ON signal_account (account_id, signal_id);
 
-CREATE INDEX ix_event_signal_at ON event (at)
-    WHERE event_class = 'signal';
-CREATE INDEX ix_event_signal_actor_at ON event (actor_id,at)
-    WHERE event_class = 'signal';
+-- populate signal_account table with people's accounts
+SET enable_seqscan TO off; -- don't use SeqScans if possible
 
--- partition-away view events
+INSERT INTO signal_account (signal_id, account_id)
+    SELECT DISTINCT signal.signal_id, au.account_id
+    FROM signal
+        JOIN account_user au USING (user_id)
+        LEFT JOIN signal_account sa USING (signal_id)
+    WHERE sa.account_id IS NULL; -- anti-join
 
-CREATE INDEX ix_event_noview_at ON event (at)
-    WHERE action <> 'view';
-CREATE INDEX ix_event_noview_class_at ON event (event_class,at)
-    WHERE action <> 'view';
-CREATE INDEX ix_event_noview_at_page ON event (at)
-    WHERE action <> 'view' AND event_class = 'page';
-
--- if we start logging profile view events, this will be important:
-CREATE INDEX ix_event_noview_at_person ON event (at)
-    WHERE action <> 'view' AND event_class = 'person';
+SET enable_seqscan TO DEFAULT;
 
 UPDATE "System"
-   SET value = '40'
- WHERE field = 'socialtext-schema-version';
+    SET value = '40'
+    WHERE field = 'socialtext-schema-version';
 
 COMMIT;

@@ -45,12 +45,8 @@ sub _scheme_host_port {
 }
 
 sub _scheme {
-    my $apr    = _apr();
     my $scheme = $default_scheme;
-
-    if ($apr) {
-        # FIXME: we should look in the ENV here not the apache
-        # dir config
+    if (_running_under_mod_perl()) {
         $scheme = $ENV{NLWHTTPSRedirect} ? 'https' : 'http';
     }
     return ( scheme => $scheme );
@@ -68,15 +64,8 @@ sub _https_port {
     return (port => $port);
 }
 
-sub _apr {
-    my $apr;
-    eval {
-        require Apache;
-        require Apache::Request;
-        $apr = Apache::Request->instance( Apache->request );
-    };
-    return undef if $@;
-    return $apr;
+sub _running_under_mod_perl {
+    return exists $ENV{MOD_PERL} ? 1 : 0;
 }
 
 1;

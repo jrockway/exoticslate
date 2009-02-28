@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use Socialtext::AppConfig;
-use Socialtext::HTTPPorts qw(SSL_PORT_DIFFERENCE);
+use Socialtext::HTTP::Ports;
 use URI::FromHash;
 use Socialtext::Cache;
 
@@ -56,26 +56,15 @@ sub _scheme {
 }
 
 sub _http_port {
-    my $custom_port = Socialtext::AppConfig->custom_http_port();
-    return () unless ($ENV{NLW_FRONTEND_PORT} or $custom_port);
-    return ( port => ( $custom_port || $ENV{NLW_FRONTEND_PORT} ) );
+    my $port = Socialtext::HTTP::Ports->http_port();
+    return () if ($port == Socialtext::HTTP::Ports->STANDARD_HTTP_PORT());
+    return (port => $port);
 }
 
 sub _https_port {
-    # NLW_FRONTEND_PORT only set in dev-env when there
-    # is a front and backend
-    if ($ENV{NLW_FRONTEND_PORT}) {
-        return ( port => ( $ENV{NLW_FRONTEND_PORT} + SSL_PORT_DIFFERENCE ));
-    }
-
-    # set no special port if the user is using custom_http_port
-    # current use cases define no special behavior for SSL in
-    # those circumstances
-    return () if Socialtext::AppConfig->custom_http_port();
-
-    # sigh under some circumstances in tests when using a mock
-    # Apache::Request we can reach here.
-    return ();
+    my $port = Socialtext::HTTP::Ports->https_port();
+    return () if ($port == Socialtext::HTTP::Ports->STANDARD_HTTPS_PORT());
+    return (port => $port);
 }
 
 sub _apr {

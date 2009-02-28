@@ -20,6 +20,7 @@ my $appconfig = Socialtext::AppConfig->new(file => $config_file);
 my $hostname = lc $appconfig->web_hostname();
 
 BASIC_TESTS: {
+    local $ENV{NLW_IS_APPLIANCE} = 1;
     is( Socialtext::URI::uri( path => '/' ), "http://$hostname/",
         'uri with path of /' );
     is( Socialtext::URI::uri( path => '/', query => { foo => 1 } ),

@@ -38,7 +38,7 @@ sub _scheme_host_port {
     my $scheme = _scheme();
     return (
         scheme => $scheme,
-        _host(),
+        host   => Socialtext::AppConfig->web_hostname(),
         (($scheme eq 'http') ? _http_port() : _https_port())
     );
 }
@@ -53,10 +53,6 @@ sub _scheme {
         $scheme = $ENV{NLWHTTPSRedirect} ? 'https' : 'http';
     }
     return ( scheme => $scheme );
-}
-
-sub _host {
-    return ( host => Socialtext::AppConfig->web_hostname() );
 }
 
 sub _http_port {

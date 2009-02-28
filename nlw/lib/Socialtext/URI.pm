@@ -59,15 +59,6 @@ sub _host {
     return ( host => Socialtext::AppConfig->web_hostname() );
 }
 
-sub _port {
-    if (_scheme() eq 'http') {
-        return _http_port();
-    }
-    else {
-        return _https_port();
-    }
-}
-
 sub _http_port {
     my $custom_port = Socialtext::AppConfig->custom_http_port();
     return () unless ($ENV{NLW_FRONTEND_PORT} or $custom_port);

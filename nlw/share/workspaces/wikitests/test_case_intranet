@@ -48,7 +48,7 @@
 | *Comment* | Test Case: Intranet. Verify central page is home page |  |
 | open_ok | /%%auth_w%%/ |  |
 | text_like | contentContainer | Test Case Intranet |
-| text_like | contentContainer | Welcome to your Socialtext Workspace |
+| text_like | contentContainer | qr/Welcome to your.+Workspace/i |
 | click_and_wait | link=Settings |  |
 | text_like | errors-and-messages | To set your preferences for a workspace, you must be logged in. |
 

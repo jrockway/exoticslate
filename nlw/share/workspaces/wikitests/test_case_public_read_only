@@ -5,15 +5,14 @@
 | st-admin | set-permissions --workspace %%auth_w%% --permissions public-read-only | The permissions for the %%auth_w%% workspace have been changed to public-read-only. |
 | st-logout |  |  |
 
-| pause | 10000 |  |
 | open_ok | /%%auth_w%%/ |  |
-| pause | 10000 |  |
+| wait_for_element_visible_ok | st-page-titletext | 30000 |
 
 | *Comment* | Test Case: Public Read Only. Verify buttons and links page top |  |
-| text_unlike | mainWrap | Edit |
-| text_unlike | mainWrap | Comment |
-| text_unlike | contentRight | Add tag |
-| text_unlike | contentRight | Upload files |
+| wait_for_element_not_present_ok | link=Edit | 30000 |
+| wait_for_element_not_present_ok | link=Comment | 30000 |
+| wait_for_element_not_present_ok | link=Add Tag | 30000 |
+| wait_for_element_not_present_ok | link=Upload Files | 30000 |
 | wait_for_element_visible_ok | link=Log in | 30000 |
 | text_like | globalNav | Log in |
 | wait_for_element_visible_ok | link=Register | 30000 |

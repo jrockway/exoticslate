@@ -227,6 +227,7 @@ proto.poll = function(test, callback, interval, maximum) {
 
 proto.setup_one_widget = function(params, callback) {
     var url = typeof(params) == 'string' ? params : params.url;
+    url += ';container_id=1';
     if (typeof(params) == 'string') params = {};
     var self = this;
     var setup_widget = function() {
@@ -246,7 +247,7 @@ proto.setup_one_widget = function(params, callback) {
 
         });
     }
-    this.open_iframe("/?action=clear_widgets", setup_widget);
+    this.open_iframe("/?action=clear_widgets;container_id=1", setup_widget);
 }
 
 proto.getWidget = function(widget_name, callback) {

@@ -1008,6 +1008,9 @@ div#contentColumns div#contentLeft em {
 	font-style: italic;
 }
 
+div#contentColumns div#contentLeft .wiki em {
+        color: #0A94DF;
+}
 
 div#contentColumns div#contentLeft p strong {
 	font-weight: bold;

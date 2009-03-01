@@ -24,7 +24,7 @@ t.runAsync([
 
     function() { 
         t.like(
-            $('a.wiki-include-edit-link', t.doc).attr('href'),
+            $('a.smallEditButton', t.doc).attr('href'),
             /\/lite\//,
             "The edit link goes to /lite/ when viewed inside /lite/"
         );

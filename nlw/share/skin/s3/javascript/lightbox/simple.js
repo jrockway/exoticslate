@@ -9,8 +9,11 @@ ST.SimpleLightbox.prototype = {
             close: '#simple-lightbox .close'
         });
         
-        if (cb) {
-            $('#simple-lightbox .close').unbind('click').click(cb);
+        if ($.isFunction(cb)) {
+            $('#simple-lightbox .close').unbind('click').click(function () {
+                cb();
+                return false;
+            });
         }
     }
 }

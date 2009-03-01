@@ -6,12 +6,13 @@
 | st-logout |  |  |
 
 | open_ok | /%%auth_w%%/index.cgi |  |
+| wait_for_element_visible_ok | st-page-titletext | 30000 |
 
 | *Comment* | Test Case: Public Authenticate to Edit. Verify buttons and links page top |  |
 | text_like | st-login-to-edit-button-link | Edit |
-| text_unlike | mainWrap | Comment |
-| text_unlike | contentRight | Add tag |
-| text_unlike | contentRight | Upload files |
+| wait_for_element_not_present_ok | link=Comment | 30000 |
+| wait_for_element_not_present_ok | link=Add Tag | 30000 |
+| wait_for_element_not_present_ok | link=Upload Files | 30000 |
 | wait_for_element_visible_ok | link=Log in | 30000 |
 | text_like | globalNav | Log in |
 | wait_for_element_visible_ok | link=Register | 30000 |
@@ -33,15 +34,12 @@
 | type_ok | password | 123456 |
 | click_and_wait | //input[@value='Log in'] |  |
 
+| *Comment* | Test Case: Public Authenticate to Edit. Wait for editor to open after login. |  |
 | wait_for_element_visible_ok | st-editing-title | 30000 |
 | text_like | st-editing-title | Editing: |
-
-| *Comment* | I don't know why, but Selenium can't detect the open editor here. |  |
-
- wait_for_element_visible_ok | link=Wiki Text | 60000 |
- wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-
-| pause | 10000 |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_and_wait | st-save-button-link |  |
 

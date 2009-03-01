@@ -322,11 +322,11 @@ CREATE SEQUENCE gadget_id
 CREATE TABLE gadget_instance (
     gadget_instance_id bigint NOT NULL,
     container_id bigint NOT NULL,
-    default_gadget_id bigint,
     gadget_id bigint NOT NULL,
     col integer NOT NULL,
     "row" integer NOT NULL,
-    minimized boolean DEFAULT false
+    minimized boolean DEFAULT false,
+    fixed boolean DEFAULT false
 );
 
 CREATE SEQUENCE gadget_instance_id
@@ -369,7 +369,9 @@ CREATE SEQUENCE gadget_user_pref_id
 CREATE TABLE gallery (
     gallery_id bigint NOT NULL,
     last_update timestamptz DEFAULT now() NOT NULL,
-    account_id bigint
+    account_id bigint,
+    CONSTRAINT gallery_id_or_account_id
+            CHECK (((gallery_id = 0) AND (account_id IS NULL)) OR ((gallery_id <> 0) AND (account_id IS NOT NULL)))
 );
 
 CREATE TABLE gallery_gadget (
@@ -696,6 +698,10 @@ ALTER TABLE ONLY sessions
     ADD CONSTRAINT sessions_pkey
             PRIMARY KEY (id);
 
+ALTER TABLE ONLY signal_account
+    ADD CONSTRAINT signal_account_pkey
+            PRIMARY KEY (signal_id, account_id);
+
 ALTER TABLE ONLY signal
     ADD CONSTRAINT signal_pkey
             PRIMARY KEY (signal_id);
@@ -986,11 +992,6 @@ ALTER TABLE ONLY container
             FOREIGN KEY (workspace_id)
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
-ALTER TABLE ONLY gadget_instance
-    ADD CONSTRAINT default_gadget_id_fk
-            FOREIGN KEY (default_gadget_id)
-            REFERENCES default_gadget(default_gadget_id) ON DELETE CASCADE;
-
 ALTER TABLE ONLY event
     ADD CONSTRAINT event_actor_id_fk
             FOREIGN KEY (actor_id)
@@ -1252,4 +1253,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '40');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '41');

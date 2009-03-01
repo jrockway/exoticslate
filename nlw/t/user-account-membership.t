@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 # @COPYRIGHT@
+
 # This test was created to aid in refactoring the 'account_user' view into a
 # materialized view, but the mat-view turned out to be too slow.  It should
 # capture the business logic of "if a user's in an workspace, they're also in

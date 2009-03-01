@@ -15,7 +15,7 @@ use Socialtext::Workspace;
 use Socialtext::Pluggable::Plugin::Widgets;
 use Socialtext::Gadgets::XML;
 
-ensure_socialtext_schema( 31 );
+ensure_socialtext_schema( 37 );
 
 my $main = Socialtext->new();
 my $hub  = $main->load_hub(

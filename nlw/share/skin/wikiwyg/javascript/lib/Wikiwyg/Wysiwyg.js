@@ -1331,7 +1331,7 @@ proto.do_add_col_left = function() {
                     .html("&nbsp;")
             );
         });
-        Socialtext.make_table_unsortable( $cell.parents("table").get(0) );
+        Socialtext.make_table_unsortable( $cell.parents("table:eq(0)").get(0) );
     });
 }
 
@@ -1346,7 +1346,7 @@ proto.do_add_col_right = function() {
                     .html("&nbsp;")
             );
         });
-        Socialtext.make_table_unsortable( $cell.parents("table").get(0) );
+        Socialtext.make_table_unsortable( $cell.parents("table:eq(0)").get(0) );
     });
 }
 

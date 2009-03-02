@@ -72,10 +72,7 @@ Socialtext.make_table_unsortable = function(table) {
     $table.find("thead").remove();
 
     $table.find("th").each(function() {
-        var $td = jQuery("<td></td>");
-        $td.html( jQuery(this).html() ).attr("style", jQuery(this).attr('style'));
-
-        jQuery(this).replaceWith($td);
+        jQuery(this).replaceWith("<td style=\"" + jQuery(this).attr("style") + "\">" + this.innerHTML + "</td>");
     });
 
 }

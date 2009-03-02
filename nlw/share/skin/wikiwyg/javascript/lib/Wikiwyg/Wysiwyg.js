@@ -653,11 +653,11 @@ proto.enableThis = function() {
             var doc = self.get_edit_document();
             if (jQuery.browser.msie) {
                 var i = setInterval(function() {
-                    if (doc.readyState && (doc.readyState == "interactive" || doc.readyState == "complete")) { 
+                    if (doc.readyState && (doc.readyState == "interactive" || doc.readyState == "complete") && doc.body && doc.body.innerHTML) { 
                         clearInterval(i);
                         ready();
                     }
-                }, 600);
+                }, 1800);
                 return ;
             }
             ready();

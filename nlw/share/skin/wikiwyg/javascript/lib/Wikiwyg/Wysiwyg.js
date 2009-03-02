@@ -627,30 +627,41 @@ proto.enableThis = function() {
 
     var self = this;
     var ready = function() {
-        if (!self.is_ready)
-            self.fromHtml( self.wikiwyg.div.innerHTML );
-        self.get_edit_document().designMode = 'on';
-        self.enable_keybindings();
-        self.set_clear_handler();
-
         if (Wikiwyg.is_gecko) {
+            self.get_edit_document().designMode = 'on';
             setTimeout(function() {
                 self.get_edit_document().execCommand("enableObjectResizing", false, false);
                 self.get_edit_document().execCommand("enableInlineTableEditing", false, false);
             }, 100);
         }
 
-        jQuery('div.wiki table.sort', self.get_edit_document())
+        self.enable_keybindings();
+        self.set_clear_handler();
+
+        jQuery('table.sort', self.get_edit_document())
             .each(function() {
                 Socialtext.make_table_sortable(this);
             });
 
         self.is_ready = true;
     };
+
     if (self.is_ready)
         ready();
     else
-        self.get_edit_window().onload = ready;
+        jQuery(self.get_edit_window()).bind("load", function() {
+            var doc = self.get_edit_document();
+            if (jQuery.browser.msie) {
+                var i = setInterval(function() {
+                    if (doc.readyState && (doc.readyState == "interactive" || doc.readyState == "complete")) { 
+                        clearInterval(i);
+                        ready();
+                    }
+                }, 600);
+                return ;
+            }
+            ready();
+        });
 
     setTimeout(function() {
         try {

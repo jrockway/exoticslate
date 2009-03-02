@@ -48,8 +48,9 @@ sub munge_raw_query_string {
     my ( $self, $query ) = @_;
 
     # Establish some field synonyms.
-    $query =~ s/=/title:/g;       # Old style title search
-    $query =~ s/category:/tag:/g; # Old name for tags
+    $query =~ s/=/title:/g;        # Old style title search
+    $query =~ s/category:/tag:/gi; # Old name for tags
+    $query =~ s/tag:\s+/tag:/gi;   # fix capitalization and allow an extra space
 
     # Find everything that looks like a field, but is not.  I.e. in "cow:foo"
     # we would find "cow:". 

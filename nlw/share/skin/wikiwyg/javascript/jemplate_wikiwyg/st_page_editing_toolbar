@@ -1,94 +1,101 @@
-<div id="st-page-editing-toolbar"><div class="wikiwyg_toolbar" id="wikiwyg_toolbar" style="display: block;"><div class="other_buttons"><img class="wikiwyg_button" id="wikiwyg_button_bold" alt="Bold (Ctrl+b)" title="Bold (Ctrl+b)" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/bold.png"/><img class="wikiwyg_button" id="wikiwyg_button_italic" alt="Italic(Ctrl+i)" title="Italic(Ctrl+i)" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/italic.png"/><img class="wikiwyg_button" id="wikiwyg_button_strike" alt="Strike Through(Ctrl+d)" title="Strike Through(Ctrl+d)" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/strike.png"/><img class="wikiwyg_separator" alt=" | " title="" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/separator.png"/><img class="wikiwyg_button" id="wikiwyg_button_h1" alt="Heading 1" title="Heading 1" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/h1.png"/><img class="wikiwyg_button" id="wikiwyg_button_h2" alt="Heading 2" title="Heading 2" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/h2.png"/><img class="wikiwyg_button" id="wikiwyg_button_h3" alt="Heading 3" title="Heading 3" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/h3.png"/><img class="wikiwyg_button" id="wikiwyg_button_h4" alt="Heading 4" title="Heading 4" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/h4.png"/><img class="wikiwyg_button" id="wikiwyg_button_p" alt="Normal Text" title="Normal Text" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/p.png"/><img class="wikiwyg_separator" alt=" | " title="" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/separator.png"/><img class="wikiwyg_button" id="wikiwyg_button_ordered" alt="Numbered List" title="Numbered List" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/ordered.png"/><img class="wikiwyg_button" id="wikiwyg_button_unordered" alt="Bulleted List" title="Bulleted List" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/unordered.png"/><img class="wikiwyg_button" id="wikiwyg_button_outdent" alt="Less Indented" title="Less Indented" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/outdent.png"/><img class="wikiwyg_button" id="wikiwyg_button_indent" alt="More Indented" title="More Indented" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/indent.png"/><img class="wikiwyg_separator" alt=" | " title="" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/separator.png"/><img class="wikiwyg_button" id="wikiwyg_button_link" alt="Create Link" title="Create Link" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/link.png"/><img class="wikiwyg_button" id="wikiwyg_button_image" alt="Include an Image" title="Include an Image" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/image.png"/><img class="wikiwyg_separator" alt=" | " title="" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/separator.png"/><img class="wikiwyg_button" id="wikiwyg_button_table" alt="New Table" title="New Table" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/table.png"/><img class="wikiwyg_button" id="wikiwyg_button_table-settings" alt="Table Settings" title="Table Settings" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/table-settings.png"/><img class="wikiwyg_separator" alt=" | " title="" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/separator.png"/></div><div class="table_buttons disabled"><img class="wikiwyg_button" id="wikiwyg_button_add-row-below" alt="Add Table Row Below Current Row" title="Add Table Row Below Current Row" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/add-row-below.png"/><img class="wikiwyg_button" id="wikiwyg_button_add-row-above" alt="Add Table Row Above Current Row" title="Add Table Row Above Current Row" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/add-row-above.png"/><img class="wikiwyg_button" id="wikiwyg_button_move-row-down" alt="Move Current Table Row Down" title="Move Current Table Row Down" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/move-row-down.png"/><img class="wikiwyg_button" id="wikiwyg_button_move-row-up" alt="Move Current Table Row Up" title="Move Current Table Row Up" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/move-row-up.png"/><img class="wikiwyg_button" id="wikiwyg_button_del-row" alt="Delete Current Table Row" title="Delete Current Table Row" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/del-row.png"/><img class="wikiwyg_separator" alt=" | " title="" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/separator.png"/><img class="wikiwyg_button" id="wikiwyg_button_add-col-left" alt="Add Table Column to the Left" title="Add Table Column to the Left" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/add-col-left.png"/><img class="wikiwyg_button" id="wikiwyg_button_add-col-right" alt="Add Table Column to the Right" title="Add Table Column to the Right" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/add-col-right.png"/><img class="wikiwyg_button" id="wikiwyg_button_move-col-left" alt="Move Current Table Column to the Left" title="Move Current Table Column to the Left" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/move-col-left.png"/><img class="wikiwyg_button" id="wikiwyg_button_move-col-right" alt="Move Current Table Column to the Right" title="Move Current Table Column to the Right" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/move-col-right.png"/><img class="wikiwyg_button" id="wikiwyg_button_del-col" alt="Delete Current Table Column" title="Delete Current Table Column" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/del-col.png"/></div></div>
-                                    <div id="st-page-editing-widget-menu">
-                                        <ul id="st-editing-insert-menu">
-  <li><a onclick="return false" href="#">Insert</a>
+<div id="st-page-editing-toolbar">
+ <div class="wikiwyg_toolbar" id="wikiwyg_toolbar" style="display: block;">
+  <div class="other_buttons">
+   <img class="wikiwyg_button" id="wikiwyg_button_bold" alt="Bold (Ctrl+b)" title="Bold (Ctrl+b)" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/bold.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_italic" alt="Italic(Ctrl+i)" title="Italic(Ctrl+i)" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/italic.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_strike" alt="Strike Through(Ctrl+d)" title="Strike Through(Ctrl+d)" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/strike.png"/>
+   <img class="wikiwyg_separator" alt=" | " title="" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/separator.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_h1" alt="Heading 1" title="Heading 1" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/h1.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_h2" alt="Heading 2" title="Heading 2" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/h2.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_h3" alt="Heading 3" title="Heading 3" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/h3.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_h4" alt="Heading 4" title="Heading 4" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/h4.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_p" alt="Normal Text" title="Normal Text" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/p.png"/>
+   <img class="wikiwyg_separator" alt=" | " title="" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/separator.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_ordered" alt="Numbered List" title="Numbered List" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/ordered.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_unordered" alt="Bulleted List" title="Bulleted List" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/unordered.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_outdent" alt="Less Indented" title="Less Indented" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/outdent.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_indent" alt="More Indented" title="More Indented" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/indent.png"/>
+   <img class="wikiwyg_separator" alt=" | " title="" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/separator.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_link" alt="Create Link" title="Create Link" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/link.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_image" alt="Include an Image" title="Include an Image" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/image.png"/>
+   <img class="wikiwyg_separator" alt=" | " title="" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/separator.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_table" alt="New Table" title="New Table" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/table.png"/>
+   <!-- img class="wikiwyg_button" id="wikiwyg_button_table-settings" alt="Table Settings" title="Table Settings" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/table-settings.png"/ -->
+   <img class="wikiwyg_separator" alt=" | " title="" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/separator.png"/>
+  </div>
+  <div class="table_buttons disabled">
+   <img class="wikiwyg_button" id="wikiwyg_button_add-row-below" alt="Add Table Row Below Current Row" title="Add Table Row Below Current Row" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/add-row-below.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_add-row-above" alt="Add Table Row Above Current Row" title="Add Table Row Above Current Row" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/add-row-above.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_move-row-down" alt="Move Current Table Row Down" title="Move Current Table Row Down" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/move-row-down.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_move-row-up" alt="Move Current Table Row Up" title="Move Current Table Row Up" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/move-row-up.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_del-row" alt="Delete Current Table Row" title="Delete Current Table Row" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/del-row.png"/>
+   <img class="wikiwyg_separator" alt=" | " title="" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/separator.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_add-col-left" alt="Add Table Column to the Left" title="Add Table Column to the Left" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/add-col-left.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_add-col-right" alt="Add Table Column to the Right" title="Add Table Column to the Right" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/add-col-right.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_move-col-left" alt="Move Current Table Column to the Left" title="Move Current Table Column to the Left" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/move-col-left.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_move-col-right" alt="Move Current Table Column to the Right" title="Move Current Table Column to the Right" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/move-col-right.png"/>
+   <img class="wikiwyg_button" id="wikiwyg_button_del-col" alt="Delete Current Table Column" title="Delete Current Table Column" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/del-col.png"/>
+  </div>
+ </div>
+ <div id="st-page-editing-widget-menu">
+  <ul id="st-editing-insert-menu">
+   <li><a onclick="return false" href="#">Insert</a>
     <ul>
-      
-      
-      
-      <li><a do="do_widget_image" onclick="return false;" href="#">Image</a></li>
-      
-      <li><a do="do_table" onclick="return false;" href="#">Table</a></li>
-      
-      <li><a do="do_hr" onclick="return false;" href="#">HorizontalLine</a></li>
-      <li><a onclick="return false" href="#" class="daddy">Alinkto...</a>
-        <ul>
-      
-          <li><a do="do_widget_file" onclick="return false;" href="#">Afileattachedtothispage</a></li>
-      
-          <li><a do="do_widget_link2_section" onclick="return false;" href="#">Asectioninthispage</a></li>
-      
-          <li><a do="do_widget_link2" onclick="return false;" href="#">Adifferentwikipage</a></li>
-      
-          <li><a do="do_widget_weblog" onclick="return false;" href="#">Aperson'sblog</a></li>
-      
-          <li><a do="do_widget_tag" onclick="return false;" href="#">Pagesrelatedtoatag</a></li>
-      
-          <li><a do="do_widget_link2_hyperlink" onclick="return false;" href="#">Apageontheweb</a></li>
-        </ul>
-      </li>
-      <li><a onclick="return false" href="#" class="daddy">Fromworkspaces...</a>
-        <ul>
-      
-          <li><a do="do_widget_include" onclick="return false;" href="#">Apageinclude</a></li>
-      
-          <li><a do="do_widget_tag_list" onclick="return false;" href="#">Taggedpages</a></li>
-      
-          <li><a do="do_widget_recent_changes" onclick="return false;" href="#">Recentchanges</a></li>
-      
-          <li><a do="do_widget_weblog_list" onclick="return false;" href="#">Blogpostings</a></li>
-      
-          <li><a do="do_widget_search" onclick="return false;" href="#">Wikisearchresults</a></li>
-        </ul>
-      </li>
-      <li><a onclick="return false" href="#" class="daddy">Fromtheweb...</a>
-        <ul>
-      
-          <li><a do="do_widget_googlesoap" onclick="return false;" href="#">Googlesearchresults</a></li>
-      
-          <li><a do="do_widget_technorati" onclick="return false;" href="#">Technoratiresults</a></li>
-      
-          <li><a do="do_widget_fetchrss" onclick="return false;" href="#">RSSfeeditems</a></li>
-      
-          <li><a do="do_widget_fetchatom" onclick="return false;" href="#">Atomfeeditems</a></li>
-        </ul>
-      </li>
-      <li><a onclick="return false" href="#" class="daddy">Organizingyourpage...</a>
-        <ul>
-      
-          <li><a do="do_widget_toc" onclick="return false;" href="#">Tableofcontents</a></li>
-      
-          <li><a do="do_widget_section" onclick="return false;" href="#">Sectionmarker</a></li>
-      
-          <li><a do="do_hr" onclick="return false;" href="#">Horizontalline</a></li>
-        </ul>
-      </li>
-      <li><a onclick="return false" href="#" class="daddy">Communicating...</a>
-        <ul>
-      
-          <li><a do="do_widget_skype" onclick="return false;" href="#">Skypelink</a></li>
-      
-          <li><a do="do_widget_aim" onclick="return false;" href="#">AIMlink</a></li>
-      
-          <li><a do="do_widget_yahoo" onclick="return false;" href="#">Yahoo!Messengerlink</a></li>
-        </ul>
-      </li>
-      <li><a onclick="return false" href="#" class="daddy">Name&Date...</a>
-        <ul>
-      
-          <li><a do="do_widget_user" onclick="return false;" href="#">Username</a></li>
-      
-          <li><a do="do_widget_date" onclick="return false;" href="#">LocalDate&Time</a></li>
-        </ul>
-      </li>
-      
-      <li><a do="do_widget_asis" onclick="return false;" href="#">Unformattedtext...</a></li>
-    </ul>
+     <li><a do="do_widget_image" onclick="return false;" href="#">Image</a></li>
+     <li><a do="do_table" onclick="return false;" href="#">Table</a></li>
+     <li><a do="do_hr" onclick="return false;" href="#">Horizontal Line</a></li>
+     <li><a onclick="return false" href="#" class="daddy">A Link To...</a>
+      <ul>
+       <li><a do="do_widget_file" onclick="return false;" href="#">A File Attached to This Page</a></li>
+       <li><a do="do_widget_link2_section" onclick="return false;" href="#">A Section in This Page</a></li>
+       <li><a do="do_widget_link2" onclick="return false;" href="#">A Different Wiki Page</a></li>
+       <li><a do="do_widget_weblog" onclick="return false;" href="#">A Person's Blog</a></li>
+       <li><a do="do_widget_tag" onclick="return false;" href="#">Pages Related to a Tag</a></li>
+       <li><a do="do_widget_link2_hyperlink" onclick="return false;" href="#">A Page on The Web</a></li>
+      </ul>
+     </li>
+     <li>
+      <a onclick="return false" href="#" class="daddy">From Workspaces...</a>
+      <ul>
+       <li><a do="do_widget_include" onclick="return false;" href="#">A Page Include</a></li>
+       <li><a do="do_widget_tag_list" onclick="return false;" href="#">Tagged Pages</a></li>
+       <li><a do="do_widget_recent_changes" onclick="return false;" href="#">Recent Changes</a></li>
+       <li><a do="do_widget_weblog_list" onclick="return false;" href="#">Blog Postings</a></li>
+       <li><a do="do_widget_search" onclick="return false;" href="#">Wiki Search Results</a></li>
+      </ul>
+     </li>
+     <li><a onclick="return false" href="#" class="daddy">From The Web...</a>
+      <ul>
+       <li><a do="do_widget_googlesoap" onclick="return false;" href="#">Google Search Results</a></li>
+       <li><a do="do_widget_technorati" onclick="return false;" href="#">Technorati Results</a></li>
+       <li><a do="do_widget_fetchrss" onclick="return false;" href="#">RSS Feed Items</a></li>
+       <li><a do="do_widget_fetchatom" onclick="return false;" href="#">Atom Feed Items</a></li>
+      </ul>
+     </li>
+     <li><a onclick="return false" href="#" class="daddy">Organizing Your Page...</a>
+      <ul>
+       <li><a do="do_widget_toc" onclick="return false;" href="#">Table of Contents</a></li>
+       <li><a do="do_widget_section" onclick="return false;" href="#">Section Marker</a></li>
+      </ul>
+     </li>
+     <li><a onclick="return false" href="#" class="daddy">Communicating...</a>
+      <ul>
+      <li><a do="do_widget_skype" onclick="return false;" href="#">Skype Link</a></li>
+      <li><a do="do_widget_aim" onclick="return false;" href="#">AIM Link</a></li>
+      <li><a do="do_widget_yahoo" onclick="return false;" href="#">Yahoo! Messenger Link</a></li>
+     </ul>
+    </li>
+    <li><a onclick="return false" href="#" class="daddy">Name &amp; Date...</a>
+     <ul>
+      <li><a do="do_widget_user" onclick="return false;" href="#">User Name</a></li>
+      <li><a do="do_widget_date" onclick="return false;" href="#">Local Date &amp; Time</a></li>
+     </ul>
+    </li>
+    <li><a do="do_widget_asis" onclick="return false;" href="#">Unformatted Text...</a></li>
+   </ul>
   </li>
-</ul>
-
-<div style="clear: both;" id="menu-style-reset"/>
-
-                                    </div>
-                                </div>
+ </ul>
+ <div style="clear: both;" id="menu-style-reset"/>
+ </div>
+</div>
 

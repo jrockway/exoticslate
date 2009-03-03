@@ -90,7 +90,7 @@ sub st_timed_log {
     my $data = shift || {};
     my $times = shift || {};
 
-    my $message = uc($command) . ',' . uc($name) . ',' . 'ACTOR_ID:' . $user->user_id . ',';
+    my $message = uc($command) . ',' . uc($name) . ',' . 'ACTOR_ID:' . ($user ? $user->user_id : 0). ',';
 
     $message .= join(',', map { $_.':'.$data->{$_} } sort keys %$data);
 

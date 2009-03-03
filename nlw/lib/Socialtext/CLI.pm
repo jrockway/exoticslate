@@ -452,6 +452,10 @@ sub import_account {
         warn $@ if $@;
     }
 
+    $account->finish_import(
+        hub => $hub,
+    );
+
     $self->_success(
         "\n" . loc("[_1] account imported.", $account->name));
 }

@@ -334,6 +334,7 @@ sub import_file {
     }
 
     $hub->pluggable->hook('nlw.import_account', $account, $hash);
+    $account->{_import_hash} = $hash;
 
     # Create all the profiles after so that user references resolve.
     eval "require Socialtext::People::Profile";
@@ -343,6 +344,14 @@ sub import_file {
     }
 
     return $account;
+}
+
+sub finish_import {
+    my $self = shift;
+    my %opts = @_;
+    my $hub  = $opts{hub};
+
+    $hub->pluggable->hook('nlw.finish_import_account', $self, $self->{_import_hash});
 }
 
 sub users {

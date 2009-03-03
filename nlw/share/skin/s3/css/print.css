@@ -54,6 +54,7 @@ div#st-display-mode-container #tabs {
     background-color: white;
     margin: 0px;
     padding: 0px;
+    -width: 45%; /* IE6's landscape mode uses portrait-mode widths: {bz: 2157} */
 }
 
 div#st-display-mode-container #controls,

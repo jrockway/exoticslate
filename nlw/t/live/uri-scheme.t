@@ -5,7 +5,7 @@ use warnings;
 use Test::Live fixtures => [qw(admin)];
 use Test::More tests => 4;
 use Socialtext::Hostname;
-use Socialtext::HTTPPorts qw(SSL_PORT_DIFFERENCE);
+use Socialtext::HTTP::Ports;
 
 # borrowed from wsdl-0.9.t
 
@@ -13,8 +13,8 @@ my $live     = Test::Live->new();
 my $base_uri = $live->base_url;
 my $feed     = $base_uri . '/feed/workspace/admin?page=what_if_i_make_a_mistake';
 my $host     = Socialtext::Hostname::fqdn();
-my $port     = $< + 30000;
-my $ssl_port = $port + SSL_PORT_DIFFERENCE;
+my $port      = Socialtext::HTTP::Ports->http_port();
+my $ssl_port  = Socialtext::HTTP::Ports->https_port();
 
 $live->mech( WWW::Mechanize->new() );
 

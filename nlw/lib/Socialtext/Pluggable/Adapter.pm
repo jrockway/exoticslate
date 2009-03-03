@@ -305,7 +305,7 @@ sub hook {
             last if $hook->{once};
         }
     }
-    return @output == 1 ? $output[0] : join("\n", @output);
+    return @output == 1 ? $output[0] : join("\n", grep {defined} @output);
 }
 
 1;

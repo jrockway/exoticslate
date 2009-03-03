@@ -7,6 +7,7 @@ package Test::Socialtext::Fixture;
 use strict;
 use warnings;
 use Carp qw( confess );
+use Class::Field qw(const);
 use DateTime;
 use File::Basename ();
 use File::chdir;
@@ -23,8 +24,8 @@ use Socialtext::Pages;
 use Socialtext::User;
 use Socialtext::AppConfig;
 
-my $DefaultUsername = 'devnull1@socialtext.com';
-
+const 'test_username' => 'devnull1@socialtext.com';
+const 'test_password' => 'd3vnu11l';
 
 sub new {
     my $class = shift;
@@ -291,8 +292,8 @@ sub _generate_workspaces {
     return unless $self->config->{workspaces};
 
     my $creator = $self->_create_user(
-        username           => $DefaultUsername,
-        passwd             => 'd3vnu11l',
+        username           => test_username(),
+        passwd             => test_password(),
         is_business_admin  => 1,
         is_technical_admin => 1,
     );

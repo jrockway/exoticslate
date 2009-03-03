@@ -18,10 +18,10 @@
  /><img class="wikiwyg_separator" alt=" | " title="" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/separator.png"
  /><img class="wikiwyg_button" id="wikiwyg_button_link" alt="Create Link" title="Create Link" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/link.png"
  /><img class="wikiwyg_button" id="wikiwyg_button_image" alt="Include an Image" title="Include an Image" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/image.png"
- /><img class="wikiwyg_separator" alt=" | " title="" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/separator.png"
  /><img class="wikiwyg_button" id="wikiwyg_button_table" alt="New Table" title="New Table" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/table.png"
  /><img class="wikiwyg_separator" alt=" | " title="" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/separator.png"
- /><!-- img class="wikiwyg_button" id="wikiwyg_button_table-settings" alt="Table Settings" title="Table Settings" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/table-settings.png"/ -->
+ /><!--<img class="wikiwyg_separator" alt=" | " title="" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/separator.png"
+ /><img class="wikiwyg_button" id="wikiwyg_button_table-settings" alt="Table Settings" title="Table Settings" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/table-settings.png"/ -->
   </div>
   <div class="table_buttons disabled">
    <img class="wikiwyg_button" id="wikiwyg_button_add-row-below" alt="Add Table Row Below Current Row" title="Add Table Row Below Current Row" src="/static/3.4.0.1/skin/s2/images/wikiwyg_icons/add-row-below.png"

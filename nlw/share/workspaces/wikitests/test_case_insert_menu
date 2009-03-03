@@ -28,14 +28,14 @@
 
 TODO: Selenium up to 9.2 only recognizes the first prompt for table size. Check later versions for the ability to dismiss two prompts in a row.
 
- answerOnNextPrompt | 3 | |
- verifyPrompt | Please enter the number of table columns: | |
+answerOnNextPrompt | 3 | |
+verifyPrompt | Please enter the number of table columns: | |
 
-| *Comment* | Test Case: Insert Menu click on the icons for spreadsheet, image, HR, and table |  |
-| click_ok | link=Spreadsheet |  |
-| verifyValue | wikiwyg_wikitext_textarea | `{ss: foo}` |
-| click_ok | link=Spreadsheet |  |
-| verifyValue | wikiwyg_wikitext_textarea | foo |
+ *Comment* | Test Case: Insert Menu click on the icons for spreadsheet, image, HR, and table | |
+click_ok | link=Spreadsheet | |
+verifyValue | wikiwyg_wikitext_textarea | `{ss: foo}` |
+click_ok | link=Spreadsheet | |
+verifyValue | wikiwyg_wikitext_textarea | foo |
 
 | click_ok | link=Image |  |
 | verifyValue | wikiwyg_wikitext_textarea | `{image: foo}` |
@@ -49,115 +49,115 @@ TODO: Selenium up to 9.2 only recognizes the first prompt for table size. Check 
 | answerOnNextPrompt | 3 |  |
 | verifyPrompt | Please enter the number of table rows: |  |
 
-| *Comment* | Test Case: Insert Menu "A link to..." |  |
-| click_ok | link=A different wiki page |  |
+| *Comment* | Test Case: Insert Menu "A Link To..." |  |
+| click_ok | link=A Different Wiki Page |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{link: ----}/s` |
-| click_ok | link=A different wiki page |  |
+| click_ok | link=A Different Wiki Page |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
-| click_ok | link=A page on the web |  |
+| click_ok | link=A Page on The Web |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+<http:\/\/---->/s` |
-| click_ok | link=A page on the web |  |
+| click_ok | link=A Page on The Web |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
-| click_ok | link=A section in this page |  |
+| click_ok | link=A Section in This Page |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{link: ----}/s` |
-| click_ok | link=A section in this page |  |
+| click_ok | link=A Section in This Page |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
-| click_ok | link=Pages related to a tag |  |
+| click_ok | link=Pages Related to a Tag |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{tag: ----}/s` |
-| click_ok | link=Pages related to a tag |  |
+| click_ok | link=Pages Related to a Tag |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
-| click_ok | link=A person's blog |  |
+| click_ok | link=A Person's Blog |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{weblog: ----}/s` |
-| click_ok | link=A person's blog |  |
+| click_ok | link=A Person's Blog |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
-| click_ok | link=A file attached to this page |  |
+| click_ok | link=A File Attached to This Page |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{file: ----}/s` |
-| click_ok | link=A file attached to this page |  |
+| click_ok | link=A File Attached to This Page |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
 | *Comment* | Test Case: Insert Menu "From workspaces..." |  |
-| click_ok | link=A page include |  |
+| click_ok | link=A Page Include |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{include: ----}/s` |
-| click_ok | link=A page include |  |
+| click_ok | link=A Page Include |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
-| click_ok | link=Recent changes |  |
+| click_ok | link=Recent Changes |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{recent_changes: ----}/s` |
-| click_ok | link=Recent changes |  |
+| click_ok | link=Recent Changes |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
-| click_ok | link=Blog postings |  |
+| click_ok | link=Blog Postings |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{weblog_list: ----}/s` |
-| click_ok | link=Blog postings |  |
+| click_ok | link=Blog Postings |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
-| click_ok | link=Tagged pages |  |
+| click_ok | link=Tagged Pages |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{tag_list: ----}/s` |
-| click_ok | link=Tagged pages |  |
+| click_ok | link=Tagged Pages |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
-| click_ok | link=Wiki search results |  |
+| click_ok | link=Wiki Search Results |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{search: ----}/s` |
-| click_ok | link=Wiki search results |  |
+| click_ok | link=Wiki Search Results |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
-| *Comment* | Test Case: Insert Menu "Organizing your page..." |  |
-| click_ok | link=Table of contents |  |
+| *Comment* | Test Case: Insert Menu "Organizing Your Page..." |  |
+| click_ok | link=Table of Contents |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{toc: ----}/s` |
-| click_ok | link=Table of contents |  |
+| click_ok | link=Table of Contents |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
-| click_ok | link=Section marker |  |
+| click_ok | link=Section Marker |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{section: ----}/s` |
-| click_ok | link=Section marker |  |
+| click_ok | link=Section Marker |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
 | *Comment* | Test Case: Insert Menu "From the web..." |  |
-| click_ok | link=Google search results |  |
+| click_ok | link=Google Search Results |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{googlesoap: ----}/s` |
-| click_ok | link=Google search results |  |
+| click_ok | link=Google Search Results |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
-| click_ok | link=RSS feed items |  |
+| click_ok | link=RSS Feed Items |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{fetchrss: ----}/s` |
-| click_ok | link=RSS feed items |  |
+| click_ok | link=RSS Feed Items |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
-| click_ok | link=Atom feed items |  |
+| click_ok | link=Atom Feed Items |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{fetchatom: ----}/s` |
-| click_ok | link=Atom feed items |  |
+| click_ok | link=Atom Feed Items |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
-| click_ok | link=Technorati results |  |
+| click_ok | link=Technorati Results |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{technorati: ----}/s` |
-| click_ok | link=Technorati results |  |
+| click_ok | link=Technorati Results |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
 | *Comment* | Test Case: Insert Menu "Communicating..." |  |
-| click_ok | link=AIM link |  |
+| click_ok | link=AIM Link |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+aim:----/s` |
-| click_ok | link=AIM link |  |
+| click_ok | link=AIM Link |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
-| click_ok | link=Yahoo! Messenger link |  |
+| click_ok | link=Yahoo! Messenger Link |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+yahoo:----/s` |
-| click_ok | link=Yahoo! Messenger link |  |
+| click_ok | link=Yahoo! Messenger Link |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
-| click_ok | link=Skype link |  |
+| click_ok | link=Skype Link |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+skype:----/s` |
-| click_ok | link=Skype link |  |
+| click_ok | link=Skype Link |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
 | *Comment* | Test Case: Insert Menu "Name and Date..." |  |
-| click_ok | link=User name |  |
+| click_ok | link=User Name |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{user: ----}/s` |
-| click_ok | link=User name |  |
+| click_ok | link=User Name |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
 | click_ok | link=Local Date & Time |  |
@@ -166,9 +166,9 @@ TODO: Selenium up to 9.2 only recognizes the first prompt for table size. Check 
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
 | *Comment* | Test Case: Insert Menu "Unformatted text..." |  |
-| click_ok | link=Unformatted text... |  |
+| click_ok | link=Unformatted Text... |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+{{----}}/s` |
-| click_ok | link=Unformatted text... |  |
+| click_ok | link=Unformatted Text... |  |
 | verifyValue | wikiwyg_wikitext_textarea | `qr/foo.+----/s` |
 
 | *Comment* | Test Case: Insert Menu COMPLETED |  |

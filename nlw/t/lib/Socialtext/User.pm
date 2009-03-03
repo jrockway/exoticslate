@@ -181,5 +181,11 @@ sub Guest {
     return shift->new( username => 'guest' );
 }
 
+sub accounts {
+    my $self = shift;
+
+    my @accounts = @{ $self->{accounts} || [] };
+    return wantarray ? @accounts : \@accounts;
+}
 
 1;

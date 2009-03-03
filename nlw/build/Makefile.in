@@ -474,7 +474,10 @@ QUICK_TESTS = t/Socialtext/People/Directories.t \
 	t/Socialtext/File/Stringify.t \
 	t/pod.t \
 	t/Socialtext/AppConfig.t \
-	t/Socialtext/TT2/Renderer.t
+	t/Socialtext/TT2/Renderer.t \
+	t/Socialtext/CredentialsExtractor/Apache.t \
+	t/Socialtext/CredentialsExtractor/Cookie.t \
+	t/Socialtext/CredentialsExtractor/Guest.t
 
 quicktest:
 	$<

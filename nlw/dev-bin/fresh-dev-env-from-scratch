@@ -63,7 +63,7 @@ psql -f etc/socialtext/db/dev.sql
 
 if [ $FDEFS_PROXY = 0 ]; then
     echo "Starting in single-Apache mode";
-    dev-bin/gen-config --root=$HOME/.nlw --ports-start-at=20000 --apache-proxy=$FDEFS_PROXY --socialtext-open=0;
+    dev-bin/gen-config --root=$HOME/.nlw --apache-proxy=$FDEFS_PROXY --socialtext-open=0;
     dev-bin/nlwctl -c start;
     dev-bin/nlwctl -1 start;
 else

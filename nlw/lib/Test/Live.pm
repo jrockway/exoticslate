@@ -105,7 +105,6 @@ sub setup_env {
 
     Test::Socialtext::Environment->CreateEnvironment(
         root_dir       => $self->nlw_root_dir,
-        ports_start_at => 30000,
         fixtures       => $Environment_params{fixtures} || ['ALL'],
     );
 }

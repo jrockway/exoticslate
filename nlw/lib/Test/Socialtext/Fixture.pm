@@ -104,7 +104,6 @@ sub _built_in_base_config {
         $gen_config,
         '--quiet',
         '--root',           $env->root_dir,
-        '--ports-start-at', $env->ports_start_at,
         '--apache-proxy=' . $apache_proxy,
         '--socialtext-open=' . $socialtext_open,
         '--dev=0',    # Don't create the files in ~/.nlw

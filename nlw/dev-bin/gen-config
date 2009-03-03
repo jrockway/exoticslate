@@ -80,7 +80,6 @@ GetOptions(
     'sitewide'         => \$opts{sitewide},
     'testing'          => \$opts{testing},
     'root=s'           => \$opts{root},
-    'ports-start-at=i' => \$opts{ports_start_at},
     'production'       => \$opts{production},
     'appliance'        => \$opts{appliance},
     'stdout'           => \$opts{stdout},
@@ -98,7 +97,6 @@ my $is_dev_install
     = !( $opts{sitewide} || $opts{appliance} || $opts{production} );
 
 if ( $opts{dev} ) {
-    $opts{ports_start_at} = 20000;
     $opts{root} = File::Spec->catdir( $user->dir, '.nlw' );
 }
 
@@ -129,12 +127,6 @@ sub main {
             unless $opts{sitewide} || $opts{stdout};
         %dirs = sitewide_dirs();
     }
-
-    help('Not run with --sitewide, and no --ports-start-at parameter given.')
-        unless $opts{sitewide}
-        or $opts{ports_start_at}
-        or $opts{appliance}
-        or $opts{production};
 
     my @files;
 
@@ -867,7 +859,7 @@ sub help {
     print<<"END_OF_HELP";
 $message
 $0 [ --sitewide | --appliance --root=<dir> | \
-    --root=<div> --ports-start-at=<number> ]
+    --root=<div> ]
 
 Create the system config for an NLW installation. Works for production
 and staging hosting, appliances and developer environments. Responsible
@@ -877,7 +869,7 @@ Options:
 
 --help        What you're reading now.
 
---dev         Same as "--ports-start-at=20000 --root=\$HOME/.nlw"
+--dev         Same as "--root=\$HOME/.nlw"
               HINT: This is what you want if you are developing NLW!
 
 --verbose     Print output as the program runs.
@@ -895,11 +887,6 @@ Options:
 --root=<dir>  Put output in directories using <dir> as the base.
 
 --stdout      Don't output to files, output to STDOUT
-
---ports-start-at=<number>
-              Instead of the defaults ports 80 and 443 for the HTTP
-              server, use <number> plus the UID of the user running
-              this command.
 
 --quiet       Don't print anything to STDOUT
 

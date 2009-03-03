@@ -12,12 +12,12 @@ use Class::Field qw( field );
 use File::chdir;
 use File::Path;
 use Socialtext::Workspace;
+use Socialtext::HTTP::Ports;
 use Test::More;
 use Test::Socialtext::Fixture;
 
 field 'root_dir';
 field 'base_dir';
-field 'ports_start_at' => 20000;
 field 'verbose' => 1;
 field 'wiki_url_base';
 field 'fixtures' => [];
@@ -110,7 +110,7 @@ sub _set_url {
     my $self = shift;
     my $hostname = `hostname`;
     chomp($hostname);
-    my $main_port = ( $self->ports_start_at ) + $>;
+    my $main_port = Socialtext::HTTP::Ports->http_port();
     $self->wiki_url_base( "http://$hostname:" . $main_port );
 }
 

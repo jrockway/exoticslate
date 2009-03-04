@@ -12,6 +12,7 @@ use URI::Escape qw(uri_unescape uri_escape);
 use Socialtext::File;
 use Time::HiRes qw/gettimeofday tv_interval time/;
 use Socialtext::System qw/shell_run/;
+use Socialtext::HTTP::Ports;
 
 =head1 NAME
 
@@ -25,6 +26,12 @@ Creates the Test::HTTP object.
 
 sub init {
     my $self = shift;
+
+    # provide access to the default HTTP(S) ports in use
+    $self->{http_port}          = Socialtext::HTTP::Ports->http_port();
+    $self->{https_port}         = Socialtext::HTTP::Ports->https_port();
+    $self->{backend_http_port}  = Socialtext::HTTP::Ports->backend_http_port();
+    $self->{backend_https_port} = Socialtext::HTTP::Ports->backend_https_port();
 
     # Set up the Test::HTTP object initially
     $self->http_user_pass($self->{username}, $self->{password});

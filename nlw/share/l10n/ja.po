@@ -544,7 +544,7 @@ msgstr ""
 msgid "Actions"
 msgstr ""
 
-#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/template/control/workspace_invite.html
+#: share/skin/s3/javascript/lightbox/email.tt2 share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/template/control/workspace_invite.html
 #.  
 msgid "Add"
 msgstr "追加"
@@ -949,7 +949,7 @@ msgstr ""
 msgid "Can't remove privileges of the last admin"
 msgstr "前回の管理者の権限を削除できません。"
 
-#: share/console-template/template/popup.html share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/create_content_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/template/control/field_form
+#: share/console-template/template/popup.html share/skin/s3/javascript/lightbox/comment.tt2 share/skin/s3/javascript/lightbox/copy.tt2 share/skin/s3/javascript/lightbox/create_content.tt2 share/skin/s3/javascript/lightbox/delete.tt2 share/skin/s3/javascript/lightbox/duplicate.tt2 share/skin/s3/javascript/lightbox/email.tt2 share/skin/s3/javascript/lightbox/rename.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/template/control/field_form
 #.  
 msgid "Cancel"
 msgstr "キャンセル"
@@ -1119,7 +1119,22 @@ msgstr "オフラインで使用のコンピューターに、ウォッチして
 msgid "Click this button to save this page to your computer for offline use."
 msgstr "オフラインで使用のコンピューターに、このページを保存するには、このボタンをクリックしてください。"
 
-#: share/console-template/template/popup.html share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
+#: share/skin/s3/template/view/settings
+#.  
+msgid "Clone This Workspace"
+msgstr ""
+
+#: share/skin/s3/template/element/settings/workspace_clone_section
+#.  
+msgid "Clone Workspace"
+msgstr ""
+
+#: share/skin/s3/template/element/settings/workspace_clone_section
+#. (
+msgid "Clone of %1"
+msgstr ""
+
+#: share/console-template/template/popup.html share/skin/s3/javascript/lightbox/simple.tt2 share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
 msgid "Close"
 msgstr "閉じる"
@@ -1199,6 +1214,11 @@ msgstr ""
 msgid "Copy Page to Workspace"
 msgstr "ワークスペースにページをコピー"
 
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "Could not create workspace %1"
+msgstr ""
+
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
 msgid "Could not extract files from the skin archive. This is most likely caused by a corrupt archive file. Please check your file and try the upload again."
@@ -1209,12 +1229,7 @@ msgstr ""
 msgid "Could not open %1"
 msgstr ""
 
-#: lib/Socialtext/Handler/ControlPanel.pm
-#. (
-msgid "Cound not create workspace %1"
-msgstr ""
-
-#: share/skin/s3/javascript/template/create_content_lightbox.tt2 share/template/control/report.html
+#: share/skin/s3/javascript/lightbox/create_content.tt2 share/template/control/report.html
 #.  
 msgid "Create"
 msgstr "作成"
@@ -1384,7 +1399,7 @@ msgstr ""
 msgid "Default Skin."
 msgstr ""
 
-#: share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/lightbox/delete.tt2 share/skin/s3/template/view/page/display
 #.  
 msgid "Delete Page"
 msgstr "ページの削除"
@@ -1394,7 +1409,7 @@ msgstr "ページの削除"
 msgid "Delete Selected Attachments"
 msgstr "選択した添付ファイルを削除する"
 
-#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/lightbox-attachment.js share/skin/s3/javascript/lightbox-attachment.js share/skin/s3/javascript/lightbox/attachment.js share/skin/s3/javascript/lightbox/attachment.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
 #.  
 msgid "Delete this attachment"
 msgstr ""
@@ -1422,6 +1437,11 @@ msgstr "誤って削除してしまった場合は、元に戻すことができ
 #: lib/Socialtext/CLI.pm
 #. (
 msgid "Directory %1 does not exist."
+msgstr ""
+
+#: share/template/control/account.html
+#.  
+msgid "Disable Export User Data"
 msgstr ""
 
 #: share/template/control/fields-account.html
@@ -1594,10 +1614,15 @@ msgstr "テスト用 Email アドレス:"
 msgid "Email and description are required!"
 msgstr ""
 
-#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/lightbox/email.tt2 share/skin/s3/template/view/page/display
 #.  
 msgid "Email this page"
 msgstr "このページを Email で送る"
+
+#: share/template/control/account.html
+#.  
+msgid "Enable Export User Data"
+msgstr ""
 
 #: share/skin/s3/template/element/settings/workspaces_settings_features_section
 #.  
@@ -1632,6 +1657,11 @@ msgstr ""
 #: lib/Socialtext/CLI.pm
 #. (
 msgid "Error - export directory %1 already exists!"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Setup.pm
+#. (
+msgid "Error setting proxy server: %1"
 msgstr ""
 
 #: lib/Socialtext/Appliance/Model/Setup.pm
@@ -1719,7 +1749,7 @@ msgstr "毎週"
 msgid "Example:"
 msgstr "例："
 
-#: share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_settings_appearance_section
+#: share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_settings_appearance_section
 #.  
 msgid "Example: Acme Widgets Product Development"
 msgstr "例: Acme Widgets 製品開発"
@@ -1734,7 +1764,7 @@ msgstr ""
 msgid "Example: Sales Team Weblog"
 msgstr "例： 販売チーム ウェブログ"
 
-#: share/skin/s3/template/element/settings/workspaces_create_section
+#: share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section
 #.  
 msgid "Example: acme-product-dev creates this workspace address:"
 msgstr "例: ワークスペース名が acme-product-dev の場合、このワークスペースのアドレス:"
@@ -1789,6 +1819,11 @@ msgstr "Word にエクスポート"
 msgid "Export user data as CSV"
 msgstr ""
 
+#: share/template/control/accounts.html
+#. (
+msgid "Export user data for %quant(%1,selected account)"
+msgstr ""
+
 #: lib/Socialtext/CLI.pm
 #. (
 msgid "Exporting account %1 ..."
@@ -1809,7 +1844,7 @@ msgstr ""
 msgid "External Person fields are not currently supported"
 msgstr ""
 
-#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/lightbox-attachment.js share/skin/s3/javascript/lightbox-attachment.js share/skin/s3/javascript/lightbox/attachment.js share/skin/s3/javascript/lightbox/attachment.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
 #.  
 msgid "Extract this attachment"
 msgstr ""
@@ -2014,6 +2049,11 @@ msgstr "夏時間の設定を選択してください。"
 msgid "How should displayed dates be formatted?"
 msgstr "日付の書式を選択してください。"
 
+#: share/console-template/template/form.tmpl
+#.  
+msgid "How to configure a web proxy"
+msgstr ""
+
 #: share/template/authen/element/forgot_password_link
 #.  
 msgid "I don't know my password."
@@ -2189,7 +2229,7 @@ msgstr "パラメーター変更に無効な文字 '/' が含まれます。"
 msgid "Invalid field source '%1'"
 msgstr ""
 
-#: lib/Socialtext/Appliance/Model/Setup.pm
+#: lib/Socialtext/Appliance/Model/Setup.pm lib/Socialtext/Appliance/Model/Setup.pm
 #. (
 msgid "Invalid host: %1"
 msgstr "無効なホスト: %1"
@@ -2249,7 +2289,7 @@ msgstr ""
 msgid "Invited by"
 msgstr ""
 
-#: share/skin/s3/template/element/settings/workspaces_create_section
+#: share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section
 #.  
 msgid "It must consist of 3-30 lowercase letters, numbers, underscores or dashes."
 msgstr ""
@@ -2459,6 +2499,11 @@ msgstr "ロゴファイルは gif, jpeg, あるいは png でなければなり�
 msgid "Look for"
 msgstr ""
 
+#: share/skin/s3/template/element/settings/workspace_clone_section
+#. (
+msgid "Make a clone of the %1 workspace, including all pages, tags, and attachments. Next, you will need to invite members into the new workspace."
+msgstr ""
+
 #: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "Make your contributions in the text box, then click \\\"Save\\\"."
@@ -2639,6 +2684,11 @@ msgstr "いいえ"
 msgid "No changes for user %1"
 msgstr ""
 
+#: lib/Socialtext/CLI.pm
+#.  
+msgid "No changes were made"
+msgstr ""
+
 #: lib/Socialtext/UserSettingsPlugin.pm lib/Socialtext/UserSettingsPlugin.pm
 #.  
 msgid "No email addresses specified"
@@ -2759,6 +2809,11 @@ msgstr "このワークスペースから退会したい場合は、下のボタ
 msgid "Only registered users can send email to %1."
 msgstr "登録したユーザだけが%1に Email を送ることができます。"
 
+#: lib/Socialtext/Gadgets/XML.pm
+#.  
+msgid "Only url and html are valid values for widget types"
+msgstr ""
+
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #. (
 msgid "Only workspace members can send email to %1."
@@ -2789,7 +2844,7 @@ msgstr "発信メールサーバー"
 msgid "Overview"
 msgstr "概要"
 
-#: share/skin/s3/javascript/create_content.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/paging
+#: share/skin/s3/javascript/lightbox-create_content.js share/skin/s3/javascript/lightbox/create_content.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/paging
 #.  
 msgid "Page"
 msgstr ""
@@ -3109,6 +3164,11 @@ msgstr ""
 msgid "Profile field \\\"%1\\\" could not be updated"
 msgstr ""
 
+#: share/console-template/template/setup.html
+#.  
+msgid "Proxy Server for Web Services"
+msgstr ""
+
 #: share/skin/s3/template/element/settings/workspaces_permissions_section
 #.  
 msgid "Public login-to-edit"
@@ -3244,7 +3304,7 @@ msgstr ""
 msgid "Remember me on this computer."
 msgstr ""
 
-#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/element/settings/users_listall_section share/template/control/workspace_invite.html
+#: share/skin/s3/javascript/lightbox/email.tt2 share/skin/s3/template/element/settings/users_listall_section share/template/control/workspace_invite.html
 #.  
 msgid "Remove"
 msgstr "削除"
@@ -3434,7 +3494,7 @@ msgstr "サンプル ウェブログ"
 msgid "Sat"
 msgstr "土"
 
-#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
+#: share/skin/s3/javascript/lightbox/comment.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
 msgid "Save"
 msgstr "保存"
@@ -3593,6 +3653,11 @@ msgstr "Email の設定をする"
 #.  
 msgid "Set Time Server"
 msgstr "タイムサーバーを設定する"
+
+#: share/console-template/template/setup.html
+#.  
+msgid "Set Web Proxy Server"
+msgstr ""
 
 #: share/template/control/add_user.html
 #.  
@@ -3959,6 +4024,11 @@ msgstr ""
 msgid "Technorati: %1"
 msgstr "Technorati: %1"
 
+#: lib/Socialtext/Gadgets/Gallery.pm
+#.  
+msgid "That widget already exists in this gallery."
+msgstr ""
+
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
 msgid "The %1 account has been created."
@@ -3976,32 +4046,12 @@ msgstr ""
 
 #: lib/Socialtext/CLI.pm
 #. (
-msgid "The %1 plugin is now disabled for account %2"
+msgid "The %1 plugin is now disabled for $what"
 msgstr ""
 
 #: lib/Socialtext/CLI.pm
 #. (
-msgid "The %1 plugin is now disabled for all accounts"
-msgstr ""
-
-#: lib/Socialtext/CLI.pm
-#. (
-msgid "The %1 plugin is now disabled for workspace %2"
-msgstr ""
-
-#: lib/Socialtext/CLI.pm
-#. (
-msgid "The %1 plugin is now enabled for account %2"
-msgstr ""
-
-#: lib/Socialtext/CLI.pm
-#. (
-msgid "The %1 plugin is now enabled for all accounts"
-msgstr ""
-
-#: lib/Socialtext/CLI.pm
-#. (
-msgid "The %1 plugin is now enabled for workspace %2"
+msgid "The %1 plugin is now enabled for $what"
 msgstr ""
 
 #: lib/Socialtext/Handler/ControlPanel.pm
@@ -4028,6 +4078,21 @@ msgstr ""
 #. (
 msgid "The %1 you provided (%2) is already in use."
 msgstr "あなたの入力した %1 (%2) はすでに使用されています。"
+
+#: lib/Socialtext/Gadgets/XML.pm
+#. (
+msgid "The %1 you provided does not appear to be a valid widget XML file. Please check your %1 and try again."
+msgstr ""
+
+#: lib/Socialtext/Gadgets/XML.pm
+#. (
+msgid "The %1 you provided does not appear to be valid XML. Please check your %1 and try again."
+msgstr ""
+
+#: lib/Socialtext/Gadgets/XML.pm
+#. (
+msgid "The %1 you provided does not contain a widget file. Please check the %1 and try again."
+msgstr ""
 
 #: lib/Socialtext/CLI.pm
 #. (
@@ -4279,7 +4344,7 @@ msgstr ""
 msgid "This is a short unique identifier used as  part of your workspace's web address and email address. It must consist of 3-30 lowercase letters, numbers, underscores, or dashes."
 msgstr ""
 
-#: share/skin/s3/template/element/settings/workspaces_create_section
+#: share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section
 #.  
 msgid "This is a short unique identifier used as part of your workspace's web address and email address."
 msgstr "あなたのワークスペースを見つけるのに便利な名前をつけてください。ワークスペース名は web アドレスと Email アドレスの一部になります。"
@@ -4294,7 +4359,7 @@ msgstr "これは %1 の最初の投稿です。新しく投稿するには *新
 msgid "This is the title of your workspace. It may be changed at any time."
 msgstr "あなたのワークスペースのタイトルです。いつでも変更できます。"
 
-#: share/skin/s3/template/element/settings/workspaces_create_section share/template/control/workspace_invite.html
+#: share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section share/template/control/workspace_invite.html
 #.  
 msgid "This is the title of your workspace. It may be changed later if you want."
 msgstr "あなたのワークスペースのタイトルです。後で変更できます。"
@@ -4317,6 +4382,11 @@ msgstr "このユーザには関連した Email アドレスがありません�
 #: share/skin/s3/template/element/settings/workspaces_settings_appearance_section
 #.  
 msgid "This weblog:"
+msgstr ""
+
+#: lib/Socialtext/Gadgets/XML.pm
+#.  
+msgid "This widget cannot be installed from a file because it contains references to localization files"
 msgstr ""
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
@@ -4449,6 +4519,11 @@ msgstr ""
 msgid "URI"
 msgstr ""
 
+#: lib/Socialtext/Gadgets/XML.pm
+#.  
+msgid "URL"
+msgstr ""
+
 #: lib/Socialtext/Pluggable/Plugin/People.pm
 #.  
 msgid "Unable to change profile field."
@@ -4539,7 +4614,7 @@ msgstr ""
 msgid "Upload An Image"
 msgstr "画像のアップロード"
 
-#: share/skin/s3/javascript/template/attachment_lightbox.tt2 share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/lightbox/attachment.tt2 share/skin/s3/template/view/page/display
 #.  
 msgid "Upload Files"
 msgstr "ファイルのアップロード"
@@ -4564,7 +4639,7 @@ msgstr "アップロードしたユーザ"
 msgid "Uploaded by"
 msgstr ""
 
-#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/lightbox-attachment.js share/skin/s3/javascript/lightbox/attachment.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display
 #. (
 msgid "Uploaded by %1 on %2. (%3 bytes)"
 msgstr ""
@@ -4713,6 +4788,21 @@ msgstr ""
 #. (
 msgid "Watchlist update for %1 Workspace"
 msgstr "ワークスペース %1 のウォッチリストの更新"
+
+#: share/console-template/template/setup.html
+#.  
+msgid "Web Service Proxy Address"
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Setup.pm
+#.  
+msgid "Web proxy cleared."
+msgstr ""
+
+#: lib/Socialtext/Appliance/Model/Setup.pm
+#. (
+msgid "Web proxy updated to %1"
+msgstr ""
 
 #: share/skin/s3/template/view/weblog
 #.  
@@ -4874,7 +4964,7 @@ msgstr ""
 msgid "Workspace Logo Image"
 msgstr "ワークスペース　ロゴ画像"
 
-#: share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_listall_section
+#: share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_listall_section
 #.  
 msgid "Workspace Name"
 msgstr "ワークスペース名"
@@ -4894,7 +4984,7 @@ msgstr "ワークスペースのプライバシー"
 msgid "Workspace Skin"
 msgstr ""
 
-#: share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_listall_section share/skin/s3/template/element/settings/workspaces_settings_appearance_section
+#: share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_listall_section share/skin/s3/template/element/settings/workspaces_settings_appearance_section
 #.  
 msgid "Workspace Title"
 msgstr "ワークスペースタイトル"
@@ -4962,6 +5052,11 @@ msgstr ""
 #: share/skin/s3/template/element/workspace_list/my_workspaces
 #.  
 msgid "Workspaces you belong to:"
+msgstr ""
+
+#: lib/Socialtext/WorkspacesUIPlugin.pm
+#.  
+msgid "Workspaces: Clone This Workspace"
 msgstr ""
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
@@ -5055,6 +5150,11 @@ msgid "You can now login to the %1 workspace"
 msgstr "%1 ワークスペースにログインできます"
 
 #: share/console-template/template/form.tmpl
+#. (
+msgid "You can set a proxy server that allows users to access Web Services including Dashboard Widgets and RSS feeds. For more information see: %1."
+msgstr ""
+
+#: share/console-template/template/form.tmpl
 #.  
 msgid "You can synchronize the appliance clock with another computer using the Internet Time protocol. The appliance must be able to contact that server via port 37."
 msgstr "アプライアンスの時刻と、インターネットのタイムプロトコルを使用している別のコンピューターを同期させることができます。アプライアンスは port 37 を通してサーバーとコンタクトできなければなりません。"
@@ -5124,6 +5224,11 @@ msgstr ""
 msgid "You must choose at least one workspace"
 msgstr ""
 
+#: lib/Socialtext/Gadgets/XML.pm
+#.  
+msgid "You must either specify a file or a URL"
+msgstr ""
+
 #: lib/Socialtext/OpenIdPlugin.pm
 #.  
 msgid "You must input both an OpenID and an email."
@@ -5162,6 +5267,11 @@ msgstr ""
 #: lib/Socialtext/CLI.pm
 #.  
 msgid "You must specify a plugin."
+msgstr ""
+
+#: lib/Socialtext/Rest/Gadgets/Gadget.pm lib/Socialtext/Rest/Gadgets/Gallery.pm
+#.  
+msgid "You no longer have accounts administration privileges."
 msgstr ""
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
@@ -5239,7 +5349,12 @@ msgstr ""
 msgid "\\\"%1\\\" (edited %2 in %3)"
 msgstr ""
 
-#: share/console-template/template/help.html share/skin/s3/javascript/email-lightbox.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js
+#: lib/Socialtext/Page.pm
+#. (
+msgid "\\\"%1\\\" is a reserved name. Please use a different name."
+msgstr ""
+
+#: share/console-template/template/help.html share/skin/s3/javascript/lightbox-email.js share/skin/s3/javascript/lightbox/email.js share/skin/s3/javascript/socialtext-lightbox.js
 #. (
 msgid "\\\"%1\\\" is not a valid email address."
 msgstr ""
@@ -5249,7 +5364,7 @@ msgstr ""
 msgid "\\\"%1\\\" is not a valid email address. Please use your email address to log in."
 msgstr ""
 
-#: share/skin/s3/template/element/settings/workspaces_create_section
+#: share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section
 #.  
 msgid "and this email address:"
 msgstr "Email アドレス:"
@@ -5399,6 +5514,11 @@ msgstr "外部リンクの作成"
 msgid "feed: %1"
 msgstr "フィード: %1"
 
+#: lib/Socialtext/Gadgets/XML.pm
+#.  
+msgid "file"
+msgstr ""
+
 #: lib/Socialtext/Widget_resource.pm lib/Socialtext/Widget_resource.pm
 #. (
 msgid "file: %1"
@@ -5417,6 +5537,11 @@ msgstr ""
 #: share/skin/s3/template/element/settings/users_invite_search_section
 #.  
 msgid "friend"
+msgstr ""
+
+#: lib/Socialtext/Rest/Gadgets/Gallery.pm
+#.  
+msgid "gadget_id is a required parameter"
 msgstr ""
 
 #: share/skin/s3/template/view/page/display share/template/control/fields-account.html
@@ -5569,7 +5694,7 @@ msgstr "リフレッシュ"
 msgid "registered users"
 msgstr "登録したユーザ"
 
-#: share/skin/s3/template/element/settings/weblog_create share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_settings_appearance_section
+#: share/skin/s3/template/element/settings/weblog_create share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_settings_appearance_section
 #.  
 msgid "required"
 msgstr "必須"

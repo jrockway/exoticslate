@@ -544,7 +544,7 @@ msgstr "4Cc0uN7S M47cHiNg \\\"%1\\\""
 msgid "Actions"
 msgstr "4C7I0Ns"
 
-#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/template/control/workspace_invite.html
+#: share/skin/s3/javascript/lightbox/email.tt2 share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/template/control/workspace_invite.html
 #.  
 msgid "Add"
 msgstr "4Dd"
@@ -949,7 +949,7 @@ msgstr "c4n 0NlY Sp3cIfY 0n3 0f --vIsI8L3 0R --HiDd3n"
 msgid "Can't remove privileges of the last admin"
 msgstr "c4n'7 r3m0v3 PrIvIl3g3s 0F 7h3 L4S7 4DmIn"
 
-#: share/console-template/template/popup.html share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/javascript/template/copy_lightbox.tt2 share/skin/s3/javascript/template/create_content_lightbox.tt2 share/skin/s3/javascript/template/duplicate_lightbox.tt2 share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/javascript/template/rename_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/template/control/field_form
+#: share/console-template/template/popup.html share/skin/s3/javascript/lightbox/comment.tt2 share/skin/s3/javascript/lightbox/copy.tt2 share/skin/s3/javascript/lightbox/create_content.tt2 share/skin/s3/javascript/lightbox/delete.tt2 share/skin/s3/javascript/lightbox/duplicate.tt2 share/skin/s3/javascript/lightbox/email.tt2 share/skin/s3/javascript/lightbox/rename.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/template/control/field_form
 #.  
 msgid "Cancel"
 msgstr "c4nC3L"
@@ -1119,7 +1119,22 @@ msgstr "cLiCk 7HiS 8u770n 70 S4V3 7H3 p4g3s y0u'r3 W47cHiNg f0r 0FfLiN3 uS3."
 msgid "Click this button to save this page to your computer for offline use."
 msgstr "cLiCk 7HiS 8u770n 70 S4V3 7HiS P4G3 70 Y0Ur c0mPu73R F0R 0fFlIn3 Us3."
 
-#: share/console-template/template/popup.html share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
+#: share/skin/s3/template/view/settings
+#.  
+msgid "Clone This Workspace"
+msgstr "cL0N3 7HiS W0RkSp4c3"
+
+#: share/skin/s3/template/element/settings/workspace_clone_section
+#.  
+msgid "Clone Workspace"
+msgstr "cL0N3 w0rKsP4C3"
+
+#: share/skin/s3/template/element/settings/workspace_clone_section
+#. (
+msgid "Clone of %1"
+msgstr "cL0N3 0F %1"
+
+#: share/console-template/template/popup.html share/skin/s3/javascript/lightbox/simple.tt2 share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
 msgid "Close"
 msgstr "cL0S3"
@@ -1199,6 +1214,11 @@ msgstr "c0n73N7S"
 msgid "Copy Page to Workspace"
 msgstr "c0pY P4G3 70 W0RkSp4c3"
 
+#: lib/Socialtext/Handler/ControlPanel.pm
+#. (
+msgid "Could not create workspace %1"
+msgstr "c0uLd n07 cR3473 W0RkSp4c3 %1"
+
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
 msgid "Could not extract files from the skin archive. This is most likely caused by a corrupt archive file. Please check your file and try the upload again."
@@ -1209,12 +1229,7 @@ msgstr "c0uLd n07 3X7R4C7 fIl3s fR0M 7h3 SkIn 4RcHiV3. 7hIs iS M0S7 lIk3lY C4Us3
 msgid "Could not open %1"
 msgstr "c0uLd n07 0P3N %1"
 
-#: lib/Socialtext/Handler/ControlPanel.pm
-#. (
-msgid "Cound not create workspace %1"
-msgstr "c0uNd n07 cR3473 W0RkSp4c3 %1"
-
-#: share/skin/s3/javascript/template/create_content_lightbox.tt2 share/template/control/report.html
+#: share/skin/s3/javascript/lightbox/create_content.tt2 share/template/control/report.html
 #.  
 msgid "Create"
 msgstr "cR3473"
@@ -1384,7 +1399,7 @@ msgstr "d3c3m83R"
 msgid "Default Skin."
 msgstr "d3f4uL7 sKiN."
 
-#: share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/lightbox/delete.tt2 share/skin/s3/template/view/page/display
 #.  
 msgid "Delete Page"
 msgstr "d3l373 P4G3"
@@ -1394,7 +1409,7 @@ msgstr "d3l373 P4G3"
 msgid "Delete Selected Attachments"
 msgstr "d3l373 S3L3C73d 4774cHm3n7s"
 
-#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/lightbox-attachment.js share/skin/s3/javascript/lightbox-attachment.js share/skin/s3/javascript/lightbox/attachment.js share/skin/s3/javascript/lightbox/attachment.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
 #.  
 msgid "Delete this attachment"
 msgstr "d3l373 7hIs 4774cHm3n7"
@@ -1423,6 +1438,11 @@ msgstr "dId y0u d3l373 7hIs p4g3 In 3Rr0r? If s0, y0u c4n r3s70R3 7H3 p4g3."
 #. (
 msgid "Directory %1 does not exist."
 msgstr "dIr3c70Ry %1 D03s n07 3XiS7."
+
+#: share/template/control/account.html
+#.  
+msgid "Disable Export User Data"
+msgstr "dIs48L3 3Xp0r7 Us3r d474"
 
 #: share/template/control/fields-account.html
 #.  
@@ -1594,10 +1614,15 @@ msgstr "3M4Il 4DdR3Ss f0r 73s7iNg:"
 msgid "Email and description are required!"
 msgstr "3M4Il 4Nd d3sCrIp7i0n 4R3 r3qUiR3D!"
 
-#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/lightbox/email.tt2 share/skin/s3/template/view/page/display
 #.  
 msgid "Email this page"
 msgstr "3M4Il 7HiS P4G3"
+
+#: share/template/control/account.html
+#.  
+msgid "Enable Export User Data"
+msgstr "3N48l3 3xP0R7 uS3R D474"
 
 #: share/skin/s3/template/element/settings/workspaces_settings_features_section
 #.  
@@ -1633,6 +1658,11 @@ msgstr "3N73r y0uR 3m4iL 4dDr3sS 83L0W. 3N73r 7H3 3M4Il 4DdR3Ss y0u n0rM4LlY Us3
 #. (
 msgid "Error - export directory %1 already exists!"
 msgstr "3Rr0r - 3Xp0r7 DiR3C70rY %1 4Lr34Dy 3XiS7S!"
+
+#: lib/Socialtext/Appliance/Model/Setup.pm
+#. (
+msgid "Error setting proxy server: %1"
+msgstr "3Rr0r s377iNg pR0Xy s3rV3R: %1"
 
 #: lib/Socialtext/Appliance/Model/Setup.pm
 #. (
@@ -1719,7 +1749,7 @@ msgstr "3V3Ry w33K"
 msgid "Example:"
 msgstr "3X4MpL3:"
 
-#: share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_settings_appearance_section
+#: share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_settings_appearance_section
 #.  
 msgid "Example: Acme Widgets Product Development"
 msgstr "3X4MpL3: 4cM3 wIdG37s pR0DuC7 d3v3l0pM3N7"
@@ -1734,7 +1764,7 @@ msgstr "3X4MpL3: C:\\\\My pIc7uR3S\\\\s0cI4L73x7-L0G0-30.GiF"
 msgid "Example: Sales Team Weblog"
 msgstr "3X4MpL3: S4L3S 734m w38L0G"
 
-#: share/skin/s3/template/element/settings/workspaces_create_section
+#: share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section
 #.  
 msgid "Example: acme-product-dev creates this workspace address:"
 msgstr "3X4MpL3: 4cM3-pR0DuC7-d3v cR3473s 7HiS W0RkSp4c3 4dDr3sS:"
@@ -1789,6 +1819,11 @@ msgstr "3Xp0r7 70 w0rD"
 msgid "Export user data as CSV"
 msgstr "3Xp0r7 Us3r d474 4s cSv"
 
+#: share/template/control/accounts.html
+#. (
+msgid "Export user data for %quant(%1,selected account)"
+msgstr "3Xp0r7 Us3r d474 F0R %quant(%1,S3L3C73d 4Cc0uN7)"
+
 #: lib/Socialtext/CLI.pm
 #. (
 msgid "Exporting account %1 ..."
@@ -1809,7 +1844,7 @@ msgstr "3X73rN4L"
 msgid "External Person fields are not currently supported"
 msgstr "3X73rN4L P3Rs0n fI3LdS 4r3 N07 CuRr3n7lY SuPp0r73D"
 
-#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/lightbox-attachment.js share/skin/s3/javascript/lightbox-attachment.js share/skin/s3/javascript/lightbox/attachment.js share/skin/s3/javascript/lightbox/attachment.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display share/skin/s3/template/view/page/display
 #.  
 msgid "Extract this attachment"
 msgstr "3X7R4C7 7HiS 4774ChM3N7"
@@ -2014,6 +2049,11 @@ msgstr "h0w sH0UlD D4YlIgH7 s4vInGs/sUmM3R 7iM3 83 H4NdL3D?"
 msgid "How should displayed dates be formatted?"
 msgstr "h0w sH0UlD DiSpL4Y3D D473S 83 f0rM4773d?"
 
+#: share/console-template/template/form.tmpl
+#.  
+msgid "How to configure a web proxy"
+msgstr "h0w 70 C0NfIgUr3 4 W38 Pr0xY"
+
 #: share/template/authen/element/forgot_password_link
 #.  
 msgid "I don't know my password."
@@ -2189,7 +2229,7 @@ msgstr "iNv4lId cH4R4C73r '/' iN Ch4nG3S P4R4M373R"
 msgid "Invalid field source '%1'"
 msgstr "iNv4lId fI3Ld s0uRc3 '%1'"
 
-#: lib/Socialtext/Appliance/Model/Setup.pm
+#: lib/Socialtext/Appliance/Model/Setup.pm lib/Socialtext/Appliance/Model/Setup.pm
 #. (
 msgid "Invalid host: %1"
 msgstr "iNv4lId h0s7: %1"
@@ -2249,7 +2289,7 @@ msgstr "iNvI73d 8Y"
 msgid "Invited by"
 msgstr "iNvI73d 8Y"
 
-#: share/skin/s3/template/element/settings/workspaces_create_section
+#: share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section
 #.  
 msgid "It must consist of 3-30 lowercase letters, numbers, underscores or dashes."
 msgstr "i7 MuS7 c0nSiS7 0F 3-30 l0w3rC4S3 l3773Rs, NuM83rS, uNd3rSc0r3s 0R D4Sh3s."
@@ -2459,6 +2499,11 @@ msgstr "l0g0 FiL3 mUs7 83 4 gIf, Jp3g, 0r pNg fIl3."
 msgid "Look for"
 msgstr "l00K F0R"
 
+#: share/skin/s3/template/element/settings/workspace_clone_section
+#. (
+msgid "Make a clone of the %1 workspace, including all pages, tags, and attachments. Next, you will need to invite members into the new workspace."
+msgstr "m4k3 4 Cl0n3 0f 7H3 %1 W0RkSp4c3, iNcLuDiNg 4Ll p4g3s, 74Gs, 4nD 4774ChM3N7S. n3x7, y0u wIlL N33d 70 InVi73 m3m83Rs iN70 7h3 N3W W0RkSp4c3."
+
 #: share/skin/s3/template/element/settings/users_invite_search_section share/skin/s3/template/element/settings/users_invite_section
 #.  
 msgid "Make your contributions in the text box, then click \\\"Save\\\"."
@@ -2639,6 +2684,11 @@ msgstr "n0"
 msgid "No changes for user %1"
 msgstr "n0 Ch4nG3S F0R Us3r %1"
 
+#: lib/Socialtext/CLI.pm
+#.  
+msgid "No changes were made"
+msgstr "n0 Ch4nG3S W3R3 m4d3"
+
 #: lib/Socialtext/UserSettingsPlugin.pm lib/Socialtext/UserSettingsPlugin.pm
 #.  
 msgid "No email addresses specified"
@@ -2759,6 +2809,11 @@ msgstr "0NlY ClIcK 7h3 8u770n 83l0w iF Y0U WiSh 70 83 uNsU8ScRi83D Fr0m 7HiS W0R
 msgid "Only registered users can send email to %1."
 msgstr "0NlY R3GiS73r3d uS3Rs c4n s3nD 3m4iL 70 %1."
 
+#: lib/Socialtext/Gadgets/XML.pm
+#.  
+msgid "Only url and html are valid values for widget types"
+msgstr "0NlY UrL 4nD H7Ml 4R3 v4lId v4lU3S F0R WiDg37 7Yp3s"
+
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #. (
 msgid "Only workspace members can send email to %1."
@@ -2789,7 +2844,7 @@ msgstr "0U7G0InG M4Il s3rV3R"
 msgid "Overview"
 msgstr "0V3RvI3W"
 
-#: share/skin/s3/javascript/create_content.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/paging
+#: share/skin/s3/javascript/lightbox-create_content.js share/skin/s3/javascript/lightbox/create_content.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/paging
 #.  
 msgid "Page"
 msgstr "p4g3"
@@ -3109,6 +3164,11 @@ msgstr "pR0FiL3 fI3Ld iD '%1' d03S N07 3xIs7 F0R 4cC0Un7 '%2'"
 msgid "Profile field \\\"%1\\\" could not be updated"
 msgstr "pR0FiL3 fI3Ld \\\"%1\\\" C0UlD N07 83 uPd473d"
 
+#: share/console-template/template/setup.html
+#.  
+msgid "Proxy Server for Web Services"
+msgstr "pR0Xy s3rV3R F0R W38 S3RvIc3s"
+
 #: share/skin/s3/template/element/settings/workspaces_permissions_section
 #.  
 msgid "Public login-to-edit"
@@ -3244,7 +3304,7 @@ msgstr "r3l3v4nC3"
 msgid "Remember me on this computer."
 msgstr "r3m3m83R M3 0N 7hIs c0mPu73R."
 
-#: share/skin/s3/javascript/template/email_lightbox.tt2 share/skin/s3/template/element/settings/users_listall_section share/template/control/workspace_invite.html
+#: share/skin/s3/javascript/lightbox/email.tt2 share/skin/s3/template/element/settings/users_listall_section share/template/control/workspace_invite.html
 #.  
 msgid "Remove"
 msgstr "r3m0v3"
@@ -3434,7 +3494,7 @@ msgstr "s4mPl3 W38l0g"
 msgid "Sat"
 msgstr "s47"
 
-#: share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/template/comment_lightbox.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
+#: share/skin/s3/javascript/lightbox/comment.tt2 share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/start share/skin/s3/template/element/settings/stop share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg share/skin/wikiwyg/javascript/jemplate_wikiwyg/edit_wikiwyg
 #.  
 msgid "Save"
 msgstr "s4v3"
@@ -3593,6 +3653,11 @@ msgstr "s37 3M4Il c0nFiGuR47i0n"
 #.  
 msgid "Set Time Server"
 msgstr "s37 7Im3 S3Rv3r"
+
+#: share/console-template/template/setup.html
+#.  
+msgid "Set Web Proxy Server"
+msgstr "s37 w38 pR0Xy s3rV3R"
 
 #: share/template/control/add_user.html
 #.  
@@ -3959,6 +4024,11 @@ msgstr "74r84Ll 8UiL7"
 msgid "Technorati: %1"
 msgstr "73cHn0r47I: %1"
 
+#: lib/Socialtext/Gadgets/Gallery.pm
+#.  
+msgid "That widget already exists in this gallery."
+msgstr "7H47 WiDg37 4Lr34Dy 3XiS7S In 7HiS G4Ll3rY."
+
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
 msgid "The %1 account has been created."
@@ -3976,33 +4046,13 @@ msgstr "7H3 %1 PlUgIn c4n n07 83 S37 47 7H3 w0rKsP4C3 sC0P3"
 
 #: lib/Socialtext/CLI.pm
 #. (
-msgid "The %1 plugin is now disabled for account %2"
-msgstr "7H3 %1 PlUgIn iS N0W DiS48l3d f0r 4Cc0uN7 %2"
+msgid "The %1 plugin is now disabled for $what"
+msgstr "7H3 %1 PlUgIn iS N0W DiS48l3d f0r $Wh47"
 
 #: lib/Socialtext/CLI.pm
 #. (
-msgid "The %1 plugin is now disabled for all accounts"
-msgstr "7H3 %1 PlUgIn iS N0W DiS48l3d f0r 4Ll 4Cc0uN7S"
-
-#: lib/Socialtext/CLI.pm
-#. (
-msgid "The %1 plugin is now disabled for workspace %2"
-msgstr "7H3 %1 PlUgIn iS N0W DiS48l3d f0r w0rKsP4C3 %2"
-
-#: lib/Socialtext/CLI.pm
-#. (
-msgid "The %1 plugin is now enabled for account %2"
-msgstr "7H3 %1 PlUgIn iS N0W 3n48L3D F0R 4cC0Un7 %2"
-
-#: lib/Socialtext/CLI.pm
-#. (
-msgid "The %1 plugin is now enabled for all accounts"
-msgstr "7H3 %1 PlUgIn iS N0W 3n48L3D F0R 4lL 4cC0Un7s"
-
-#: lib/Socialtext/CLI.pm
-#. (
-msgid "The %1 plugin is now enabled for workspace %2"
-msgstr "7H3 %1 PlUgIn iS N0W 3n48L3D F0R W0RkSp4c3 %2"
+msgid "The %1 plugin is now enabled for $what"
+msgstr "7H3 %1 PlUgIn iS N0W 3n48L3D F0R $wH47"
 
 #: lib/Socialtext/Handler/ControlPanel.pm
 #. (
@@ -4028,6 +4078,21 @@ msgstr "7H3 %1 W0RkSp4c3 Is n0w p4r7 0f 7H3 %2 4cC0Un7."
 #. (
 msgid "The %1 you provided (%2) is already in use."
 msgstr "7H3 %1 Y0U Pr0vId3d (%2) Is 4Lr34Dy iN Us3."
+
+#: lib/Socialtext/Gadgets/XML.pm
+#. (
+msgid "The %1 you provided does not appear to be a valid widget XML file. Please check your %1 and try again."
+msgstr "7H3 %1 Y0U Pr0vId3d d03S N07 4pP34r 70 83 4 v4lId wIdG37 XmL FiL3. Pl34S3 cH3Ck y0uR %1 4Nd 7Ry 4G4In."
+
+#: lib/Socialtext/Gadgets/XML.pm
+#. (
+msgid "The %1 you provided does not appear to be valid XML. Please check your %1 and try again."
+msgstr "7H3 %1 Y0U Pr0vId3d d03S N07 4pP34r 70 83 v4lId xMl. Pl34S3 cH3Ck y0uR %1 4Nd 7Ry 4G4In."
+
+#: lib/Socialtext/Gadgets/XML.pm
+#. (
+msgid "The %1 you provided does not contain a widget file. Please check the %1 and try again."
+msgstr "7H3 %1 Y0U Pr0vId3d d03S N07 C0N74iN 4 WiDg37 fIl3. pL34s3 Ch3cK 7h3 %1 4Nd 7Ry 4G4In."
 
 #: lib/Socialtext/CLI.pm
 #. (
@@ -4279,7 +4344,7 @@ msgstr "7HiS Fi3lD Is n0w vIsI8L3 iN Us3rS\\\\"
 msgid "This is a short unique identifier used as  part of your workspace's web address and email address. It must consist of 3-30 lowercase letters, numbers, underscores, or dashes."
 msgstr "7HiS Is 4 sH0R7 uNiQu3 Id3n7iFi3r uS3D 4s  P4R7 0F Y0Ur w0rKsP4C3's w38 4DdR3Ss 4Nd 3M4Il 4DdR3Ss. I7 mUs7 C0NsIs7 0f 3-30 L0W3Rc4s3 L3773rS, nUm83Rs, UnD3RsC0R3S, 0R D4Sh3s."
 
-#: share/skin/s3/template/element/settings/workspaces_create_section
+#: share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section
 #.  
 msgid "This is a short unique identifier used as part of your workspace's web address and email address."
 msgstr "7HiS Is 4 sH0R7 uNiQu3 Id3n7iFi3r uS3D 4s p4r7 0f y0uR W0RkSp4c3'S W38 4dDr3sS 4nD 3m4iL 4dDr3sS."
@@ -4294,7 +4359,7 @@ msgstr "7HiS Is 7H3 fIrS7 p0s7 In %1. cLiCk *N3W P0S7* 70 4Dd 4N07h3r p0s7."
 msgid "This is the title of your workspace. It may be changed at any time."
 msgstr "7HiS Is 7H3 7I7L3 0F Y0Ur w0rKsP4C3. I7 m4y 83 Ch4nG3D 47 4Ny 7Im3."
 
-#: share/skin/s3/template/element/settings/workspaces_create_section share/template/control/workspace_invite.html
+#: share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section share/template/control/workspace_invite.html
 #.  
 msgid "This is the title of your workspace. It may be changed later if you want."
 msgstr "7HiS Is 7H3 7I7L3 0F Y0Ur w0rKsP4C3. I7 m4y 83 Ch4nG3D L473R If y0u w4n7."
@@ -4318,6 +4383,11 @@ msgstr "7HiS Us3rN4M3 h4s n0 4sS0Ci473d 3M4Il 4DdR3Ss."
 #.  
 msgid "This weblog:"
 msgstr "7HiS W38l0g:"
+
+#: lib/Socialtext/Gadgets/XML.pm
+#.  
+msgid "This widget cannot be installed from a file because it contains references to localization files"
+msgstr "7HiS WiDg37 c4nN07 83 iNs74Ll3d fR0M 4 FiL3 83c4uS3 i7 C0N74iNs r3f3r3nC3S 70 l0c4lIz47I0N FiL3S"
 
 #: lib/Socialtext/Appliance/Model/Backup.pm
 #.  
@@ -4449,6 +4519,11 @@ msgstr "7Yp3 N3W P4SsW0Rd 4G4In:"
 msgid "URI"
 msgstr "uRi"
 
+#: lib/Socialtext/Gadgets/XML.pm
+#.  
+msgid "URL"
+msgstr "uRl"
+
 #: lib/Socialtext/Pluggable/Plugin/People.pm
 #.  
 msgid "Unable to change profile field."
@@ -4539,7 +4614,7 @@ msgstr "uPl04D"
 msgid "Upload An Image"
 msgstr "uPl04D 4n iM4G3"
 
-#: share/skin/s3/javascript/template/attachment_lightbox.tt2 share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/lightbox/attachment.tt2 share/skin/s3/template/view/page/display
 #.  
 msgid "Upload Files"
 msgstr "uPl04D FiL3S"
@@ -4564,7 +4639,7 @@ msgstr "uPl04D3D 8y"
 msgid "Uploaded by"
 msgstr "uPl04D3D 8y"
 
-#: share/skin/s3/javascript/pageattachments.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display
+#: share/skin/s3/javascript/lightbox-attachment.js share/skin/s3/javascript/lightbox/attachment.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js share/skin/s3/template/view/page/display
 #. (
 msgid "Uploaded by %1 on %2. (%3 bytes)"
 msgstr "uPl04D3D 8y %1 0n %2. (%3 8Y73s)"
@@ -4713,6 +4788,21 @@ msgstr "w47ChLiS7 uPd473 F0R %1"
 #. (
 msgid "Watchlist update for %1 Workspace"
 msgstr "w47ChLiS7 uPd473 F0R %1 w0rKsP4C3"
+
+#: share/console-template/template/setup.html
+#.  
+msgid "Web Service Proxy Address"
+msgstr "w38 s3rViC3 pR0Xy 4DdR3Ss"
+
+#: lib/Socialtext/Appliance/Model/Setup.pm
+#.  
+msgid "Web proxy cleared."
+msgstr "w38 pR0Xy cL34r3d."
+
+#: lib/Socialtext/Appliance/Model/Setup.pm
+#. (
+msgid "Web proxy updated to %1"
+msgstr "w38 pR0Xy uPd473d 70 %1"
 
 #: share/skin/s3/template/view/weblog
 #.  
@@ -4874,7 +4964,7 @@ msgstr "w0rKsP4C3 lIs7"
 msgid "Workspace Logo Image"
 msgstr "w0rKsP4C3 l0g0 Im4g3"
 
-#: share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_listall_section
+#: share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_listall_section
 #.  
 msgid "Workspace Name"
 msgstr "w0rKsP4C3 n4m3"
@@ -4894,7 +4984,7 @@ msgstr "w0rKsP4C3 pRiV4Cy"
 msgid "Workspace Skin"
 msgstr "w0rKsP4C3 sKiN"
 
-#: share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_listall_section share/skin/s3/template/element/settings/workspaces_settings_appearance_section
+#: share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_listall_section share/skin/s3/template/element/settings/workspaces_settings_appearance_section
 #.  
 msgid "Workspace Title"
 msgstr "w0rKsP4C3 7I7L3"
@@ -4963,6 +5053,11 @@ msgstr "w0rKsP4C3S M47cHiNg \\\"%1\\\""
 #.  
 msgid "Workspaces you belong to:"
 msgstr "w0rKsP4C3S Y0U 83L0Ng 70:"
+
+#: lib/Socialtext/WorkspacesUIPlugin.pm
+#.  
+msgid "Workspaces: Clone This Workspace"
+msgstr "w0rKsP4C3S: cL0N3 7HiS W0RkSp4c3"
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
@@ -5055,6 +5150,11 @@ msgid "You can now login to the %1 workspace"
 msgstr "y0u c4n n0w l0gIn 70 7h3 %1 w0rKsP4C3"
 
 #: share/console-template/template/form.tmpl
+#. (
+msgid "You can set a proxy server that allows users to access Web Services including Dashboard Widgets and RSS feeds. For more information see: %1."
+msgstr "y0u c4n s37 4 pR0Xy s3rV3R 7h47 4Ll0wS Us3rS 70 4Cc3sS W38 S3RvIc3s iNcLuDiNg d4sH804Rd wIdG37s 4Nd rSs f33Ds. F0R M0R3 iNf0rM47i0n s33: %1."
+
+#: share/console-template/template/form.tmpl
 #.  
 msgid "You can synchronize the appliance clock with another computer using the Internet Time protocol. The appliance must be able to contact that server via port 37."
 msgstr "y0u c4n sYnChR0NiZ3 7H3 4PpLi4nC3 cL0Ck wI7H 4n07H3R C0MpU73r uSiNg 7H3 iN73rN37 7iM3 pR070C0L. 7H3 4PpLi4nC3 mUs7 83 48l3 70 c0n74C7 7H47 S3Rv3r vI4 p0r7 37."
@@ -5124,6 +5224,11 @@ msgstr "y0u mUs7 Ch00S3 47 L34s7 0n3 4dMiNiS7R470R."
 msgid "You must choose at least one workspace"
 msgstr "y0u mUs7 Ch00S3 47 L34s7 0n3 W0RkSp4c3"
 
+#: lib/Socialtext/Gadgets/XML.pm
+#.  
+msgid "You must either specify a file or a URL"
+msgstr "y0u mUs7 3i7h3r sP3CiFy 4 fIl3 0r 4 uRl"
+
 #: lib/Socialtext/OpenIdPlugin.pm
 #.  
 msgid "You must input both an OpenID and an email."
@@ -5163,6 +5268,11 @@ msgstr "y0u mUs7 Pr0vId3 4n 4Cc0uN7_iD 0r 4Cc0uN7_n4m3 70 7HiS UrI (%1)."
 #.  
 msgid "You must specify a plugin."
 msgstr "y0u mUs7 Sp3cIfY 4 PlUgIn."
+
+#: lib/Socialtext/Rest/Gadgets/Gadget.pm lib/Socialtext/Rest/Gadgets/Gallery.pm
+#.  
+msgid "You no longer have accounts administration privileges."
+msgstr "y0u n0 L0Ng3r h4v3 4cC0Un7s 4DmInIs7r47I0N PrIvIl3g3s."
 
 #: lib/Socialtext/WorkspacesUIPlugin.pm
 #.  
@@ -5239,7 +5349,12 @@ msgstr "\\\"%1\\\""
 msgid "\\\"%1\\\" (edited %2 in %3)"
 msgstr "\\\"%1\\\" (3Di73D %2 iN %3)"
 
-#: share/console-template/template/help.html share/skin/s3/javascript/email-lightbox.js share/skin/s3/javascript/socialtext-editor-mini.js share/skin/s3/javascript/socialtext-editor.js share/skin/s3/javascript/socialtext-lightbox.js
+#: lib/Socialtext/Page.pm
+#. (
+msgid "\\\"%1\\\" is a reserved name. Please use a different name."
+msgstr "\\\"%1\\\" Is 4 r3s3rV3D N4M3. Pl34S3 uS3 4 dIfF3R3N7 n4m3."
+
+#: share/console-template/template/help.html share/skin/s3/javascript/lightbox-email.js share/skin/s3/javascript/lightbox/email.js share/skin/s3/javascript/socialtext-lightbox.js
 #. (
 msgid "\\\"%1\\\" is not a valid email address."
 msgstr "\\\"%1\\\" Is n07 4 v4lId 3M4Il 4DdR3Ss."
@@ -5249,7 +5364,7 @@ msgstr "\\\"%1\\\" Is n07 4 v4lId 3M4Il 4DdR3Ss."
 msgid "\\\"%1\\\" is not a valid email address. Please use your email address to log in."
 msgstr "\\\"%1\\\" Is n07 4 v4lId 3M4Il 4DdR3Ss. Pl34S3 uS3 y0uR 3m4iL 4dDr3sS 70 l0g iN."
 
-#: share/skin/s3/template/element/settings/workspaces_create_section
+#: share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section
 #.  
 msgid "and this email address:"
 msgstr "4Nd 7HiS 3m4iL 4dDr3sS:"
@@ -5399,6 +5514,11 @@ msgstr "3X73rN4L LiNk"
 msgid "feed: %1"
 msgstr "f33D: %1"
 
+#: lib/Socialtext/Gadgets/XML.pm
+#.  
+msgid "file"
+msgstr "fIl3"
+
 #: lib/Socialtext/Widget_resource.pm lib/Socialtext/Widget_resource.pm
 #. (
 msgid "file: %1"
@@ -5418,6 +5538,11 @@ msgstr "fR33"
 #.  
 msgid "friend"
 msgstr "fRi3nD"
+
+#: lib/Socialtext/Rest/Gadgets/Gallery.pm
+#.  
+msgid "gadget_id is a required parameter"
+msgstr "g4dG37_Id iS 4 R3QuIr3d p4r4m373r"
 
 #: share/skin/s3/template/view/page/display share/template/control/fields-account.html
 #.  
@@ -5569,7 +5694,7 @@ msgstr "r3fR3Sh"
 msgid "registered users"
 msgstr "r3gIs73R3D Us3rS"
 
-#: share/skin/s3/template/element/settings/weblog_create share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_settings_appearance_section
+#: share/skin/s3/template/element/settings/weblog_create share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspace_clone_section share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_create_section share/skin/s3/template/element/settings/workspaces_settings_appearance_section
 #.  
 msgid "required"
 msgstr "r3qUiR3D"

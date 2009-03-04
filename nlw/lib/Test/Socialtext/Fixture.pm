@@ -81,7 +81,7 @@ sub _built_in_base_layout {
     my $self = shift;
     my $env  = $self->env;
     my @layout;
-    foreach my $based (qw(docroot storage data plugin user)) {
+    foreach my $based (qw(docroot storage storage/db-backups data plugin user)) {
         push @layout, File::Spec->catdir( $env->base_dir, $based );
     }
     foreach my $rooted (qw(ceq etc/socialtext lock log run)) {

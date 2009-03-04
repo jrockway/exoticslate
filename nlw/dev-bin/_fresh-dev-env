@@ -36,10 +36,6 @@ Test::Socialtext::Environment->CreateEnvironment(
     verbose        => 1,
 );
 
-my $backup_dir = Socialtext::Paths::storage_directory("db-backups");
-File::Path::mkpath($backup_dir) or die "Unable to create $backup_dir: $!";
-die "Didn't create $backup_dir!" unless -d $backup_dir;
-
 exit;
 
 

@@ -41,7 +41,6 @@ central_page_important_links
 congratulations_you_know_how_to_use_a_workspace
 conversations
 document_library_template
-document_templates
 documents_that_people_are_working_on
 expense_report_template
 how_do_i_find_my_way_around

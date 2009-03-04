@@ -183,3 +183,4 @@ lib/Socialtext/Gadgets/UserAgent.pm
 lib/Socialtext/Rest/Gadgets/GadgetInstance.pm
 t/Socialtext/Rest/Gadgets/GadgetInstance.t
 t/Socialtext/Signal/export_import.t
+t/Socialtext/Gadgets/Gadget-push.t

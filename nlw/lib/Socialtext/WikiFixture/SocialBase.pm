@@ -430,6 +430,27 @@ Put to the specified URI
 
 sub put { shift->_call_method('put', @_) }
 
+=head2 set_http_keepalive ( on_off )
+
+Enables/disables support for HTTP "Keep-Alive" connections (defaulting to I<off>).
+
+When called, this method re-instantiates the C<Test::HTTP> object that is
+being used for testing; be aware of this when writing your tests.
+
+=cut
+
+sub set_http_keepalive {
+    my $self   = shift;
+    my $on_off = shift;
+
+    # switch User-Agent classes
+    $Test::HTTP::UaClass = $on_off ? 'Test::LWP::UserAgent::keep_alive' : 'LWP::UserAgent';
+
+    # re-instantiate our Test::HTTP object
+    delete $self->{http};
+    $self->http_user_pass($self->{username}, $self->{password});
+}
+
 =head2 set_from_content ( name, regex )
 
 Set a variable from content in the last response.

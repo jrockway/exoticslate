@@ -52,7 +52,7 @@ set +e
 dev-bin/link-control-panel
 dev-bin/link-console
 dev-bin/link-reports
-dev-bin/link-plugins widgets agile csskit dashboard people signals socialcalc
+dev-bin/link-plugins widgets agile csskit dashboard people signals socialcalc apache
 set -e
 
 (cd ../plugins; make clean all);

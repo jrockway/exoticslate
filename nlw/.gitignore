@@ -184,3 +184,6 @@ lib/Socialtext/Rest/Gadgets/GadgetInstance.pm
 t/Socialtext/Rest/Gadgets/GadgetInstance.t
 t/Socialtext/Signal/export_import.t
 t/Socialtext/Gadgets/Gadget-push.t
+lib/Socialtext/Pluggable/Plugin/ApacheTest.pm
+t/wikitests/apache/
+t/wikitests/apache/http-keep-alive.wiki

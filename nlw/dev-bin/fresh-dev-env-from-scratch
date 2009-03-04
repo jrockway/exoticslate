@@ -37,9 +37,12 @@ fi
 rm_dir "template_compile_dir";
 rm_dir "formatter_cache_dir";
 
+# Shut down any running copy of ST and/or OpenLDAP
 set -x
 NLWCTL_QUIET=1 dev-bin/nlwctl stop
-dev-bin/st-bootstrap-openldap stop
+if [ -e ~/.nlw ]; then
+    dev-bin/st-bootstrap-openldap stop
+fi
 dev-bin/_fresh-dev-env
 
 # Setup robots.txt file to prevent dev-env heat death

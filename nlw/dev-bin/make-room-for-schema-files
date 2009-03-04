@@ -1,4 +1,6 @@
 #!/usr/bin/perl
+# @COPYRIGHT@
+
 use strict;
 use warnings;
 use File::Slurp qw(slurp);

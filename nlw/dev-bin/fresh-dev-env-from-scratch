@@ -43,7 +43,12 @@ NLWCTL_QUIET=1 dev-bin/nlwctl stop
 if [ -e ~/.nlw ]; then
     dev-bin/st-bootstrap-openldap stop
 fi
-dev-bin/_fresh-dev-env
+
+# Create the basic dev-env
+rm -rf $HOME/.nlw/
+dev-bin/make-test-fixture --home_dir $HOME --fixture clean
+dev-bin/make-test-fixture --home_dir $HOME --preserve --fixture base_config
+dev-bin/make-test-fixture --home_dir $HOME --preserve --fixture ALL
 
 # Setup robots.txt file to prevent dev-env heat death
 perl -le 'print "User-agent: *\nDisallow: /"' > ~/.nlw/root/docroot/robots.txt

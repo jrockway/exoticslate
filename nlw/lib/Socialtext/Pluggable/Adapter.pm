@@ -10,6 +10,7 @@ my %hook_types;
 
 use base 'Socialtext::Plugin';
 use Socialtext::Workspace;
+use Socialtext::l10n qw/loc_lang/;
 use Fcntl ':flock';
 use File::chdir;
 use Module::Pluggable search_path => ['Socialtext::Pluggable::Plugin'],
@@ -56,6 +57,7 @@ sub handler {
     my $t = time;
 
     $self->make_hub($rest->user) unless $self->hub;
+    loc_lang( $self->hub->best_locale );
 
     my $res;
     my $action;

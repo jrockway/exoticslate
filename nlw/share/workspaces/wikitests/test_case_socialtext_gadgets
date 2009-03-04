@@ -23,8 +23,8 @@
 | open_ok | / |  |
 | wait_for_element_visible_ok | link=Add Content | 30000 |
 | click_and_wait | link=Add Content |  |
-| wait_for_element_visible_ok | //a[contains(@href,'my_workspaces')] | 30000 |
-| click_and_wait | //a[contains(@href,'my_workspaces')] |  |
+| wait_for_element_visible_ok | //a[contains(@href,'?action=add_widget;gadget_id=3')] | 30000 |
+| click_and_wait | //a[contains(@href,'?action=add_widget;gadget_id=3')] |  |
 
 | *Comment* | Test Case: Socialtext Gadgets. Wiki Page |  |
 
@@ -63,7 +63,7 @@
 | open_ok | / |  |
 | wait_for_element_visible_ok | link=Add Content | 30000 |
 | click_and_wait | link=Add Content |  |
-| wait_for_element_visible_ok | link=Signals | 30000 |
-| click_and_wait | link=Signals |  |
+| wait_for_element_visible_ok | link=Socialtext Signals | 30000 |
+| click_and_wait | link=Socialtext Signals |  |
 
 | *Comment* | Test Case: Socialtext Gadgets COMPLETED |  |

@@ -28,7 +28,7 @@
 | st-empty-container |  |  |
 | wait_for_element_visible_ok | link=Add Content |  |
 | click_and_wait | link=Add Content |  |
-| click_and_wait | link=Signals |  |
+| click_and_wait | link=Socialtext Signals |  |
 | wait_for_element_visible_ok | link=Add Content |  |
 
 | st-name-widget | 1 | signals_widget |

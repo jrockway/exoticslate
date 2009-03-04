@@ -185,7 +185,7 @@ sub create_and_delete_thirty_pages {
         #Add a page and delete it
         my $month = 'Mar';
         my $page = 'blue' . $idx;
-        $add_delete .= create_page_nlw_entry($rausers->[0], $raWorkspaces->[-0], $month.' 1',$page);   
+        $add_delete .= create_page_nlw_entry($rausers->[0], $raWorkspaces->[-0], $month.' 1 2008',$page);   
         $add_delete .= $month .  ' 2 2008 13:03:08 qa2 nlw[21556]: [33] ACTION,EDIT_CONTENT,page_name:'.$page.',WORKSPACE:'.
                                  $raWorkspaces->[0]->workspace_id . ',USER:'.$rausers->[0]->user_id . ',PAGE:'  
                                  . $raWorkspaces->[0]->name . ',[drop_workspace_breadcrumb:0.003885,overall:0.021291]' . "\n";

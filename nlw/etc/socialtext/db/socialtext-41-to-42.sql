@@ -17,6 +17,7 @@ CREATE INDEX ix_gadget_instance__parent_id
 
 
 ALTER TABLE ONLY container
+    ADD COLUMN layout_template text,
     DROP CONSTRAINT container_scope_ptr,
     ADD CONSTRAINT container_scope_ptr
         CHECK (

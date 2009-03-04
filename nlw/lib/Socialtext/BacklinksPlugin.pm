@@ -251,6 +251,7 @@ sub html_description {
 # return a list of Socialtext::Page objects that have no backlinks
 sub get_orphaned_pages {
     my $self = shift;
+    return [] unless $self->hub->current_workspace->real;
     my @pages = $self->hub->pages->all_active();
 
     my $orphans = [];

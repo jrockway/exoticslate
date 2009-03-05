@@ -706,11 +706,6 @@ proto.enableThis = function() {
             }, 1000
         );
     }
-    jQuery( self.get_edit_document(), self.get_edit_window())
-        .bind("mousedown", function() {
-            jQuery("#st-edit-summary").hide(); 
-        });
-
 }
 
 proto.disableThis = function() {
@@ -872,10 +867,6 @@ proto.set_clear_handler = function () {
 
         /* We've just unbound the paste handler, so re-enable it here */
         self.set_key_interception_handler();
-
-        /* Re-enable clicking out of edit summary popup {bz: 2094} */
-        jQuery(editor)
-            .bind("mousedown", function () { jQuery('#st-edit-summary').hide(); });
     };
 
     try {

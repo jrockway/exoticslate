@@ -1266,7 +1266,6 @@ function setup_wikiwyg() {
             //do_post_cancel_tidying();
             ww.disableLinkConfirmations();
 
-            hide_edit_summary();
             jQuery('#st-edit-summary .input').val('')
 
             ww.is_editing = false;
@@ -1280,35 +1279,6 @@ function setup_wikiwyg() {
     // Begin - Edit Summary Logic
 
     var ok_to_show_summary = false;
-
-    var show_edit_summary = function () {
-        if (! ok_to_show_summary) return;
-        if (! jQuery('#st-edit-summary').is(':hidden')) return;
-        var $input = jQuery('#st-edit-summary .input');
-
-        if (ww.edit_summary() == '')
-            $input.val('');
-        jQuery('#st-edit-summary').show();
-        $input.focus();
-
-        // position cursor at the end of the input field
-        var len = $input[0].value.length;
-        if ($input[0].createTextRange) {
-            var range = $input[0].createTextRange();
-            range.collapse(true);
-            range.moveEnd('character', len);
-            range.moveStart('character', len);
-            range.select();
-        }
-        else if ($input[0].setSelectionRange) {
-            $input[0].setSelectionRange(len, len);
-        }
-    }
-
-    var hide_edit_summary = function () {
-        jQuery('#st-edit-summary').hide();
-        return false;
-    }
 
     ww.update_edit_summary_preview = function () {
         if (jQuery('#st-edit-summary .preview').is(':hidden')) return true;
@@ -1387,7 +1357,6 @@ function setup_wikiwyg() {
     jQuery("body").mousedown(function(e) {
         if ( jQuery(e.target).parents("#st-edit-summary").size() > 0 ) return;
         if ( jQuery(e.target).is("#st-edit-summary") ) return;
-        hide_edit_summary();
     });
 
     jQuery('#st-preview-button-link')

@@ -41,11 +41,7 @@ sub get_resource {
             my %hash = %{$user->to_hash};
             delete $hash{password};
             $hash{accounts} = [
-                map { {
-                    account_name    => $_->name,
-                    account_id      => $_->account_id,
-                    plugins_enabled => [ $_->plugins_enabled ]
-                } } $user->accounts
+                map { $_->hash_representation } $user->accounts
             ];
         return \%hash;
     }

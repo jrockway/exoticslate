@@ -5,6 +5,7 @@ use warnings;
 use base 'Socialtext::MockBase';
 use unmocked 'Socialtext::Account';
 use unmocked 'Class::Field', qw/field/;
+use unmocked 'Socialtext::MultiCursor';
 
 field 'skin_name';
 field 'uploaded_skin';
@@ -73,6 +74,12 @@ sub real { 1 }
 
 sub account { 
     return Socialtext::Account->new(account_id => $_[0]->{account_id} || 1);
+}
+
+sub All {
+    return Socialtext::MultiCursor->new(
+        iterables => [],
+    );
 }
 
 package Socialtext::NoWorkspace;

@@ -2,5 +2,5 @@
 # @COPYRIGHT@
 
 if [ -d /usr/share/nlw/plugin/widgets ]; then
-    st-widgets update-all
+    st-widgets update-all --force
 fi

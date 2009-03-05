@@ -39,7 +39,8 @@ $Commands{$command}->(@ARGV);
 sub get {
     print "\n";
     for my $k (@_) {
-        print " $k: ", Socialtext::AppConfig->$k(), "\n";
+        my $value = Socialtext::AppConfig->$k() || 'undef';
+        print " $k: $value\n";
     }
     print "\n";
 }

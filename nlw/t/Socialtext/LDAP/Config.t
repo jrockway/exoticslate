@@ -137,6 +137,7 @@ save_ok: {
     my $config = Socialtext::LDAP::Config->new(%{$data});
     isa_ok $config, 'Socialtext::LDAP::Config', 'created LDAP config';
 
+    # save the config out to disk
     my $tmpfile = File::Spec->catfile(
         File::Spec->tmpdir(),
         "$$.yaml",
@@ -145,10 +146,12 @@ save_ok: {
     ok Socialtext::LDAP::Config->save_to($tmpfile, $config), '... saved config to temp file';
     ok -e $tmpfile, '... temp file exists';
 
+    # verify the contents of the YAML file
     my $reloaded = eval { YAML::LoadFile($tmpfile) };
     ok $reloaded, '... able to reload YAML from temp file';
     is_deeply $reloaded, $data, '... ... and it matches original data';
 
+    # remove our tempfile
     unlink $tmpfile;
 }
 

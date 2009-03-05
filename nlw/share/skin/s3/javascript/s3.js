@@ -34,6 +34,7 @@ function nlw_name_to_id(name) {
 push_onload_function = function (fcn) { jQuery(fcn) }
 
 Socialtext.make_table_sortable = function(table) {
+    if (!table) return;
     var undefined;
     if (typeof(table.config) != 'undefined') {
         table.config = undefined;
@@ -63,6 +64,7 @@ Socialtext.make_table_sortable = function(table) {
 }
 
 Socialtext.make_table_unsortable = function(table) {
+    if (!table) return;
     var undefined;
     var $table = jQuery(table);
 

@@ -14,22 +14,15 @@
                     <a class="genericOrangeButton" id="st-cancel-button-link" href="#">[% loc('Cancel') %]</a></li>
                 </li>
             </ul>
-            <ul class="buttonRight">        
-                <li><a href="#" id="st-mode-wysiwyg-button" onclick="return false;">[% loc('Rich Text') %]</a></li>
-                <li><a href="#" id="st-mode-wikitext-button" onclick="return false;">[% loc('Wiki Text') %]</a></li>
-                <li>
-                    <a href="#" style="display:none" id="st-edit-tips">
-                       [% loc('Edit Tips') %]
-                    </a>
-                </li>
-            </ul>                                   
         </div><!-- st-editing-tools-edit END -->
 
-        <!-- XXX: move this somewhere or style it in screen.css -->
-        <div style="float:left;position:relative;padding:11px;display:none" id="bootstrap-loader">
+        <div id="bootstrap-loader">
             [% loc("Loading...") %]
             <img src="/static/skin/common/images/ajax-loader.gif">
         </div>
+
+        [% INCLUDE element/edit_summary.html.tt2 %]
+
 
         <div id="controlsRight">
             <ul class="level1">
@@ -43,8 +36,16 @@
     </div><!-- controls END -->
     <div id="st-edit-mode-view">
         <div id="contentContainer">
-            [% INCLUDE element/edit_summary.html.tt2 %]
-            <div id="contentTitle">
+
+           <div id="contentTitle">
+                <ul class="editModeSwitcher">
+                    <li><a href="#" id="st-mode-wysiwyg-button" onclick="return false;">[% loc('Rich Text') %]</a></li>
+                    <li><a href="#" id="st-mode-wikitext-button" onclick="return false;">[% loc('Wiki Text') %]</a>
+                        <a href="#" style="display:none" id="st-edit-tips">(?)</a>
+                    </li>
+                </ul>
+
+ 
                 [% IF is_new && !is_incipient %]
                     <h2 id="st-editing-title" class="tableTitle">
                         [% loc('Editing:') %]
@@ -58,6 +59,7 @@
                     </h2>
                 [% END %]
             </div>
+
             <div class="st-content" id="st-content-page-edit">
                 <div id="st-edit-mode-toolbar">
                     <div id="st-page-editing">

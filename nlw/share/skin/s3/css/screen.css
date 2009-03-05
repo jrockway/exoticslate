@@ -2661,7 +2661,10 @@ a#st-edit-tips {
 /* Loading... message */
 div#bootstrap-loader {
     float: left;
-    display: none;
+    float:left;
+    position:relative;
+    padding:11px;
+    display:none
 }
 
 /* pagetools : the top right New Page, Print, Email, and Tools items at top right */
@@ -4123,29 +4126,23 @@ ul li.flexButtonBlue a.addButton:hover {
 }
 
 #st-edit-summary {
+    float: left;
+    height: 45px;
+    line-height:45px;
+    margin-left: 15px;
     width: 400px;
-    background: #e8e8e8;
-    padding: 10px 14px 10px 10px;
-    border: 1px solid black;
-    z-index: 1;
-    position: absolute;
-    display: none;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
-    -webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-    -moz-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+}
+
+#st-edit-summary form .field {
+    float: left;
 }
 
 #st-edit-summary .input {
-    background: #fff;
-    width:400px;
-    /* margin-bottom: 8px; */
-}
-
-#st-edit-summary .explain {
-    font-size: smaller;
+    width: 280px;
 }
 
 #st-edit-summary .signal {
+    width: 100px;
     float: left;
 }
 
@@ -4157,25 +4154,6 @@ ul li.flexButtonBlue a.addButton:hover {
     text-align: right;
     float: right;
     width: 150px;
-}
-
-#st-edit-summary .title-area {
-    float: left;
-    margin-bottom: 5px;
-}
-
-#st-edit-summary .title {
-    font-size: 120%;
-    font-weight: bold;
-}
-
-#st-edit-summary .close-area {
-    float: right;
-}
-
-#st-edit-summary .close-window {
-    padding: 0;
-    margin: 0;
 }
 
 #st-page-title .st-edit-summary {
@@ -4235,4 +4213,22 @@ ul li.flexButtonBlue a.addButton:hover {
 .wiki table.sort th.headerSortDown:hover {
     background-image: url(../images/sort-down-hover.png);
 }
+
+div#contentContainer ul.editModeSwitcher {
+    float:left;
+    width: 140px;
+    margin-right: 15px;
+    height: 40px;
+    line-height: 40px;
+}
+
+div#contentContainer ul.editModeSwitcher li {
+    display:inline;
+}
+
+div#contentContainer h2.tableTitle {
+    float: left;
+    width: 700px;
+}
+
 

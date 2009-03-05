@@ -34,14 +34,16 @@ function nlw_name_to_id(name) {
 push_onload_function = function (fcn) { jQuery(fcn) }
 
 Socialtext.make_table_sortable = function(table) {
-    if (table.config) {
-        delete table.config;
+    var undefined;
+    if (typeof(table.config) != 'undefined') {
+        table.config = undefined;
     }
 
     var $table = $(table);
     var $row = $table
         .children('tbody:first')
         .children('tr:first');
+
     if ($row.length) {
         if ($table.find("th").size() == 0) {
             var $newRow = $('<tr />');
@@ -54,18 +56,17 @@ Socialtext.make_table_sortable = function(table) {
                 );
             });
             $row.remove();
-            $table.prepend(
-                $('<thead />').append($newRow)
-            );
+            $table.prepend("<thead><tr>" + $newRow.html() + "</tr></thead>");
         }
         $table.tablesorter();
     }
 }
 
 Socialtext.make_table_unsortable = function(table) {
+    var undefined;
     var $table = jQuery(table);
 
-    delete table.config;
+    table.config = undefined;
 
     $table.find("thead tr").prependTo( $table.find("tbody") );
     $table.find("thead").remove();

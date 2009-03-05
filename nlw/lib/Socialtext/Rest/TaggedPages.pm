@@ -25,13 +25,29 @@ sub _entities_for_query {
     my $self = shift;
 
     my $limit = $self->rest->query->param('limit')
-                || $self->rest->query->param('count');
-    my $pagesref = Socialtext::Model::Pages->By_tag(
-        hub => $self->hub,
-        tag => $self->tag,
-        workspace_id => $self->hub->current_workspace->workspace_id,
-        limit => $limit,
-    );
+                || $self->rest->query->param('count')
+                || 500;
+
+    my $pagesref = [];
+    if (lc($self->tag) eq 'recent changes') {
+        my $prefs = $self->hub->recent_changes->preferences;
+        my $seconds = $prefs->changes_depth->value * 1440 * 60;
+        $pagesref = Socialtext::Model::Pages->By_seconds_limit(
+            seconds          => $seconds,
+            hub              => $self->hub,
+            limit            => $limit,
+            do_not_need_tags => 1,
+            workspace_id => $self->hub->current_workspace->workspace_id,
+        );
+    }
+    else {
+        $pagesref = Socialtext::Model::Pages->By_tag(
+            hub => $self->hub,
+            tag => $self->tag,
+            workspace_id => $self->hub->current_workspace->workspace_id,
+            limit => $limit,
+        );
+    }
     return @$pagesref;
 }
 

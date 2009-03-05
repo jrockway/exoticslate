@@ -429,14 +429,14 @@ $(function() {
     });
 
     Socialtext.ui_expand_on = function() {
-        $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Normal View")).text(loc("Normal"));
+        $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Normal View")).text(loc("Normal")).addClass("contract");
         $('#st-edit-mode-container, #mainWrap').addClass("expanded");
 
         $(window).trigger("resize");
         return false;
     };
     Socialtext.ui_expand_off = function() {
-        $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Expanded View")).text(loc("Expand"));
+        $("#st-edit-pagetools-expand,#st-pagetools-expand").attr("title", loc("Expanded View")).text(loc("Expand")).removeClass("contract");
         $('#st-edit-mode-container, #mainWrap').removeClass("expanded");
 
         $("iframe#st-page-editing-wysiwyg").width( $('#st-edit-mode-view').width() - 48 );

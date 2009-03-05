@@ -12,7 +12,6 @@ use Socialtext::Exceptions qw( data_validation_error );
 use Socialtext::l10n qw(loc);
 use Socialtext::Events;
 use Socialtext::String;
-use Socialtext::Log qw(st_log);
 
 sub class_id { 'edit' }
 const class_title => 'Editing Page';
@@ -100,8 +99,6 @@ sub edit_content {
     my $metadata = $page->metadata;
 
     my $edit_summary = Socialtext::String::trim($self->cgi->edit_summary || '');
-    st_log->info("CREATE,EDIT_SUMMARY,edit_summary")
-        if $edit_summary;
 
     $metadata->loaded(1);
     $metadata->update( user => $self->hub->current_user );
@@ -212,8 +209,6 @@ sub save {
         = Socialtext::String::trim($self->cgi->edit_summary || '');
     $self->_signal_edit_summary($edit_summary, $page)
         if $self->cgi->signal_edit_summary;
-    st_log->info("CREATE,EDIT_SUMMARY,edit_summary")
-        if $edit_summary;
 
     my @categories =
       sort keys %{+{map {($_, 1)} split /[\n\r]+/, $self->cgi->header}};

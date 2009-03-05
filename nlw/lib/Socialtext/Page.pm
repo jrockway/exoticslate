@@ -762,8 +762,25 @@ sub store {
     else {
         $metadata->Control('Deleted');
     }
+
+    $self->_log_edit_summary
+         if $self->metadata->RevisionSummary;
+
     $self->write_file($self->headers, $body);
     $self->_perform_store_actions();
+}
+
+sub _log_edit_summary {
+    my $self = shift;
+    my $user = $self->hub->current_user;
+    my $ws   = $self->hub->current_workspace;
+
+    st_log->info(
+        'CREATE,EDIT_SUMMARY,edit_summary,'
+        . 'workspace:' . $ws->name . '(' . $ws->workspace_id . '),'
+        . 'user:' . $user->email_address . '(' . $user->user_id . '),'
+        . 'page:' . $self->id
+    );
 }
 
 sub _perform_store_actions {

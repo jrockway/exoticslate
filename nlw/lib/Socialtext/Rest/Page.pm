@@ -11,7 +11,6 @@ use Socialtext::JSON;
 use Readonly;
 use Socialtext::HTTP ':codes';
 use Socialtext::Events;
-use Socialtext::Log qw( st_log );
 use Socialtext::PageMeta qw( EDIT_SUMMARY_MAXLENGTH );
 
 Readonly my $DEFAULT_LINK_DICTIONARY => 'REST';
@@ -263,8 +262,6 @@ sub PUT_json {
     my $object = decode_json( $content );
 
     my $edit_summary = $object->{edit_summary} || '';
-    st_log->info("CREATE,EDIT_SUMMARY,edit_summary")
-        if $edit_summary;
 
     $page->update_from_remote(
         content => $object->{content},

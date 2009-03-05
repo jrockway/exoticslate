@@ -6,6 +6,13 @@ if [ "$ST_CURRENT" != "" ]; then
     cd $ST_CURRENT/nlw
 fi
 
+# Cleanup plugins that don't exist here
+for link in lib/Socialtext/Pluggable/Plugin/*.pm; do
+    [ -e $link ] && continue;
+    echo "Unlinking dead symlink $link"
+    rm $link
+done
+
 perl -MCwd -le'print "Running ", Cwd::abs_path(shift)' $0
 
 START_PORT=21000 # for SSL

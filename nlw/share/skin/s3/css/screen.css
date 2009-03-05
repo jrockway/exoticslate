@@ -2651,11 +2651,15 @@ body#contentPage #controlsRight ul.level2 {
  * XXX: Hack around the fact that we don't have buttons for these elements yet
  */
 a#st-mode-wysiwyg-button,
-a#st-mode-wikitext-button,
-a#st-edit-tips {
+a#st-mode-wikitext-button {
     top: 0 !important;
     padding-left: 10px !important;
     margin-left: 0px !important;
+}
+a#st-edit-tips {
+    top: 0 !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
 }
 
 /* Loading... message */

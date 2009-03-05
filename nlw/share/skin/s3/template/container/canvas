@@ -1,0 +1,85 @@
+[%# vim: set et sts=2 sw=2: %]
+[% WRAPPER layout/html 
+    id="dashBoard"
+    head_template="element/canvas_head"
+    title=loc('Socialtext')
+%]
+<input id="containerID" type="hidden" value="[% container.id %]"/>
+<input id="widgetList" type="hidden" value="[% container.gadgetlist %]"/>
+
+<div id="controls">
+    <div id="st-editing-tools-edit">
+        [% IF container.hello_template %]
+            [% INCLUDE $container.hello_template %]
+        [% ELSE %]
+            <ul></ul>
+        [% END %]
+    </div><!-- controlsLeft END -->
+    <div id="controlsRight">
+        [% IF container.links_template %]
+            [% INCLUDE $container.links_template %]
+        [% ELSE %]
+            <ul></ul>
+        [% END %]
+    </div><!-- controlsRight END -->
+</div><!-- controls END -->
+
+<div class="notice">
+[% FILTER decorate('notice') %]
+[% END %]
+</div>
+
+<div id="contentContainer">
+  <div id="contentColumns">
+    <div id="contentLeft">
+      <div class="widgetTan">
+        <div class="widgetHeader">
+          <h4>[% loc('Socialtext Dashboard') %]</h4>
+        </div><!-- widgetHeader END -->
+        <div class="widgetContent">
+
+          <ul class="leftNavList">
+            <li>
+                <a id="editProfile" style="float:right" href="#">
+                  [% loc('edit') %]
+                </a>
+                <a href="/?profile">[% loc('Profile') %]</a>
+            </li>
+            <li><a href="#" id="allActivity">All Activity</a></li>
+            <li><a href="#" id="myActivity">My Activity</a></li>
+          </ul>
+
+          <h4>[% loc('Apps') %]</h4>
+          <ul id="appList" class="leftNavList"></ul>
+
+          <div class="clear"></div>
+        </div><!-- widgetContent -->
+        <div class="widgetBottom">
+          <div class="widgetBottomRight"></div>
+        </div><!-- widgetBottom END -->
+      </div><!-- widget END -->
+    </div><!-- contentLeft -->
+
+    <div id="contentRight">
+
+      [% gadget = container.gadgets.0 %]
+
+      <div class="widgetTan">
+        <div class="widgetHeader">
+          <h4 id="canvasTitle">[% gadget.title %]</h4>
+        </div><!-- widgetHeader END -->
+        <div class="widgetContent">
+          [% INCLUDE widget/iframe %]
+          <div class="clear"></div>
+        </div><!-- widgetContent -->
+        <div class="widgetBottom">
+          <div class="widgetBottomRight"></div>
+        </div><!-- widgetBottom END -->
+      </div><!-- widget END -->
+
+    </div><!-- contentRight -->
+
+  </div><!-- contentColumns END -->
+  <div class="clear"></div><!-- clear END -->
+</div><!-- contentContainer -->
+[% END %]

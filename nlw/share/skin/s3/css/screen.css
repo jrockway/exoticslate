@@ -4141,8 +4141,30 @@ ul li.flexButtonBlue a.addButton:hover {
     float: left;
 }
 
-#st-edit-summary .input {
+#st-edit-summary form .field label {
+    display: block;
+    color: #aaa;
+    font-style: italic;
+    background:#fff;
+    height: 1.4em;
+    line-height:1.4em;
+    margin: 1.4em 0 -2.8em 0;
+    width:270px;
+    padding: 0 5px
+}
+
+#st-edit-summary form .field input {
     width: 280px;
+    background: #fff;
+}
+
+#st-edit-summary form .field input.default {
+    background: transparent;
+}
+
+#st-edit-summary form .field input.default:focus,
+#st-edit-summary form .field input:focus {
+    background: #fff;
 }
 
 #st-edit-summary .signal {

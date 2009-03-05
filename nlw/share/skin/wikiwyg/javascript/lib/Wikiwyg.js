@@ -1277,6 +1277,20 @@ function setup_wikiwyg() {
     });
 
     // Begin - Edit Summary Logic
+    jQuery("#st-edit-summary .field input").each(function() {
+        var $self = jQuery(this);
+        var label = $self.prev("label").text();
+
+        $self
+        .val("")
+        .addClass("default")
+        .bind("blur", function() {
+            if( $self.val() == "" ) 
+                $self.addClass("default");
+            else 
+                $self.removeClass("default");
+        });
+    });
 
     var ok_to_show_summary = false;
 

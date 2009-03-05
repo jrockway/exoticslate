@@ -2,6 +2,7 @@
     <div class="body">
         <form action="#">
             <div class="field">
+                <label for="st-edit-summary-text-area">[% loc("Summarize your edit (optional)") %]</label>
                 <input type="text" id="st-edit-summary-text-area" maxlength="250" class="input">
             </div>
             [% IF plugins_enabled.grep("signals").size -%]

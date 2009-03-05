@@ -727,6 +727,15 @@ sub _validate_and_clean_data {
     data_validation_error errors => \@errors if @errors;
 }
 
+sub hash_representation {
+    my $self = shift;
+    return {
+        account_name    => $self->name,
+        account_id      => $self->account_id,
+        plugins_enabled => [ $self->plugins_enabled ]
+    };
+}  
+
 1;
 
 __END__

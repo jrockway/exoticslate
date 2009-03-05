@@ -4253,6 +4253,11 @@ div#contentContainer ul.editModeSwitcher li {
     display:inline;
 }
 
+div#contentContainer ul.editModeSwitcher li a.disabled {
+    color: black;
+    font-weight: bold;
+}
+
 div#contentContainer h2.tableTitle {
     float: left;
     width: 700px;

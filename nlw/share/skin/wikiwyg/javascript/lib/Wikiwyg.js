@@ -1266,8 +1266,6 @@ function setup_wikiwyg() {
             //do_post_cancel_tidying();
             ww.disableLinkConfirmations();
 
-            jQuery('#st-edit-summary .input').val('')
-
             ww.is_editing = false;
             ww.showScrollbars();
 
@@ -1289,9 +1287,9 @@ function setup_wikiwyg() {
         })
         .bind("blur", function() {
             $self.removeClass("focus");
-            if( $self.val() == "" ) 
+            if( $self.val() == "" )
                 $self.addClass("default");
-            else 
+            else
                 $self.removeClass("default");
         });
     });

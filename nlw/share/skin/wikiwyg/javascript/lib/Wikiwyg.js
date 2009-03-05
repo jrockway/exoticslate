@@ -1284,7 +1284,11 @@ function setup_wikiwyg() {
         $self
         .val("")
         .addClass("default")
+        .bind("focus", function() {
+            $self.addClass("focus");
+        })
         .bind("blur", function() {
+            $self.removeClass("focus");
             if( $self.val() == "" ) 
                 $self.addClass("default");
             else 

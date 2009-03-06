@@ -3,6 +3,7 @@ package Socialtext::WikiText::Emitter::Messages::HTML;
 use strict;
 use warnings;
 
+use Socialtext::l10n qw/loc/;
 use base 'WikiText::Receiver';
 
 sub content {
@@ -52,7 +53,7 @@ sub user_html {
 
     my $user = eval { Socialtext::User->Resolve($userid) };
     unless ($user) {
-        return "Unknown Person";
+        return loc("Unknown Person");
     }
 
     unless ($viewer && $user->profile_is_visible_to($viewer)) {

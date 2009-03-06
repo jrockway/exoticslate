@@ -777,6 +777,10 @@ CREATE INDEX ix_container_workspace_id
 CREATE INDEX ix_default_gadget__container_type
 	    ON default_gadget (container_type);
 
+CREATE INDEX ix_event_actor_page_contribs
+	    ON event (actor_id, page_workspace_id, page_id, "at")
+	    WHERE ((event_class = 'page') AND is_page_contribution("action"));
+
 CREATE INDEX ix_event_actor_time
 	    ON event (actor_id, "at");
 
@@ -1268,4 +1272,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '42');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '43');

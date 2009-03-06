@@ -2,9 +2,11 @@ package Socialtext::Events;
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More;
-use base 'Socialtext::MockBase';
+use unmocked 'Exporter';
+use unmocked 'Exporter::Heavy';
+use unmocked 'Test::More';
 use base 'Exporter';
+use base 'Socialtext::MockBase';
 our @EXPORT_OK = qw/event_ok is_event_count/;
 
 our @Events;

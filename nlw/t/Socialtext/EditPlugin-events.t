@@ -2,19 +2,22 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More tests => 10;
 use Data::Dumper;
 use mocked 'Apache::Cookie';
 use mocked 'Socialtext::Events', qw/event_ok/;
 use mocked 'Socialtext::WeblogPlugin';
 use mocked 'Socialtext::Hub';
 use Socialtext::Attachments;
-use File::Path qw/mkpath/;
+use Test::Socialtext tests => 10;
 
 BEGIN { use_ok 'Socialtext::EditPlugin' }
 
+###############################################################################
+# Fixtures: db
+fixtures(qw( db ));
+
+###############################################################################
 my $hub = Socialtext::Hub->new;
-mkpath "t/tmp/log";
 
 Edit_save_event: {
     my $ep = setup_plugin();

@@ -479,7 +479,8 @@ QUICK_TESTS = t/Socialtext/People/Directories.t \
 	t/Socialtext/CredentialsExtractor/Cookie.t \
 	t/Socialtext/CredentialsExtractor/Guest.t \
 	t/Socialtext/NTLM/Config.t \
-	t/st-ntlm-config.t
+	t/st-ntlm-config.t \
+	t/Socialtext/Config/Base.t
 
 quicktest:
 	$<

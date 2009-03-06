@@ -885,6 +885,10 @@ Export the account data to a file in the specified directory.
 Imports an account from data in the specified file.  If a name
 is supplied, that name will be used instead of the original account name.
 
+=item $account->hash_representation()
+
+Returns a hash representation of the account.
+
 =item Socialtext::Account->Unknown()
 
 =item Socialtext::Account->Socialtext()

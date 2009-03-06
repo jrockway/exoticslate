@@ -53,9 +53,12 @@ proto.deleteNewAttachments = function (cb) {
 proto.refreshAttachments = function (cb) {
     var self = this;
     $.ajax({
-        url: Page.pageUrl() + '/attachments',
+        url: Page.pageUrl() + '/attachments?accept=application/json',
         cache: false,
         dataType: 'json',
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(textStatus);
+        },
         success: function (list) {
             $('#st-attachment-listing').html('');
             for (var i=0; i< list.length; i++) {
@@ -132,8 +135,11 @@ proto.delAttachment = function (url, refresh) {
     }
 };
 
-proto.onTargetLoad = function (basename) {
+proto.onTargetLoad = function (iframe) {
     var self = this;
+    var doc = iframe.contentDocument || iframe.contentWindow.document;
+
+    var id = $('input', doc).val();
 
     $('#st-attachments-attach-uploadmessage').html(loc('Upload Complete'));
     $('#st-attachments-attach-filename').attr('disabled', false).val('');
@@ -146,9 +152,7 @@ proto.onTargetLoad = function (basename) {
         for (var i=0; i< list.length; i++) {
             var item = list[i];
 
-            // Compare basename, because FF2 would use the
-            // full pathname but item.name is basename-only.
-            if (basename == item.name) {
+            if (id == item.id) {
                 self.addNewAttachment(item);
             }
         }
@@ -157,7 +161,7 @@ proto.onTargetLoad = function (basename) {
             .show()
             .html('')
             .append(
-                $('<span />')
+                $('<span></span>')
                     .attr('class', 'st-attachments-attach-listlabel')
                     .html(loc('Uploaded files:') + 
                         '&nbsp;' + self.attachmentList()
@@ -193,7 +197,7 @@ proto.onChangeFilename = function () {
     );
 
     $('#st-attachments-attach-formtarget')
-        .one('load', function () { self.onTargetLoad(basename) });
+        .one('load', function () { self.onTargetLoad(this) });
 
     $('#st-attachments-attach-form').submit();
     $('#st-attachments-attach-closebutton').attr('disabled', true);

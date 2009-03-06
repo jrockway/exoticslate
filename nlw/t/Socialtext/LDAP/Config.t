@@ -47,7 +47,7 @@ check_required_fields: {
         ok !defined $config, "instantiation, missing '$required' parameter";
 
         is logged_count(), 1, '... logged right number of entries';
-        next_log_like 'warning', qr/missing '$required'/, "... ... missing $required";
+        next_log_like 'error', qr/missing '$required'/, "... ... missing $required";
     }
 }
 
@@ -65,7 +65,7 @@ check_required_mapped_attributes: {
         ok !defined $config, "instantiation, missing '$attr' mapped attribute";
 
         is logged_count(), 1, '... logged right number of entries';
-        next_log_like 'warning', qr/missing mapped attribute '$attr'/, "... ... missing $attr";
+        next_log_like 'error', qr/missing mapped attribute '$attr'/, "... ... missing $attr";
     }
 }
 
@@ -86,7 +86,7 @@ load_nonexistent_file: {
     ok !defined $config, 'load, missing YAML file';
 
     is logged_count(), 1, '... logged right number of entries';
-    next_log_like 'error', qr/error reading LDAP config/, '... ... error reading config';
+    next_log_like 'error', qr/error reading config/, '... ... error reading config';
 }
 
 ###############################################################################
@@ -104,8 +104,8 @@ load_invalid_yaml: {
     my $config = Socialtext::LDAP::Config->load_from($fh);
     ok !defined $config, 'load, invalid YAML file';
     is logged_count(), 2, '... logged right number of entries';
-    next_log_like 'warning', qr/config missing/, '... ... config missing something';
-    next_log_like 'error', qr/error with LDAP config/, '... ... bad config in file';
+    next_log_like 'error', qr/config missing/, '... ... config missing something';
+    next_log_like 'error', qr/error with config/, '... ... bad config in file';
 }
 
 ###############################################################################

@@ -6,13 +6,16 @@ package Socialtext::LDAP::Config;
 
 use strict;
 use warnings;
-use Class::Field qw(field);
-use File::Spec;
+use Class::Field qw(field const);
 use Time::HiRes qw(gettimeofday);
-use YAML;
-use Socialtext::AppConfig;
-use Socialtext::Log qw(st_log);
+use base qw(Socialtext::Config::Base);
 
+###############################################################################
+# Name our configuration file
+const 'config_basename' => 'ldap.yaml';
+
+###############################################################################
+# Fields that the config file contains
 field 'id';
 field 'name';
 field 'backend';
@@ -36,79 +39,26 @@ field 'attr_map';
 #      even if the user goes in and changes all of the other information about
 #      the connection (hostname, port, descriptive name, etc).
 
-sub new {
-    my ($class, %opts) = @_;
-    my $self = \%opts;
-    bless $self, $class;
+sub init {
+    my $self = shift;
 
-    # make sure we've got all required fields and mapped attributes
-    foreach my $field (qw( id host attr_map )) {
-        unless ($opts{$field}) {
-            st_log->warning( "ST::LDAP::Config: LDAP config missing '$field'" );
-            return undef;
+    # make sure we've got all required fields
+    my @required = (qw( id host attr_map ));
+    $self->check_required_fields(@required);
+
+    # make sure we've got all required mapped attributes
+    my @req_attrs = (qw( user_id username email_address first_name last_name ));
+    $self->check_required_mapped_attributes(@req_attrs);
+}
+
+sub check_required_mapped_attributes {
+    my ($self, @attrs) = @_;
+    my $attr_map = $self->attr_map();
+    foreach my $attr (@attrs) {
+        unless ($attr_map->{$attr}) {
+            die "config missing mapped attribute '$attr'\n";
         }
     }
-    foreach my $attr (qw( user_id username email_address first_name last_name )) {
-        unless ($opts{attr_map}{$attr}) {
-            st_log->warning( "ST::LDAP::Config: LDAP config missing mapped attribute '$attr'" );
-            return undef;
-        }
-    }
-
-    # return newly created object
-    return $self;
-}
-
-sub config_filename {
-    my $yaml_file = File::Spec->catfile(
-        Socialtext::AppConfig->config_dir(),
-        'ldap.yaml',
-        );
-    return $yaml_file;
-}
-
-sub load {
-    my $class = shift;
-    my $filename = $class->config_filename();
-    return $class->load_from($filename);
-}
-
-sub load_from {
-    my ($class, $file) = @_;
-    my @config = eval { YAML::LoadFile($file) };
-    if ($@) {
-        st_log->error( "ST::LDAP::Config: error reading LDAP config in '$file'; $@" );
-        return;
-    }
-
-    my @objects;
-    foreach my $cfg (@config) {
-        my $obj = $class->new(%{$cfg});
-        unless ($obj) {
-            st_log->error( "ST::LDAP::Config: error with LDAP config in '$file'" );
-            return;
-        }
-        push @objects, $obj;
-    }
-    return wantarray ? @objects : $objects[0];
-}
-
-sub save {
-    my ($class, @objects) = @_;
-    my $filename = $class->config_filename();
-    return $class->save_to( $filename, @objects );
-}
-
-sub save_to {
-    my ($class, $file, @objects) = @_;
-    # save un-blessed versions of the config objects (without the YAML header
-    # that says that they came from ST::LDAP::Config).
-    if ($file) {
-        local $YAML::UseHeader=0;
-        my @unblessed = map { {%{$_}} } @objects;
-        return YAML::DumpFile( $file, @unblessed );
-    }
-    return 0;
 }
 
 sub generate_driver_id {
@@ -132,27 +82,7 @@ Socialtext::LDAP::Config - Configuration object for LDAP connections
 
 =head1 SYNOPSIS
 
-  use Socialtext::LDAP::Config;
-
-  # load LDAP config, from default config filename
-  @cfg_objects  = Socialtext::LDAP::Config->load();
-  $first_config = Socialtext::LDAP::Config->load();
-
-  # load LDAP config from explicit YAML file
-  @cfg_objects  = Socialtext::LDAP::Config->load_from($filename);
-  $first_config = Socialtext::LDAP::Config->load_from($filename);
-
-  # save LDAP config, to default config filename
-  Socialtext::LDAP::Config->save(@cfg_objects);
-
-  # save LDAP config to explicit YAML file
-  Socialtext::LDAP::Config->save_to($filename, @cfg_objects);
-
-  # get path to LDAP configuration file
-  $filename = Socialtext::LDAP::Config->config_filename();
-
-  # instantiate based on config hash
-  $config = Socialtext::LDAP::Config->new(%ldap_configuration);
+  # please refer to Socialtext::Base::Config
 
   # generate a new unique driver ID
   $driver_id = Socialtext::LDAP::Config->generate_driver_id();
@@ -246,46 +176,10 @@ Maps Socialtext user attributes to their underlying LDAP representations.
 
 =over
 
-=item B<Socialtext::LDAP::Config-E<gt>new(%config)>
+=item B<$self-E<gt>init()>
 
-Instantiates a new configuration object based on the provided hash of
-configuration options.
-
-=item B<Socialtext::LDAP::Config-E<gt>config_filename()>
-
-Returns the full path to the LDAP configuration file.
-
-=item B<Socialtext::LDAP::Config-E<gt>load()>
-
-Loads LDAP configuration from the default LDAP configuration file.
-
-Contents of the configuration file are returned in an appropriate context.  In
-list context you get a list of all of the known LDAP configurations (as
-C<Socialtext::LDAP::Config> objects).  In scalar context you get a
-C<Socialtext::LDAP::Config> object for the I<first> LDAP configuration defined
-in the file.
-
-=item B<Socialtext::LDAP::Config-E<gt>load_from($filename)>
-
-Loads LDAP configuration from the specified configuration file.
-
-Contents returned in an appropriate context, as outlined in L<load()> above.
-
-=item B<Socialtext::LDAP::Config-E<gt>save(@objects)>
-
-Saves the given C<Socialtext::LDAP::Config> objects out to the default LDAP
-configuration file.  Any existing configuration present in the file is
-over-written.
-
-Returns true if we're able to save the configuration, false otherwise.
-
-=item B<Socialtext::LDAP::Config-E<gt>save_to($filename, @objects)>
-
-Saves the given C<Socialtext::LDAP::Config> objects out to the specified
-configuration file.  Any existing configuration present in the file is
-over-written.
-
-Returns true if we're able to save the configuration, false otherwise.
+Custom initialization routtine.  Verifies that the configuration contains all
+of the required fields and required mapped attributes.
 
 =item B<Socialtext::LDAP::Config-E<gt>generate_driver_id()>
 
@@ -306,6 +200,7 @@ under the same terms as Perl itself.
 
 =head1 SEE ALSO
 
+L<Socialtext::Config::Base>,
 L<http://www.socialtext.net/open/index.cgi?ldap_configuration_options>.
 
 =cut

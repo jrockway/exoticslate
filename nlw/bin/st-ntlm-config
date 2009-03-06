@@ -40,7 +40,6 @@ pod2usage(1) unless ($command && exists $Commands{$command});
 ###############################################################################
 # Load up the NTLM configuration, taking into consideration that it either
 # might not be present (yet) or might only be partially configured.
-$Socialtext::NTLM::Config::allow_missing = 1;
 my $config = Socialtext::NTLM::Config->load()
           || Socialtext::NTLM::Config->new();
 

@@ -36,7 +36,7 @@ check_required_fields: {
         ok !defined $config, "instantiation, missing '$required' parameter";
 
         is logged_count(), 1, '... logged right number of entries';
-        next_log_like 'warning', qr/missing '$required'/, "... ... missing $required";
+        next_log_like 'error', qr/missing '$required'/, "... ... missing $required";
     }
 }
 
@@ -57,7 +57,7 @@ load_nonexistent_file: {
     ok !defined $config, 'load, missing YAML file';
 
     is logged_count(), 1, '... logged right number of entries';
-    next_log_like 'error', qr/error reading NTLM config/, '... ... error reading config';
+    next_log_like 'error', qr/error reading config/, '... ... error reading config';
 }
 
 ###############################################################################
@@ -75,8 +75,8 @@ load_invalid_yaml: {
     my $config = Socialtext::NTLM::Config->load_from($fh);
     ok !defined $config, 'load, invalid YAML file';
     is logged_count(), 2, '... logged right number of entries';
-    next_log_like 'warning', qr/config missing/, '... ... config missing something';
-    next_log_like 'error', qr/error with NTLM config/, '... ... bad config in file';
+    next_log_like 'error', qr/config missing/, '... ... config missing something';
+    next_log_like 'error', qr/error with config/, '... ... bad config in file';
 }
 
 ###############################################################################

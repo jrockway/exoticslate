@@ -7,7 +7,7 @@ use mocked 'Apache';
 use mocked 'Apache::Cookie';
 use mocked 'Socialtext::Events', qw( event_ok is_event_count );
 
-use Test::Socialtext tests => 41;
+use Test::Socialtext tests => 35;
 use Socialtext::Signal;
 
 fixtures( 'admin_no_pages' );
@@ -100,10 +100,6 @@ edit_summary_signal: {
         event_class => 'page',
         action => 'edit_save',
     );
-    event_ok (
-        event_class => 'signal',
-        action => 'page_edit',
-    );
     is_event_count(0);
 }
 
@@ -129,10 +125,6 @@ long_edit_summary_signal: {
         event_class => 'page',
         action => 'edit_save',
     );
-    event_ok (
-        event_class => 'signal',
-        action => 'page_edit',
-    );
     is_event_count(0);
 }
 
@@ -156,10 +148,6 @@ no_edit_summary_signal: {
         event_class => 'page',
         action => 'edit_save',
     );
-    Socialtext::Events::event_ok (
-        event_class => 'signal',
-        action => 'page_edit',
-    );
     is_event_count(0);
 }
 
@@ -182,6 +170,7 @@ signals_disabled_signal_edit_summary: {
         );
         is_event_count(0);
     };
+    warn $@ if $@;
     ok !$@;
     $user->primary_account->enable_plugin('signals');
 }

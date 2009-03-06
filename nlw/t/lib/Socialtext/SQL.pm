@@ -2,8 +2,8 @@
 package Socialtext::SQL;
 use strict;
 use warnings;
-use Test::More;
 use base 'Exporter';
+use unmocked 'Test::More';
 use unmocked 'Socialtext::Date';
 use unmocked 'Data::Dumper';
 use unmocked 'DateTime::Format::Pg';

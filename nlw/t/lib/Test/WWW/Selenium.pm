@@ -3,7 +3,7 @@ package Test::WWW::Selenium;
 use strict;
 use warnings;
 use base 'Exporter';
-use Test::More;
+use unmocked 'Test::More';
 
 our @EXPORT_OK = '$SEL';
 

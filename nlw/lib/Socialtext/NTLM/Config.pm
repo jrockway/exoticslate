@@ -11,7 +11,7 @@ use Socialtext::Log qw(st_log);
 
 field 'domain';
 field 'primary';
-field 'backup';
+field 'backup' => [];
 
 ###############################################################################
 # Do we allow for missing fields in the config?  Default is to fail on missing
@@ -31,6 +31,11 @@ sub new {
             st_log->warning( "ST::NTLM::Config: NTLM config missing '$field'" );
             return undef;
         }
+    }
+
+    # "backup" should *always* be treated as a list-ref
+    if ($self->{backup} and not ref($self->{backup})) {
+        $self->{backup} = [$self->{backup}];
     }
 
     # return newly created object

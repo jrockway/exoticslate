@@ -477,7 +477,9 @@ QUICK_TESTS = t/Socialtext/People/Directories.t \
 	t/Socialtext/TT2/Renderer.t \
 	t/Socialtext/CredentialsExtractor/Apache.t \
 	t/Socialtext/CredentialsExtractor/Cookie.t \
-	t/Socialtext/CredentialsExtractor/Guest.t
+	t/Socialtext/CredentialsExtractor/Guest.t \
+	t/Socialtext/NTLM/Config.t \
+	t/st-ntlm-config.t
 
 quicktest:
 	$<

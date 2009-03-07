@@ -31,10 +31,7 @@ sub get_resource {
         && (   $acting_user->is_business_admin()
             || $user->username eq $acting_user->username )
         ) {
-        return +{
-            ( hgrep { $k ne 'password' } %{ $user->to_hash } ),
-            accounts => [ map { $_->hash_representation } $user->accounts ],
-        };
+        return +{ hgrep { $k ne 'password' } %{ $user->to_hash } };
     }
     return undef;
 }

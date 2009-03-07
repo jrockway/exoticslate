@@ -20,7 +20,8 @@ sub create_grammar {
         phrases => $phrases,
         filter => sub {
             chomp;
-            s/\n/ /g; # Turn all newlines into spaces
+            die "Message text cannot contain newline:\n>$_<"
+              if /\n/;
         }
     };
 #     $grammar->{b} = {

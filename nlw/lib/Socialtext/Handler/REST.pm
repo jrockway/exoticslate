@@ -59,17 +59,8 @@ sub _webkit_air_unauthorized_handler {
     my $class = shift;
     my $r     = shift;
 
-    if ($r->header_in('Authorization')) {
-        # Special case: Rewrite 401 as 403 to prevent re-authentication.
-        $r->status_line(HTTP_403_Forbidden);
-    }
-    else {
-        # Special case: Make realm a nonce, so the client won't re-use
-        # credentials from its last successful login.
-        $r->status_line(HTTP_401_Unauthorized);
-        $r->header_out('WWW-Authenticate' => 'Basic realm="Socialtext-'.time().'"');
-    }
-
+    # Special case: Rewrite 401 as 403 to prevent re-authentication.
+    $r->status_line(HTTP_403_Forbidden);
     $r->send_http_header;
     return AUTH_REQUIRED;
 }

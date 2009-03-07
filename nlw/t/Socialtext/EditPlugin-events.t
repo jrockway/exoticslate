@@ -8,15 +8,10 @@ use mocked 'Socialtext::Events', qw/event_ok/;
 use mocked 'Socialtext::WeblogPlugin';
 use mocked 'Socialtext::Hub';
 use Socialtext::Attachments;
-use Test::Socialtext tests => 10;
+use Test::More tests => 10;
 
 BEGIN { use_ok 'Socialtext::EditPlugin' }
 
-###############################################################################
-# Fixtures: db
-fixtures(qw( db ));
-
-###############################################################################
 my $hub = Socialtext::Hub->new;
 
 Edit_save_event: {

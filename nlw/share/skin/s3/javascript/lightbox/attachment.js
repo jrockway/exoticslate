@@ -56,9 +56,6 @@ proto.refreshAttachments = function (cb) {
         url: Page.pageUrl() + '/attachments?accept=application/json',
         cache: false,
         dataType: 'json',
-        error: function (XMLHttpRequest, textStatus, errorThrown) {
-            alert(textStatus);
-        },
         success: function (list) {
             $('#st-attachment-listing').html('');
             for (var i=0; i< list.length; i++) {

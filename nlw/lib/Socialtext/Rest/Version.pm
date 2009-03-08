@@ -9,8 +9,8 @@ use Readonly;
 
 # Starting from 1 onward, $API_VERSION should be a simple incrementing integer:
 # 1: iteration-2008-06-27
-# 2: iteration-2009-02-13 (release-3.4)
-# 3: iteration-2009-02-27 (release-3.5)
+# 2: iteration-2009-02-13 (release-3.4.0)
+# 3: iteration-2009-02-27 (release-3.4.1)
 Readonly our $API_VERSION => 3;
 Readonly our $MTIME       => ( stat(__FILE__) )[9];
 

@@ -508,6 +508,13 @@ ul li a.genericBlueButton:hover {
 }
 
 
+ul li.flexButton.disabled a.genericOrangeButton, ul li.flexButton.disabled a.genericOrangeButton:hover {
+        visibility: hidden;
+}
+ul li.flexButton.disabled {
+        background: url(../images/ajax-loader.gif) no-repeat right;
+}
+
 ul li a.genericOrangeButton {
 	display: block;
 	color: #fff;

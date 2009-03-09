@@ -154,20 +154,21 @@ sub _log_page_action {
 
     my $action = $object->hub->action || '';
     return if $object->hub->rest->query->param('clobber')
-        || $action eq 'submit_comment'
-        || $action eq 'attachments_upload';
+        || $action eq 'submit_comment';
 
     if ( $action eq 'edit_content' ||
          $action eq 'rename_page' ) {
          return unless $object->restored || $object->revision_count == 1;
     }
 
-    $action = ($action eq 'delete_page') ? 'DELETE' : 'CREATE';
+    my $log_action = ($action eq 'delete_page') ? 'DELETE' : 'CREATE';
+    $log_action = 'ATTACHMENTS_UPLOAD' if $action eq 'attachments_upload';
+
     my $ws     = $object->hub->current_workspace;
     my $user   = $object->hub->current_user;
     my $page   = $object->hub->pages->current;
 
-    st_log()->info("$action,PAGE,"
+    st_log()->info("$log_action,PAGE,"
                    . 'workspace:' . $ws->name . '(' . $ws->workspace_id . '),'
                    . 'page:' . $page->id . ','
                    . 'user:' . $user->username . '(' . $user->user_id . '),'

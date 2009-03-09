@@ -223,6 +223,15 @@ sub update_from_remote {
             page => $self,
         });
 
+        my $ws = $self->hub->current_workspace;
+
+        st_log->info(
+            'EDIT_CONTENTION,PAGE,edit_contention,'
+            . 'workspace:' . $ws->name . '(' . $ws->workspace_id . '),'
+            . 'user:' . $user->email_address . '(' . $user->user_id . '),'
+            . 'page:' . $self->id
+        );
+
         die "Contention: page has been updated since retrieved\n";
     }
 

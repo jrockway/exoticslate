@@ -11,6 +11,7 @@ use Socialtext::Pages;
 use Socialtext::Exceptions qw( data_validation_error );
 use Socialtext::l10n qw(loc);
 use Socialtext::Events;
+use Socialtext::Log qw(st_log);
 use Socialtext::String;
 
 sub class_id { 'edit' }
@@ -86,11 +87,6 @@ sub edit_content {
     my $append_mode = $self->cgi->append_mode || '';
 
     if ($self->_there_is_an_edit_contention($page, $self->cgi->revision_id)) {
-        Socialtext::Events->Record({
-            event_class => 'page',
-            action => 'edit_contention',
-            page => $page,
-        });
         if ($append_mode eq '') {
             return $self->_edit_contention_screen($page);
         }
@@ -236,6 +232,23 @@ sub save {
 sub _edit_contention_screen {
     my $self = shift;
     my $page = shift;
+
+    # record the event.
+    Socialtext::Events->Record({
+        event_class => 'page',
+        action => 'edit_contention',
+        page => $page,
+    });
+
+    # log it.
+    my $user = $self->hub->current_user;
+    my $ws   = $self->hub->current_workspace;
+    st_log->info(
+        'EDIT_CONTENTION,PAGE,edit_contention,'
+        . 'workspace:' . $ws->name . '(' . $ws->workspace_id . '),'
+        . 'user:' . $user->email_address . '(' . $user->user_id . '),'
+        . 'page:' . $page->id
+    );
 
     $self->screen_template('view/edit_contention');
     return $self->render_screen(

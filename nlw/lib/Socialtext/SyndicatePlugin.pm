@@ -101,7 +101,7 @@ sub syndicate {
         return $self->_syndicate_page_named( $type, $page_name );
     }
     elsif ( $self->cgi->watchlist ) {
-        return $self->_syndicate_watchlist( $type, $self->cgi->watchlist );
+        return $self->_syndicate_watchlist( $type, $self->cgi->watchlist, $count );
     }
     elsif ( $tag ) {
         return $self->_syndicate_tag( $type, $tag, $count );
@@ -174,9 +174,10 @@ sub _syndicate_search {
 }
 
 sub _syndicate_watchlist {
-    my $self = shift;
-    my $type  = shift;
-    my $watchlist  = shift;
+    my $self      = shift;
+    my $type      = shift;
+    my $watchlist = shift;
+    my $count     = shift;
     my $user;
 
     Socialtext::Timer->Continue('_syndicate_watchlist');
@@ -189,7 +190,7 @@ sub _syndicate_watchlist {
     my $feed = $self->_syndicate(
         title => $self->_watchlist_feed_title($user),
         link  => $self->_watchlist_html_link($user),
-        pages => $self->_watchlist_get_items($user),
+        pages => $self->_watchlist_get_items($user, $count),
         type  => $type,
     );
     Socialtext::Timer->Pause('_syndicate_watchlist');
@@ -312,14 +313,17 @@ sub _changes_get_items {
 }
 
 sub _watchlist_get_items {
-    my $self = shift;
-    my $user = shift;
+    my $self  = shift;
+    my $user  = shift;
+    my $count = shift;
+
     Socialtext::Timer->Continue('_watchlist_get_items');
     my $watchlist = Socialtext::Watchlist->new(
         user      => $user,
         workspace => $self->hub->current_workspace
     );
-    my @pages = map { $self->hub->pages->new_page( $_ ) } $watchlist->pages;
+    my @pages = map { $self->hub->pages->new_page( $_ ) } 
+                $watchlist->pages( limit => $count);
     Socialtext::Timer->Pause('_watchlist_get_items');
     return \@pages;
 }

@@ -223,11 +223,12 @@ sub global_template_vars {
     ];
 
     my $cookies = Apache::Cookie->fetch();
+    my $locale = $self->hub->display->preferences->locale;
     my %result = (
         action            => $self->hub->cgi->action,
         pluggable         => $self->hub->pluggable,
         loc               => \&loc,
-        loc_lang          => $self->hub->display->preferences->locale->value,
+        loc_lang          => ($locale ? $locale->value : undef),
         css               => $self->hub->skin->css_info,
         user              => $self->_get_user_info,
         wiki              => $self->_get_wiki_info,

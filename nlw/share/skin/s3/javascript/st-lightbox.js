@@ -34,7 +34,7 @@ ST.Lightbox.prototype = {
         $(self.sel + ' .error').html('');
 
         $(self.sel + ' form').submit(function () {
-            $(self.sel + ' input[type=submit]').attr('disabled', true);
+            $(self.sel + ' a[class~=submit]').parent().addClass('disabled');
 
             var formdata = $(this).serializeArray();
             var new_title = this.new_title.value;
@@ -46,7 +46,7 @@ ST.Lightbox.prototype = {
                 dataType: 'json',
                 async: false,
                 success: function (data) {
-                    $(self.sel + ' input[type=submit]').attr('disabled', false);
+                    $(self.sel + ' a[class~=submit]').parent().removeClass('disabled');
 
                     var error = self.errorString(data, new_title);
                     if (error) {
@@ -65,7 +65,7 @@ ST.Lightbox.prototype = {
                 },
                 error: function (xhr, textStatus, errorThrown) {
                     $(self.sel + ' .error').html(textStatus).show();
-                    $(self.sel + ' input[type=submit]').attr('disabled', false);
+                    $(self.sel + ' a[class~=submit]').parent().removeClass('disabled');
                 }
             });
 
@@ -75,7 +75,7 @@ ST.Lightbox.prototype = {
 
     errorString: function (data, new_title, workspace) {
         if (data.page_exists) {
-            var button = $(this.sel + ' input[type=submit]').val();
+            var button = $(this.sel + ' a[class~=submit]').text();
             return loc(
                 'The new page name you selected, "' + new_title + 
                 '", is already in use.  Please choose a different ' +

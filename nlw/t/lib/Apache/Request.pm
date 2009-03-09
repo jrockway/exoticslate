@@ -24,7 +24,10 @@ sub status           { }
 sub send_http_header { }
 
 sub instance {
-    new(@_);
+    my $class = shift;
+    my $req   = shift;
+    return $req if $req;
+    return $class->new(@_);
 }
 
 sub param {

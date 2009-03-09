@@ -91,16 +91,6 @@ sub search {
             . "num_results:" . $self->result_set->{hits}
             . ',[' . $timer->elapsed . ']');
 
-    use constant PAGE_SIZE => 10;
-    use constant MAX_PAGE_SIZE => 100;
-    my ($offset) = ($self->cgi->offset =~ /^(\d+)$/);
-    $offset ||= 0;
-    my ($limit) = ($self->cgi->limit =~ /^(\d+)$/);
-    $limit ||= PAGE_SIZE;
-    if ($limit > MAX_PAGE_SIZE) {
-        $limit = MAX_PAGE_SIZE;
-    }
-
     $self->display_results(
         $self->sortdir,
         sortby => $self->sortby,

@@ -1139,7 +1139,7 @@ proto.detab_table = function(text) {
 }
 
 proto.enableThis = function() {
-    this.wikiwyg.set_edit_tips_span_display('inline');
+    this.wikiwyg.set_edit_tips_span_display();
 
     Wikiwyg.Mode.prototype.enableThis.call(this);
     this.textarea.style.width = Wikiwyg.is_ie ? '98%' : '99%';
@@ -1182,7 +1182,7 @@ proto.fromHtml = function(html) {
 }
 
 proto.disableThis = function() {
-    this.wikiwyg.set_edit_tips_span_display('none');
+    this.wikiwyg.set_edit_tips_span_display();
     Wikiwyg.Mode.prototype.disableThis.call(this);
 }
 

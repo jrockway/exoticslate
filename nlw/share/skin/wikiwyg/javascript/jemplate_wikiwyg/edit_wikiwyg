@@ -14,6 +14,13 @@
                     <a class="genericOrangeButton" id="st-cancel-button-link" href="#">[% loc('Cancel') %]</a></li>
                 </li>
             </ul>
+
+            <ul class="editModeSwitcher">
+                <li><a href="#" id="st-mode-wysiwyg-button" onclick="return false;">[% loc('Rich Text') %]</a></li>
+                <li><a href="#" id="st-mode-wikitext-button" onclick="return false;">[% loc('Wiki Text') %]</a>
+                    <a href="#" id="st-edit-tips">(?)</a>
+                </li>
+            </ul>
         </div><!-- st-editing-tools-edit END -->
 
         <div id="bootstrap-loader">
@@ -27,9 +34,9 @@
         <div id="controlsRight">
             <ul class="level1">
                 [% IF ui_is_expanded %]
-                <li><a href="#" title="[% loc('Normal View') %]" id="st-edit-pagetools-expand">[% loc('Normal') %]</a></li>
+                <li><a href="#" title="[% loc('Return edit area to normal view') %]" id="st-edit-pagetools-expand">[% loc('Normal') %]</a></li>
                 [% ELSE %]
-                <li><a href="#" title="[% loc('Expanded View') %]" id="st-edit-pagetools-expand">[% loc('Expand') %]</a></li>
+                <li><a href="#" title="[% loc('Expand edit area to fill browser window') %]" id="st-edit-pagetools-expand">[% loc('Expand') %]</a></li>
                 [% END %]
             </ul>
         </div><!-- controlsRight END -->
@@ -38,14 +45,6 @@
         <div id="contentContainer">
 
            <div id="contentTitle">
-                <ul class="editModeSwitcher">
-                    <li><a href="#" id="st-mode-wysiwyg-button" onclick="return false;">[% loc('Rich Text') %]</a></li>
-                    <li><a href="#" id="st-mode-wikitext-button" onclick="return false;">[% loc('Wiki Text') %]</a>
-                        <a href="#" style="display:none" id="st-edit-tips">(?)</a>
-                    </li>
-                </ul>
-
- 
                 [% IF is_new && !is_incipient %]
                     <h2 id="st-editing-title" class="tableTitle">
                         [% loc('Editing:') %]

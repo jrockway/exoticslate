@@ -476,8 +476,12 @@ body#blog div#controls div#st-editing-tools-edit ul#quickLinks li img {
 	margin-right: 5px;
 }
 
-body#contentPage div#controls div#st-editing-tools-edit ul li,body#dashBoard div#controls div#st-editing-tools-edit ul li,body#settingsPage div#controls div#st-editing-tools-edit ul li {
+body#dashBoard div#controls div#st-editing-tools-edit ul li,body#settingsPage div#controls div#st-editing-tools-edit ul li {
 	line-height: 44px;
+}
+
+body#contentPage div#controls div#st-editing-tools-edit ul li {
+	line-height: 22px;
 }
 
 div#controls div#st-editing-tools-edit ul li {

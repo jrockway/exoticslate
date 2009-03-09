@@ -826,9 +826,7 @@ proto.get_wikitext_from_html = function(html) {
     return eval(WW_ADVANCED_MODE).prototype.convert_html_to_wikitext(html, true);
 }
 
-proto.set_edit_tips_span_display = function(display) {
-    jQuery('#st-edit-tips').css('display', display);
-
+proto.set_edit_tips_span_display = function() {
     if (Socialtext.S3) {
         jQuery('#st-edit-tips')
             .unbind('click')
@@ -1185,7 +1183,7 @@ function setup_wikiwyg() {
                 // quite regularly given a high enough latency to the server.
                 setTimeout( function() {
                     jQuery("#st-editing-tools-edit .buttonRight a").show();
-                    ww.set_edit_tips_span_display('none');
+                    ww.set_edit_tips_span_display();
                 }, 2000 );
             }
 

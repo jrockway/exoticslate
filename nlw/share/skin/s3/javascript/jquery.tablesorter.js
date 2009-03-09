@@ -320,7 +320,7 @@
 			};
 						
 		   	function checkCellColSpan(table, rows, row) {
-                var arr = [], r = table.tHead.rows, c = r[row].cells;
+				var arr = [], r = table.tHead.rows, c = r[row].cells;
 				
 				for(var i=0; i < c.length; i++) {
 					var cell = c[i];
@@ -686,7 +686,7 @@
 	
 	// extend plugin scope
 	$.fn.extend({
-        tablesorter: $.tablesorter.construct
+		tablesorter: $.tablesorter.construct
 	});
 	
 	var ts = $.tablesorter;
@@ -813,26 +813,26 @@
 	});
 
 	ts.addParser({
-	    id: "time",
-	    is: function(s) {
-	        return /^(([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(am|pm)))$/.test(s);
-	    },
-	    format: function(s) {
-	        return $.tablesorter.formatFloat(new Date("2000/01/01 " + s).getTime());
-	    },
+		id: "time",
+		is: function(s) {
+			return /^(([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(am|pm)))$/.test(s);
+		},
+		format: function(s) {
+			return $.tablesorter.formatFloat(new Date("2000/01/01 " + s).getTime());
+		},
 	  type: "numeric"
 	});
 	
 	
 	ts.addParser({
-	    id: "metadata",
-	    is: function(s) {
-	        return false;
-	    },
-	    format: function(s,table,cell) {
+		id: "metadata",
+		is: function(s) {
+			return false;
+		},
+		format: function(s,table,cell) {
 			var c = table.config, p = (!c.parserMetadataName) ? 'sortValue' : c.parserMetadataName;
-	        return $(cell).metadata()[p];
-	    },
+			return $(cell).metadata()[p];
+		},
 	  type: "numeric"
 	});
 	
@@ -842,13 +842,13 @@
 		format: function(table) {
 			if(table.config.debug) { var time = new Date(); }
 			$("tr:visible",table.tBodies[0])
-	        .filter(':even')
-	        .removeClass(table.config.widgetZebra.css[1]).addClass(table.config.widgetZebra.css[0])
-	        .end().filter(':odd')
-	        .removeClass(table.config.widgetZebra.css[0]).addClass(table.config.widgetZebra.css[1]);
+			.filter(':even')
+			.removeClass(table.config.widgetZebra.css[1]).addClass(table.config.widgetZebra.css[0])
+			.end().filter(':odd')
+			.removeClass(table.config.widgetZebra.css[0]).addClass(table.config.widgetZebra.css[1]);
 			if(table.config.debug) { $.tablesorter.benchmark("Applying Zebra widget", time); }
 		}
 	});	
 })(jQuery);
 
-/* vim: set noexpandtab shiftwidth=4 tabstop=4 background=light: */
+/* vim: set noexpandtab shiftwidth=4 tabstop=4: */

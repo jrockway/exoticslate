@@ -160,6 +160,33 @@ sub create {
     return $page;
 }
 
+=head2 
+Signal an update for this page 
+
+Requires the user sending the signal, and the text of the edit_summary 
+=cut
+sub signal_edit_summary {
+    my ($self, $user, $edit_summary) = @_;
+    require Socialtext::Signal;
+    my $workspace = $self->hub->current_workspace;
+
+    $edit_summary = Socialtext::String::word_truncate($edit_summary, 140);
+    my $page_link = sprintf "{link: %s [%s]}", $workspace->name, $self->title;
+    my $body = $edit_summary
+        ? loc('"[_1]" (edited [_2] in [_3])', $edit_summary, $page_link, $workspace->title)
+        : loc('wants you to know about an edit of [_1] in [_2]', $page_link, $workspace->title);
+
+    my $signal = Socialtext::Signal->Create(
+        user_id => $user->user_id,
+        body    => $body,
+        account_ids => [ $workspace->account_id ],
+        topic   => {
+            page_id      => $self->id,
+            workspace_id => $workspace->workspace_id,
+        }
+    );
+}
+
 =head2 update_from_remote( %args )
 
 Update or create a page with reasonable defaults for some options.
@@ -253,6 +280,11 @@ sub update_from_remote {
         action => 'edit_save',
         page => $self,
     });
+
+    if ($p{signal_edit_summary} && $user->can_use_plugin('signals')) {
+        $self->signal_edit_summary($user, $edit_summary);
+    };
+    
 }
 
 =head2 update( %args )

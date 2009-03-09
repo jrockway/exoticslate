@@ -262,12 +262,14 @@ sub PUT_json {
     my $object = decode_json( $content );
 
     my $edit_summary = $object->{edit_summary} || '';
+    my $signal_edit_summary = $object->{signal_edit_summary} || '';
 
     $page->update_from_remote(
         content => $object->{content},
         from    => $object->{from},
         date    => $self->make_date_time_date($object->{date}),
         edit_summary => $edit_summary,
+        signal_edit_summary => $signal_edit_summary,
         $object->{tags} ? (tags => $object->{tags}) : (),
     );
 

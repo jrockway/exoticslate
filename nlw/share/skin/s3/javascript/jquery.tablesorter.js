@@ -850,3 +850,5 @@
 		}
 	});	
 })(jQuery);
+
+/* vim: set noexpandtab shiftwidth=4 tabstop=4 background=light: */

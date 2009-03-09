@@ -77,6 +77,14 @@ sub header_in {
     return $self->{$key};
 }
 
+sub header_out {
+    my $self = shift;
+    my $key  = shift;
+    my $val  = shift;
+    $self->{$key} = $val if (defined $val);
+    return $self->{$key};
+}
+
 sub uri { $_[0]->{uri} }
 
 ######

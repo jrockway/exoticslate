@@ -7,6 +7,7 @@ our @EXPORT_OK = qw/get_log_reasons/;
 
 our @LOG_MSGS;
 our %HEADERS;
+our %PARAMS;
 
 sub new {
     my $class = shift;
@@ -24,6 +25,18 @@ sub send_http_header { }
 
 sub instance {
     new(@_);
+}
+
+sub param {
+    my $self  = shift;
+    my $field = lc(shift);
+    if ($field) {
+        if (@_) {
+            $PARAMS{$field} = shift;
+        }
+        return $PARAMS{$field};
+    }
+    return sort keys %PARAMS;
 }
 
 # This is getting so deep

@@ -1,9 +1,10 @@
 # @COPYRIGHT@
-package Socialtext::WikiText::Emitter::Messages::Canonical;
+package Socialtext::WikiText::Emitter::Messages::Canonicalize;
 use strict;
 use warnings;
 
 use base 'WikiText::Receiver';
+use Socialtext::l10n qw/loc/;
 
 sub content {
     my $self = shift;
@@ -26,10 +27,6 @@ sub insert {
     if (not(defined($ast->{wafl_type}))) {
         $output = $ast->{output};
     }
-    elsif ($ast->{wafl_type} eq 'link') {
-        $output = qq{<a href="/$ast->{workspace_id}/index.cgi?$ast->{page_id}">$ast->{text}</a>};
-
-    }
     elsif ($ast->{wafl_type} eq 'user') {
         $output = $self->user_text( $ast );
     }
@@ -45,19 +42,14 @@ sub user_text {
     my $ast  = shift;
 
     my $user_string = $ast->{user_string};
-    my $account_id = $self->{callbacks}{account_id};
     my $user = eval{ Socialtext::User->Resolve( $user_string ) };
+
     if ( $user ) {
-        if ($user->primary_account->account_id == $account_id) {
-            my $username = $user->username;
-            return "{user: $username}";
-        }
-        else {
-            return $user->best_full_name;
-        }
+        my $user_id = $user->user_id;
+        return "{user: $user_id}";
     }
 
-    return "{user: $user_string}";
+    return loc('unknown person');
 }
 
 sub begin_node {

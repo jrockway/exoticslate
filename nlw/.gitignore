@@ -183,3 +183,4 @@ lib/Socialtext/Gadgets/UserAgent.pm
 lib/Socialtext/Rest/Gadgets/GadgetInstance.pm
 t/Socialtext/Rest/Gadgets/GadgetInstance.t
 t/Socialtext/Gadgets/XML-preferences.t
+t/Socialtext/Gadgets/XML-get-timeout.t

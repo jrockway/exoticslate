@@ -30,6 +30,9 @@ sub insert {
     elsif ($ast->{wafl_type} eq 'user') {
         $output = $self->user_text( $ast );
     }
+    elsif ($ast->{wafl_type} eq 'link') {
+        $output = qq/{link $ast->{workspace_id} [$ast->{text}]}/;
+    }
     else {
         $output = qq/{$ast->{wafl_type}: not implemented}/;
     }
@@ -49,7 +52,7 @@ sub user_text {
         return "{user: $user_id}";
     }
 
-    return loc('unknown person');
+    return loc('Unknown Person');
 }
 
 sub begin_node {

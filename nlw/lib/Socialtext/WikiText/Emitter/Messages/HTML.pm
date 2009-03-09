@@ -33,7 +33,7 @@ sub insert {
         $output = $self->user_html($ast);
     }
     else {
-        $output = qq{{$ast->{wafl_type}: not supported yet, fool}};
+        $output = qq{{$ast->{wafl_type}: not supported}};
     }
 
     $self->{output} .= $output;
@@ -60,7 +60,7 @@ sub user_html {
         return $user->guess_real_name;
     }
     else {
-        return '<a href="/?profile=' . $user->user_id 
+        return '<a href="/?profile/' . $user->user_id 
             . '">' . $user->guess_real_name . '</a>';
     }
 }

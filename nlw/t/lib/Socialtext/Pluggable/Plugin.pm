@@ -26,14 +26,28 @@ const read_only => 0; # cannot be disabled/enabled in the control panel
 # perldoc Socialtext::URI for arguments
 #    path = '' & query => {}
 
+my @users;
 sub TestUser {
-    my ($class, $name) = @_;
+    my ($self, $name) = @_;
     my $email = "user.$^T.$name\@ken.socialtext.net";
-    return Socialtext::User->new( username => $email ) ||
-           Socialtext::User->create(
-               email_address => $email,
-               username => $email,
-           );
+    my $user = Socialtext::User->new( username => $email );
+    return $user if $user;
+    $user = Socialtext::User->create(
+       email_address => $email,
+       username => $email,
+    );
+    push @{$self->{_test_users}}, $user;
+    return $user;
+}
+
+sub DESTROY {
+    my $self = shift;
+    if ($self->{_test_users}) {
+        require Test::Socialtext::User;
+        Test::Socialtext::User->delete_recklessly($_)
+            for @{$self->{_test_users}};
+    }
+    return;
 }
 
 sub rest_hooks {}

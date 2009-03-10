@@ -30,6 +30,9 @@ ALTER TABLE ONLY container
         REFERENCES page(workspace_id, page_id)
         ON DELETE CASCADE;
 
+-- This table is no longer used. We just go directly to the YAML file when
+-- adding default gadgets
+DROP TABLE default_gadget;
 
 UPDATE "System"
    SET value = '42'

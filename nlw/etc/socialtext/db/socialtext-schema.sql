@@ -268,16 +268,6 @@ CREATE TABLE container_type (
     last_update timestamptz DEFAULT now() NOT NULL
 );
 
-CREATE TABLE default_gadget (
-    default_gadget_id bigint NOT NULL,
-    container_type text NOT NULL,
-    src text NOT NULL,
-    col integer NOT NULL,
-    "row" integer NOT NULL,
-    fixed boolean DEFAULT false,
-    default_prefs text[]
-);
-
 CREATE SEQUENCE default_gadget_id
     INCREMENT BY 1
     NO MAXVALUE
@@ -628,10 +618,6 @@ ALTER TABLE ONLY container_type
     ADD CONSTRAINT container_type_pk
             PRIMARY KEY (container_type);
 
-ALTER TABLE ONLY default_gadget
-    ADD CONSTRAINT default_gadget_pk
-            PRIMARY KEY (default_gadget_id);
-
 ALTER TABLE ONLY gadget_instance
     ADD CONSTRAINT gadget_instace_pk
             PRIMARY KEY (gadget_instance_id);
@@ -773,9 +759,6 @@ CREATE INDEX ix_container_user_id_type
 
 CREATE INDEX ix_container_workspace_id
 	    ON container (workspace_id);
-
-CREATE INDEX ix_default_gadget__container_type
-	    ON default_gadget (container_type);
 
 CREATE INDEX ix_event_actor_page_contribs
 	    ON event (actor_id, page_workspace_id, page_id, "at")
@@ -985,11 +968,6 @@ ALTER TABLE ONLY container
     ADD CONSTRAINT container_page_id_fk
             FOREIGN KEY (workspace_id, page_id)
             REFERENCES page(workspace_id, page_id) ON DELETE CASCADE;
-
-ALTER TABLE ONLY default_gadget
-    ADD CONSTRAINT container_type_fk
-            FOREIGN KEY (container_type)
-            REFERENCES container_type(container_type) ON DELETE CASCADE;
 
 ALTER TABLE ONLY container
     ADD CONSTRAINT container_type_fk

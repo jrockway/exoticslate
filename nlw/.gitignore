@@ -189,3 +189,9 @@ t/wikitests/apache/
 t/wikitests/apache/http-keep-alive.wiki
 t/Socialtext/Gadgets/XML-preferences.t
 t/Socialtext/Gadgets/XML-get-timeout.t
+t/Socialtext/Gadgets/Container-permissions.t
+t/Socialtext/Gadgets/XML-urls.t
+t/Socialtext/Gadgets/ContainerType.t
+t/Socialtext/Gadgets/Container-pathargs.t
+t/Socialtext/Gadgets/Container-scope.t
+t/Socialtext/Gadgets000.t

@@ -208,13 +208,6 @@ proto.insert_div_before = function(div) {
 }
 
 // Wikiwyg actions - public methods
-proto.editMode = function() { // See IE, below
-    this.current_mode = this.first_mode;
-    this.current_mode.fromHtml(this.div.innerHTML);
-    this.toolbarObject.resetModeSelector();
-    this.current_mode.enableThis();
-}
-
 proto.displayMode = function() {
     for (var i = 0; i < this.config.modeClasses.length; i++) {
         var mode_class = this.config.modeClasses[i];
@@ -849,39 +842,6 @@ proto.editMode = function() {
     this.toolbarObject.resetModeSelector();
     this.current_mode.enableThis();
 }
-
-proto.get_inner_html = function( cb ) {
-    if ( cb ) {
-        this.get_inner_html_async( cb );
-        return;
-    }
-
-    var result = '';
-    try {
-        result = this.get_editable_div().innerHTML;
-    } catch (e) {};
-    return result;
-}
-
-proto.set_inner_html = function(html) {
-    var self = this;
-    var doc = this.get_edit_document();
-    if ( doc.readyState == 'loading' ) {
-        setTimeout( function() {
-            self.set_inner_html(html);
-        }, 500);
-    } else {
-        try { 
-            this.get_editable_div().innerHTML = html;
-        } catch (e) {
-            setTimeout( function() {
-                self.set_inner_html(html);
-            }, 500);
-        }
-    }
-}
-
-
 
 // Class level helper methods
 Wikiwyg.unique_id_base = 0;

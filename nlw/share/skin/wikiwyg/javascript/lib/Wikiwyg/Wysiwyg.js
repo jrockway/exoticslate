@@ -45,9 +45,6 @@ proto.initializeObject = function() {
     this.div = this.edit_iframe;
     this.div.style.width = '99%';
     var self = this;
-    this.get_edit_window().onload = function() {
-        self.is_ready = true;
-    }
 }
 
 proto.toHtml = function(func) {
@@ -627,6 +624,8 @@ proto.enableThis = function() {
 
     var self = this;
     var ready = function() {
+        if (!self.is_ready)
+            self.fromHtml( self.wikiwyg.div.innerHTML );
         if (Wikiwyg.is_gecko) {
             self.get_edit_document().designMode = 'on';
             setTimeout(function() {
@@ -634,8 +633,32 @@ proto.enableThis = function() {
                 self.get_edit_document().execCommand("enableInlineTableEditing", false, false);
             }, 100);
         }
+        else if (Wikiwyg.is_ie) {
+            /* IE needs this to prevent stack overflow when switching modes,
+             * as described in {bz: 1511}.
+             */
+            self._ieSelectionBookmark = null;
 
+            if (jQuery.browser.version <= 6) {
+                /* We take advantage of IE6's overflow:visible bug
+                 * to make the DIV always agree with the dimensions
+                 * of the inner content.  More details here:
+                 *     http://www.quirksmode.org/css/overflow.html
+                 * Note that this must not be applied to IE7+, because
+                 * overflow:visible is implemented correctly there, and
+                 * setting it could trigger a White Screen of Death
+                 * as described in {bz: 1366}.
+                 */
+                jQuery(self.get_editable_div()).css(
+                    'overflow', 'visible'
+                );
+            }
+            self.set_clear_handler();
+        }
+
+        self.set_focus();
         self.enable_keybindings();
+        self.set_key_interception_handler();
         self.set_clear_handler();
 
         jQuery('table.sort', self.get_edit_document())
@@ -649,7 +672,7 @@ proto.enableThis = function() {
     if (self.is_ready)
         ready();
     else
-        jQuery(self.get_edit_window()).bind("load", function() {
+        jQuery(self.get_edit_window()).one("load", function() {
             var doc = self.get_edit_document();
             if (jQuery.browser.msie) {
                 var i = setInterval(function() {
@@ -662,39 +685,6 @@ proto.enableThis = function() {
             }
             ready();
         });
-
-    setTimeout(function() {
-        try {
-            if (Wikiwyg.is_gecko) self.get_edit_window().focus();
-            if (Wikiwyg.is_ie) { 
-                /* IE needs this to prevent stack overflow when switching modes,
-                 * as described in {bz: 1511}.
-                 */
-                self._ieSelectionBookmark = null;
-
-                jQuery(self.get_editable_div()).focus();
-
-                if (jQuery.browser.version <= 6) {
-                    /* We take advantage of IE6's overflow:visible bug
-                     * to make the DIV always agree with the dimensions
-                     * of the inner content.  More details here:
-                     *     http://www.quirksmode.org/css/overflow.html
-                     * Note that this must not be applied to IE7+, because
-                     * overflow:visible is implemented correctly there, and
-                     * setting it could trigger a White Screen of Death
-                     * as described in {bz: 1366}.
-                     */
-                    jQuery(self.get_editable_div()).css(
-                        'overflow', 'visible'
-                    );
-                }
-                self.set_clear_handler();
-            }
-
-            self.set_key_interception_handler();
-        }
-        catch(e) { }
-    }, 1);
 
     if (!this.__toolbar_styling_interval) {
         this.__toolbar_styling_interval = setInterval(
@@ -1722,7 +1712,6 @@ proto.fromHtml = function(html) {
     dom.innerHTML = html;
     this.sanitize_dom(dom);
     this.set_inner_html(dom.innerHTML);
-
     this.setWidgetHandlers();
 }
 
@@ -1885,6 +1874,7 @@ proto.toHtml = function(func) {
 
 proto.setWidgetHandlers = function() {
     var self = this;
+    var win = this.get_edit_window();
     var doc = this.get_edit_document();
 
     // XXX: this setTimeout make several wikiwyg js-test meaningless.. :(
@@ -1901,10 +1891,6 @@ proto.setWidgetHandlers = function() {
 
     if (jQuery.browser.msie)
         this.revert_widget_images();
-
-    var self = this;
-    var win = this.get_edit_window();
-    var doc = this.get_edit_document();
 
     if (jQuery(doc, win).data("mouseup_handler_set")) return;
 

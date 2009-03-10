@@ -38,19 +38,19 @@
 | type_ok | signal-field | She rocks in the treehouse, %%start_time%% |
 | click_ok | post |  |
 | pause | 1000 |  |
-| type_ok | signal-field | Rockin' and a bopin' %%start_time%% |
+| type_ok | signal-field | Rockin and a bopin %%start_time%% |
 | click_ok | post |  |
 | pause | 1000 |  |
 | type_ok | signal-field | All the little birds %%start_time%% |
 | click_ok | post |  |
 | pause | 1000 |  |
-| type_ok | signal-field | Love to hear the robin' going %%start_time%% |
+| type_ok | signal-field | Love to hear the robin going %%start_time%% |
 | click_ok | post |  |
 | pause | 1000 |  |
 | text_like | //body | She rocks in the treehouse, %%start_time%% |
-| text_like | //body | Rockin' and a bopin' %%start_time%% |
+| text_like | //body | Rockin and a bopin %%start_time%% |
 | text_like | //body | All the little birds %%start_time%% |
-| text_like | //body | Love to hear the robin' going %%start_time%% |
+| text_like | //body | Love to hear the robin going %%start_time%% |
 | select-frame | relative=parent |  |
 
 | *Comment* | Test case: Signals Widget. Wait for Signal to appear in Updates |  |
@@ -58,9 +58,9 @@
 | st-name-widget | 4 | profile_updates |
 | st-select-widget-frame | profile_updates |  |
 | wait_for_text_present_ok | She rocks in the treehouse, %%start_time%% | 120000 |
-| wait_for_text_present_ok | Rockin' and a bopin' %%start_time%% | 120000 |
+| wait_for_text_present_ok | Rockin and a bopin %%start_time%% | 120000 |
 | wait_for_text_present_ok | All the little birds %%start_time%% | 120000 |
-| wait_for_text_present_ok | %%short_username%% "Love to hear the robin' going %%start_time%%" | 120000 |
+| wait_for_text_present_ok | %%short_username%% "Love to hear the robin going %%start_time%%" | 120000 |
 
 | *Comment* | Test Case: Signals widget. Wait for automatic refresh in Updates |  |
 | wait_for_text_present_ok | (one minute ago) | 120000 |
@@ -74,9 +74,9 @@
 | st-select-widget-frame | signals_widget |  |
 
 | wait_for_text_present_ok | She rocks in the treehouse, %%start_time%% | 120000 |
-| wait_for_text_present_ok | Rockin' and a bopin' %%start_time%% | 120000 |
+| wait_for_text_present_ok | Rockin and a bopin %%start_time%% | 120000 |
 | wait_for_text_present_ok | All the little birds %%start_time%% | 120000 |
-| wait_for_text_present_ok | Love to hear the robin' going %%start_time%% | 120000 |
+| wait_for_text_present_ok | Love to hear the robin going %%start_time%% | 120000 |
 | wait_for_text_present_ok | 2 minutes ago | 120000 |
 
 | select-frame | relative=parent |  |

@@ -17,7 +17,7 @@ use File::Spec;
 use Readonly;
 use Scalar::Util qw(blessed);
 use YAML;
-use Socialtext::Log 'st_timed_log';
+use Socialtext::Log qw(st_timed_log);
 use Socialtext::Timer;
 use Socialtext::CGI::Scrubbed;
 
@@ -137,23 +137,39 @@ sub log_timings {
     if ( !$status_string || $status_string =~ /^([23]\d{2})\D/ ) {
         $status = $1 if $status_string;
 
+        my $method = $handler->getRequestMethod();
+
         # get the template we matched
-        my $message
-            = $handler->getRequestMethod() . ',' . $path . ',' . $status;
+        my $message = $method . ',' . $path . ',' . $status;
 
         # get the hash which is the keys and values of the :word things
         # in the template path
         my %template_vars = $handler->getTemplateVars($path);
 
-        # get any query string data
-        my $query_string =
-            $handler->request->args
-            ? scalar( $handler->request->args )
-            : '';
+        my $query_string;
+        if ( $method eq 'GET' ) {
+            # get any query string data
+            $query_string =
+                $handler->request->args
+                ? scalar( $handler->request->args )
+                : '';
+        }
+        elsif ( $method eq 'POST' ) {
+            my $query = $handler->query;
+            my @params = $query->param();
+            my @strings = ( scalar @params )
+                ? map {
+                    my $val = $query->param($_);
+                    # 254 is ~ page id size
+                    length($val) > 254 ? () : "$_=$val";
+                } @params
+                : ();
+            $query_string = join ';', @strings;
+        }
 
         my $data = {
             %template_vars,
-            ( $query_string ? (q => $query_string) : () )
+            ( $query_string ? (q => $query_string) : () ),
         };
 
         st_timed_log(

@@ -13,6 +13,7 @@ use Socialtext::Exceptions;
 use Socialtext::TT2::Renderer;
 use Socialtext::l10n qw(loc system_locale);
 use Socialtext::BrowserDetect;
+use Socialtext::Timer;
 
 sub class_id { 'attachments_ui' }
 const class_title => 'Attachments';
@@ -116,12 +117,16 @@ sub attachments_extract {
 sub attachments_upload {
     my $self = shift;
 
+    Socialtext::Timer->Continue('upload_attachments');
+
     my @files = $self->cgi->file;
     my @embeds = $self->cgi->embed unless $self->cgi->editmode;
     my $error = $self->process_attachments_upload(
         files  => \@files,
         embed  => \@embeds,
     );
+
+    Socialtext::Timer->Pause('upload_attachments');
 
     return $self->_finish(
         error => $error,

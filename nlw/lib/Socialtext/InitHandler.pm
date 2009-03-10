@@ -31,7 +31,7 @@ sub handler {
                 _regen_combined_js($r);
             }
             local $Socialtext::System::SILENT_RUN = 1;
-            shell_run '-st-widgets update-all --noremote';
+            shell_run '-st-widgets update-all';
         }
     }
 

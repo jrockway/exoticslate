@@ -87,3 +87,4 @@ else
 fi
 
 st-admin set-workspace-config --workspace admin skin_name s3
+which st-widgets >/dev/null && st-widgets update-gallery

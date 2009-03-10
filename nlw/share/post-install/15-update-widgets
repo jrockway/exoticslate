@@ -3,4 +3,5 @@
 
 if [ -d /usr/share/nlw/plugin/widgets ]; then
     st-widgets update-all --force
+    st-widgets update-gallery
 fi

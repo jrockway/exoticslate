@@ -82,6 +82,8 @@ sub get_dbh {
     $DBH{handle} = DBI->connect($dsn, $params{user}, "",  {
             AutoCommit => 0,
             pg_enable_utf8 => 1,
+            PrintError => 0,
+            RaiseError => 0,
         }) or croak "Could not connect to database with dsn: $dsn: $!";
     $DBH{st_in_transaction} = 0;
     Socialtext::Timer->Pause('get_dbh');
@@ -192,8 +194,8 @@ sub _sql_execute {
         Socialtext::Timer->Continue('sql_prepare');
         $sth = $dbh->prepare($statement);
         Socialtext::Timer->Pause('sql_prepare');
-        $sth->$exec_sub(@$bind) ||
-            die "$exec_sub failed: " . $sth->errstr . "\n";
+        $sth->$exec_sub(@$bind)
+            || die "$exec_sub failed: " . $sth->errstr . "\n";
     };
 
     if (my $err = $@) {

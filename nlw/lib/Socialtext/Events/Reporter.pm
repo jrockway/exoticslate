@@ -181,18 +181,18 @@ sub decorate_event_set {
 }
 
 my $FIELDS = <<'EOSQL';
-    e.at AT TIME ZONE 'UTC' || 'Z' AS at_utc,
-    e.event_class AS event_class,
-    e.action AS action,
-    e.actor_id AS actor_id, 
-    e.person_id AS person_id, 
-    page.page_id as page_id, 
-        page.name AS page_name, 
+    at AT TIME ZONE 'UTC' || 'Z' AS at_utc,
+    event_class AS event_class,
+    action AS action,
+    actor_id AS actor_id,
+    person_id AS person_id,
+    page.page_id as page_id,
+        page.name AS page_name,
         page.page_type AS page_type,
-    w.name AS page_workspace_name, 
+    w.name AS page_workspace_name,
         w.title AS page_workspace_title,
-    e.tag_name AS tag_name,
-    e.context AS context
+    tag_name AS tag_name,
+    context AS context
 EOSQL
 
 my $SIGNAL_VIS_SQL = <<'EOSQL';
@@ -331,25 +331,27 @@ sub _build_standard_sql {
 
     $self->_process_before_after($opts);
 
-    $self->prepend_condition(
-        $I_CAN_USE_THIS_WORKSPACE => $self->viewer->user_id
-    );
-
-    unless ($self->{_skip_visibility}) {
-        $self->add_outer_condition(
-            $VISIBILITY_SQL => ($self->viewer->user_id) x 3
+    unless ($self->{_skip_standard_opts}) {
+        $self->prepend_condition(
+            $I_CAN_USE_THIS_WORKSPACE => $self->viewer->user_id
         );
-    }
 
-    if ($opts->{followed}) {
-        $self->add_condition(
-            $FOLLOWED_PEOPLE_ONLY => ($self->viewer->user_id) x 2
-        );
-    }
+        unless ($self->{_skip_visibility}) {
+            $self->add_outer_condition(
+                $VISIBILITY_SQL => ($self->viewer->user_id) x 3
+            );
+        }
 
-    # filter for contributions-type events
-    $self->add_condition($CONTRIBUTIONS)
-        if $opts->{contributions};
+        if ($opts->{followed}) {
+            $self->add_condition(
+                $FOLLOWED_PEOPLE_ONLY => ($self->viewer->user_id) x 2
+            );
+        }
+
+        # filter for contributions-type events
+        $self->add_condition($CONTRIBUTIONS)
+            if $opts->{contributions};
+    }
 
     $self->_process_field_conditions($opts);
 
@@ -501,64 +503,63 @@ sub get_events_activities {
     return $evs;
 }
 
-my $CONVERSATIONS = <<"EOSQL";
-SELECT $FIELDS
-FROM (
-    SELECT their_contribs.*
-    FROM event their_contribs
-    WHERE event_class = 'page' AND is_page_contribution(action)
-      AND their_contribs.actor_id <> ?
-      AND page_workspace_id IN ( $VISIBLE_WORKSPACES )
-      AND (
-          -- it's in my watchlist
-          EXISTS (
-              SELECT 1
-              FROM "Watchlist" wl
-              WHERE their_contribs.page_workspace_id = wl.workspace_id
-                AND wl.user_id = ?
-                AND their_contribs.page_id = wl.page_text_id::text
-          )
-          OR
-          -- i created it
-          EXISTS (
-              SELECT 1
-              FROM page p
-              WHERE p.workspace_id = their_contribs.page_workspace_id
-                AND p.page_id = their_contribs.page_id
-                AND p.creator_id = ?
-          )
-          OR
-          -- they contributed to it after i did
-          EXISTS (
-              SELECT 1
-              FROM event my_contribs
-              WHERE my_contribs.event_class = 'page' 
-                AND is_page_contribution(my_contribs.action)
-                AND my_contribs.actor_id = ?
-                AND my_contribs.page_workspace_id 
-                      = their_contribs.page_workspace_id
-                AND my_contribs.page_id = their_contribs.page_id
-                AND my_contribs.at < their_contribs.at
-          )
+my $CONVERSATIONS_WHERE = <<"EOSQL";
+  event_class = 'page'
+  AND is_page_contribution(action)
+  AND e.actor_id <> ?
+  AND page_workspace_id IN ( $VISIBLE_WORKSPACES )
+  AND (
+      -- it's in my watchlist
+      EXISTS (
+          SELECT 1
+          FROM "Watchlist" wl
+          WHERE e.page_workspace_id = wl.workspace_id
+            AND wl.user_id = ?
+            AND e.page_id = wl.page_text_id::text
       )
-    ORDER BY their_contribs.at DESC 
-    [% limit_and_offset %]
-) e
-LEFT JOIN page ON (e.page_workspace_id = page.workspace_id AND 
-                   e.page_id = page.page_id)
-LEFT JOIN "Workspace" w ON (e.page_workspace_id = w.workspace_id)
+      OR
+      -- i created it
+      EXISTS (
+          SELECT 1
+          FROM page p
+          WHERE p.workspace_id = e.page_workspace_id
+            AND p.page_id = e.page_id
+            AND p.creator_id = ?
+      )
+      OR
+      -- they contributed to it after i did
+      EXISTS (
+          SELECT 1
+          FROM event my_contribs
+          WHERE my_contribs.event_class = 'page'
+            AND is_page_contribution(my_contribs.action)
+            AND my_contribs.actor_id = ?
+            AND my_contribs.page_workspace_id
+                  = e.page_workspace_id
+            AND my_contribs.page_id = e.page_id
+            AND my_contribs.at < e.at
+      )
+  )
 EOSQL
 
 sub _build_convos_sql {
     my $self = shift;
     my $opts = shift;
 
-    my $sql = $CONVERSATIONS;
+    # filter the options to a subset of what's usually allowed
+    my %filtered_opts = map {
+        exists($opts->{$_}) ? ($_ => $opts->{$_}) : ()
+    } qw(
+       action actor_id page_workspace_id page_id tag_name
+       before after limit count offset
+    );
+    delete $filtered_opts{actor_id}
+        unless defined $filtered_opts{actor_id};
 
-    my ($limit_stmt, @limit_args) = $self->_limit_and_offset($opts);
-    $sql =~ s/\[\% limit_and_offset \%\]/$limit_stmt/;
+    local $self->{_skip_standard_opts} = 1;
+    $self->prepend_condition($CONVERSATIONS_WHERE, ($opts->{user_id}) x 5);
 
-    return $sql, [($opts->{user_id}) x 5, @limit_args];
+    return $self->_build_standard_sql(\%filtered_opts);
 }
 
 sub get_events_conversations {

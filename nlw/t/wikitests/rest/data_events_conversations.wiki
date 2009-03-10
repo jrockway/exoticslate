@@ -251,6 +251,39 @@ They are also demonstrating that the events are sorted in reverse by time.
 | body-like       | "tk":"209"                                             |
 | body-like       | "tk":"208"                                             |
 
+The `before` and `after` clauses work.
+
+| comment        | get a single event, extract it's timestamp |        |
+| http-user-pass | %%user_c%%                                 | qwerty |
+
+| get              | /data/events/conversations/%%user_c%%?limit=1 | application/json |
+| code-is          | 200            |                  |
+| json-parse       |                |                  |
+| json-array-size  | 1              |                  |
+| set-from-content | first_event_at | qr/"at":"([^"]+)"/ |
+
+| comment | get the second event so we can query "before" that time | |
+| get              | /data/events/conversations/%%user_c%%?limit=1;offset=1 | application/json |
+| code-is          | 200            |                  |
+| json-parse       |                |                  |
+| json-array-size  | 1              |                  |
+| set-from-content | second_event_at | qr/"at":"([^"]+)"/ |
+
+| comment         | get the first event before the latest one                               |                  |
+| get             | /data/events/conversations/%%user_c%%?before=%%first_event_at%%;limit=1 | application/json |
+| code-is         | 200                                                                     |                  |
+| json-parse      |                                                                         |                  |
+| json-array-size | 1                                                                       |                  |
+| body-unlike     | %%first_event_at%%                                                      |                  |
+| body-like       | %%second_event_at%%                                                     |                  |
+
+| comment         | get the events after the second one                             |                  |
+| get             | /data/events/conversations/%%user_c%%?after=%%second_event_at%% | application/json |
+| code-is         | 200                                                             |                  |
+| json-parse      |                                                                 |                  |
+| json-array-size | 1                                                               |                  |
+| body-like       | %%first_event_at%%                                              |                  |
+| body-unlike     | %%second_event_at%%                                             |                  |
 
 | comment | create 50 more events that user_c will see |
 | http-user-pass | %%user_a%% | qwerty |
@@ -304,28 +337,30 @@ They are also demonstrating that the events are sorted in reverse by time.
 | post-json | /data/events | {"context":{"tk":"447"},"page":{"id":"x01", "workspace_name":"%%ws%%"},"action":"edit_save","event_class":"page"} |
 | post-json | /data/events | {"context":{"tk":"448"},"page":{"id":"x01", "workspace_name":"%%ws%%"},"action":"edit_save","event_class":"page"} |
 | post-json | /data/events | {"context":{"tk":"449"},"page":{"id":"x01", "workspace_name":"%%ws%%"},"action":"edit_save","event_class":"page"} |
+| post-json | /data/events | {"context":{"tk":"450"},"person":{"id":"1"},"action":"edit_save","event_class":"person"} |
 | code-is | 201 |  |
 
 | http-user-pass | %%user_c%% | qwerty |
 
-| comment         | check that the default limit is 25    |
-| get              | /data/events/conversations/%%user_c%% | application/json |
-| code-is         | 200                                   |
-| json-parse      |                                       |
-| json-array-size | 25                                    |
+| comment         | check that the default limit is 25    |                  |
+| get             | /data/events/conversations/%%user_c%% | application/json |
+| code-is         | 200                                   |                  |
+| json-parse      |                                       |                  |
+| json-array-size | 25                                    |                  |
+| body-unlike     | "tk":"450"                            |                  |
 
-| comment         | nonsense arguments are the default                         |
-| get              | /data/events/conversations/%%user_c%%?limit=-9;offset=carl | application/json |
-| code-is         | 200                                                        |
-| json-parse      |                                                            |
-| json-array-size | 25                                                         |
+| comment         | nonsense arguments are the default                         |                  |
+| get             | /data/events/conversations/%%user_c%%?limit=-9;offset=carl | application/json |
+| code-is         | 200                                                        |                  |
+| json-parse      |                                                            |                  |
+| json-array-size | 25                                                         |                  |
 
-| comment         | check that we can go up to at least 50         |
-| get              | /data/events/conversations/%%user_c%%?limit=50 | application/json |
-| code-is         | 200                                            |
-| json-parse      |                                                |
-| json-array-size | 50                                             |
-| body-unlike     | qr/"tk":"[12]/                                 |
+| comment         | check that we can go up to at least 50         |                  |
+| get             | /data/events/conversations/%%user_c%%?limit=50 | application/json |
+| code-is         | 200                                            |                  |
+| json-parse      |                                                |                  |
+| json-array-size | 50                                             |                  |
+| body-unlike     | qr/"tk":"[12]/                                 |                  |
 
 | comment         | check that we can "page" the rest                        |
 | get              | /data/events/conversations/%%user_c%%?offset=50;limit=50 | application/json |
@@ -337,3 +372,4 @@ They are also demonstrating that the events are sorted in reverse by time.
 | comment | check that we can't access another user's conversations |
 | get              | /data/events/conversations/%%user_b%% | application/json |
 | code-is         | 403                                   |
+

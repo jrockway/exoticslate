@@ -55,12 +55,12 @@ sub prepend_outer_condition {
 }
 
 our @QueryOrder = qw(
-    event_class 
-    action 
-    actor_id 
-    person_id 
-    page_workspace_id 
-    page_id 
+    event_class
+    action
+    actor_id
+    person_id
+    page_workspace_id
+    page_id
     tag_name
 );
 
@@ -125,7 +125,7 @@ sub _extract_page {
     };
 
     if ($page->{workspace_name} && $page->{id}) {
-        $page->{uri} = 
+        $page->{uri} =
             "/data/workspaces/$page->{workspace_name}/pages/$page->{id}";
     }
 
@@ -169,9 +169,9 @@ sub decorate_event_set {
         $self->_expand_context($row);
         $self->_extract_signal($row);
 
-        delete $row->{person} 
+        delete $row->{person}
             if (!defined($row->{person}) and $row->{event_class} ne 'person');
-        
+
         $row->{at} = delete $row->{at_utc};
 
         push @$result, $row;
@@ -197,8 +197,8 @@ EOSQL
 
 my $SIGNAL_VIS_SQL = <<'EOSQL';
      AND account_id IN (
-        SELECT account_id 
-        FROM signal_account sa 
+        SELECT account_id
+        FROM signal_account sa
         WHERE sa.signal_id = signal_id
     )
 EOSQL
@@ -236,7 +236,7 @@ my $VISIBILITY_SQL = join "\n",
     ')';
 
 my $VISIBLE_WORKSPACES = <<'EOSQL';
-    SELECT workspace_id FROM "UserWorkspaceRole" WHERE user_id = ? 
+    SELECT workspace_id FROM "UserWorkspaceRole" WHERE user_id = ?
     UNION ALL
     SELECT workspace_id
     FROM "WorkspaceRolePermission" wrp
@@ -246,30 +246,30 @@ my $VISIBLE_WORKSPACES = <<'EOSQL';
 EOSQL
 
 my $I_CAN_USE_THIS_WORKSPACE = <<"EOSQL";
-    page_workspace_id IS NULL OR 
+    page_workspace_id IS NULL OR
     page_workspace_id IN ( $VISIBLE_WORKSPACES )
 EOSQL
 
 my $FOLLOWED_PEOPLE_ONLY = <<'EOSQL';
-(  
+(
    (actor_id IN (
-        SELECT person_id2 
-        FROM person_watched_people__person 
+        SELECT person_id2
+        FROM person_watched_people__person
         WHERE person_id1=?))
    OR
    (person_id IN (
-        SELECT person_id2 
-        FROM person_watched_people__person 
+        SELECT person_id2
+        FROM person_watched_people__person
         WHERE person_id1=?))
 )
 EOSQL
 
 my $CONTRIBUTIONS = <<'EOSQL';
-    (event_class = 'person' AND is_profile_contribution(action)) 
+    (event_class = 'person' AND is_profile_contribution(action))
     OR
     (event_class = 'page' AND is_page_contribution(action))
     OR
-    (event_class = 'signal') 
+    (event_class = 'signal')
 EOSQL
 
 sub _process_before_after {
@@ -357,9 +357,9 @@ sub _build_standard_sql {
 
     my ($limit_stmt, @limit_args) = $self->_limit_and_offset($opts);
 
-    my $where = join("\n  AND ", 
+    my $where = join("\n  AND ",
                      map {"($_)"} ('1=1',@{$self->{_conditions}}));
-    my $outer_where = join("\n  AND ", 
+    my $outer_where = join("\n  AND ",
                            map {"($_)"} ('1=1',@{$self->{_outer_conditions}}));
 
     (my $fields = $FIELDS) =~ s/\be\.//sg;
@@ -368,7 +368,7 @@ sub _build_standard_sql {
 SELECT $fields FROM (
     SELECT evt.* FROM (
         SELECT e.*
-        FROM event e 
+        FROM event e
         WHERE $where
         ORDER BY at DESC
     ) evt
@@ -376,7 +376,7 @@ SELECT $fields FROM (
     $outer_where
     $limit_stmt
 ) outer_e
-LEFT JOIN page ON (outer_e.page_workspace_id = page.workspace_id AND 
+LEFT JOIN page ON (outer_e.page_workspace_id = page.workspace_id AND
                    outer_e.page_id = page.page_id)
 LEFT JOIN "Workspace" w ON (outer_e.page_workspace_id = w.workspace_id)
 
@@ -406,8 +406,8 @@ sub get_events {
     my $self   = shift;
     my $opts = ref($_[0]) eq 'HASH' ? $_[0] : {@_};
 
-    if ($opts->{event_class} && !(ref $opts->{event_class}) && 
-        $opts->{event_class} eq 'page' && $opts->{contributions}) 
+    if ($opts->{event_class} && !(ref $opts->{event_class}) &&
+        $opts->{event_class} eq 'page' && $opts->{contributions})
     {
         warn "getting page contribs";
         return $self->get_events_page_contribs($opts);
@@ -426,7 +426,7 @@ sub get_events_page_contribs {
     local $self->{_skip_visibility} = 1;
     my ($sql, $args) = $self->_build_standard_sql($opts);
 
-    my %opts_slice = map { $_ => $opts->{$_} } 
+    my %opts_slice = map { $_ => $opts->{$_} }
         qw(limit count offset before after followed);
 
     Socialtext::Timer->Continue('get_page_contribs');
@@ -467,26 +467,26 @@ sub get_events_activities {
 
     if ($classes{page}) {
         push @conditions, q{
-            event_class = 'page' 
-            AND is_page_contribution(action) 
+            event_class = 'page'
+            AND is_page_contribution(action)
             AND actor_id = ?
         };
         $user_ids++;
     }
-    
+
     if ($classes{person}) {
         push @conditions, q{
             -- target ix_event_person_contribs_actor
-            (event_class = 'person' AND is_profile_contribution(action) 
+            (event_class = 'person' AND is_profile_contribution(action)
                 AND actor_id = ?)
             OR
             -- target ix_event_person_contribs_person
-            (event_class = 'person' AND is_profile_contribution(action) 
+            (event_class = 'person' AND is_profile_contribution(action)
                 AND person_id = ?)
         };
         $user_ids += 2;
     }
-    
+
     if ($classes{signal}) {
         push @conditions, q{
             event_class = 'signal' AND actor_id = ?

@@ -480,7 +480,8 @@ QUICK_TESTS = t/Socialtext/People/Directories.t \
 	t/Socialtext/CredentialsExtractor/Guest.t \
 	t/Socialtext/NTLM/Config.t \
 	t/st-ntlm-config.t \
-	t/Socialtext/Config/Base.t
+	t/Socialtext/Config/Base.t \
+	t/Socialtext/Handler/Redirect.t
 
 quicktest:
 	$<

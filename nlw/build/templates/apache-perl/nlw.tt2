@@ -71,6 +71,13 @@
     [% simple_handler( '/',      'Socialtext::Handler::REST' ) %]
     [% simple_handler( '/nlw', 'Socialtext::Handler::Authen' ) %]
 
+    <Location /nlw/ntlm>
+        SetHandler          perl-script
+        PerlHandler         +Socialtext::Handler::Redirect
+        PerlAuthenHandler   +Socialtext::Apache::Authen::NTLM
+        Require             valid-user
+    </Location>
+
 [% IF not config.socialtext_open %]
     <Location /nlw/control>
         SetHandler  perl-script

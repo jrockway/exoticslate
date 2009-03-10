@@ -367,6 +367,9 @@ test:
 	$<
 	$(PROVE) -l $(shell find t -name '*.t' -not -regex '^t/live.*' | sort)
 
+testplugin-%:
+	$(PROVE) -l $(shell cd share/plugin/$(@:testplugin-%=%) && find t -name '*.t' -not -regex '^t/live.*' | sort)
+
 testlive:
 	$(PROVE) -l -r t/live
 

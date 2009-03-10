@@ -10,6 +10,7 @@
 Algorithm::Diff::XS: 0
 # The change in 0.8902 to not use UNIVERSAL::isa exposed a bug in the
 # handling of an attempt to load a row which doesn't exist in the DBMS.
+Apache::AuthenNTLM: 2.10
 Apache::Constants: 1.09
 Apache::Request: 1.33
 Apache::Session: 1.81

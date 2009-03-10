@@ -57,12 +57,18 @@ sub remove_page {
 }
 
 sub pages {
-    my ( $self, %p ) = @_;
+    my $self = shift;
+    my %p    = @_;
 
-    my $sth = sql_execute(
-        'SELECT page_text_id FROM "Watchlist"'
-        . ' WHERE user_id=? AND workspace_id=?'
-        . ' LIMIT ?',
+    my $sth = sql_execute( <<EOT,
+SELECT page_text_id 
+    FROM "Watchlist" w
+        LEFT JOIN page p ON (w.workspace_id = p.workspace_id 
+                        AND w.page_text_id = p.page_id)
+    WHERE w.user_id = ? AND w.workspace_id = ?
+    ORDER BY p.last_edit_time DESC
+    LIMIT ?
+EOT
         $self->{user_id}, $self->{workspace_id}, $p{limit} );
 
     return map { $_->[0] } @{ $sth->fetchall_arrayref };

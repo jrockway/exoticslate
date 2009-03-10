@@ -188,3 +188,4 @@ lib/Socialtext/Pluggable/Plugin/ApacheTest.pm
 t/wikitests/apache/
 t/wikitests/apache/http-keep-alive.wiki
 t/Socialtext/Gadgets/XML-preferences.t
+t/Socialtext/Gadgets/XML-get-timeout.t

@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 8;
+use Test::Socialtext tests => 11;
 fixtures( 'admin' );
 
 use Socialtext::User;
@@ -41,10 +41,14 @@ ok( $watchlist->has_page( page => $page ),
     'Admin Wiki is now in the watchlist' );
 
 $watchlist->add_page( page => $other_page );
+ok( $watchlist->has_page( page => $other_page ),
+    '$other_page is now in the watchlist' );
 
 # Watchlist: admin_wiki, help
 @list = $watchlist->pages;
 ok( ( grep /admin_wiki/, @list ), 'Admin wiki is still in the watchlist' );
+@list = $watchlist->pages(limit => 2);
+ok( ( grep /admin_wiki/, @list ), 'Admin wiki is still in the watchlist with limit' );
 
 $watchlist->remove_page( page => $page );
 
@@ -54,3 +58,5 @@ ok( !$watchlist->has_page( page=> $page),
 
 @list = $watchlist->pages;
 ok( ( grep /help/, @list ), 'Help is still in the watchlist' );
+@list = $watchlist->pages(limit => 1);
+ok( ( grep /help/, @list ), 'Help is still in the watchlist with limit' );

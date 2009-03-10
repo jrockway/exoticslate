@@ -140,7 +140,7 @@ proto.onTargetLoad = function (iframe) {
 
     $('#st-attachments-attach-uploadmessage').html(loc('Upload Complete'));
     $('#st-attachments-attach-filename').attr('disabled', false).val('');
-    $('#st-attachments-attach-closebutton').attr('disabled', false);
+    $('#st-attachments-attach-closebutton').removeClass('disabled');
 
     this.refreshAttachments(function (list) {
         // Add the freshly-uploaded file to the
@@ -197,7 +197,7 @@ proto.onChangeFilename = function () {
         .one('load', function () { self.onTargetLoad(this) });
 
     $('#st-attachments-attach-form').submit();
-    $('#st-attachments-attach-closebutton').attr('disabled', true);
+    $('#st-attachments-attach-closebutton').addClass('disabled');
     $(this).attr('disabled', true);
 }
 

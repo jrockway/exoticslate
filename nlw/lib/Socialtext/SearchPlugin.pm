@@ -32,10 +32,6 @@ const sortdir => {
 field 'category_search';
 field 'title_search';
 
-# Per object (request) cache mapping a workspace name to a 
-# Workspace object;
-field '_workspace_cache' => {};
-
 =head1 DESCRIPTION
 
 This module acts as an adaptor between the Socialtext::Query::Plugin and associated
@@ -90,16 +86,6 @@ sub search {
         ->info( "SEARCH,WORKSPACE,term:'$search_term',"
             . "num_results:" . $self->result_set->{hits}
             . ',[' . $timer->elapsed . ']');
-
-    use constant PAGE_SIZE => 10;
-    use constant MAX_PAGE_SIZE => 100;
-    my ($offset) = ($self->cgi->offset =~ /^(\d+)$/);
-    $offset ||= 0;
-    my ($limit) = ($self->cgi->limit =~ /^(\d+)$/);
-    $limit ||= PAGE_SIZE;
-    if ($limit > MAX_PAGE_SIZE) {
-        $limit = MAX_PAGE_SIZE;
-    }
 
     $self->display_results(
         $self->sortdir,
@@ -250,133 +236,6 @@ sub _new_search {
     Socialtext::Timer->Pause('hitrows');
 
     return @results;
-}
-
-# Fetch pages in the bulk per workspace for search results
-# We'll stick the pageref in the hit object for later
-sub _load_pages_for_hits {
-    my $self = shift;
-    my $hits = shift;
-    
-    my %pages;
-    for my $hit (@$hits) {
-        push @{$pages{$hit->workspace_name}{$hit->page_uri}}, $hit;
-    }
-    for my $workspace_name (keys %pages) {
-        my ($workspace, $hit_hub)
-            = $self->_load_hit_workspace_and_hub($workspace_name);
-        my $wksp_pages = $pages{$workspace_name};
-        my $pages = [];
-        eval {
-            $pages = Socialtext::Model::Pages->By_id(
-                hub              => $hit_hub,
-                workspace_id     => $workspace->workspace_id,
-                page_id          => [ keys %$wksp_pages ],
-                do_not_need_tags => 1,
-            );
-        };
-        warn $@ if $@;
-        $pages = [$pages] unless (ref($pages) || '') eq 'ARRAY';
-
-        for my $page (@$pages) {
-            my $page_hits = $wksp_pages->{$page->id};
-            for my $hit (@$page_hits) {
-                $hit->{page} = $page;
-            }
-        }
-    }
-}
-
-sub _load_hit_workspace_and_hub {
-    my $self = shift;
-    my $workspace_name  = shift;
-
-    if (my $hit = $self->_workspace_cache->{$workspace_name}) {
-        return ($hit->{workspace}, $hit->{hub});
-    }
-
-    # Establish the proper hub for the hit
-    my $hub = $self->hub;
-    my $workspace;
-    eval { $workspace = Socialtext::Workspace->new(name => $workspace_name) };
-    if ( $workspace->name ne $hub->current_workspace->name ) {
-        my $main = Socialtext->new();
-        $main->load_hub(
-            current_user      => $hub->current_user,
-            current_workspace => $workspace
-        );
-        $main->hub->registry->load;
-        $hub = $main->hub;
-    }
-
-    # Seed the cache for next time
-    $self->_workspace_cache->{$workspace_name} = {
-        workspace => $workspace,
-        hub       => $hub,
-    };
-    return ($workspace, $hub);
-}
-
-sub _make_row {
-    my ( $self, $hit ) = @_;
-
-    my ($workspace, $hit_hub)
-        = $self->_load_hit_workspace_and_hub($hit->workspace_name);
-
-    my $page_uri = $hit->page_uri;
-    my $page;
-    eval {
-        $page = $hit->{page} || Socialtext::Model::Pages->By_id(
-            hub          => $hit_hub,
-            workspace_id => $workspace->workspace_id,
-            page_id      => $page_uri,
-        );
-    };
-    return {} if !$page or $page->deleted;
-
-    my $author = $page->last_edited_by;
-    my $document_title = $page->title;
-    my $date = $page->last_edit_time;
-    my $date_local = $page->datetime_for_user;
-    my $snippet = $hit->snippet || $page->summary;
-    my $id = $page->id;
-    my $attachment;
-    if ( $hit->isa('Socialtext::Search::AttachmentHit') ) {
-        my $attachment_id = $hit->attachment_id;
-        $attachment = $hit_hub->attachments->new_attachment(
-            id      => $attachment_id,
-            page_id => $page_uri,
-        )->load();
-
-        return {} if $attachment->deleted;
-        $snippet = $hit->snippet || $attachment->preview_text;
-        $document_title = $attachment->{filename};
-        $date = $attachment->{Date};
-        $date_local = $self->hub->timezone->date_local( $date );
-        $id = $attachment->id;
-        $author = $attachment->uploaded_by;
-    }
-
-    return +{
-        Relevance           => $hit->hit->{score},
-        Date                => $date,
-        Revision            => $page->current_revision_num,
-        Summary             => $snippet,
-        document_title      => $document_title,
-        Subject             => $page->title,
-        DateLocal           => $date_local,
-        revision_count      => $page->revision_count,
-        page_uri            => $page->uri,
-        page_id             => $page->id,
-        id                  => $id,
-        username            => $author->username,
-        Workspace           => $workspace->title,
-        workspace_name      => $workspace->name,
-        workspace_title     => $workspace->title,
-        is_attachment       => $hit->isa('Socialtext::Search::AttachmentHit'),
-        is_spreadsheet      => $page->is_spreadsheet,
-        edit_summary        => $page->edit_summary,
-    };
 }
 
 sub get_result_set {

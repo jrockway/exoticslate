@@ -1020,7 +1020,11 @@ div#contentColumns div#contentLeft em {
 }
 
 div#contentColumns div#contentLeft .wiki em {
-        color: #0A94DF;
+	font-size: inherit;
+	color: inherit;
+	line-height: inherit;
+	margin-top: inherit;
+	font-style: italic;
 }
 
 div#contentColumns div#contentLeft p strong {

@@ -3,7 +3,7 @@ package Socialtext::SyndicatePlugin;
 use strict;
 use warnings;
 
-use base 'Socialtext::Plugin';
+use base 'Socialtext::Query::Plugin';
 
 use Class::Field qw( const );
 use Socialtext::AppConfig;
@@ -95,7 +95,7 @@ sub syndicate {
     my $tag = $self->cgi->tag_or_category;
     $tag = '' if $tag and lc($tag) eq lc($self->default_tag);
     if ( my $search = $self->cgi->search_term ) {
-        return $self->_syndicate_search( $type, $search );
+        return $self->_syndicate_search( $type, $search, $count );
     }
     elsif ( my $page_name = $self->cgi->page ) {
         return $self->_syndicate_page_named( $type, $page_name );
@@ -158,15 +158,16 @@ sub syndication_depth {
 }
 
 sub _syndicate_search {
-    my $self = shift;
+    my $self  = shift;
     my $type  = shift;
     my $query = shift;
+    my $count = shift;
 
     Socialtext::Timer->Continue('_syndicate_search');
     my $feed = $self->_syndicate(
         title => $self->_search_feed_title($query),
         link  => $self->_search_html_link($query),
-        pages => $self->_search_get_items($query),
+        pages => $self->_search_get_items($query, $count),
         type  => $type,
     );
     Socialtext::Timer->Pause('_syndicate_search');
@@ -329,19 +330,32 @@ sub _watchlist_get_items {
 }
 
 sub _search_get_items {
-    my $self = shift;
+    my $self  = shift;
     my $query = shift;
+    my $count = shift;
 
     Socialtext::Timer->Continue('_search_get_items');
-    my @pages = map { $self->hub->pages->new_page( $_->page_uri ) }
-        grep { $_->isa('Socialtext::Search::PageHit') }
-        search_on_behalf(
-            $self->hub->current_workspace->name,
-            $query,
-            undef, # undefined scope
-            $self->hub->current_user,
-            sub { },   # FIXME: swallowing this error for now
-            sub { } ); # FIXME: swallowing this error for now
+    my @hits = grep { $_->isa('Socialtext::Search::PageHit') }
+                    search_on_behalf(
+                        $self->hub->current_workspace->name,
+                        $query,
+                        undef, # undefined scope
+                        $self->hub->current_user,
+                        sub { },   # FIXME: swallowing this error for now
+                        sub { } ); # FIXME: swallowing this error for now
+    eval { $self->_load_pages_for_hits(\@hits) };
+    warn $@ if $@;
+    $self->new_result_set();
+    for my $hit (@hits) {
+        my $row = $self->_make_row($hit);
+        push @{$self->result_set->{rows}}, $row;
+    }
+
+    Socialtext::Timer->Continue('_search_get_items_sort');
+    my $sorted = $self->sorted_result_set($self->hub->search->sortdir, $count);
+    my @pages = map { $self->hub->pages->new_page($_->{page_uri}) }
+                @{ $sorted->{rows} };
+    Socialtext::Timer->Pause('_search_get_items_sort');
     Socialtext::Timer->Pause('_search_get_items');
 
     return \@pages;
@@ -437,6 +451,8 @@ cgi 'type';
 cgi 'page';
 cgi 'watchlist';
 cgi 'count';
+cgi 'sortby';
+cgi 'direction';
 
 sub tag_or_category {
     my $self = shift;

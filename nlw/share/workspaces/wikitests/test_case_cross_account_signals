@@ -1,0 +1,159 @@
+Ken is saving this in case it might be useful in the future. There are wikiDtests for cross-network signalling.
+
+^ END
+
+| *Comment* | STARTING Test case: Multiple Account Signals |  |
+
+* Fixture: SocialWidgets
+
+user A and B share account P (or WS P in account P) (primary)
+user A and B share WS S in account S (secondary)
+
+| set | p_acc | P-%%start_time%% |
+| set | p_ws | P-%%start_time%% |
+| set | s_acc | S-%%start_time%% |
+| set | s_ws | S-%%start_time%% |
+
+| set | a_user | `A-%%start_time%%@ken.socialtext.net` |
+| set | b_user | `B-%%start_time%%@ken.socialtext.net` |
+
+| *Comment* | Test case: Multiple Account Signals. Create acct, user, ws, add members |  |
+| st-admin | create-account --name %%p_acc%% | was created |
+| st-admin | create-account --name %%s_acc%% | was created |
+| st-admin | create-workspace --n %%p_ws%% --t %%p_ws%% --account %%p_acc%% | was created |
+| st-admin | create-workspace --n %%s_ws%% --t %%s_ws%% --account %%s_acc%% | was created |
+| st-admin | enable-plugin --all-accounts --p dashboard |  |
+| st-admin | enable-plugin --all-accounts --p signals |  |
+
+Shared primary account
+
+| set | add_cmd | `set-user-account --account %%p_acc%%` |
+| set | remove_cmd | `set-user-account --account Unknown` |
+| set | x_acc | %%p_acc%% |
+
+Shared primary WS in primary account
+
+ set | add_cmd | `add-member --w %%p_ws%%` |
+set | remove_cmd | `remove-member --w %%p_ws%%` |
+set | x_acc | Unknown | PROBLEM. CODE ASSUMES PRIMARY ACCOUNT for labels. User indexes?
+
+Create users in accounts
+
+| st-admin | create-user --e %%a_user%% --p %%password%% --account %%x_acc%% | was created |
+| st-admin | create-user --e %%b_user%% --p %%password%% --account %%x_acc%% | was created |
+
+Secondary WS in secondary account
+
+| st-admin | add-member --w %%s_ws%% --e %%a_user%% | is now a member |
+| st-admin | add-member --w %%s_ws%% --e %%b_user%% | is now a member |
+
+First user to signal
+
+| st-logout |  |  |
+| set | write_user | %%a_user%% |
+
+| include | `[Test Include: Signals Widget]` |  |
+
+| *Comment* | Test Case: Multiple Account Signals. %%username%% signals/checks primary |  |
+| wait_for_element_visible_ok | network-select | 30000 |
+| select_ok | network-select | label=%%p_acc%% (primary) |
+| type_ok | signal-field | %%write_user%% signals %%p_acc%% |
+| click_ok | post |  |
+| wait_for_text_present_ok | %%write_user%% signals %%p_acc%% | 30000 |
+
+| *Comment* | Test Case: Signals Widget. %%write_user%% signals/checks secondary |  |
+| select_ok | network-select | label=%%s_acc%% |
+| type_ok | signal-field | %%write_user%% signals %%s_acc%% |
+| click_ok | post |  |
+| wait_for_text_present_ok | %%write_user%% signals %%s_acc%% | 30000 |
+
+| *Comment* | Test Case: Signals Widget. Logout as %%write_user%% |  |
+
+| select-frame | relative=parent |  |
+| open_ok | /nlw/submit/logout |  |
+
+Second user signals and checks first user's signals
+
+| set | write_user | %%b_user%% |
+| set | read_user | %%a_user%% |
+
+| include | `[Test Include: Signals Widget]` |  |
+
+| *Comment* | Test Case: Multiple Account Signals. %%write_user%% signals/checks primary |  |
+| wait_for_element_visible_ok | network-select | 30000 |
+| select_ok | network-select | label=%%p_acc%% (primary) |
+| type_ok | signal-field | %%write_user%% signals %%p_acc%% |
+| click_ok | post |  |
+| wait_for_text_present_ok | %%write_user%% signals %%p_acc%% | 30000 |
+
+| *Comment* | Test Case: Signals Widget. %%write_user%% signals/checks secondary |  |
+| select_ok | network-select | label=%%s_acc%% |
+| type_ok | signal-field | %%write_user%% signals %%s_acc%% |
+| click_ok | post |  |
+| wait_for_text_present_ok | %%write_user%% signals %%s_acc%% | 30000 |
+
+| *Comment* | Test Case: Signals Widget. %%write_user%% checks %%read_user%% |  |
+| wait_for_element_visible_ok | select-followed | 10000 |
+| click_ok | select-followed |  |
+| wait_for_text_not_present_ok | %%read_user%% | 30000 |
+| wait_for_element_visible_ok | select-everyone | 10000 |
+| click_ok | select-everyone |  |
+| wait_for_text_present_ok | %%read_user%% signals %%p_acc%% | 30000 |
+| wait_for_text_present_ok | %%read_user%% signals %%s_acc%% | 5000 |
+
+| *Comment* | Test Case: Signals Widget. Logout as %%write_user%% |  |
+
+| select-frame | relative=parent |  |
+| open_ok | /nlw/submit/logout |  |
+
+First user checks second user's signals
+
+| set | write_user | %%a_user%% |
+| set | read_user | %%b_user%% |
+
+| include | `[Test Include: Signals Widget]` |  |
+
+| *Comment* | Test Case: Signals Widget. %%write_user%% checks %%read_user%% |  |
+| wait_for_element_visible_ok | select-followed | 10000 |
+| click_ok | select-followed |  |
+| wait_for_text_not_present_ok | %%read_user%% | 30000 |
+| wait_for_element_visible_ok | select-everyone | 10000 |
+| click_ok | select-everyone |  |
+| wait_for_text_present_ok | %%read_user%% signals %%p_acc%% | 30000 |
+| wait_for_text_present_ok | %%read_user%% signals %%s_acc%% | 5000 |
+
+| *Comment* | Test Case: Signals Widget. Logout as %%write_user%% |  |
+
+| select-frame | relative=parent |  |
+| open_ok | /nlw/submit/logout |  |
+
+| *Comment* | Test Case: Signals Widget. Remove %%a_user%% from secondary %%s_ws%% |  |
+| st-admin | remove-member --w %%s_ws%% --e %%a_user%% |  |
+
+%%b_user%% user should no longer see %%a_user%% secondary signals
+
+| set | write_user | %%b_user%% |
+| set | read_user | %%a_user%% |
+
+| include | `[Test Include: Signals Widget]` |  |
+
+| *Comment* | Test Case: Signals Widget. %%write_user%% checks %%read_user%% |  |
+| wait_for_element_visible_ok | select-followed | 10000 |
+| click_ok | select-followed |  |
+| wait_for_text_not_present_ok | %%read_user%% | 30000 |
+| wait_for_element_visible_ok | select-everyone | 10000 |
+| click_ok | select-everyone |  |
+| wait_for_text_present_ok | %%read_user%% signals %%p_acc%% | 30000 |
+| wait_for_text_not_present_ok | %%read_user%% signals %%s_acc%% | 5000 |
+
+| pause | 30000 |  |
+
+^ END
+
+| select-frame | relative=parent |  |
+| pause | 30000 |  |
+
+| *Comment* | Test Case: Signals Widget Teardown |  |
+| st-empty-container |  |  |
+
+| *Comment* | Test Case: Multiple Account Signals COMPLETED |  |

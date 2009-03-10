@@ -8,7 +8,11 @@ use mocked 'Socialtext::Events', qw/event_ok/;
 use mocked 'Socialtext::WeblogPlugin';
 use mocked 'Socialtext::Hub';
 use Socialtext::Attachments;
-use Test::More tests => 10;
+use Test::Socialtext tests => 10;
+
+###############################################################################
+# Fixtures: db
+fixtures(qw( db ));
 
 BEGIN { use_ok 'Socialtext::EditPlugin' }
 

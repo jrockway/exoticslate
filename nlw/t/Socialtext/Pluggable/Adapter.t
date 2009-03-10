@@ -5,13 +5,17 @@ use warnings;
 
 BEGIN { push @INC, 't/share/plugin/fakeplugin/lib' };
 
-use Test::More tests => 43;
 use Socialtext::SQL;
 use Socialtext::Account;
 use Socialtext::User;
 use mocked 'Socialtext::Registry';
 use mocked 'Socialtext::Hub';
 use Socialtext::Pluggable::Adapter;
+use Test::Socialtext tests => 43;
+
+###############################################################################
+# Fixtures: db
+fixtures(qw( db ));
 
 my $adapt = Socialtext::Pluggable::Adapter->new;
 my $registry = Socialtext::Registry->new;

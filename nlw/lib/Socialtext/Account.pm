@@ -57,7 +57,8 @@ sub EnsureRequiredDataIsPresent {
         require Sys::Hostname;
         my $acct = $class->create(
             name => Sys::Hostname::hostname(),
-            is_system_created => 1,
+            # This is not a system account, it is intended to be used.
+            is_system_created => 0,
         );
         $acct->enable_plugin('dashboard');
         $acct->enable_plugin('widgets');

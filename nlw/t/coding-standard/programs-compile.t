@@ -9,7 +9,7 @@ use File::Basename qw(basename dirname);
 use File::Spec::Functions qw(catdir catfile);
 use Cwd qw(abs_path getcwd);
 
-my $BASE_DIR = abs_path(catdir(dirname(__FILE__), '..'));
+my $BASE_DIR = abs_path(catdir(dirname(__FILE__), '../..'));
 
 BEGIN {
     unless ( eval { require Test::Program; Test::Program->import(); 1 } ) {

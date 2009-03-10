@@ -376,7 +376,7 @@ testlive:
 testall: test testlive
 
 QUICK_TESTS = t/Socialtext/People/Directories.t \
-	t/coding-standard.t \
+	t/coding-standard/tests-have-plans.t \
 	t/Socialtext/Locales.t \
 	t/Socialtext/Hostname.t \
 	t/Socialtext/File_guess_en.t \
@@ -396,7 +396,7 @@ QUICK_TESTS = t/Socialtext/People/Directories.t \
 	t/Socialtext/ChangeEvent/Workspace.t \
 	t/Socialtext/File_guess_ja.t \
 	t/Socialtext/Storage.t \
-	t/migrations.t \
+	t/coding-standard/migrations.t \
 	t/Socialtext/Handler/URIMap.t \
 	t/Socialtext/Template/Plugin/label_ellipsis.t \
 	t/Socialtext/ArchiveExtractor.t \
@@ -412,15 +412,15 @@ QUICK_TESTS = t/Socialtext/People/Directories.t \
 	t/Socialtext/String.t \
 	t/Socialtext/PageMeta.t \
 	t/Socialtext/Timer.t \
-	t/pod-coverage.t \
+	t/coding-standard/pod-coverage.t \
 	t/Socialtext/UserPreferencesPlugin.t \
 	t/Socialtext/Events.t \
-	t/case-conflict.t \
+	t/coding-standard/case-conflict.t \
 	t/Socialtext/EmailReceiver-subject.t \
 	t/Socialtext/EditPlugin-events.t \
 	t/Socialtext/EmailSender/ja.t \
 	t/Socialtext/Pluggable/Adapter.t \
-	t/tests.t \
+	t/coding-standard/tests.t \
 	t/Socialtext/Model/Page.t \
 	t/Socialtext/People/Rest/Profile.t \
 	t/Socialtext/Migration.t \
@@ -467,7 +467,7 @@ QUICK_TESTS = t/Socialtext/People/Directories.t \
 	t/Socialtext/Search/AbstractFactory.t \
 	t/Socialtext/LogParser.t \
 	t/chunks.t \
-	t/copyright.t \
+	t/coding-standard/code-contains-copyright.t \
 	t/Socialtext/RtfExportPlugin-gif-to-png.t \
 	t/Socialtext/Session.t \
 	t/Socialtext/UserSettingsPlugin-email-address-parse.t \
@@ -475,7 +475,7 @@ QUICK_TESTS = t/Socialtext/People/Directories.t \
 	t/Socialtext/LDAP/Base.t \
 	t/live-ldap/OpenLDAP-User.t \
 	t/Socialtext/File/Stringify.t \
-	t/pod.t \
+	t/coding-standard/pod.t \
 	t/Socialtext/AppConfig.t \
 	t/Socialtext/TT2/Renderer.t \
 	t/Socialtext/CredentialsExtractor/Apache.t \

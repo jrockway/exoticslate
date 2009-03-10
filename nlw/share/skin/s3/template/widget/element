@@ -40,6 +40,12 @@
         <div id="[% gadget.id %]-content" class="[% IF gadget.incomplete %]hidden[% ELSE %]visible[% END %]">
             [% INCLUDE widget/iframe %]
         </div>
+        [% IF container.name == "editing" && !gadget.parent_instance_id  %]
+        <div id="[% gadget.id %]-push">
+            <input class="push-widget" name="[% gadget.title %]" id="push_[% gadget.id %]" type="checkbox" /> <label for="push_[% gadget.id %]">Push to all dashboards </label>
+        </div>
+        
+        [% END %]
     </div><!-- widgetContent END -->
     <div class="widgetBottom"><div class="widgetBottomRight"></div></div><!-- widgetBottom END -->                                
 [% END %]

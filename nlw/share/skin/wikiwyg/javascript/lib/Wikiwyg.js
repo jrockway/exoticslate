@@ -1091,7 +1091,7 @@ function setup_wikiwyg() {
 
             // See the comment about "two seconds" below
             if (Socialtext.S3 && (firstMode == WW_SIMPLE_MODE)) {
-                jQuery("#st-editing-tools-edit .buttonRight a").hide();
+                jQuery("#st-editing-tools-edit .editModeSwitcher a").hide();
             }
 
             jQuery("#st-editing-tools-edit, #wikiwyg_toolbar").show();
@@ -1142,7 +1142,7 @@ function setup_wikiwyg() {
                 // to find the link anyway, but Selenium can trigger this bug
                 // quite regularly given a high enough latency to the server.
                 setTimeout( function() {
-                    jQuery("#st-editing-tools-edit .buttonRight a").show();
+                    jQuery("#st-editing-tools-edit .editModeSwitcher a").show();
                     ww.set_edit_tips_span_display();
                 }, 2000 );
             }

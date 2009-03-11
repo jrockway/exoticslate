@@ -1785,6 +1785,8 @@ sub created_by_user_id {
     Socialtext::User->SystemUser->user_id;
 }
 
+sub drop_breadcrumb {}
+
 sub new {
     my $class = shift;
     my $self = {};

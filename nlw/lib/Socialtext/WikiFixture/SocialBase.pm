@@ -746,4 +746,16 @@ sub header_isnt {
     }
 }
 
+=head2 reset_plugins
+
+Reset any global plugin enabled.
+
+=cut
+
+sub reset_plugins {
+    my $self = shift;
+    sql_execute(q{DELETE FROM "System" WHERE field like '%-enabled-all'});
+}
+
+
 1;

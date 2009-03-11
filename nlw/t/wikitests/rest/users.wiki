@@ -3,6 +3,7 @@ Test /data/users via the REST API
 * Fixture: SocialRest
 
 | comment | create test accounts |
+| reset-plugins | | |
 | set | acct_a | %%start_time%%a |
 | set | acct_b | %%start_time%%b |
 | set | acct_c | %%start_time%%c |

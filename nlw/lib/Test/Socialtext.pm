@@ -245,7 +245,10 @@ sub _teardown_cleanup {
         foreach my $opt (keys %InitialAppConfig) {
             no warnings;
             if ($appconfig->$opt() ne $InitialAppConfig{$opt}) {
-                Test::More::diag( "CLEANUP: resetting '$opt' AppConfig value; your test changed it" );
+                if (Test::Socialtext::Environment->instance()->verbose) {
+                    Test::More::diag("CLEANUP: resetting '$opt' AppConfig "
+                                    ."value; your test changed it");
+                }
                 $appconfig->set( $opt, $InitialAppConfig{$opt} );
                 $appconfig->write();
             }
@@ -275,7 +278,11 @@ sub _teardown_cleanup {
                 my $driver   = $user->driver_name();
                 my $user_id  = $user->user_id();
                 my $username = $user->username();
-                Test::More::diag( "CLEANUP: removing user '$driver:$user_id ($username)'; your test left it behind" );
+                if (Test::Socialtext::Environment->instance()->verbose) {
+                    Test::More::diag("CLEANUP: removing user "
+                                    ."'$driver:$user_id ($username)'; "
+                                    ."your test left it behind");
+                }
                 Test::Socialtext::User->delete_recklessly($user);
             }
         }
@@ -302,7 +309,11 @@ sub _teardown_cleanup {
             my $ws_id = $ws->workspace_id();
             unless ($InitialWorkspaceIds{$ws_id}) {
                 my $ws_name = $ws->name();
-                Test::More::diag( "CLEANUP: removing workspace '$ws_id ($ws_name)'; your test left it behind" );
+                if (Test::Socialtext::Environment->instance()->verbose) {
+                    Test::More::diag("CLEANUP: removing workspace "
+                                    ."'$ws_id ($ws_name)'; your test "
+                                    ."left it behind");
+                }
                 $ws->delete();
             }
         }

@@ -40,16 +40,6 @@ sub TestUser {
     return $user;
 }
 
-sub DESTROY {
-    my $self = shift;
-    if ($self->{_test_users}) {
-        require Test::Socialtext::User;
-        Test::Socialtext::User->delete_recklessly($_)
-            for @{$self->{_test_users}};
-    }
-    return;
-}
-
 sub rest_hooks {}
 sub add_content_type {}
 

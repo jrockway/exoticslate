@@ -4239,7 +4239,7 @@ ul li.flexButtonBlue a.addButton:hover {
     background-position: top right;
     background-repeat: no-repeat;
     background-image: url(../images/unsorted.png);
-    background-color: #aaa;
+    background-color: #eee;
 }
 .wiki table.sort td.header.headerSortUp {
     background-image: url(../images/sorted-up.png);

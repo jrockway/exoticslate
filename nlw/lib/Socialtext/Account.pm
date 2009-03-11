@@ -805,6 +805,11 @@ Updates the object's information with the new key/val pairs passed in.
 This method accepts the same PARAMS as C<new()>, but you cannot change
 "is_system_created" after the initial creation of a row.
 
+=item Socialtext::Account->new_from_hash_ref( $hashref )
+
+Given a hash ref of attributes, create a new account object. This
+alone will not cause the data to persist, however.
+
 =item $account->delete()
 
 Deletes the account from the DBMS, but this is probably a bad idea if

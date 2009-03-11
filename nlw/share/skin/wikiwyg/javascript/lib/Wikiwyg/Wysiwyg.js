@@ -631,6 +631,7 @@ proto.enableThis = function() {
             setTimeout(function() {
                 self.get_edit_document().execCommand("enableObjectResizing", false, false);
                 self.get_edit_document().execCommand("enableInlineTableEditing", false, false);
+                self.get_edit_document().execCommand("justifyLeft", false, false);
             }, 100);
         }
         else if (Wikiwyg.is_ie) {
@@ -670,6 +671,8 @@ proto.enableThis = function() {
     };
 
     if (self.is_ready)
+        ready();
+    else if (Socialtext.page_id && Socialtext.revision_id && !Socialtext.start_in_edit_mode)
         ready();
     else
         jQuery(self.get_edit_window()).one("load", function() {

@@ -1186,13 +1186,18 @@ proto._do_table_manip = function(callback) {
         var $new_cell = callback.call(self, $cell);
 
         if ($new_cell) {
+            $cell = $new_cell;
             self.set_focus();
             if ($.browser.mozilla) {
                 if (parseFloat($.browser.version) >= 1.9) {
-                    // FF3+ has a natural .collapse(parentNode) method.
-                    self.get_edit_window().getSelection().collapse(
-                        $new_cell.find("span").get(0), 0
-                    );
+                    try {
+
+                        // FF3+ has a natural .collapse(parentNode) method.
+                        self.get_edit_window().getSelection().collapse(
+                            $new_cell.find("span").get(0), 0
+                        );
+
+                    } catch(e) {}
                 }
                 else {
                     // FF2 needs a complex dance here: {bz: 1815}
@@ -1225,9 +1230,7 @@ proto._do_table_manip = function(callback) {
 
         setTimeout(function() {
             var $table = $cell.parents("table.sort:eq(0)");
-            if ($table.size()) {
-                Socialtext.make_table_sortable($table[0]);
-            }
+            $table.trigger("update");
         }, 50);
 
     }, 100);

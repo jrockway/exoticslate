@@ -135,9 +135,9 @@
 				
 				var rows = table.tBodies[0].rows;
 				
-				if(table.tBodies[0].rows[0]) {
+				if(table.tBodies[0].rows[1]) {
 
-					var list = [], cells = rows[0].cells, l = cells.length;
+					var list = [], cells = rows[1].cells, l = cells.length;
 					
 					for (var i=0;i < l; i++) {
 						var p = false;
@@ -570,7 +570,6 @@
 					
 					// apply easy methods that trigger binded events
 					$this.bind("update",function() {
-						
 						// rebuild parsers.
 						this.config.parsers = buildParserCache(this,$headers);
 						

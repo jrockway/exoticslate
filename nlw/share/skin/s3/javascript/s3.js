@@ -40,6 +40,7 @@ Socialtext.make_table_sortable = function(table) {
     }
 
     $(table).tablesorter();
+    $(table).trigger("update");
 }
 
 Socialtext.make_table_unsortable = function(table) {

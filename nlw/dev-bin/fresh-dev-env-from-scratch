@@ -86,5 +86,6 @@ else
     dev-bin/nlwctl start;
 fi
 
+st-widgets update-gallery --fork
+
 st-admin set-workspace-config --workspace admin skin_name s3
-which st-widgets >/dev/null && st-widgets update-gallery

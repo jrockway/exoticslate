@@ -1227,6 +1227,9 @@ function setup_wikiwyg() {
             ww.is_editing = false;
             ww.showScrollbars();
 
+            jQuery('#st-edit-summary-text-area').val('');
+            jQuery('#st-edit-summary-signal-checkbox').attr('checked', false);
+
             Socialtext.ui_expand_off();
         } catch(e) {}
         return false;

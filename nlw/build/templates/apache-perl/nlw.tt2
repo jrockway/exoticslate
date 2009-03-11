@@ -75,6 +75,7 @@
         SetHandler          perl-script
         PerlHandler         +Socialtext::Handler::Redirect
         PerlAuthenHandler   +Socialtext::Apache::Authen::NTLM
+        AuthType            ntlm
         Require             valid-user
     </Location>
 

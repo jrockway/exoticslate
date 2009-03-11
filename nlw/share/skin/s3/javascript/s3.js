@@ -35,9 +35,9 @@ push_onload_function = function (fcn) { jQuery(fcn) }
 
 Socialtext.make_table_sortable = function(table) {
     if (!table) return;
-    var undefined;
+
     if (typeof(table.config) != 'undefined') {
-        table.config = undefined;
+        delete table.config;
     }
 
     var $table = $(table);

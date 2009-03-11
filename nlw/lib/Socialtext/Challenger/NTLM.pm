@@ -93,9 +93,10 @@ When configured for use, this Challenger redirects Users off to the NTLM
 Authentication URL (C</nlw/ntlm>) for NTLM authentication.
 
 It is expected that the NTLM Authentication URL has been configured to use
-C<Socialtext::Handler::Redirect> as the underlying Mod_perl handler, which
-will redirect the User off to the URI provided to it (once it has been able to
-verify that the User I<is> logged in).
+C<Socialtext::Handler::NTLM> as the underlying Mod_perl handler, which will
+redirect the User off to the URI provided to it (once it has been able to
+verify that the User I<is> logged in, and sets a session cookie in their
+browser).
 
 =head1 METHODS
 
@@ -130,6 +131,7 @@ Copyright 2009 Socialtext, Inc., All Rights Reserved.
 =head1 SEE ALSO
 
 L<Socialtext::Challenger>,
-L<Socialtext::Handler::Redirect>.
+L<Socialtext::Handler::NTLM>,
+L<Socialtext::Apache::Authen::NTLM>.
 
 =cut

@@ -49,10 +49,18 @@ our @EXPORT_OK = qw(
     }
 }
 
+our $DB_AVAILABLE = 0;
 sub fixtures () {
     $ENV{NLW_CONFIG} = Cwd::cwd . '/t/tmp/etc/socialtext/socialtext.conf';
 
-    Test::Socialtext::Environment->CreateEnvironment( fixtures => [ @_ ] );
+    # set up the test environment, and all of its fixtures.
+    my $env
+        = Test::Socialtext::Environment->CreateEnvironment(fixtures => [@_]);
+
+    # check to see if the "DB" fixture is current (if so, we will want to
+    # store and reset some state that's inside the DB)
+    $DB_AVAILABLE = Test::Socialtext::Fixture->new(name => 'db', env => $env)
+        ->is_current();
 
     # store the state of the universe "after fixtures have been created", so
     # that we can reset back to this state (as best we can) at the end of the
@@ -208,16 +216,20 @@ sub setup_test_appconfig_dir {
 # end of each test run.
 sub _store_initial_state {
     _store_initial_appconfig();
-    _store_initial_userids();
-    _store_initial_workspaceids();
+    if ($DB_AVAILABLE) {
+        _store_initial_userids();
+        _store_initial_workspaceids();
+    }
 }
 
 # revert back to the initial state (as best we can) when the test run is over.
 END { _teardown_cleanup() }
 sub _teardown_cleanup {
     _reset_initial_appconfig();
-    _remove_all_but_initial_userids();
-    _remove_all_but_initial_workspaceids();
+    if ($DB_AVAILABLE) {
+        _remove_all_but_initial_userids();
+        _remove_all_but_initial_workspaceids();
+    }
 }
 
 {

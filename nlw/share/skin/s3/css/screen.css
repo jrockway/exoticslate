@@ -4108,7 +4108,7 @@ body div#globalNav div input.searchText {
 }
 
 #st-page-editing-toolbar {
-    margin-right: 198p;;
+    margin-right: 198px;
 }
 
 #wikiwyg_toolbar .other_buttons,
@@ -4271,11 +4271,6 @@ div#contentContainer ul.editModeSwitcher li {
 div#contentContainer ul.editModeSwitcher li a.disabled {
     color: black;
     font-weight: bold;
-}
-
-div#contentContainer h2.tableTitle {
-    float: left;
-    width: 700px;
 }
 
 body#contentPage div#controls div#controlsRight ul li a#st-edit-pagetools-expand {

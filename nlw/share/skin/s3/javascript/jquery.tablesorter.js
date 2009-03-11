@@ -288,17 +288,13 @@
 			};
 			
 			function buildHeaders(table) {
-				
 				if(table.config.debug) { var time = new Date(); }
 				
-				var meta = ($.metadata) ? true : false, tableHeadersRows = [];
+				var meta = ($.metadata) ? true : false; 
 			
-				for(var i = 0; i < table.tHead.rows.length; i++) { tableHeadersRows[i]=0; };
-				
-				$tableHeaders = $("thead th",table);
+				$tableHeaders = $("tr:eq(0) td", table);
 		
 				$tableHeaders.each(function(index) {
-							
 					this.count = 0;
 					this.column = index;
 					this.order = formatSortingOrder(table.config.sortInitialOrder);
@@ -319,24 +315,6 @@
 				
 			};
 						
-		   	function checkCellColSpan(table, rows, row) {
-				var arr = [], r = table.tHead.rows, c = r[row].cells;
-				
-				for(var i=0; i < c.length; i++) {
-					var cell = c[i];
-					
-					if ( cell.colSpan > 1) { 
-						arr = arr.concat(checkCellColSpan(table, headerArr,row++));
-					} else  {
-						if(table.tHead.length == 1 || (cell.rowSpan > 1 || !r[row+1])) {
-							arr.push(cell);
-						}
-						//headerArr[row] = (i+row);
-					}
-				}
-				return arr;
-			};
-			
 			function checkHeaderMetadata(cell) {
 				if(($.metadata) && ($(cell).metadata().sorter === false)) { return true; };
 				return false;
@@ -487,8 +465,8 @@
 			this.construct = function(settings) {
 
 				return this.each(function() {
-					
-					if(!this.tHead || !this.tBodies) return;
+
+					if(!this.tBodies) return;
 					
 					var $this, $document,$headers, cache, config, shiftDown = 0, sortOrder;
 					
@@ -576,6 +554,8 @@
 								//set css for headers
 								setHeadersCss($this[0],$headers,config.sortList,sortCSS);
 								appendToTable($this[0],multisort($this[0],config.sortList,cache));
+
+								$headers.parent("tr").prependTo($this[0]);
 							},1);
 							// stop normal event by returning false
 							return false;

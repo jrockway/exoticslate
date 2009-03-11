@@ -35,47 +35,20 @@ push_onload_function = function (fcn) { jQuery(fcn) }
 
 Socialtext.make_table_sortable = function(table) {
     if (!table) return;
-
     if (typeof(table.config) != 'undefined') {
         delete table.config;
     }
 
-    var $table = $(table);
-    var $row = $table
-        .children('tbody:first')
-        .children('tr:first');
-
-    if ($row.length) {
-        if ($table.find("th").size() == 0) {
-            var $newRow = $('<tr />');
-            $row.children('td').each(function() {
-                var $col = $(this);
-                $newRow.append(
-                    $('<th />')
-                        .html($col.html())
-                        .attr('style', $col.attr('style'))
-                );
-            });
-            $row.remove();
-            $table.prepend("<thead><tr>" + $newRow.html() + "</tr></thead>");
-        }
-        $table.tablesorter();
-    }
+    $(table).tablesorter();
 }
 
 Socialtext.make_table_unsortable = function(table) {
     if (!table) return;
-    var undefined;
-    var $table = jQuery(table);
+    if (typeof(table.config) != 'undefined') {
+        delete table.config;
+    }
 
-    table.config = undefined;
-
-    $table.find("thead tr").prependTo( $table.find("tbody") );
-    $table.find("thead").remove();
-
-    $table.find("th").each(function() {
-        jQuery(this).replaceWith("<td style=\"" + jQuery(this).attr("style") + "\">" + this.innerHTML + "</td>");
-    });
+    $(table).removeClass("sort").find("tr:eq(0) td").unbind("click").unbind("mousedown");
 
 }
 

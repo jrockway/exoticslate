@@ -4234,25 +4234,26 @@ ul li.flexButtonBlue a.addButton:hover {
     float: right;
 }
 
-.wiki table.sort th {
+.wiki table.sort td.header {
     padding-right: 24px !important;
     background-position: top right;
     background-repeat: no-repeat;
     background-image: url(../images/unsorted.png);
+    background-color: #aaa;
 }
-.wiki table.sort th.headerSortUp {
+.wiki table.sort td.header.headerSortUp {
     background-image: url(../images/sorted-up.png);
 }
-.wiki table.sort th.headerSortDown {
+.wiki table.sort td.header.headerSortDown {
     background-image: url(../images/sorted-down.png);
 }
-.wiki table.sort th:hover {
+.wiki table.sort td.header:hover {
     background-image: url(../images/unsorted-hover.png);
 }
-.wiki table.sort th.headerSortUp:hover {
+.wiki table.sort td.header.headerSortUp:hover {
     background-image: url(../images/sort-up-hover.png);
 }
-.wiki table.sort th.headerSortDown:hover {
+.wiki table.sort td.header.headerSortDown:hover {
     background-image: url(../images/sort-down-hover.png);
 }
 

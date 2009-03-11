@@ -2,9 +2,9 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More;
 use mocked 'Socialtext::Hub';
 use Socialtext::File qw/get_contents/;
+use Test::Socialtext;
 
 my $have_net_access;
 BEGIN {
@@ -14,6 +14,8 @@ BEGIN {
     plan tests => $tests + $net_tests;
     use_ok 'Socialtext::FetchRSSPlugin';
 }
+
+fixtures(qw( db ));
 
 my $testcases = [
     { 

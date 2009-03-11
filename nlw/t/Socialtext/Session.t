@@ -6,6 +6,8 @@ use warnings;
 
 use Test::Socialtext tests => 24;
 
+fixtures(qw( db ));
+
 BEGIN {
     use_ok('Socialtext::Session');
 }

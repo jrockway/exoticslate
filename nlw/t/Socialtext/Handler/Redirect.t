@@ -12,9 +12,9 @@ use Test::Socialtext tests => 9;
 use_ok 'Socialtext::Handler::Redirect';
 
 ###############################################################################
-# Fixtures: base_config
-# - need the basic config laid out, but that's it
-fixtures(qw( base_config ));
+# Fixtures: db
+# - need a DB, but don't care what's in it
+fixtures(qw( db ));
 
 ###############################################################################
 # We *only* need a simple credentials extractor for these tests, which means

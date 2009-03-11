@@ -625,10 +625,12 @@ sub _AllByWorkspaceCount {
         'SELECT "Account".*,'
         . ' COUNT("Workspace".workspace_id) AS workspace_count'
         . ' FROM "Account"'
-        . ' LEFT OUTER JOIN "Workspace" ON'
-        . ' "Account".account_id="Workspace".account_id'
+        . ' LEFT OUTER JOIN "Workspace" USING ( account_id )' 
         . $where
-        . ' GROUP BY "Account".account_id, "Account".name'
+        . ' GROUP BY "Account".account_id, "Account".name,'
+        . '       "Account".is_system_created, "Account".skin_name,'
+        . '       "Account".email_addresses_are_hidden,'
+        . '       "Account".is_exportable'
         . " ORDER BY workspace_count $p{sort_order}, \"Account\".name ASC"
         . ' LIMIT ? OFFSET ?' ,
         @args );
@@ -655,12 +657,13 @@ sub _AllByUserCount {
         'SELECT "Account".*,'
         . ' COUNT("UserWorkspaceRole".user_id) AS user_count'
         . ' FROM "Account"'
-        . ' LEFT OUTER JOIN "Workspace" ON'
-        . ' "Account".account_id="Workspace".account_id'
-        . ' LEFT OUTER JOIN "UserWorkspaceRole" ON'
-        . ' "Workspace".workspace_id="UserWorkspaceRole".workspace_id'
+        . ' LEFT OUTER JOIN "Workspace" USING ( account_id )'
+        . ' LEFT OUTER JOIN "UserWorkspaceRole" USING ( workspace_id )'
         . $where
-        . ' GROUP BY "Account".account_id, "Account".name'
+        . ' GROUP BY "Account".account_id, "Account".name,'
+        . '       "Account".is_system_created, "Account".skin_name,'
+        . '       "Account".email_addresses_are_hidden,'
+        . '       "Account".is_exportable'
         . " ORDER BY user_count $p{sort_order}, \"Account\".name ASC"
         . ' LIMIT ? OFFSET ?',
         @args );

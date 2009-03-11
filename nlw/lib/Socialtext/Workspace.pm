@@ -1796,6 +1796,8 @@ sub new {
 
 sub _set_workspace_option { return 1; }
 
+sub is_plugin_enabled { 0 }
+
 1;
 
 __END__

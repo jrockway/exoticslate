@@ -431,6 +431,12 @@ sub _new_from_where {
         @bindings );
     my $row = $sth->fetchrow_hashref;
     return unless $row;
+    return $class->new_from_hash_ref($row);
+}
+
+sub new_from_hash_ref {
+    my ( $class, $row ) = @_;
+    return $row unless $row;
     return bless $row, $class;
 }
 
@@ -590,7 +596,7 @@ sub _All {
     }
 
     my $sth = sql_execute(
-        'SELECT account_id'
+        'SELECT *'
         . ' FROM "Account"'
         . $where
         . " ORDER BY name $p{sort_order}"
@@ -598,10 +604,9 @@ sub _All {
         @args );
 
     return Socialtext::MultiCursor->new(
-        iterables => [ $sth->fetchall_arrayref ],
+        iterables => [ $sth->fetchall_arrayref({}) ],
         apply => sub {
-            my $row = shift;
-            return Socialtext::Account->new( account_id => $row->[0] );
+            return Socialtext::Account->new_from_hash_ref($_[0]);
         }
     );
 }
@@ -617,7 +622,7 @@ sub _AllByWorkspaceCount {
     }
 
     my $sth = sql_execute(
-        'SELECT "Account".account_id,'
+        'SELECT "Account".*,'
         . ' COUNT("Workspace".workspace_id) AS workspace_count'
         . ' FROM "Account"'
         . ' LEFT OUTER JOIN "Workspace" ON'
@@ -629,10 +634,9 @@ sub _AllByWorkspaceCount {
         @args );
 
     return Socialtext::MultiCursor->new(
-        iterables => [ $sth->fetchall_arrayref ],
+        iterables => [ $sth->fetchall_arrayref({}) ],
         apply => sub {
-            my $row = shift;
-            return Socialtext::Account->new( account_id => $row->[0] );
+            return Socialtext::Account->new_from_hash_ref($_[0]);
         }
     );
 }
@@ -648,7 +652,7 @@ sub _AllByUserCount {
     }
 
     my $sth = sql_execute(
-        'SELECT "Account".account_id AS account_id,'
+        'SELECT "Account".*,'
         . ' COUNT("UserWorkspaceRole".user_id) AS user_count'
         . ' FROM "Account"'
         . ' LEFT OUTER JOIN "Workspace" ON'
@@ -662,10 +666,9 @@ sub _AllByUserCount {
         @args );
 
     return Socialtext::MultiCursor->new(
-        iterables => [ $sth->fetchall_arrayref ],
+        iterables => [ $sth->fetchall_arrayref({}) ],
         apply => sub {
-            my $row = shift;
-            return Socialtext::Account->new( account_id => $row->[0] );
+            return Socialtext::Account->new_from_hash_ref($_[0]);
         }
     );
 }

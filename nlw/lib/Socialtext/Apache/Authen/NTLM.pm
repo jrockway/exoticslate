@@ -20,12 +20,6 @@ sub get_config {
     # Apache config to define some of this if they wanted to.
     $self->SUPER::get_config($r);
 
-    # Over-ride some of the config that Apache::AuthenNTLM sets up by
-    # default...
-    $self->{authtype}  = 'ntlm';
-    $self->{authntlm}  = 1;
-    $self->{authbasic} = 0;
-
     # read in our NTLM config, and set up our PDC/BDCs
     my @all_configs = Socialtext::NTLM::Config->load();
     foreach my $config (@all_configs) {

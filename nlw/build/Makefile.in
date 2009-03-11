@@ -433,7 +433,6 @@ QUICK_TESTS = t/Socialtext/People/Directories.t \
 	t/st-migrate.t \
 	t/Socialtext/EmailSender.t \
 	t/Socialtext/WikiText/Parser.t \
-	t/Socialtext/FetchRSSPlugin.t \
 	t/Socialtext/EmailReceiver-local-address.t \
 	t/Socialtext/CategoryPlugin-email-address-encoding.t \
 	t/Socialtext/Date/l10n.t \
@@ -469,7 +468,6 @@ QUICK_TESTS = t/Socialtext/People/Directories.t \
 	t/chunks.t \
 	t/coding-standard/code-contains-copyright.t \
 	t/Socialtext/RtfExportPlugin-gif-to-png.t \
-	t/Socialtext/Session.t \
 	t/Socialtext/UserSettingsPlugin-email-address-parse.t \
 	t/Socialtext/User/LDAP.t \
 	t/Socialtext/LDAP/Base.t \
@@ -483,8 +481,7 @@ QUICK_TESTS = t/Socialtext/People/Directories.t \
 	t/Socialtext/CredentialsExtractor/Guest.t \
 	t/Socialtext/NTLM/Config.t \
 	t/st-ntlm-config.t \
-	t/Socialtext/Config/Base.t \
-	t/Socialtext/Handler/Redirect.t
+	t/Socialtext/Config/Base.t
 
 quicktest:
 	$<

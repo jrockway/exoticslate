@@ -55,10 +55,12 @@ sub workspace {
 
 sub user_account_skin {
     my ($self) = @_;
-    return $self->hub
+    return $self->{_user_account_skin} if $self->{_user_account_skin};
+    return $self->{_user_account_skin} = $self->hub
         ? $self->hub->current_user->primary_account->skin_name
         : undef;
 }
+
 sub workspace_account_skin {
     my ($self) = @_;
     return $self->hub

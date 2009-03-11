@@ -731,7 +731,7 @@ EOSQL
         }
 
         my $sth = sql_execute(<<EOSQL, $self->user_id);
-SELECT workspace_id
+SELECT *
     FROM "UserWorkspaceRole" LEFT OUTER JOIN "Workspace" USING (workspace_id)
     WHERE user_id=?
     $selected_only_clause
@@ -740,10 +740,9 @@ SELECT workspace_id
 EOSQL
 
         return Socialtext::MultiCursor->new(
-            iterables => [ $sth->fetchall_arrayref ],
+            iterables => [ $sth->fetchall_arrayref({}) ],
             apply => sub {
-                my $row = shift;
-                return Socialtext::Workspace->new( workspace_id => $row->[0] );
+                return Socialtext::Workspace->new_from_hash_ref($_[0]);
             }
         );
     }

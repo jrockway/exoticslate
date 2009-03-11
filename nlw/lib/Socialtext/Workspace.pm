@@ -157,10 +157,10 @@ sub _new {
 
     # Sure there's a better way to make use of the row we're getting back.
     my $row = $sth->fetchrow_hashref();
-    return $class->_new_from_hash_ref($row);
+    return $class->new_from_hash_ref($row);
 }
 
-sub _new_from_hash_ref {
+sub new_from_hash_ref {
     my ( $class, $row ) = @_;
     return $row unless $row;
     return Socialtext::NoWorkspace->new if $row->{workspace_id} == 0;
@@ -1539,7 +1539,7 @@ sub _WorkspaceCursor {
         iterables => [ $sth->fetchall_arrayref( {} ) ],
         apply => sub {
             my $row = shift;
-            return Socialtext::Workspace->_new_from_hash_ref( $row );
+            return Socialtext::Workspace->new_from_hash_ref( $row );
         }
     );
 }
@@ -2594,7 +2594,7 @@ Save the user's breadcrumb list
 
 Add a workspace breadcrumb to the user's list
 
-=head2 Socialtext::Workspace->_new_from_hash_ref(hash)
+=head2 Socialtext::Workspace->new_from_hash_ref(hash)
 
 Returns a new instantiation of a Workspace object. Data members for the
 object are initialized from the hash reference passed to the method.

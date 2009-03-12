@@ -255,6 +255,11 @@ sub register {
     my $self = shift;
     my $r = $self->r;
 
+    if (Socialtext::AppConfig->disable_registration) {
+        $self->session->add_error(loc("Registration is disabled."));
+        return $self->_redirect('/nlw/login.html');
+    }
+
     my $email_address = $self->{args}{email_address};
     unless ( $email_address ) {
         $self->session->add_error(loc("Please enter an email address."));

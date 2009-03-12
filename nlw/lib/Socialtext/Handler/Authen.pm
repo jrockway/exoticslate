@@ -255,7 +255,7 @@ sub register {
     my $self = shift;
     my $r = $self->r;
 
-    if (Socialtext::AppConfig->disable_registration) {
+    unless (Socialtext::AppConfig->self_registration()) {
         $self->session->add_error(loc("Registration is disabled."));
         return $self->_redirect('/nlw/login.html');
     }

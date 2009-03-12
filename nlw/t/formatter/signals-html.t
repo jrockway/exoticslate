@@ -38,11 +38,11 @@ __DATA__
 
 === Link to a page with workspace and text override
 --- wikitext: Check out "my idea"{link: admin [Foo]} FTW!
---- html: Check out <a href="/admin/index.cgi?foo">my idea</a> FTW!
+--- html: Check out <a href="/admin/index.cgi?Foo">my idea</a> FTW!
 
 === Link to a page without text override
 --- wikitext: Check out {link: admin [Foo]} FTW!
---- html: Check out <a href="/admin/index.cgi?foo">Foo</a> FTW!
+--- html: Check out <a href="/admin/index.cgi?Foo">Foo</a> FTW!
 
 === Invalid wafl phrase with arguments
 --- wikitext: The wafl {foo: bar baz} is invalid.
@@ -62,11 +62,11 @@ __DATA__
 
 === Link with many words
 --- wikitext: Read {link: admin [The Page Name]} now
---- html: Read <a href="/admin/index.cgi?the_page_name">The Page Name</a> now
+--- html: Read <a href="/admin/index.cgi?The%20Page%20Name">The Page Name</a> now
 
 === Link with many words
 --- wikitext: Read {link: admin [The Page Name]} now
---- html: Read <a href="/admin/index.cgi?the_page_name">The Page Name</a> now
+--- html: Read <a href="/admin/index.cgi?The%20Page%20Name">The Page Name</a> now
 
 === Hyperlink
 --- wikitext: Go to "Google"<http://google.com>!

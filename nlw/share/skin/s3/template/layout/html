@@ -62,11 +62,12 @@
             <li id="st-wikinav-setting"><a href="?action=users_settings">[% loc('Settings') %]</a></li>
             <li id="st-wikinav-help"><a href="/help/index.cgi" target="_blank">[% loc('Help') %]</a></li>
             [% IF user.is_guest %]
-            <li id="st-wikinav-login"><a href="/challenge?[% wiki.uri | html %]">[% loc('Log in') %]</a></li>
-            [% IF !disable_registration %]
-              <li id="st-wikinav-register" class="last"><a href="/nlw/register.html?redirect_to=[% hub.current_workspace.uri %]">[% loc('Register') %]</a></li>
-            [% END %]
-
+              [% IF self_registration %]
+                <li id="st-wikinav-login"><a href="/challenge?[% wiki.uri | html %]">[% loc('Log in') %]</a></li>
+                <li id="st-wikinav-register" class="last"><a href="/nlw/register.html?redirect_to=[% hub.current_workspace.uri %]">[% loc('Register') %]</a></li>
+              [% ELSE %]
+                <li id="st-wikinav-login" class="last"><a href="/challenge?[% wiki.uri | html %]">[% loc('Log in') %]</a></li>
+              [% END %]
             [% ELSE %]
             <li id="st-wikinav-logout" class="last"><a id="logout_btn" href="/nlw/submit/logout[% IF wiki.is_public %]?redirect_to=[% wiki.uri | html %][% END %]">[% loc('Log out') %]</a></li>
             [% END %]

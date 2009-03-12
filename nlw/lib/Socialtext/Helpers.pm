@@ -250,7 +250,7 @@ sub global_template_vars {
         workspaceslist     => $self->_get_workspace_list_for_template,
         ui_is_expanded     => defined($cookies->{"ui_is_expanded"}),
         plugins_enabled    => $plugins_enabled,
-        disable_registration => Socialtext::AppConfig->disable_registration(),
+        self_registration  => Socialtext::AppConfig->self_registration(),
         $self->hub->pluggable->hooked_template_vars,
     );
     if ($self->hub->current_user->can_use_plugin('people')) {

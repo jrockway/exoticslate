@@ -6,6 +6,14 @@ use warnings;
 use base 'WikiText::Receiver';
 use Socialtext::l10n qw/loc/;
 
+my $markup = {
+    asis => [ '{{', '}}' ],
+    b    => [ '*',  '*'  ],
+    i    => [ '_',  '_'  ],
+    del  => [ '-',  '-'  ],
+    a    => [ '',   ''   ],
+};
+
 sub content {
     my $self = shift;
     my $content = $self->{output};
@@ -25,52 +33,67 @@ sub insert {
     my $output = '';
 
     if (not(defined($ast->{wafl_type}))) {
-        $output = $ast->{output};
+        $output = $ast->{output} || '';
     }
     elsif ($ast->{wafl_type} eq 'user') {
-        $output = $self->user_text( $ast );
-    }
-    elsif ($ast->{wafl_type} eq 'link') {
-        $output = qq/{link $ast->{workspace_id} [$ast->{text}]}/;
+        if ($self->{callbacks}{decanonicalize}) {
+            $output = $self->user_as_username( $ast );
+        }
+        else {
+            $output = $self->user_as_id( $ast );
+        }
     }
     else {
-        $output = qq/{$ast->{wafl_type}: not implemented}/;
+        $output = "{$ast->{wafl_type}: $ast->{wafl_string}}";
     }
 
     $self->{output} .= $output;
 }
 
-sub user_text {
+sub user_as_id {
+    my $self = shift;
+    my $ast  = shift;
+
+    my $user = eval{ Socialtext::User->Resolve( $ast->{user_string} ) };
+    return loc('Unknown Person') unless $user;
+
+    my $user_id = $user->user_id;
+    return "{user: $user_id}";
+}
+
+sub user_as_username {
     my $self = shift;
     my $ast  = shift;
 
     my $user_string = $ast->{user_string};
+    my $account_id = $self->{callbacks}{account_id};
     my $user = eval{ Socialtext::User->Resolve( $user_string ) };
 
-    if ( $user ) {
-        my $user_id = $user->user_id;
-        return "{user: $user_id}";
-    }
+    return "{user: $user_string}" unless $user;
 
-    return loc('Unknown Person');
+    if ($user->primary_account_id == $account_id) {
+        my $username = $user->username;
+        return "{user: $username}";
+    }
+    else {
+        return $user->best_full_name;
+    }
 }
 
 sub begin_node {
     my $self = shift;
     my $ast = shift;
-    if ($ast->{type} eq 'asis') {
-        $self->{output} .= '{{';
+    if (exists $markup->{$ast->{type}}) {
+        $self->{output} .= $markup->{$ast->{type}}->[0];
     }
 }
 
 sub end_node {
     my $self = shift;
     my $ast = shift;
-    if ($ast->{type} eq 'asis') {
-        $self->{output} .= '}}';
-        return;
+    if (exists $markup->{$ast->{type}}) {
+        $self->{output} .= $markup->{$ast->{type}}->[1];
     }
-    $self->{output} .= " ";
 }
 
 sub text_node {

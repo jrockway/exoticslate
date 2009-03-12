@@ -58,7 +58,7 @@ my $sth = sql_execute("
      WHERE class LIKE 'container:%'
        AND key = 'type'
        AND value = 'dashboard'
-       AND users.user_id IS NOT NULL;
+       AND users.user_id IS NOT NULL
 ");
 while (my $row = $sth->fetchrow_hashref) {
     my $container_store = Socialtext::Storage->new($row->{class});

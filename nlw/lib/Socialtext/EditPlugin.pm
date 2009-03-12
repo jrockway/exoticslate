@@ -71,6 +71,7 @@ sub edit_content {
 
     if ($self->_there_is_an_edit_contention($page, $self->cgi->revision_id)) {
         if ($append_mode eq '') {
+            $self->_record_edit_contention($page);
             return $self->_edit_contention_screen($page);
         }
     }
@@ -167,6 +168,7 @@ sub save {
     $page->load;
 
     if ($self->_there_is_an_edit_contention($page, $self->cgi->revision_id)) {
+        $self->_record_edit_contention($page);
         return $self->_edit_contention_screen($page);
     }
 
@@ -210,9 +212,7 @@ sub save {
     return $self->to_display($page);
 }
 
-# Build the edit contention screen
-# .RETURN. The HTML for the screen
-sub _edit_contention_screen {
+sub _record_edit_contention {
     my $self = shift;
     my $page = shift;
 
@@ -232,6 +232,13 @@ sub _edit_contention_screen {
         . 'user:' . $user->email_address . '(' . $user->user_id . '),'
         . 'page:' . $page->id
     );
+}
+
+# Build the edit contention screen
+# .RETURN. The HTML for the screen
+sub _edit_contention_screen {
+    my $self = shift;
+    my $page = shift;
 
     $self->screen_template('view/edit_contention');
     return $self->render_screen(

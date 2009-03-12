@@ -53,9 +53,12 @@ sub transform_url {
 my $sth = sql_execute("
     SELECT distinct(class) as class, user_id
       FROM storage
+ LEFT JOIN users
+     USING (user_id)
      WHERE class LIKE 'container:%'
        AND key = 'type'
        AND value = 'dashboard'
+       AND users.user_id IS NOT NULL
 ");
 while (my $row = $sth->fetchrow_hashref) {
     my $container_store = Socialtext::Storage->new($row->{class});

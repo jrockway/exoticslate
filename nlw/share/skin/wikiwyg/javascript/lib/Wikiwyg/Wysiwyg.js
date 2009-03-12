@@ -590,6 +590,13 @@ proto.set_key_interception_handler = function() {
     var self = this;
 
     self.pastebin = jQuery("#pastebin").get(0).contentWindow;
+    if (!self.pastebin.document.body) {
+        setTimeout(function() {
+            self.set_key_interception_handler();
+        }, 500);
+        return;
+    }
+
     self.pastebin.document.body.innerHTML = "";
     self.pastebin.document.designMode = "on";
 

@@ -11,6 +11,7 @@ use Socialtext::Page;
 use Socialtext::Pages;
 use Socialtext::Permission 'ST_EDIT_PERM';
 use Socialtext::JSON;
+use Socialtext::String ();
 
 # XXX funkity duplication throughout, trying to remove some
 # but still plenty left
@@ -72,7 +73,7 @@ sub duplicate_page {
             page_title_bad => 1,
         );
     }
-    elsif ( Socialtext::Page->_MAX_PAGE_ID_LENGTH < length $new_id ) {
+    elsif ( Socialtext::String::MAX_PAGE_ID_LEN < length $new_id ) {
         return $self->duplicate_popup(
             page_title_too_long => 1,
         );
@@ -106,7 +107,7 @@ sub copy_to_workspace {
             page_title_bad => 1,
         );
     }
-    elsif ( Socialtext::Page->_MAX_PAGE_ID_LENGTH < length $new_id ) {
+    elsif ( Socialtext::String::MAX_PAGE_ID_LEN < length $new_id ) {
         return $self->copy_to_workspace_popup(
             page_title_too_long => 1,
         );

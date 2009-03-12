@@ -72,7 +72,7 @@ sub _is_favorites_page_title_valid {
     my $self = shift;
     my $name = shift;
 
-    if ( Socialtext::Page->_MAX_PAGE_ID_LENGTH
+    if ( Socialtext::String::MAX_PAGE_ID_LEN
          < length Socialtext::String::title_to_id($name) ) {
         return 0;
     }

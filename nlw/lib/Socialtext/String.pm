@@ -5,9 +5,15 @@ use warnings;
 use HTML::Entities ();
 use URI::Escape ();
 
+use constant MAX_PAGE_ID_LEN => 255;
+
 =head1 Socialtext::String
 
 A collection of random string functions.
+
+=head2 MAX_PAGE_ID_LEN
+
+Returns the maximum length of a page id.
 
 =head2 html_escape( $str )
 

@@ -37,7 +37,7 @@ sub _validate_pagename_length {
 
     my $id = Socialtext::String::title_to_id($page_name);
 
-    if ( Socialtext::Page->_MAX_PAGE_ID_LENGTH < length $id ) {
+    if ( Socialtext::String::MAX_PAGE_ID_LEN < length $id ) {
         my $message = loc("Page title is too long after URL encoding");
         data_validation_error errors => [$message];
     }

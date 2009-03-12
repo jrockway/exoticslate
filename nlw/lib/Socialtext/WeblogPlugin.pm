@@ -104,7 +104,7 @@ sub _get_weblog_tag_suffix {
 sub _create_new_page_for_data_validation_error {
     my $self = shift;
     my $page_name = shift;
-    my $page_id = substr(Socialtext::String::title_to_id($page_name), 0, Socialtext::Page->_MAX_PAGE_ID_LENGTH());
+    my $page_id = substr(Socialtext::String::title_to_id($page_name), 0, Socialtext::String::MAX_PAGE_ID_LEN);
     return $self->hub->pages->new_page($page_id); 
 }
 
@@ -113,7 +113,7 @@ sub _weblog_title_is_valid {
     my $weblog_name = shift;
     my $message;
 
-    if (length Socialtext::String::title_to_id($weblog_name) > Socialtext::Page->_MAX_PAGE_ID_LENGTH() ) {
+    if (length Socialtext::String::title_to_id($weblog_name) > Socialtext::String::MAX_PAGE_ID_LEN ) {
        $message = loc("Weblog name is too long after URL encoding");
        $self->add_error($message);
        return 0;
@@ -475,10 +475,10 @@ sub box_content_filled {
 
     my $title = $self->page_title;
     if ( defined $title
-         and ( length Socialtext::String::title_to_id($title) > Socialtext::Page->_MAX_PAGE_ID_LENGTH() )
+         and ( length Socialtext::String::title_to_id($title) > Socialtext::String::MAX_PAGE_ID_LEN )
        ) {
         my $message = loc( "Page title is too long; maximum length is [_1]",
-            Socialtext::Page->_MAX_PAGE_ID_LENGTH );
+            Socialtext::String::MAX_PAGE_ID_LEN );
         return $message;
     }
 

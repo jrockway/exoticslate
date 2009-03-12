@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 use utf8;
-use Socialtext::Page;
+use Socialtext::String;
 
 use Test::More tests => 5;
 
@@ -18,10 +18,10 @@ FAVORITES_PAGE_TITLE:
     #
     # Check length boundary conditions.
     # 
-    ok(Socialtext::UserPreferencesPlugin->_is_favorites_page_title_valid('a' x Socialtext::Page->_MAX_PAGE_ID_LENGTH),
+    ok(Socialtext::UserPreferencesPlugin->_is_favorites_page_title_valid('a' x Socialtext::String::MAX_PAGE_ID_LEN),
     "Max length title succeeds.");
 
-    ok(! Socialtext::UserPreferencesPlugin->_is_favorites_page_title_valid('a' x (Socialtext::Page->_MAX_PAGE_ID_LENGTH + 1)),
+    ok(! Socialtext::UserPreferencesPlugin->_is_favorites_page_title_valid('a' x (Socialtext::String::MAX_PAGE_ID_LEN + 1)),
     "Over max length title fails.");
 
     #

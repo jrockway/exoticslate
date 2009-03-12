@@ -28,6 +28,7 @@ use Socialtext::Log qw( st_log );
 use Socialtext::Permission qw( ST_EMAIL_IN_PERM );
 use Socialtext::User ();
 use Socialtext::Page ();
+use Socialtext::String ();
 use Text::Flowed     ();
 use Socialtext::File;
 use Socialtext::l10n qw(loc system_locale);
@@ -166,7 +167,7 @@ sub _get_page_for_subject {
 
     my $subject = $self->_clean_subject();
     if (length Socialtext::Page->uri_escape($subject) 
-        > Socialtext::Page->_MAX_PAGE_ID_LENGTH() ) {
+        > Socialtext::String::MAX_PAGE_ID_LEN ) {
         data_validation_error loc("Page title is too long after URL encoding");
         return;
     }

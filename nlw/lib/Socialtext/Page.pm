@@ -772,7 +772,7 @@ sub store {
 
     # XXX Why are we accessing _MAX_PAGE_ID_LENGTH, which implies to me
     # a very private piece of data.
-    if (Socialtext::Page->_MAX_PAGE_ID_LENGTH < length($self->id)) {
+    if (Socialtext::String::MAX_PAGE_ID_LEN < length($self->id)) {
         my $message = loc("Page title is too long after URL encoding");
         Socialtext::Exception::DataValidation->throw( errors => [ $message ] );
     }

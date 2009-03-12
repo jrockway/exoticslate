@@ -630,7 +630,7 @@ sub TitleIsValid {
     }
 
     if ( defined $title
-         and ( length Socialtext::String::title_to_id($title) > Socialtext::Page->_MAX_PAGE_ID_LENGTH() )
+         and ( length Socialtext::String::title_to_id($title) > Socialtext::String::MAX_PAGE_ID_LEN )
        ) {
         push @{$errors}, loc('Workspace title is too long after URL encoding');
     }

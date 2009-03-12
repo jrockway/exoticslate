@@ -10,8 +10,6 @@ field 'name';
 field 'id', -init => '$self->name';
 field 'uri', -init => '$self->id';
 
-const _MAX_PAGE_ID_LENGTH => 255;
-
 sub title { $_[0]->{title} || $_[0]->name || 'Mock page title' }
 
 sub to_html_or_default {

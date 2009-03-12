@@ -9,6 +9,7 @@ use Class::Field qw( const );
 use Socialtext::AppConfig;
 use Socialtext::Page;
 use Socialtext::Pages;
+use Socialtext::String ();
 use Socialtext::Permission 'ST_EDIT_PERM';
 use Socialtext::JSON;
 
@@ -48,7 +49,7 @@ sub rename_page {
             page_title_bad => 1,
         );
     }
-    elsif ( Socialtext::Page->_MAX_PAGE_ID_LENGTH < length $new_id ) {
+    elsif ( Socialtext::String::MAX_PAGE_ID_LEN < length $new_id ) {
         return $self->rename_popup(
             page_title_too_long => 1,
         );

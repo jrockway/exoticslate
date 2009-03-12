@@ -73,7 +73,7 @@
 
     <Location /nlw/ntlm>
         SetHandler          perl-script
-        PerlHandler         +Socialtext::Handler::Redirect
+        PerlHandler         +Socialtext::Handler::NTLM
         PerlAuthenHandler   +Socialtext::Apache::Authen::NTLM
         AuthType            ntlm
         Require             valid-user

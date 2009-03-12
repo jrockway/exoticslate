@@ -5,7 +5,7 @@ use warnings;
 
 use base 'WikiText::Socialtext::Parser';
 
-use Socialtext::Page;
+use Socialtext::String ();
 
 sub create_grammar {
     my $self = shift;
@@ -78,8 +78,13 @@ sub handle_waflphrase {
 
 sub name_to_id {
     my $self = shift;
-    my $text = shift;
-    return Socialtext::Page->name_to_id($text);
+    my $id = shift;
+    $id = '' if not defined $id;
+    $id =~ s/\s+/\s/g;
+    $id =~ s/^\s(?=.)//;
+    $id =~ s/(?<=.)\s$//;
+    $id =~ s/^0$/_/;
+    return Socialtext::String::uri_escape($id);
 }
 
 sub unknown_wafl {

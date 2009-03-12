@@ -12,7 +12,7 @@ use Test::Socialtext tests => 10;
 
 ###############################################################################
 # Fixtures: db
-fixtures(qw( db ));
+fixtures(qw( populated_rdbms ));
 
 BEGIN { use_ok 'Socialtext::EditPlugin' }
 

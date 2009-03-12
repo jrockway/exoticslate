@@ -41,14 +41,14 @@ sub rename_page {
     my $self = shift;
 
     my $new_title = $self->cgi->new_title;
+    my $new_id = Socialtext::String::title_to_id($new_title);
 
     if ( $self->_page_title_bad($new_title)) {
         return $self->rename_popup(
             page_title_bad => 1,
         );
     }
-    elsif ( Socialtext::Page->_MAX_PAGE_ID_LENGTH
-            < length Socialtext::Page->name_to_id($new_title) ) {
+    elsif ( Socialtext::Page->_MAX_PAGE_ID_LENGTH < length $new_id ) {
         return $self->rename_popup(
             page_title_too_long => 1,
         );
@@ -61,8 +61,7 @@ sub rename_page {
         return $self->template_process('close_window.html',
             before_window_close => q{window.opener.location='} .
                 Socialtext::AppConfig->script_name . '?' .
-                Socialtext::Page->name_to_id($self->cgi->new_title) .
-                q{';},
+                $new_id . q{';},
         );
     }
 

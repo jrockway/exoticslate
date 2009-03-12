@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use DateTime;
-use Test::Socialtext tests => 46;
+use Test::Socialtext tests => 44;
 fixtures( 'clean', 'admin' );
 
 BEGIN {
@@ -12,21 +12,6 @@ BEGIN {
 }
 
 use Socialtext::l10n qw(loc);
-
-# XXX: This test doesn't test enough, it was put in place as a
-# debugging aid, but should actuall test for real
-NAME_TO_ID: {
-    my %cases = (
-        'hello monKey' => 'hello_monkey',
-        'asTro?turf'   => 'astro_turf',
-        # FIXME: need utf8 examples
-    );
-
-    foreach my $case (keys %cases) {
-        is( Socialtext::Page->name_to_id($case), $cases{$case},
-            "$case => $cases{$case}" );
-    }
-}
 
 APPEND: {
     my $hub = new_hub('admin');

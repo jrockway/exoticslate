@@ -8,6 +8,7 @@ use Test::Socialtext tests => 10;
 use Socialtext::Page;
 use Socialtext::User;
 use Socialtext::Workspace;
+use Socialtext::String ();
 
 fixtures('admin');
 
@@ -56,7 +57,7 @@ Page_create_delete_restore_edit: {
             revision => $page->revision_count + 4,
             subject => $page_title,
             user => $user,
-            original_page_id => Socialtext::Page->name_to_id($page_title),
+            original_page_id => Socialtext::String::title_to_id($page_title),
         );
         logged_not_like('info', 'CREATE,PAGE,');
     }

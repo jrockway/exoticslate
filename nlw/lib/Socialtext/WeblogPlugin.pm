@@ -11,6 +11,7 @@ use URI;
 use URI::QueryParam;
 use Socialtext::l10n qw( loc );
 use Encode;
+use Socialtext::String ();
 use utf8;
 
 sub class_id { 'weblog' }
@@ -103,7 +104,7 @@ sub _get_weblog_tag_suffix {
 sub _create_new_page_for_data_validation_error {
     my $self = shift;
     my $page_name = shift;
-    my $page_id = substr(Socialtext::Page->name_to_id($page_name), 0, Socialtext::Page->_MAX_PAGE_ID_LENGTH());
+    my $page_id = substr(Socialtext::String::title_to_id($page_name), 0, Socialtext::Page->_MAX_PAGE_ID_LENGTH());
     return $self->hub->pages->new_page($page_id); 
 }
 
@@ -112,7 +113,7 @@ sub _weblog_title_is_valid {
     my $weblog_name = shift;
     my $message;
 
-    if (length Socialtext::Page->name_to_id($weblog_name) > Socialtext::Page->_MAX_PAGE_ID_LENGTH() ) {
+    if (length Socialtext::String::title_to_id($weblog_name) > Socialtext::Page->_MAX_PAGE_ID_LENGTH() ) {
        $message = loc("Weblog name is too long after URL encoding");
        $self->add_error($message);
        return 0;
@@ -125,7 +126,7 @@ sub _first_post_title_id {
     my $self             = shift;
     my $weblog_tag       = shift;
     my $first_post_title = loc("First Post in [_1]", $weblog_tag);
-    my $first_post_id    = Socialtext::Page->name_to_id($first_post_title);
+    my $first_post_id    = Socialtext::String::title_to_id($first_post_title);
     return ( $first_post_title, $first_post_id );
 }
 
@@ -474,7 +475,7 @@ sub box_content_filled {
 
     my $title = $self->page_title;
     if ( defined $title
-         and ( length Socialtext::Page->name_to_id($title) > Socialtext::Page->_MAX_PAGE_ID_LENGTH() )
+         and ( length Socialtext::String::title_to_id($title) > Socialtext::Page->_MAX_PAGE_ID_LENGTH() )
        ) {
         my $message = loc( "Page title is too long; maximum length is [_1]",
             Socialtext::Page->_MAX_PAGE_ID_LENGTH );

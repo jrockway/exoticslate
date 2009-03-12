@@ -12,7 +12,7 @@ use Socialtext::Exceptions qw( data_validation_error );
 use Socialtext::l10n qw(loc);
 use Socialtext::Events;
 use Socialtext::Log qw(st_log);
-use Socialtext::String;
+use Socialtext::String ();
 
 sub class_id { 'edit' }
 const class_title => 'Editing Page';
@@ -35,13 +35,13 @@ sub _validate_pagename_length {
     my $self = shift;
     my $page_name = shift;
 
-    if ( Socialtext::Page->_MAX_PAGE_ID_LENGTH
-         < length Socialtext::Page->name_to_id($page_name) ) {
+    my $id = Socialtext::String::title_to_id($page_name);
 
+    if ( Socialtext::Page->_MAX_PAGE_ID_LENGTH < length $id ) {
         my $message = loc("Page title is too long after URL encoding");
         data_validation_error errors => [$message];
     }
-    if ( length Socialtext::Page->name_to_id($page_name) == 0 ) {
+    if ( length $id == 0 ) {
         my $message = loc("Page title missing");
         data_validation_error errors => [$message];
     }

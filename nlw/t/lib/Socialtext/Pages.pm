@@ -11,8 +11,8 @@ field 'hub';
 
 sub new_from_name {
     my $self = shift;
-    my $title = shift;
-    my $id = Socialtext::Page->name_to_id($title);
+    my $title = shift || '';
+    my $id = lc($title); # TODO: make this Socialtext::String::title_to_id
     my $page = $self->new_page($id);
     $page->title($title);
     return $page;

@@ -14,11 +14,10 @@ use base 'Socialtext::Search::Searcher';
 
 use Encode ();
 use Socialtext::Hub;
-use Socialtext::Page;
 use Socialtext::Pages;
 use Socialtext::Search::SimplePageHit;
 use Socialtext::Workspace;
-use URI::Escape ();
+use Socialtext::String ();
 
 sub new {
     my ( $class, $workspace_name ) = @_;
@@ -37,8 +36,7 @@ sub new {
 sub search {
     my ( $self, $query_string ) = @_;
 
-    my $flat_terms
-        = URI::Escape::uri_unescape( Socialtext::Page->name_to_id($query_string) );
+    my $flat_terms = Socialtext::String::title_to_id($query_string, 'no-escape');
 
     Encode::_utf8_on($flat_terms);
 

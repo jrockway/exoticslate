@@ -18,6 +18,7 @@ use Socialtext::User;
 use Socialtext::Validate qw( validate DIR_TYPE );
 use Socialtext::Workspace;
 use Socialtext::l10n qw( loc );
+use Socialtext::String ();
 
 sub class_id { 'pages' }
 const class_title => 'NLW Pages';
@@ -181,7 +182,7 @@ sub current_id {
     my $page_name = 
       $self->hub->cgi->page_name ||
       $self->hub->current_workspace->title;
-    Socialtext::Page->name_to_id($page_name);
+    Socialtext::String::title_to_id($page_name);
 }
 
 sub unset_current {
@@ -197,7 +198,7 @@ sub new_page {
 sub new_from_name {
     my $self = shift;
     my $page_name = shift;
-    my $id = Socialtext::Page->name_to_id($page_name);
+    my $id = Socialtext::String::title_to_id($page_name);
     my $page = $self->new_page($id);
     return unless $page;
     $page->title($self->name_to_title($page_name));
@@ -213,11 +214,11 @@ sub new_from_uri {
 
     my $page = Socialtext::Page->new(
         hub => $self->hub,
-        id  => Socialtext::Page->name_to_id($uri) );
+        id  => Socialtext::String::title_to_id($uri) );
 
     die("Invalid page URI: $uri") unless $page;
 
-    my $return_id = Socialtext::Page->name_to_id($page->title);
+    my $return_id = Socialtext::String::title_to_id($page->title);
     $page->title( $uri ) unless $return_id eq $uri;
 
     return $page;
@@ -229,7 +230,7 @@ sub new_page_from_any {
     my $page = Socialtext::Page->new(hub => $self->hub, id => '_');
     $page->metadata($page->new_metadata('_'));
     $page->load($any);
-    $page->id(Socialtext::Page->name_to_id($page->metadata->Subject));
+    $page->id(Socialtext::String::title_to_id($page->metadata->Subject));
     return $page;
 }
 

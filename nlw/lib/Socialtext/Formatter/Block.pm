@@ -13,6 +13,7 @@ sub contains_phrases {
 package Socialtext::Formatter::Heading;
 use base 'Socialtext::Formatter::Block';
 use Class::Field qw( const field );
+use Socialtext::String ();
 
 const formatter_id => 'hx';
 field 'level';
@@ -28,7 +29,7 @@ sub match {
 sub html_start {
     my $self = shift;
     my $text = $self->get_text;
-    my $id   = Socialtext::Page->name_to_id($text);
+    my $id   = Socialtext::String::title_to_id($text);
     sprintf '<h%s id="%s">', $self->level,
         Socialtext::Formatter::legalize_sgml_id($id);
 }

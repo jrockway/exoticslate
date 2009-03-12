@@ -8,6 +8,7 @@ use base 'Socialtext::Query::Plugin';
 use Class::Field qw( const );
 use Socialtext::Pages;
 use Socialtext::l10n qw(loc);
+use Socialtext::String();
 
 sub class_id { 'backlinks' }
 const class_title          => 'Backlinks';
@@ -126,7 +127,7 @@ sub update {
 
     my $links = $self->_get_links($page);
     foreach my $found (@$links) {
-        my $link = Socialtext::Page->name_to_id($found->{link});
+        my $link = Socialtext::String::title_to_id($found->{link});
         $self->_write_link($page, $link);
     }
 

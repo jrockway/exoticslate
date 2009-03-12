@@ -13,6 +13,7 @@ use Socialtext::TT2::Renderer;
 use Socialtext::l10n qw/loc/;
 use Socialtext::Stax;
 use Socialtext::Timer;
+use Socialtext::String ();
 use Apache::Cookie;
 
 sub class_id { 'helpers' }
@@ -335,7 +336,7 @@ sub _get_wiki_info {
 
     return {
         title         => $wiki->title,
-        central_page  => Socialtext::Page->name_to_id( $wiki->title ),
+        central_page  => Socialtext::String::title_to_id( $wiki->title ),
         logo          => $wiki->logo_uri_or_default,
         name          => $wiki->name,
         has_dashboard => $wiki->homepage_is_dashboard,

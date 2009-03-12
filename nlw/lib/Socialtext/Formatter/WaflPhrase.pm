@@ -8,6 +8,7 @@ use base 'Socialtext::Formatter::Wafl', 'Socialtext::Formatter::Phrase';
 use Class::Field qw( const field );
 use Socialtext::Paths;
 use Socialtext::Permission 'ST_READ_PERM';
+use Socialtext::String ();
 
 const formatter_id  => 'wafl_phrase';
 const pattern_start =>
@@ -93,7 +94,7 @@ sub parse_wafl_reference {
     # XXX this just feels wrong. It's necessary for the many ways
     # we might enter the formatter. This is probably the wrong place
     # for this.
-    my $page_id = Socialtext::Page->name_to_id($page_title)
+    my $page_id = Socialtext::String::title_to_id($page_title)
         || $self->hub->viewer->page_id || $self->current_page_id;
     my $title = $page_title || '';
 
@@ -279,7 +280,7 @@ sub html {
         $label = "[$page_title] $label"
             if $page_title
             and ( $self->current_page_id ne
-            Socialtext::Page->name_to_id($page_title) );
+            Socialtext::String::title_to_id($page_title) );
         $label = "$workspace_name:$label"
             if $workspace_name
             and ( $self->current_workspace_name ne $workspace_name );
@@ -323,7 +324,7 @@ sub html {
     $label = "[$page_title] $label"
         if $page_title
         and ( $self->current_page_id ne
-        Socialtext::Page->name_to_id($page_title) );
+        Socialtext::String::title_to_id($page_title) );
     $label = "$workspace_name:$label"
         if $workspace_name
         and ( $self->current_workspace_name ne $workspace_name );
@@ -652,7 +653,7 @@ sub html {
         $label ||= $page_title
             ? "$page_title ($section_id)"
             : $section_id;
-        $section_id   = Socialtext::Page->name_to_id($section_id);
+        $section_id   = Socialtext::String::title_to_id($section_id);
         $section_text = '#' . Socialtext::Formatter::legalize_sgml_id($section_id);
         $link_title   = loc("section link");
     }

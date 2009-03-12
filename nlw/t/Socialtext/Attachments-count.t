@@ -4,12 +4,13 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 4;
+use Test::Socialtext tests => 5;
 fixtures( 'admin' );
 
 BEGIN {
     use_ok( 'Socialtext::Attachments' );
     use_ok( 'Socialtext::Page' );
+    use_ok( 'Socialtext::String' );
 }
 
 my $hub = new_hub('admin');
@@ -51,7 +52,7 @@ sub attach_to_page {
     open my $fh, '<', $filepath or die "$filepath: $!";
     $hub->attachments->create(
         filename => $filename,
-        page_id  => Socialtext::Page->name_to_id($page_name),
+        page_id  => Socialtext::String::title_to_id($page_name),
         fh       => $fh,
         creator => $hub->current_user,
     );

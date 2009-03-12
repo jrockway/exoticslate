@@ -18,6 +18,7 @@ use Socialtext::Formatter::Parser;
 use Socialtext::Cache;
 use Socialtext::Authz::SimpleChecker;
 use Socialtext::Pluggable::Adapter;
+use Socialtext::String ();
 my $prod_ver = Socialtext->product_version;
 
 # Class Methods
@@ -378,7 +379,7 @@ sub get_revision {
 
     return undef if (!$p{workspace_name} || !$p{revision_id} || !$p{page_name});
 
-    my $page_id = $self->name_to_id($p{page_name});
+    my $page_id = Socialtext::String::title_to_id($p{page_name});
     my $cache_key = "page $p{workspace_name} $page_id revision $p{revision_id}";
     my $revision = $self->value_from_cache($cache_key);
     return $revision if ($revision);
@@ -415,7 +416,7 @@ sub get_page {
 
     return undef if (!$p{workspace_name} || !$p{page_name});
 
-    my $page_id = $self->name_to_id($p{page_name});
+    my $page_id = Socialtext::String::title_to_id($p{page_name});
     my $cache_key = "page $p{workspace_name} $page_id";
     my $page = $self->value_from_cache($cache_key);
     return $page if ($page);
@@ -443,16 +444,7 @@ sub get_page {
 
 sub name_to_id {
     my $self = shift;
-    my $id = shift;
-
-    $id = '' if not defined $id;
-    $id =~ s/[^\p{Letter}\p{Number}\p{ConnectorPunctuation}\pM]+/_/g;
-    $id =~ s/_+/_/g;
-    $id =~ s/^_(?=.)//;
-    $id =~ s/(?<=.)_$//;
-    $id =~ s/^0$/_/;
-    $id = lc($id);
-    return URI::Escape::uri_escape_utf8($id);
+    return Socialtext::String::title_to_id(shift);
 }
 
 sub _hub_for_workspace {

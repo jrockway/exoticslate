@@ -4,8 +4,7 @@ package Socialtext::Rest::Sections;
 use strict;
 use warnings;
 
-# for name_to_id of anchors
-use Socialtext::Page;
+use Socialtext::String ();
 
 # One can guess that someday there could be a 
 # Socialtext::Rest::Units (so we can pull a variety of
@@ -42,7 +41,7 @@ sub _uri_for_section {
     my $self    = shift;
     my $section = shift;
     return '../' . $self->page->uri  . '#'
-        . Socialtext::Page->name_to_id($section);
+        . Socialtext::String::title_to_id($section);
 }
 
 sub _entity_hash {

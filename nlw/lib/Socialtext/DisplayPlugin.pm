@@ -8,7 +8,7 @@ use base 'Socialtext::Plugin';
 use Class::Field qw( const );
 use DateTime::Format::Strptime;
 use Socialtext::User;
-use Socialtext::String;
+use Socialtext::String ();
 use Socialtext::BrowserDetect ();
 use Socialtext::l10n qw/loc system_locale/;
 use Socialtext::Locales qw/available_locales/;
@@ -369,7 +369,7 @@ sub _get_page_info {
         display_title   => Socialtext::String::html_escape( $page->title ),
         id              => $page->id,
         is_default_page => (
-            $page->id eq Socialtext::Page->name_to_id(
+            $page->id eq Socialtext::String::title_to_id(
                 $self->hub->current_workspace->title
             )
         ),

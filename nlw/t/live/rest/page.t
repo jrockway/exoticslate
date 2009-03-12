@@ -12,6 +12,7 @@ use Socialtext::JSON;
 use Socialtext::Page;
 use Socialtext::User;
 use Socialtext::Workspace;
+use Socialtext::String ();
 use Test::Live fixtures => ['admin_with_extra_pages', 'help', 'foobar'];
 use Test::More;
 
@@ -265,12 +266,12 @@ test_http "PUT to existing page" {
     $new_body =~ s/\n+//gs;
     is( $body, $new_body, "newer body is returns as newer body" );
 
-    confirm_subject($NEW_NAME, Socialtext::Page->name_to_id($NEW_NAME));
+    confirm_subject($NEW_NAME, Socialtext::String::title_to_id($NEW_NAME));
 }
 
 
 test_http "PUT to existing page with uri not name" {
-    my $name = Socialtext::Page->name_to_id($NEW_NAME);
+    my $name = Socialtext::String::title_to_id($NEW_NAME);
 
     >> PUT $BASE/$name
     >> Content-type: text/x.socialtext-wiki

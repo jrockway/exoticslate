@@ -10,6 +10,7 @@ use File::Temp ();
 use Socialtext::File;
 use Socialtext::Formatter::Parser;
 use Socialtext::Validate qw( validate validate_pos SCALAR_TYPE );
+use Socialtext::String ();
 use Time::Local ();
 
 sub new {
@@ -164,7 +165,7 @@ sub html {
     $label = "[$page_title] $label"
       if $page_title
       and ( $self->hub->pages->current->id ne
-        Socialtext::Page->name_to_id($page_title) );
+        Socialtext::String::title_to_id($page_title) );
     $label = "$workspace_name:$label"
       if $workspace_name
       and ( $self->hub->current_workspace->name ne $workspace_name );

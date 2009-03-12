@@ -13,6 +13,7 @@ use Socialtext::Pages;
 use Socialtext::File;
 use Socialtext::Paths;
 use Socialtext::l10n qw(loc);
+use Socialtext::String ();
 
 sub class_id { 'breadcrumbs' }
 const class_title => 'Recently Viewed';
@@ -116,7 +117,7 @@ sub drop_crumb {
 
     return unless $page->exists;
 
-    my @parts = grep { Socialtext::Page->name_to_id($_) ne $page_id } @$trail_parts;
+    my @parts = grep { Socialtext::String::title_to_id($_) ne $page_id } @$trail_parts;
 
     $self->_save_trail( [ $page->title, @parts ] );
 }

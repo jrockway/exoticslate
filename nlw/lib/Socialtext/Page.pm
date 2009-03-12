@@ -85,6 +85,7 @@ sub new_metadata {
 
 sub name_to_id {
     my $self = shift;
+    Carp::carp "Socialtext::Page->name_to_id() is deprecated; use Socialtext::String::title_to_id() instead";
     return Socialtext::String::title_to_id(shift);
 }
 
@@ -303,7 +304,7 @@ various places where this has been done in the past.
         # XXX validate these args
 
         # explicitly set both id and name to predictable things _now_
-        $self->id(Socialtext::Page->name_to_id($args{subject}));
+        $self->id(Socialtext::String::title_to_id($args{subject}));
         $self->name($args{subject});
 
         my $revision
@@ -1490,7 +1491,7 @@ sub duplicate {
         return 0;
     }
 
-    my $target_page_id = ref($self)->name_to_id($target_page_title);
+    my $target_page_id = Socialtext::String::title_to_id($target_page_title);
     $target_page->content($self->content);
     $target_page->metadata->Subject($target_page_title);
     $target_page->metadata->Category($self->metadata->Category)
@@ -1544,7 +1545,7 @@ sub rename {
 
     # If the new title of the page has the same page-id as the old then just
     # change the title, and don't mess with the other bits.
-    my $new_id = $self->name_to_id($new_page_title);
+    my $new_id = Socialtext::String::title_to_id($new_page_title);
     if ( $self->id eq $new_id ) {
         $self->title($new_page_title);
         $self->metadata->Subject($new_page_title);
@@ -1952,8 +1953,8 @@ sub is_bad_page_title {
     return 1 if $title =~ /^\s*$/;
 
     # Can't have a page named "Untitled Page"
-    my $untitled_page = $class->name_to_id( loc("Untitled Page") );
-    return 1 if $class->name_to_id($title) eq $untitled_page;
+    my $untitled_page = Socialtext::String::title_to_id( loc("Untitled Page") );
+    return 1 if Socialtext::String::title_to_id($title) eq $untitled_page;
 
     return 0;
 }

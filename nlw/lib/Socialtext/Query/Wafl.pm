@@ -9,6 +9,7 @@ use base 'Socialtext::Formatter::WaflPhraseDiv';
 use Class::Field qw( field );
 use Socialtext::Permission 'ST_READ_PERM';
 use Socialtext::l10n qw( loc );
+use Socialtext::String ();
 
 field target_workspace =>
     -init => '$self->current_workspace_name';
@@ -119,7 +120,7 @@ sub _format_results {
         map {
             my $subject = $_->{Subject};
             if ($subject =~ /\]/) {
-                my $page_id = Socialtext::Page->name_to_id($_->{Subject});
+                my $page_id = Socialtext::String::title_to_id($_->{Subject});
                 $subject =~ s/"/''/g; # Hack to avoid misparsed double quotes.
                 qq("$subject"{$wafl $workspace_name [$page_id]})
             }

@@ -4,17 +4,18 @@
 use warnings;
 use strict;
 
-use Test::Socialtext tests => 11;
+use Test::Socialtext tests => 12;
 fixtures('admin');
 
 BEGIN {
     use_ok( 'Socialtext::Page' );
+    use_ok( 'Socialtext::String' );
 }
 
 my $hub       = new_hub('admin');
 my $page_name = 'update page ' . time();
 my $content1  = 'one content';
-my $page_id   = Socialtext::Page->name_to_id($page_name);
+my $page_id   = Socialtext::String::title_to_id($page_name);
 
 {
     my $page = Socialtext::Page->new( hub => $hub )->create(

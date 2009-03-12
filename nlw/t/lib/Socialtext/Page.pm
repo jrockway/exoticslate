@@ -29,12 +29,6 @@ sub to_html {
     return $self->{html} || "$self->{page_id} HTML";
 }
 
-sub name_to_id {
-    my $self = shift;
-    my $id = shift || '';
-    return lc($id);
-}
-
 sub preview_text { 'preview text' }
 
 sub directory_path { '/directory/path' }

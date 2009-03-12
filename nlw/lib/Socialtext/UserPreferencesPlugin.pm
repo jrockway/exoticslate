@@ -9,6 +9,7 @@ use Socialtext::Locales qw( valid_code );
 
 use Class::Field qw( const field );
 use Socialtext::Exceptions qw( data_validation_error );
+use Socialtext::String ();
 
 sub class_id { 'user_preferences' }
 const class_title => 'User Preferences';
@@ -72,7 +73,7 @@ sub _is_favorites_page_title_valid {
     my $name = shift;
 
     if ( Socialtext::Page->_MAX_PAGE_ID_LENGTH
-         < length Socialtext::Page->name_to_id($name) ) {
+         < length Socialtext::String::title_to_id($name) ) {
         return 0;
     }
     return 1;

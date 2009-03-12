@@ -4,6 +4,8 @@ use strict;
 use warnings;
 
 use base 'Socialtext::Plugin';
+use Socialtext::String ();
+use Socialtext::Formatter ();
 
 sub class_id { 'page_anchors' }
 
@@ -19,7 +21,7 @@ use base 'Socialtext::Formatter::WaflPhrase';
 
 sub html {
     my $self = shift;
-    my $anchor = Socialtext::Page->name_to_id($self->arguments);
+    my $anchor = Socialtext::String::title_to_id($self->arguments);
     $anchor = Socialtext::Formatter::legalize_sgml_id($anchor);
     return qq{<a name="$anchor"><span class="ugly-ie-css-hack" style="display:none;">&nbsp;</span></a>};
 }

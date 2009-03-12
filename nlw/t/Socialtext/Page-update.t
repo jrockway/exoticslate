@@ -5,12 +5,13 @@ use warnings;
 use strict;
 use DateTime;
 
-use Test::Socialtext tests => 19;
+use Test::Socialtext tests => 20;
 use Socialtext::SQL;
 fixtures( 'admin' );
 
 BEGIN {
     use_ok( 'Socialtext::Page' );
+    use_ok( 'Socialtext::String' );
 }
 
 my $hub       = new_hub('admin');
@@ -27,7 +28,7 @@ UPDATE_AS_CREATE: {
 
     $page->update(
         content          => $content1,
-        original_page_id => Socialtext::Page->name_to_id($page_name),
+        original_page_id => Socialtext::String::title_to_id($page_name),
         revision         => 0,
         subject          => $page_name,
         user             => $hub->current_user,
@@ -109,12 +110,9 @@ UPDATE_FROM_REMOTE_PRESERVES_TAGS: {
 
 sub _page_object {
     my $name = shift;
-
-    my $id = Socialtext::Page->name_to_id($name);
-
     return Socialtext::Page->new(
         hub => $hub,
-        id  => $id,
+        id  => Socialtext::String::title_to_id($name),
     );
 }
 

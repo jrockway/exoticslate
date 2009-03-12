@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::Socialtext tests => 37;
+use Test::Socialtext tests => 25;
 fixtures( 'admin_with_extra_pages' );
 
 my $hub = new_hub('admin');
@@ -69,28 +69,6 @@ my $creator = Socialtext::User->new( username => 'devnull1@socialtext.com' );
         'metadata date - needed for display';
 }
 
-use utf8;
-my %cases = (
-    'asdf'    => 'asdf',
-    '_asdf'   => 'asdf',
-    'as_df'   => 'as_df',
-    'asdf_'   => 'asdf',
-    'a@#$sdf' => 'a_sdf',
-    'as > df' => 'as_df',
-    "as\ndf"  => 'as_df',
-    'as[d]f'  => 'as_d_f',
-    'asüf'    => 'as%C3%BCf',
-    # XXX - is this really what we want '' to go to?
-    ''        => '',
-    '-:-'     => '_',
-    '0'       => '_'
-    # ...any others?
-    # You're going to hate me for this, but transliterate your new test to
-    # javascript, too please (see main.js). (TODO - OAOO these tests)
-);
-while (my($in, $out) = each %cases) {
-    is(Socialtext::Page->name_to_id($in), $out, "'$in' => '$out'");
-}
 
 { # handle newlines in Subject headers
     my $page = Socialtext::Page->new( hub => $hub )->create(

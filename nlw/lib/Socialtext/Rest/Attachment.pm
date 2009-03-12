@@ -8,6 +8,7 @@ use base 'Socialtext::Rest';
 use IO::File;
 use Socialtext::HTTP ':codes';
 use Socialtext::l10n qw(system_locale);
+use Socialtext::String ();
 
 sub allowed_methods { 'GET, HEAD, DELETE' }
 sub permission { +{ GET => 'read', DELETE => 'attachments' } }
@@ -111,7 +112,7 @@ sub _get_attachment {
     my $self = shift;
     my ( $page_uri, $attachment_id ) = split /:/, $self->attachment_id;
 
-    my $page_id =  Socialtext::Page->name_to_id($page_uri);
+    my $page_id =  Socialtext::String::title_to_id($page_uri);
 
     my $attachment = $self->hub->attachments->new_attachment(
         id      => $attachment_id,

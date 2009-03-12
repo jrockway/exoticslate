@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 19;
+use Test::More tests => 45;
 
 BEGIN {
     use_ok( 'Socialtext::String' );
@@ -52,4 +52,54 @@ WORD_TRUNCATE: {
         'UTF8 not truncated';
     is Socialtext::String::word_truncate($singapore, 2),
         substr($singapore, 0, 2) . '...', 'UTF8 truncated with ellipsis';
+}
+
+TITLE_TO_ID: {
+    use utf8;
+    my %cases = (
+        'asdf'    => 'asdf',
+        '_asdf'   => 'asdf',
+        'as_df'   => 'as_df',
+        'asdf_'   => 'asdf',
+        'a@#$sdf' => 'a_sdf',
+        'as > df' => 'as_df',
+        "as\ndf"  => 'as_df',
+        'as[d]f'  => 'as_d_f',
+        'asüf'    => 'as%C3%BCf',
+        'hello monKey' => 'hello_monkey',
+        'asTro?turf'   => 'astro_turf',
+        # XXX - is this really what we want '' to go to?
+        ''        => '',
+        '-:-'     => '_',
+        '0'       => '_'
+        # ...any others?
+        # You're going to hate me for this, but transliterate your new test to
+        # javascript, too please (see main.js). (TODO - OAOO these tests)
+    );
+    while (my($in, $out) = each %cases) {
+        is(Socialtext::String::title_to_id($in), $out, 
+            "title_to_id '$in' => '$out'");
+    }
+}
+
+TITLE_TO_DISPLAY_ID: {
+    use utf8;
+    my %cases = (
+        'asdf'    => 'asdf',
+        '_asdf'   => '_asdf',
+        'as_df'   => 'as_df',
+        'asdf_'   => 'asdf_',
+        'a@#$sdf' => 'a%40%23%24sdf',
+        'as > df' => 'as%20%3E%20df',
+        "as\ndf"  => 'as%20df',
+        'as[d]f'  => 'as%5Bd%5Df',
+        'Buster Braün' => 'Buster%20Bra%C3%BCn',
+        ''        => '',
+        '-:-'     => '-%3A-',
+        '0'       => '_'
+    );
+    while (my($in, $out) = each %cases) {
+        is(Socialtext::String::title_to_display_id($in), $out, 
+            "title_to_display_id '$in' => '$out'");
+    }
 }

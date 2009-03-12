@@ -42,7 +42,7 @@
         </div>
         [% IF container.name == "editing" && !gadget.parent_instance_id  %]
         <div id="[% gadget.id %]-push">
-            <input class="push-widget" name="[% gadget.title %]" id="push_[% gadget.id %]" type="checkbox" /> <label for="push_[% gadget.id %]">Push to all dashboards </label>
+            <input class="push-widget" name="[% gadget.title %]" id="push_[% gadget.id %]" type="checkbox" /> <label for="push_[% gadget.id %]">[% loc('Push to all dashboards') %]</label>
         </div>
         
         [% END %]

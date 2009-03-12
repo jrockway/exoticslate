@@ -1158,6 +1158,14 @@ Optional.
 
 =for code type => SCALAR_TYPE
 
+=head2 disable_registration
+
+Set this to true to prevent users from registering user accounts.
+
+Default: 0
+
+=for code type => BOOLEAN_TYPE
+
 =head1 OTHER METHODS
 
 In addition to the methods available for each configuration variable,

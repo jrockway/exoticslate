@@ -1010,12 +1010,12 @@ sub plugins_enabled {
 }
 
 sub is_plugin_enabled {
-    my ($self, $plugin) = @_;
-    my $sql = q{
-        SELECT COUNT(*) FROM workspace_plugin
-        WHERE workspace_id = ? AND plugin = ?
-    };
-    return sql_singlevalue($sql, $self->workspace_id, $plugin);
+    my ($self, $plugin_name) = @_;
+    my $authz = Socialtext::Authz->new();
+    return $authz->plugin_enabled_for_workspace(
+        plugin_name => $plugin_name,
+        workspace => $self,
+    );
 }
 
 sub _check_plugin_scope {
@@ -1042,11 +1042,11 @@ sub enable_plugin {
         INSERT INTO workspace_plugin VALUES (?,?)
     }, $self->workspace_id, $plugin);
 
+    Socialtext::Cache->clear('authz_plugin');
+
     for my $dep ($plugin_class->dependencies, $plugin_class->enables) {
         $self->enable_plugin($dep);
     }
-
-    Socialtext::Cache->clear('authz_plugin');
 }
 
 sub disable_plugin {
@@ -1064,12 +1064,12 @@ sub disable_plugin {
         WHERE workspace_id = ? AND plugin = ?
     }, $self->workspace_id, $plugin);
 
+    Socialtext::Cache->clear('authz_plugin');
+
     # Disable any reverse depended packages
     for my $rdep ($plugin_class->reverse_dependencies) {
         $self->disable_plugin($rdep);
     }
-
-    Socialtext::Cache->clear('authz_plugin');
 }
 
 sub comment_form_custom_fields {

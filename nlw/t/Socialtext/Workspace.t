@@ -17,7 +17,10 @@ use Socialtext::File;
 use Socialtext::Paths;
 use Socialtext::Account;
 use Socialtext::Workspace;
+use Socialtext::Cache;
 use utf8;
+
+Socialtext::Cache->clear('authz_plugin');
 
 my $has_image_magick = eval { require Image::Magick; 1 };
 

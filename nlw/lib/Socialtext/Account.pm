@@ -180,12 +180,12 @@ sub to_hash {
 }
 
 sub is_plugin_enabled {
-    my ($self, $plugin) = @_;
-    my $sql = q{
-        SELECT COUNT(*) FROM account_plugin
-        WHERE account_id = ? AND plugin = ?
-    };
-    return sql_singlevalue($sql, $self->account_id, $plugin);
+    my ($self, $plugin_name) = @_;
+    my $authz = Socialtext::Authz->new();
+    return $authz->plugin_enabled_for_account(
+        plugin_name => $plugin_name,
+        account => $self,
+    );
 }
 
 sub plugins_enabled {
@@ -214,11 +214,11 @@ sub enable_plugin {
         INSERT INTO account_plugin VALUES (?,?)
     }, $self->account_id, $plugin);
 
+    Socialtext::Cache->clear('authz_plugin');
+
     for my $dep ($plugin_class->dependencies, $plugin_class->enables) {
         $self->enable_plugin($dep);
     }
-
-    Socialtext::Cache->clear('authz_plugin');
 }
 
 sub disable_plugin {
@@ -236,12 +236,12 @@ sub disable_plugin {
         WHERE account_id = ? AND plugin = ?
     }, $self->account_id, $plugin);
 
+    Socialtext::Cache->clear('authz_plugin');
+
     # Disable any reverse depended packages
     for my $rdep ($plugin_class->reverse_dependencies) {
         $self->disable_plugin($rdep);
     }
-
-    Socialtext::Cache->clear('authz_plugin');
 }
 
 sub _check_plugin_scope {

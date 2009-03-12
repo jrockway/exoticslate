@@ -180,6 +180,62 @@ SQL
     return ($enabled ? 1 : 0);
 }
 
+# Is a plugin enabled for a particular account
+sub plugin_enabled_for_account {
+    my $self = shift;
+    my %p = @_;
+    my $account = delete $p{account};
+    my $plugin_name = delete $p{plugin_name};
+
+    my $account_id = ref($account) ? $account->account_id : $account;
+
+    my $cache = Socialtext::Cache->cache('authz_plugin');
+    my $cache_key = "acct:$account_id\0$plugin_name";
+    my $enabled = $cache->get($cache_key);
+    return $enabled if defined $enabled;
+
+    my $sql = <<SQL;
+        SELECT 1 
+        FROM account_plugin
+        WHERE account_id = ? AND plugin = ? 
+        LIMIT 1
+SQL
+
+    Socialtext::Timer->Continue('plugin_enabled_for_account');
+    $enabled = sql_singlevalue($sql, $account_id, $plugin_name) ? 1 : 0;
+    Socialtext::Timer->Pause('plugin_enabled_for_account');
+
+    $cache->set($cache_key, $enabled);
+    return ($enabled ? 1 : 0);
+}
+
+sub plugin_enabled_for_workspace {
+    my $self = shift;
+    my %p = @_;
+    my $ws = delete $p{workspace};
+    my $plugin_name = delete $p{plugin_name};
+
+    my $workspace_id = ref($ws) ? $ws->workspace_id : $ws;
+
+    my $cache = Socialtext::Cache->cache('authz_plugin');
+    my $cache_key = "ws:$workspace_id\0$plugin_name";
+    my $enabled = $cache->get($cache_key);
+    return $enabled if defined $enabled;
+
+    my $sql = <<SQL;
+        SELECT 1 
+        FROM workspace_plugin
+        WHERE workspace_id = ? AND plugin = ? 
+        LIMIT 1
+SQL
+
+    Socialtext::Timer->Continue('plugin_enabled_for_workspace');
+    $enabled = sql_singlevalue($sql, $workspace_id, $plugin_name) ? 1 : 0;
+    Socialtext::Timer->Pause('plugin_enabled_for_workspace');
+
+    $cache->set($cache_key, $enabled);
+    return ($enabled ? 1 : 0);
+}
 
 1;
 

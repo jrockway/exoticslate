@@ -53,7 +53,8 @@ sub handle_waflphrase {
         if ($options =~ /^\s*([\w\-]+)\s*\[(.*)\]\s*$/) {
             my ($workspace_id, $page_id) = ($1, $2);
             my $text = $match->{text} || $page_id;
-            $page_id = $self->name_to_id($page_id);
+            $page_id =
+                Socialtext::String::title_to_display_id($page_id, 'no-escape');
             $self->{receiver}->insert({
                 wafl_type => 'link',
                 workspace_id => $workspace_id,
@@ -74,17 +75,6 @@ sub handle_waflphrase {
     }
 
     $self->unknown_wafl($match);
-}
-
-sub name_to_id {
-    my $self = shift;
-    my $id = shift;
-    $id = '' if not defined $id;
-    $id =~ s/\s+/ /g;
-    $id =~ s/^\s(?=.)//;
-    $id =~ s/(?<=.)\s$//;
-    $id =~ s/^0$/_/;
-    return Socialtext::String::uri_escape($id);
 }
 
 sub unknown_wafl {

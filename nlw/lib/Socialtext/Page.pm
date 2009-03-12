@@ -85,15 +85,7 @@ sub new_metadata {
 
 sub name_to_id {
     my $self = shift;
-    my $id = shift;
-    $id = '' if not defined $id;
-    $id =~ s/[^\p{Letter}\p{Number}\p{ConnectorPunctuation}\pM]+/_/g;
-    $id =~ s/_+/_/g;
-    $id =~ s/^_(?=.)//;
-    $id =~ s/(?<=.)_$//;
-    $id =~ s/^0$/_/;
-    $id = lc($id);
-    $self->uri_escape($id);
+    return Socialtext::String::title_to_id(shift);
 }
 
 sub name {

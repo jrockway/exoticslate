@@ -261,106 +261,58 @@ sub recently_viewed_workspaces {
     return @viewed;
 }
 
-sub user_id {
-    $_[0]->homunculus->user_id( @_[ 1 .. $#_ ] );
+sub _delegate {
+    my $method = shift;
+    my %opts = @_;
+    my $new_method;
+    my $delegated = $opts{to} || 'homunculus';
+    if ($opts{utf8ify}) {
+        $new_method = eval <<EOCODE;
+            sub {
+                my \$f = \$_[0]->$delegated->$method( \@_[ 1 .. \$#_ ] );
+                Encode::_utf8_on(\$f) unless Encode::is_utf8(\$f);
+                return \$f;
+            }
+EOCODE
+    }
+    else {
+        $new_method = eval "sub { \$_[0]->$delegated->$method(\@_[1..\$#_]) }";
+    }
+    no strict qw/refs/;
+    *{$method} = $new_method;
 }
 
-sub username {
-    $_[0]->homunculus->username( @_[ 1 .. $#_ ] );
-}
+BEGIN {
 
-sub password {
-    $_[0]->homunculus->password( @_[ 1 .. $#_ ] );
-}
+_delegate user_id => (to => 'homunculus');
+_delegate username => (to => 'homunculus');
+_delegate password => (to => 'homunculus');
+_delegate email_address => (to => 'homunculus');
+_delegate first_name => (to => 'homunculus', utf8ify => 1);
+_delegate last_name => (to => 'homunculus', utf8ify => 1);
+_delegate password_is_correct => (to => 'homunculus');
+_delegate has_valid_password => (to => 'homunculus');
+_delegate driver_name => (to => 'homunculus');
 
-sub email_address {
-    $_[0]->homunculus->email_address( @_[ 1 .. $#_ ] );
-}
+_delegate email_address_at_import => (to => 'metadata');
+_delegate creation_datetime => (to => 'metadata');
+_delegate last_login_datetime => (to => 'metadata');
+_delegate created_by_user_id => (to => 'metadata');
+_delegate is_business_admin => (to => 'metadata');
+_delegate is_technical_admin => (to => 'metadata');
+_delegate is_system_created => (to => 'metadata');
+_delegate set_technical_admin => (to => 'metadata');
+_delegate set_business_admin => (to => 'metadata');
+_delegate record_login => (to => 'metadata');
+_delegate creation_datetime_object => (to => 'metadata');
+_delegate last_login_datetime_object => (to => 'metadata');
+_delegate creator => (to => 'metadata');
+_delegate primary_account => (to => 'metadata');
 
-sub first_name {
-    my $firstname = $_[0]->homunculus->first_name( @_[ 1 .. $#_ ] );
-    Encode::_utf8_on($firstname) unless Encode::is_utf8($firstname);
-    return $firstname;
-}
-
-sub last_name {
-    my $lastname = $_[0]->homunculus->last_name( @_[ 1 .. $#_ ] );
-    Encode::_utf8_on($lastname) unless Encode::is_utf8($lastname);
-    return $lastname;
-}
-
-sub password_is_correct {
-    $_[0]->homunculus->password_is_correct( @_[ 1 .. $#_ ] );
-}
-
-sub has_valid_password {
-    $_[0]->homunculus->has_valid_password( @_[ 1 .. $#_ ] );
-}
-
-sub driver_name {
-    $_[0]->homunculus->driver_name( @_[ 1 .. $#_ ] );
-}
-
-# Metadata delegates
-
-sub email_address_at_import {
-    $_[0]->metadata->email_address_at_import( @_[ 1 .. $#_ ] );
-}
-
-sub creation_datetime {
-    $_[0]->metadata->creation_datetime( @_[ 1 .. $#_ ] );
-}
-
-sub last_login_datetime {
-    $_[0]->metadata->last_login_datetime( @_[ 1 .. $#_ ] );
-}
-
-sub created_by_user_id {
-    $_[0]->metadata->created_by_user_id( @_[ 1 .. $#_ ] );
-}
-
-sub is_business_admin {
-    $_[0]->metadata->is_business_admin( @_[ 1 .. $#_ ] );
-}
-
-sub is_technical_admin {
-    $_[0]->metadata->is_technical_admin( @_[ 1 .. $#_ ] );
-}
-
-sub is_system_created {
-    $_[0]->metadata->is_system_created( @_[ 1 .. $#_ ] );
-}
-
-sub set_technical_admin {
-    $_[0]->metadata->set_technical_admin( @_[ 1 .. $#_ ] );
-}
-
-sub set_business_admin {
-    $_[0]->metadata->set_business_admin( @_[ 1 .. $#_ ] );
-}
-
-sub record_login {
-    $_[0]->metadata->record_login( @_[ 1 .. $#_ ] );
-}
-
-sub creation_datetime_object {
-    $_[0]->metadata->creation_datetime_object( @_[ 1 .. $#_ ] );
-}
-
-sub last_login_datetime_object {
-    $_[0]->metadata->last_login_datetime_object( @_[ 1 .. $#_ ] );
-}
-
-sub creator {
-    $_[0]->metadata->creator( @_[ 1 .. $#_ ] );
-}
-
-sub primary_account {
-    $_[0]->metadata->primary_account( @_[ 1 .. $#_ ] );
 }
 
 sub primary_account_id {
-    $_[0]->metadata->primary_account->account_id;
+    $_[0]->primary_account->account_id;
 }
 
 sub accounts {

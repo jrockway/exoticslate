@@ -45,8 +45,6 @@ LoadModule dir_module           [% config.module_dir %]/mod_dir.so
     SSLSessionCache  dbm:[% config.log_dir %]/ssl-cache
     SSLSessionCacheTimeout  300
     SSLMutex  default 
-
-    SetEnvIf User-Agent ".*MSIE.*" nokeepalive ssl-unclean-shutdown downgrade-1.0 force-response-1.0
 </IfModule>
 
 Listen [% config.ports.http %]

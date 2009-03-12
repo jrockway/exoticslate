@@ -182,6 +182,7 @@ Listen [% config.custom_http_port %]
     SSLEngine on
     SSLCertificateFile    [% config.ssl_base_dir %]/certs/[% config.nlw_server_hostname %].crt
     SSLCertificateKeyFile [% config.ssl_base_dir %]/private/[% config.nlw_server_hostname %].key
+    SetEnvIf User-Agent ".*MSIE.*" ssl-unclean-shutdown force-response-1.0
 </VirtualHost>
 [% END %]
 

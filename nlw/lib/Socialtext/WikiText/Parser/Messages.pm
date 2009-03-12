@@ -80,7 +80,7 @@ sub name_to_id {
     my $self = shift;
     my $id = shift;
     $id = '' if not defined $id;
-    $id =~ s/\s+/\s/g;
+    $id =~ s/\s+/ /g;
     $id =~ s/^\s(?=.)//;
     $id =~ s/(?<=.)\s$//;
     $id =~ s/^0$/_/;

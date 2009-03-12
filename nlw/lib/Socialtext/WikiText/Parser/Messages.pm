@@ -14,6 +14,8 @@ sub create_grammar {
     @$blocks = ('line');
     my $phrases = $grammar->{_all_phrases};
 
+    # NOTE: if you add phrases here, be sure to update %markup in
+    # ST::WT::Emitter::Canonicalize
     @$phrases = ('waflphrase', 'asis', 'a', 'b', 'i', 'del');
     $grammar->{line} = {
         match => qr/^(.*)$/s,

@@ -42,6 +42,7 @@ my %skip_paths = map { ($_,1) } @skip_paths;
 my @skip_matching = (
     qr#test/common/plugins/socialcalc/share/javascript/SocialCalc#,
     qr#test/common/plugins/socialcalc/share/javascript/dBrick#,
+    qr#share/skin/js-test/common/plugins/socialcalc/share/javascript/dbrick/#,
     qr#share/plugin/socialcalc/share/javascript/SocialCalc#,
     qr#share/plugin/socialcalc/share/javascript/dBrick#
 );

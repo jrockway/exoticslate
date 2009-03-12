@@ -24,6 +24,9 @@ field 'fixtures' => [];
 field 'fixture_objects' => [];
 field 'nlw_dir';
 
+# Live dangerously by default - Safety Third!
+$ENV{NLW_LIVE_DANGEROUSLY} = 1;
+
 my $Self;
 
 # NLW directory for the current branch, under which tests are run.

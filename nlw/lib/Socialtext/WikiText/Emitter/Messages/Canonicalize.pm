@@ -11,7 +11,7 @@ my $markup = {
     b    => [ '*',  '*'  ],
     i    => [ '_',  '_'  ],
     del  => [ '-',  '-'  ],
-    a    => [ '',   ''   ],
+    a    => [ '',   ''   ], # Handled as a special case below
 };
 
 sub content {
@@ -83,7 +83,11 @@ sub user_as_username {
 sub begin_node {
     my $self = shift;
     my $ast = shift;
-    if (exists $markup->{$ast->{type}}) {
+
+    if ($ast->{type} eq 'a') {
+        $self->{output} .= '"';
+    }
+    elsif (exists $markup->{$ast->{type}}) {
         $self->{output} .= $markup->{$ast->{type}}->[0];
     }
 }
@@ -91,7 +95,10 @@ sub begin_node {
 sub end_node {
     my $self = shift;
     my $ast = shift;
-    if (exists $markup->{$ast->{type}}) {
+    if ($ast->{type} eq 'a') {
+        $self->{output} .= '"<' . $ast->{attributes}{href}. '>';
+    }
+    elsif (exists $markup->{$ast->{type}}) {
         $self->{output} .= $markup->{$ast->{type}}->[1];
     }
 }

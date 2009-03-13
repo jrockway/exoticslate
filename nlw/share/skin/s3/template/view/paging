@@ -5,8 +5,8 @@
                 &laquo; [% loc('First') %]
                 &lsaquo; [% loc('Previous') %]
             [% ELSE %]
-                <a title="[% loc('First Page') %]" href="[% page_url %];offset=0;limit=[% limit %]"> &laquo; [% loc('First') %]</a>
-                <a title="[% loc('Previous Page') %]" href="[% page_url %];offset=[% previous_page_offset %];limit=[% limit %]">&lsaquo; [% loc('Previous') %]</a>
+                &laquo; <a title="[% loc('First Page') %]" href="[% page_url %];offset=0;limit=[% limit %]">[% loc('First') %]</a>
+                &lsaquo; <a title="[% loc('Previous Page') %]" href="[% page_url %];offset=[% previous_page_offset %];limit=[% limit %]">[% loc('Previous') %]</a>
             [% END %]
         </span>
         <span class="paging-numbers">
@@ -23,8 +23,8 @@
                 [% loc('Next') %] &rsaquo;
                 [% loc('Last') %] &raquo;
             [% ELSE %]
-                <a title="[% loc('Next Page') %]" href="[% page_url %];offset=[% next_page_offset %];limit=[% limit %]">[% loc('Next') %] &rsaquo;</a>
-                <a title="[% loc('Last Page') %]" href="[% page_url %];offset=[% last_page_offset %];limit=[% limit %]">[% loc('Last') %] &raquo;</a>
+                <a title="[% loc('Next Page') %]" href="[% page_url %];offset=[% next_page_offset %];limit=[% limit %]">[% loc('Next') %]</a> &rsaquo;
+                <a title="[% loc('Last Page') %]" href="[% page_url %];offset=[% last_page_offset %];limit=[% limit %]">[% loc('Last') %]</a> &raquo;
             [% END %]
         </span>
 </div>

@@ -3234,9 +3234,9 @@ Set the default account new users should belong to.
 
 Prints out the current default account.
 
-=head2 export-account
+=head2 export-account [--force]
 
-Exports the specified account to a directory in the temp workspace.
+Exports the specified account to /tmp. --force to overwrite an existing export.
 
 =head2 import-account --directory [--overwrite] [--name] [--noindex]
 

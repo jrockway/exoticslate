@@ -1,0 +1,3 @@
+[submodule "submodules/ingydotnet/js-class"]
+	path = submodules/ingydotnet/js-class
+	url = git@github.com:ingydotnet/js-class.git

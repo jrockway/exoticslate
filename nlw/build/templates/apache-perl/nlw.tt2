@@ -77,6 +77,10 @@
         PerlAuthenHandler   +Socialtext::Apache::Authen::NTLM
         AuthType            ntlm
         Require             valid-user
+# In the event that NTLM SSO Authen fails, display a login page to the User
+# - isn't ideal as we lose the "auto-redirect to the page you wanted to go
+#   to", but its better than a generic 403 error page
+        ErrorDocument       403     /nlw/login.html
     </Location>
 
 [% IF not config.socialtext_open %]

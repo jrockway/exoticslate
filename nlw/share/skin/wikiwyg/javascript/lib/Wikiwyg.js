@@ -448,7 +448,8 @@ proto.newpage_duplicate_keyupHandler = function(event) {
         key = event.which;
     }
 
-    if (key == Event.KEY_RETURN) {
+    // Return/Enter key
+    if (key == 13) {
         this.newpage_duplicate_ok();
         return false;
     }

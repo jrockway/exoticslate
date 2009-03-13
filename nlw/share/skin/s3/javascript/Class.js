@@ -1,0 +1,1 @@
+../../../../../submodules/ingydotnet/js-class/lib/Class.js

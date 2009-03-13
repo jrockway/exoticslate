@@ -74,14 +74,16 @@ Wikiwyg - Primary Wikiwyg base class
  =============================================================================*/
 
 // Constructor and class methods
-proto = new Subclass('Wikiwyg');
+Class("Wikiwyg", function() {
+
+var proto = Wikiwyg.prototype;
 
 Wikiwyg.VERSION = '3.00';
 
-var WW_SIMPLE_MODE = 'Wikiwyg.Wysiwyg';
-var WW_ADVANCED_MODE = 'Wikiwyg.Wikitext';
-var WW_PREVIEW_MODE = 'Wikiwyg.Preview';
-var WW_HTML_MODE = 'Wikiwyg.HTML';
+this.global.WW_SIMPLE_MODE = 'Wikiwyg.Wysiwyg';
+this.global.WW_ADVANCED_MODE = 'Wikiwyg.Wikitext';
+this.global.WW_PREVIEW_MODE = 'Wikiwyg.Preview';
+this.global.WW_HTML_MODE = 'Wikiwyg.HTML';
 
 // Browser support properties
 Wikiwyg.ua = navigator.userAgent.toLowerCase();
@@ -962,7 +964,7 @@ Wikiwyg.is_safari_unknown = (
     Wikiwyg.ua.indexOf("version/") == -1
 );
 
-function setup_wikiwyg() {
+this.global.setup_wikiwyg = function() {
     if (! Wikiwyg.browserIsSupported) return;
 
     if ( jQuery("#st-edit-mode-container").size() != 1 ||
@@ -1957,4 +1959,6 @@ proto.create_link_wafl = function(label, workspace, pagename, section) {
     wafl += "}";
     return wafl;
 }
+
+});
 

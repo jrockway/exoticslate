@@ -4,7 +4,8 @@
 
 | *Comment* | Test Case: People Dashboard Navigation - Create accounts, make sure they show up in people list |  |
 | set | new_email | `zzz_new_email_%%start_time%%@ken.socialtext.net` |
-| set | new_email_find_me | zzz New Email %%start_time%% |
+| set | new_email_find_me | `zzz new email %%start_time%%` |
+| set | new_email_prefix | `zzz_new_email` |
 
 | st-admin | create_user --email %%new_email%% --password %%password%% |  |
 | st-admin | add-member --username %%new_email%% --workspace %%workspace%% |  |
@@ -39,31 +40,51 @@ text_like | //link[contains(@href,'?action=add_widget;gadget_id=3')] | Workspace
 | wait_for_element_visible_ok | link=Flickr Photos | 30000 |
 | wait_for_element_visible_ok | link=LabPixies Calculator | 30000 |
 | wait_for_element_visible_ok | link=Clock & Date | 30000 |
-| wait_for_element_visible_ok | link=Labpixies ToDo | 30000 |
+| wait_for_element_visible_ok | link=LabPixies ToDo | 30000 |
 
 | text_like | Displays a single page from any of your workspaces within a Socialtext Widget. |  |
 
-| *Comment* | Test Case: People Dashboard Navigation People. Last people page |  |
+| *Comment* | Test Case: People Dashboard Navigation People. Last people page. |  |
 | click_and_wait | link=People |  |
-| wait_for_element_visible_ok | //a[contains(@title,'Last Page')] | 30000 |
-| click_and_wait | //a[contains(@title,'Last Page')] |  |
+| wait_for_element_visible_ok | link=Last | 30000 |
+| click_and_wait | link=Last |  |
 
+| *Comment* | Test Case: People Dashboard Navigation People. new_email_find_me is %%new_email_find_me%% |  |
 | wait_for_element_visible_ok | link=%%new_email_find_me%% | 30000 |
-| wait_for_element_visible_ok | link=Summaries | 30000 |
 | text_like | %%new_email_find_me%% |  |
-| *Comment* | Test Case: People Dashboard Navigation People. Title does not display email addr. |  |
+
+| *Comment* | Test Case: People Dashboard Navigation People. Names view does not display email addr. |  |
 | text_unlike | contentContainer | %%new_email%% |
 
-| *Comment* | Test Case: People Dashboard Navigation People. Summary displays email addr. |  |
+| *Comment* | Test Case: People Dashboard Navigation People. Summaries view displays email addr. |  |
 | click_and_wait | link=Summaries |  |
 | text_like | %%new_email_find_me%% |  |
 | text_like | contentContainer | %%new_email%% |
 | click_and_wait | link=Names |  |
+| text_like | %%new_email_find_me%% |  |
 | text_unlike | contentContainer | %%new_email%% |
 
-| *Comment* | Test Case: People Dashboard Navigation People. people search |  |
-| type_ok | st-search-term | %%new_email%% |
+| *Comment* | Test Case: People Dashboard Navigation People. Search for %%new_email_prefix%% |  |
+| type_ok | st-search-term | %%new_email_prefix%% |
+| click_and_wait | st-search-submit |  |
+| text_like | qr/People matching \'%%new_email_prefix%%\'/ |  |
+| text_like | %%new_email_find_me%% |  |
+| text_like | contentContainer | %%new_email%% |
 
-| *comment* | Test Case: People Dashboard Navigation TEARDOWN |
+| *Comment* | Test Case: People Dashboard Navigation People. Search Names view does not display email addr. |  |
+| click_and_wait | link=Names |  |
+| text_like | qr/People matching \'%%new_email_prefix%%\'/ |  |
+| text_like | %%new_email_find_me%% |  |
+| text_unlike | contentContainer | %%new_email%% |
 
-| *comment* | Test Case: People Dashboard Navigation COMPLETED |
+| *Comment* | Test Case: People Dashboard Navigation People. empty search |  |
+| type_ok | st-search-term | pastafazool |
+| click_and_wait | st-search-submit |  |
+| text_like | qr/People matching \'pastafazool\'/ |  |
+| text_unlike | contentContainer | %%new_email_find_me%% |
+| text_unlike | contentContainer | %%new_email%% |
+
+| *comment* | Test Case: People Dashboard Navigation TEARDOWN |  |
+| st-admin | remove-member --username %%new_email%% --workspace %%workspace%% | is no longer |
+
+| *comment* | Test Case: People Dashboard Navigation COMPLETED |  |

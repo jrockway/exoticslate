@@ -76,7 +76,7 @@ Wikiwyg - Primary Wikiwyg base class
 // Constructor and class methods
 Class("Wikiwyg", function() {
 
-var proto = Wikiwyg.prototype;
+var proto = this.prototype;
 
 Wikiwyg.VERSION = '3.00';
 
@@ -1503,10 +1503,14 @@ Wikiwyg.setup_newpage = function() {
     }
 }
 
+});
+
 /*==============================================================================
 Base class for Wikiwyg classes
  =============================================================================*/
-proto = new Subclass('Wikiwyg.Base');
+Class('Wikiwyg.Base', function() {
+
+var proto = this.prototype;
 
 proto.set_config = function(user_config) {
     if (Wikiwyg.Widgets && this.setup_widgets)
@@ -1542,10 +1546,16 @@ proto.merge_config = function(key, value) {
     }
 }
 
+});
+
 /*==============================================================================
 Base class for Wikiwyg Mode classes
  =============================================================================*/
-proto = new Subclass('Wikiwyg.Mode', 'Wikiwyg.Base');
+Class("Wikiwyg.Mode", function() {
+
+this.isa("Wikiwyg.Base");
+
+var proto = this.prototype;
 
 proto.enableThis = function() {
     this.div.style.display = 'block';

@@ -1,166 +1,69 @@
-| *comment* | STARTING Test Case: People Dashboard Navigation |  |
-
 * Fixture: SocialWidgets
 
-| *comment* | Test Case: People Dashboard Navigation - Create accounts, make sure they show up in people list |  |
-| set | new_email | `zzz_new_email_%%start_time%%@pd.net` |
-| set | new_full_name | `zzz_new_full_email_%%start_time%%@pd.net` |
-| set | new_email_find_me | zzz new email %%start_time%% |
-| st-admin | create_user --email %%new_email%% --password %%password%% --username %%new_email%% |  |
+| *Comment* | STARTING Test Case: People Dashboard Navigation |  |
+
+| *Comment* | Test Case: People Dashboard Navigation - Create accounts, make sure they show up in people list |  |
+| set | new_email | `zzz_new_email_%%start_time%%@ken.socialtext.net` |
+| set | new_email_find_me | zzz New Email %%start_time%% |
+
+| st-admin | create_user --email %%new_email%% --password %%password%% |  |
 | st-admin | add-member --username %%new_email%% --workspace %%workspace%% |  |
 
-| *comment* | Test Case: Things that don't work - {bz: 1295} |  |
-
-st-admin | create_user --email %%new_full_name%% --first_name Joe --last_name Tester --password %%password%% --username %%new_full_name%% | st-admin | add-member --username %%new_full_name%% --workspace %%workspace%% | |
-st-admin | set-user-names --username %%username%% --first_name " " --last_name " " | |
-
 | open_ok | / |  |
-| wait_for_text_present_ok | Welcome %%short_username%% | 30000 |
-| wait_for_element_present_ok | //a[contains(@title,'Add Content')] | 30000 |
-| click_and_wait | //a[contains(@title,'Add Content')] |  |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| click_and_wait | link=Add Content |  |
 
 TO DO - Add testability hooks and confirm Grey Ghost Icon
 
-| *comment* | Test Case: People Dashboard Navigation - Add Content has correct content |  |
-| wait_for_element_present_ok | link=Recent Conversations | 30000 |
-| wait_for_element_present_ok | link=Workspaces | 30000 |
-| wait_for_element_present_ok | link=WikiPage | 30000 |
-| wait_for_element_present_ok | link=RSS Viewer | 30000 |
-| wait_for_element_present_ok | link=Workspace Tags | 30000 |
-| wait_for_element_present_ok | link=All People Tags | 30000 |
-| wait_for_element_present_ok | link=Google Calendar Viewer | 30000 |
-| wait_for_element_present_ok | link=IGcheck - IG functions in opensocial containers | 30000 |
-| wait_for_element_present_ok | link=LabPixies Calculator | 30000 |
-| wait_for_element_present_ok | link=ToDo | 30000 |
-| wait_for_element_present_ok | link=Wikipedia | 30000 |
-| wait_for_element_present_ok | link=My del.icio.us | 30000 |
-| wait_for_element_present_ok | link=MapQuest | 30000 |
-| wait_for_element_present_ok | link=Clock & Date | 30000 |
-| wait_for_element_present_ok | link=BeTwittered | 30000 |
-| wait_for_element_present_ok | link=Youtube Video Player | 30000 |
-| wait_for_element_present_ok | link=SlideShare Feeds | 30000 |
-| wait_for_element_present_ok | link=Microsoft Outlook | 30000 |
+| *Comment* | Test Case: People Dashboard Navigation - Add Content has correct content |  |
+| wait_for_element_visible_ok | link=All People Tags | 30000 |
+| wait_for_element_visible_ok | link=Recent Conversations | 30000 |
+
+ wait_for_element_visible_ok | //a[contains(@href,'?action=add_widget;gadget_id=3')] | 30000 |
+text_like | //link[contains(@href,'?action=add_widget;gadget_id=3')] | Workspaces |
+
+| wait_for_element_visible_ok | link=Wiki Page | 30000 |
+| wait_for_element_visible_ok | link=One Image | 30000 |
+| wait_for_element_visible_ok | link=RSS Viewer | 30000 |
+| wait_for_element_visible_ok | link=Workspace Tags | 30000 |
+| wait_for_element_visible_ok | link=Socialtext Signals | 30000 |
+
+| wait_for_element_visible_ok | link=Microsoft Outlook | 30000 |
+| wait_for_element_visible_ok | link=Google Calendar | 30000 |
+| wait_for_element_visible_ok | link=YouTube Video Player | 30000 |
+| wait_for_element_visible_ok | link=SlideShare Feeds | 30000 |
+| wait_for_element_visible_ok | link=BeTwittered | 30000 |
+| wait_for_element_visible_ok | link=My del.icio.us | 30000 |
+| wait_for_element_visible_ok | link=MapQuest | 30000 |
+| wait_for_element_visible_ok | link=Wikipedia | 30000 |
+| wait_for_element_visible_ok | link=Flickr Photos | 30000 |
+| wait_for_element_visible_ok | link=LabPixies Calculator | 30000 |
+| wait_for_element_visible_ok | link=Clock & Date | 30000 |
+| wait_for_element_visible_ok | link=Labpixies ToDo | 30000 |
 
 | text_like | Displays a single page from any of your workspaces within a Socialtext Widget. |  |
 
-| *comment* | Test Case: People Dashboard Navigation People. |  |
+| *Comment* | Test Case: People Dashboard Navigation People. Last people page |  |
 | click_and_wait | link=People |  |
-| *Comment* | Guest, System, and self users might be on any People page, depending on how many users there are. |  |
-| wait_for_element_present_ok | //a[contains(@title,'Last Page')] | 30000 |
-| click_ok | //a[contains(@title,'Last Page')] |  |
+| wait_for_element_visible_ok | //a[contains(@title,'Last Page')] | 30000 |
+| click_and_wait | //a[contains(@title,'Last Page')] |  |
 
- wait_for_element_present_ok | link=%%short_username%% | 60000 |
+| wait_for_element_visible_ok | link=%%new_email_find_me%% | 30000 |
+| wait_for_element_visible_ok | link=Summaries | 30000 |
+| text_like | %%new_email_find_me%% |  |
+| *Comment* | Test Case: People Dashboard Navigation People. Title does not display email addr. |  |
+| text_unlike | contentContainer | %%new_email%% |
 
-| wait_for_element_present_ok | link=%%new_email_find_me%% | 30000 |
-
-| text_unlike | //body | %%username%% |
-| wait_for_element_present_ok | link=Summaries | 30000 |
+| *Comment* | Test Case: People Dashboard Navigation People. Summary displays email addr. |  |
 | click_and_wait | link=Summaries |  |
+| text_like | %%new_email_find_me%% |  |
+| text_like | contentContainer | %%new_email%% |
+| click_and_wait | link=Names |  |
+| text_unlike | contentContainer | %%new_email%% |
 
-| text_like | //body | %%username%% |
-| click_and_wait | link=%%short_username%% |  |
-| wait_for_element_present_ok | link=Home | 30000 |
-| wait_for_element_present_ok | link=People | 30000 |
-| wait_for_element_present_ok | link=Workspaces | 30000 |
+| *Comment* | Test Case: People Dashboard Navigation People. people search |  |
+| type_ok | st-search-term | %%new_email%% |
 
-| *comment* | Test Case: People Dashboard Navigation - Click on Profile |  |
-| st-name-widget | 1 | profile |
-| st-select-widget-frame | profile |  |
-| text_like | //body | %%short_username%% |
-| text_like | //body | %%username%% |
-| wait_for_element_present_ok | link=(Edit) | 30000 |
-| click_and_wait | link=(Edit) |  |
-
-| wait_for_element_present_ok | photo-upload-button | 30000 |
-| st-name-widget | 1 | profile_details |
-| st-select-widget-frame | profile_details |  |
-| text_like | //body | Name |
-| text_like | //body | Organization |
-| text_like | //body | Contact |
-| text_like | //body | IM |
-| text_like | //body | Web |
-| text_like | //body | First name: |
-| text_like | //body | Last name: |
-| type_ok | first_name | Wikicus |
-| type_ok | last_name | Testericus |
-
-| *comment* | Test Case: People Dashboard Navigation - update loses context; commented out |  |
-
-| click_ok | update_profile |  |
-| wait_for_element_present_ok | link=Log out | 30000 |
-| click_and_wait | link=Log out |
-| st-login |  |  |
-
-| open_ok | / |  |
-| click_ok | link=People |  |
-| wait_for_element_present_ok | //a[contains(@title,'Last Page')] | 30000 |
-| click_ok | //a[contains(@title,'Last Page')] |  |
-| wait_for_element_present_ok | link=Wikicus Testericus | 30000 |
-| click_and_wait | link=Wikicus Testericus |  |
-| st-name-widget | 1 | profile |
-| st-select-widget-frame | profile |  |
-| text_like | //body | Devicus Nullicus |
-| select-frame | relative=parent |  |
-
-| select-frame | relative=parent |  |
-| click_ok | link=People |  |
-| *comment* | short_username might not be present, thanks to pagination |  |
-
-| wait_for_element_present_ok | link=%%short_username%% | 30000 |
-| click_and_wait | link=%%short_username%% |
-
-| wait_for_element_present_ok | link=Home | 30000 |
-| wait_for_element_present_ok | link=People | 30000 |
-| wait_for_element_present_ok | link=Workspaces | 30000 |
-| st-name-widget | 2 | people_following |
-| st-select-widget-frame | people_following |  |
-| text_like | //body | You are not following anyone yet. |
-| select-frame | relative=parent |  |
-| st-name-widget | 3 | updates |
-
-Not yet -- save button doesn't currently work
-st-select-widget-frame | updates | |
-text_like | //body | %%short_username%% edited %%short_username%%'s profile |
-select-frame | relative=parent | |
-
-| st-name-widget | 4 | tags |
-| type_ok | new_tag | automated tester guy |
-
-click_and_wait | submit | |
-
-| select-frame | relative=parent |
-| pause | 10000 |  |
-
-| *comment* | Test Case: People Dashboard Navigation - Change name back commented out b/c it doesn't work yet |  |
-
-st-name-widget | 1 | profile |
-st-select-widget-frame | profile |
-wait_for_element_present_ok | link=(Edit) | 30000 |
-click_and_wait | link=(Edit) | |
-type_ok | first_name | |
-type_ok | last_name | |
-click_ok | update_profile | |
-pause | 60000 |
-select-frame | relative=parent | |
-
-TODO: st-admin adding someone I can see (give them add-member to %%workspace%% and see them on the list)
-
-| click_and_wait | link=People |
-
-ASSERT: All People
-ASSERT: Names, Summaries
-DO NOT SEE: %%email%%
-CLICK ON: Summaries
-ASSERT SEE: %%email%%
-
-CLICK ON: short_username
-(May not be possible yet, but expect people I am following to be blank, expect to see workspace for %%workspace%%)
-
-CLICK ON: People
-Click on: System-User
-
-Click on follow this person
-
-TODO: Assert grey ghost icon
+| *comment* | Test Case: People Dashboard Navigation TEARDOWN |
 
 | *comment* | Test Case: People Dashboard Navigation COMPLETED |

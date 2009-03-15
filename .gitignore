@@ -5,5 +5,3 @@ plugins/
 socialtext-reports/
 socialtext-skins/
 socialpoint/
-socialcalc/
-!submodule/socialcalc/

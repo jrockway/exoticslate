@@ -1,1 +1,1 @@
-../../../../../js-class/lib/Class.js
+../../../../../submodule/js-class/lib/Class.js

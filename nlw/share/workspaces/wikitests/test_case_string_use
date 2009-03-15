@@ -117,14 +117,22 @@ Set default values if they are not defined by the caller
 | type_ok | wikiwyg_wikitext_textarea | `"%%test_string%%"{link: help [Socialtext Documentation]}` |
 
 | *Comment* | Test Case: String Use: try the roundtrip |  |
+| wait_for_element_visible_ok | link=Rich Text | 30000 |
 | click_ok | link=Rich Text |  |
+| pause | 6000 | wait for the editor to load |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | link=Rich Text | 30000 |
 | click_ok | link=Rich Text |  |
+| pause | 6000 | wait for the editor to load |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
 | click_and_wait | st-save-button-link |  |
 
 | *Comment* | Test Case: String Use: try opening for editing Rich Text mode |  |
 | click_ok | st-edit-button-link |  |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
+| click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | link=Rich Text | 30000 |
 | click_ok | link=Rich Text |  |
 | pause | 10000 | wait for the editor to load |
@@ -168,9 +176,14 @@ Set default values if they are not defined by the caller
 | type_ok | wikiwyg_wikitext_textarea | `{toc}` |
 
 | *Comment* | Test Case: String Use: try the TOC roundtrip |  |
+| wait_for_element_visible_ok | link=Rich Text | 30000 |
 | click_ok | link=Rich Text |  |
+| pause | 6000 | wait for the editor to load |
+| wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
+| wait_for_element_visible_ok | link=Rich Text | 30000 |
 | click_ok | link=Rich Text |  |
+| pause | 6000 | wait for the editor to load |
 | click_and_wait | st-save-button-link |  |
 
 | *Comment* | Test Case: String Use: test for TOC blow up |  |

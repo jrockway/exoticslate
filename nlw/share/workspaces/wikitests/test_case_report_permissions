@@ -21,7 +21,7 @@
 | *Comment* | Test Case: Report Permissions - Permissions Exist for devnull1 for growth and usage |  |
 | open_ok | /webplugin/cgi/reports/report.cgi/workspace_growth.html?workspace=%%report_workspace%% |  |
 | text_like | qr/\w\w\w\s*\d\d\d\d\s*\d+\s*\d+\s*\d+\s*\d+\s*\d+/ |  |
-| text_like | qr/Date\s*Unique Members\s*Unique Contributors\s*Pages\s*Page Views\s*Contributions/i |  |
+| text_like | qr/Date\s*Unique Members\s*Unique Visitors\s*Unique Contributors\s*Pages\s*Page Views\s*Contributions/i |  |
 | text_like | Workspace Growth - |  |
 | open_ok | /webplugin/cgi/reports/report.cgi/user_workspace_usage/04-28-2008/-3months.json |  |
 | wait_for_text_present_ok | `["test-data","Canonical Test Data Set",` | 30000 |

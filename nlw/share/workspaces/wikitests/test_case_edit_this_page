@@ -23,7 +23,7 @@
 | text_like | st-cancel-button-link | Cancel |
 | text_like | st-mode-wysiwyg-button | Rich Text |
 | text_like | st-mode-wikitext-button | Wiki Text |
-| text_like | st-edit-tips | Edit Tips |
+| text_like | st-edit-tips | (?) |
 | verify_value | wikiwyg_wikitext_textarea | Edit This Page content %%start_time%% |
 
 | *Comment* | Edit This Page Checking Preview/Edit |  |
@@ -122,6 +122,7 @@
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | Edit This Page Simple mode |
+| verifyValue | wikiwyg_wikitext_textarea | Edit This Page Simple mode |
 | click_ok | link=Rich Text |  |
 | pause | 6000 | wait for Rich Text editor |
 | chooseCancelOnNextConfirmation |  |  |
@@ -150,6 +151,7 @@
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | wikiwyg_wikitext_textarea | Edit This Page Simple mode |
+| verifyValue | wikiwyg_wikitext_textarea | Edit This Page Simple mode |
 | click_ok | link=Rich Text |  |
 | pause | 6000 | wait for Rich Text editor |
 
@@ -190,14 +192,16 @@
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| wait_for_element_visible_ok | link=(?) | 30000 |
 | wait_for_element_visible_ok | link=Rich Text | 30000 |
 | click_ok | link=Rich Text |  |
-| wait_for_element_not_visible_ok | link=Edit Tips | 30000 |
+| wait_for_element_visible_ok | link=(?) | 30000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
+| wait_for_element_visible_ok | link=(?) | 30000 |
 
 | *Comment* | Edit Tips lightbox |  |
-| text-like | st-edit-tips | Edit Tips |
+| text-like | st-edit-tips | (?) |
 | click_ok | st-edit-tips |  |
 | wait_for_element_visible_ok | st-ref-card-close | 30000 |
 | text_like | qr/To Get This.+Type This/ |  |

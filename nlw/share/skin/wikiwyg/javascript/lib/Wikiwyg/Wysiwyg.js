@@ -638,7 +638,6 @@ proto.enableThis = function() {
             setTimeout(function() {
                 self.get_edit_document().execCommand("enableObjectResizing", false, false);
                 self.get_edit_document().execCommand("enableInlineTableEditing", false, false);
-                self.get_edit_document().execCommand("justifyLeft", false, false);
             }, 100);
         }
         else if (Wikiwyg.is_ie) {

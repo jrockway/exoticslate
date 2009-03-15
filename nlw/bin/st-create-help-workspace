@@ -36,7 +36,7 @@ fi
 # Construct commands to execute
 STADMIN=$(abs_path `which st-admin`)
 DELETE="$STADMIN delete-workspace --workspace $WS_NAME --no-export --ceqlotron"
-IMPORT="$STADMIN import-workspace --tarball $TARBALL"
+IMPORT="$STADMIN import-workspace --tarball $TARBALL --noindex"
 ASSIGN="$STADMIN set-workspace-config --workspace $WS_NAME account_name Socialtext"
 REINDEX="$STADMIN index-workspace --workspace $WS_NAME --sync --ceqlotron"
 

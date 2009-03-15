@@ -1,3 +1,6 @@
 [submodule "submodule/socialcalc"]
 	path = submodule/socialcalc
 	url = git@github.com:socialtext/socialcalc.git
+[submodule "submodule/js-class"]
+	path = submodule/js-class
+	url = git@github.com:socialtext/js-class.git

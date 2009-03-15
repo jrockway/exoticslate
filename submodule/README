@@ -1,6 +1,6 @@
-The submodule directory in the 'socialtext' repository is where we put git submodules. Submodules are the git way to include third party repositories in your project repo. For Socialtext this is where we can keep git hosted Open Source modules that we often hack on. This might include Dan's SocialCalc code or Ingy's Jemplate stuff as examples. 
+The submodule directory in the 'socialtext' repository is where we put git submodules. Submodules are the git way to include third party repositories in your project repo. For Socialtext this is where we can keep git hosted Open Source modules that we sometimes/often hack on. This might include Dan's SocialCalc code or Ingy's Jemplate stuff as examples. 
 
-In order for all the ST devs to be able to hack on the submodules, all the modules in this directory are github forks of the original author's modules. If you want to add a submodule, you first need to email johnt a request to fork it. Send the request to: sysadmin@socialtext.com. Then add the submodule like this:
+In order for all the ST devs to be able to hack on the submodules, all the modules in this directory are github/socialtext forks of the original author's modules. If you want to add a submodule, you first need to email johnt a request to fork it. Send the request to: sysadmin@socialtext.com. Then add the submodule like this:
 
     > cdcur
     > git submodule add git@github.com:socialtext/foo-bar.git submodule/foo-bar

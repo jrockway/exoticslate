@@ -2,34 +2,19 @@
 
 * Fixture: SocialWidgets
 
-| st-admin | create-user --email convwidget@matt.socialtext.net --password %%password%% |  |
-| st-admin | add-member --email convwidget@matt.socialtext.net --workspace %%workspace%% |  |
+| set | conv_email | my-conv-%%start_time%%@ken.socialtext.net |
+| set | conv_user | my conv %%start_time%% |
+
+| st-admin | create-user --email %%conv_email%% --password %%password%% |  |
+| st-admin | add-member --email %%conv_email%% --workspace %%workspace%% |  |
 
 | *Comment* | Test Case: My Conversations Widget Create Conversations |  |
-| st-admin | update-page --w %%workspace%% --e %%email%% --p "My Conversations Watch %%start_time%%" < %%wikitest_client_files%%wikitest.txt | has been created |
+| st-admin | update-page --w %%workspace%% --e %%email%% --p "My Conversations Tag %%start_time%%" < %%wikitest_client_files%%wikitest.txt | has been created |
 | st-admin | update-page --w %%workspace%% --e %%email%% --p "My Conversations Edit %%start_time%%" < %%wikitest_client_files%%wikitest.txt | has been created |
 | st-admin | update-page --w %%workspace%% --e %%email%% --p "My Conversations Comment %%start_time%%" < %%wikitest_client_files%%wikitest.txt | has been created |
 
-| open_ok | /%%workspace%%/?My Conversations Watch %%start_time%% |  |
-| wait_for_element_visible_ok | st-edit-button-link | 30000 |
-| wait_for_element_visible_ok | st-watchlist-indicator | 30000 |
-| st-watch-page | 1 |  |
-| pause | 2000 |  |
-| st-is-watched | 1 |  |
-
-| *Comment* | Test Case: My Conversations Widget Comment on a page |  |
-| open_ok | /%%workspace%%/?My Conversations Comment %%start_time%% |  |
-| wait_for_element_visible_ok | link=Comment | 30000 |
-| click_ok | link=Comment |  |
-| wait_for_element_visible_ok | comment | 30000 |
-| type_ok | comment | see, I commented |
-| click_ok | link=Save |  |
-
-| *Comment* | wait_for_element_not_visible_ok fails for element comment. Why? |  |
-| pause | 5000 |  |
-
-| *Comment* | Test Case: My Conversations Widget Login as convwidget |  |
-| st-logoutin | convwidget@matt.socialtext.net | %%password%% |
+| *Comment* | Test Case: My Conversations Widget Login as %%conv_email%% |  |
+| st-logoutin | %%conv_email%% | %%password%% |
 
 | *Comment* | Test Case: My Conversations Widget Edit a page |  |
 | open_ok | /%%workspace%%/?My Conversations Edit %%start_time%% |  |
@@ -38,7 +23,7 @@
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| type_ok | wikiwyg_wikitext_textarea | Don't forget to foo the bar |
+| type_ok | wikiwyg_wikitext_textarea | %%conv_user%% edits |
 | click_and_wait | link=Save |  |
 
 | *Comment* | Test Case: My Conversations Widget comment on a page |  |
@@ -46,34 +31,36 @@
 | wait_for_element_visible_ok | link=Comment | 30000 |
 | click_ok | link=Comment |  |
 | wait_for_element_visible_ok | comment | 30000 |
-| type_ok | comment | convwidget can also comment |
+| type_ok | comment | %%conv_user%% comments |
 | click_ok | link=Save |  |
-| pause | 5000 |  |
 
-| *Comment* | Test Case: My Conversations Widget make another comment |  |
-| open_ok | /%%workspace%%/?My Conversations Watch %%start_time%% |  |
-| wait_for_element_visible_ok | link=Comment | 30000 |
-| click_ok | link=Comment |  |
-| wait_for_element_visible_ok | comment | 30000 |
-| type_ok | comment | convwidget can also comment ... again |
-| click_ok | link=Save |  |
-| pause | 5000 |  |
-| st-login |  |  |
+| *Comment* | Test Case: My Conversations Widget tag a page |  |
+| open_ok | /%%workspace%%/?My Conversations Tag %%start_time%% |  |
+| wait_for_element_visible_ok | link=Add Tag | 30000 |
+| click_ok | link=Add Tag |  |
+| wait_for_element_visible_ok | st-tags-field | 30000 |
+| type_ok | st-tags-field | %%conv_user%% tags |
+| wait_for_element_visible_ok | st-tags-plusbutton-link | 30000 |
+| click_ok | st-tags-plusbutton-link |  |
+
+| st-logoutin |  |  |
 
 | open_ok | /?dashboard | 60000 |
 | wait_for_text_present_ok | Welcome, New User | 30000 |
 | st-empty-container |  |  |
-| st-add-widget | widgets/share/widgets/recent_conversations.xml | my_conversations |
-| st_wait_for_widget_load | my_conversations | 45000 |
-| pause | 10000 |  |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| click_and_wait | link=Add Content |  |
+| wait_for_element_visible_ok | link=Recent Conversations | 30000 |
+| click_and_wait | link=Recent Conversations |  |
+| st-name-widget | 1 | my_conversations |
 | st-widget-title-like | my_conversations | My Conversations |
 | st-select-widget-frame | my_conversations |  |
 | text_like | //body | My Conversations |
 | text_like | //body | My Colleagues |
 | text_like | //body | All Changes |
-| text_like | //body | convwidget edited My Conversations Edit %%start_time%% |
-| text_like | //body | convwidget commented on My Conversations Comment %%start_time%% |
-| text_like | //body | convwidget commented on My Conversations Watch %%start_time%% |
+| text_like | //body | %%conv_user%% edited My Conversations Edit %%start_time%% |
+| text_like | //body | %%conv_user%% commented on My Conversations Comment %%start_time%% |
+| text_like | //body | %%conv_user%% tagged My Conversations Tag %%start_time%% |
 
 | select-frame | relative=parent |  |
 | st-empty-container |  |  |
@@ -81,6 +68,7 @@
 | *Comment* | Test Case: My Conversations Widget Teardown |  |
 | st-admin | purge-page --w %%workspace%% --p my_conversations_edit_%%start_time%% | was purged |
 | st-admin | purge-page --w %%workspace%% --p my_conversations_comment_%%start_time%% | was purged |
-| st-admin | purge-page --w %%workspace%% --p my_conversations_watch_%%start_time%% | was purged |
+| st-admin | purge-page --w %%workspace%% --p my_conversations_tag_%%start_time%% | was purged |
+| st-admin | remove-member --e %%conv_email%% --w %%workspace%% | no longer a member |
 
 | *Comment* | Test Case: My Conversations Widget COMPLETED |  |

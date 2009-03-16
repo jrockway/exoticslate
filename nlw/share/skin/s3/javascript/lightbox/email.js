@@ -43,7 +43,7 @@ proto.show = function () {
             if (!val) {
                 return false;
             }
-            else if (!email_page_check_address(val)) {
+            else if (!Email.Page.check_address(val)) {
                 alert(loc('"[_1]" is not a valid email address.', val))
                 jQuery('#email_page_add_one').focus();
                 return false;

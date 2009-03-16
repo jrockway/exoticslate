@@ -4,6 +4,9 @@
 //
 // http://fightingforalostcause.net/misc/2006/compare-email-regex.php
 //
+
+Class('Email.Page', function() {
+
 var EMAIL_ADDRESS_REGEX = new RegExp(
     "^"
     + "([a-zA-Z0-9_'+*$%\\^&!\\.\\-])+"
@@ -14,6 +17,9 @@ var EMAIL_ADDRESS_REGEX = new RegExp(
     , "i"
 );
 
-function email_page_check_address(email_address) {
+this.check_address = function(email_address) {
     return EMAIL_ADDRESS_REGEX.test(email_address);
-}
+};
+
+});
+

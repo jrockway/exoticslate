@@ -61,16 +61,19 @@ dev-bin/make-test-fixture --home_dir $HOME --preserve --fixture ALL
 perl -le 'print "User-agent: *\nDisallow: /"' > ~/.nlw/root/docroot/robots.txt
 
 echo "Linking in extra modules ..."
+PLUGINS=${PLUGINS:-widgets agile csskit dashboard people signals socialcalc apache}
 # We set +e here so that if these fail, fdefs continues
 # otherwise everyone is forced to have all this code checked out
 set +e
 dev-bin/link-control-panel
 dev-bin/link-console
 dev-bin/link-reports
-dev-bin/link-plugins widgets agile csskit dashboard people signals socialcalc apache
+dev-bin/link-plugins $PLUGINS
 set -e
 
-(cd ../plugins; make clean all);
+for plugin in $PLUGINS; do
+    (cd ../plugins/$plugin; make clean all);
+done
 
 export PGUSER=`st-config echo db_user`
 echo "Adding special dev-env SQL hacks"

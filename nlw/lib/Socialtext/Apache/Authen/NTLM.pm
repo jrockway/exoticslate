@@ -78,6 +78,7 @@ sub handler($$) {
         # Apache::AuthenNTLM throws a 500 when it can't speak to the PDC, and
         # this is the *ONLY* time it throws a 500
         $rc = HTTP_FORBIDDEN;
+        st_log->error( "unable to reach the Windows NTLM DC to get nonce" );
         _set_session_error( $r, loc(
             "The Socialtext system cannot reach the Windows NTLM Domain Controller.  An Admin should check the Domain Controller and/or Socialtext configuration."
         ) );

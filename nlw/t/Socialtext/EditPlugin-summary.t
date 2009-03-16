@@ -92,7 +92,7 @@ edit_summary_signal: {
 
     signal_ok (
         viewer => $hub->current_user,
-        body => '"where you at, dog" (edited {link admin [Save Page]} in Admin Wiki)',
+        body => '"where you at, dog" (edited {link: admin [Save Page]} in Admin Wiki)',
         signaler => $hub->current_user,
         msg => 'normal length edit summary'
     );
@@ -117,7 +117,7 @@ long_edit_summary_signal: {
 
     signal_ok (
         viewer => $hub->current_user,
-        body => '"' . 'ten chars!' x 13 . 'we are..." (edited {link admin [Save Page]} in Admin Wiki)',
+        body => '"' . 'ten chars!' x 13 . 'we are..." (edited {link: admin [Save Page]} in Admin Wiki)',
         signaler => $hub->current_user,
         msg => 'edit summary over max signal length'
     );
@@ -140,7 +140,7 @@ no_edit_summary_signal: {
 
     signal_ok (
         viewer => $user,
-        body => 'wants you to know about an edit of {link admin [Save Page]} in Admin Wiki',
+        body => 'wants you to know about an edit of {link: admin [Save Page]} in Admin Wiki',
         signaler => $user,
         msg => 'edit summary over max signal length'
     );

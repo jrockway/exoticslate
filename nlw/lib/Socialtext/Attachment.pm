@@ -83,6 +83,12 @@ sub load {
 
     my $path = $self->_content_file;
 
+    unless (-e $path) {
+        $self->hub->log->warning("Attachment does not exist: '$path'");
+        $self->deleted(1);
+        return $self;
+    }
+
     for ( Socialtext::File::get_contents_utf8($path) ) {
         next unless /^(\w\S*):\s*(.*)$/;
         my $value = $2;

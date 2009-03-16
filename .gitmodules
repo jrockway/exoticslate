@@ -1,6 +1,3 @@
-[submodule "submodule/socialcalc"]
-	path = submodule/socialcalc
-	url = git@github.com:socialtext/socialcalc.git
 [submodule "nlw/share/skin/common/submodule/js-class"]
 	path = nlw/share/skin/common/submodule/js-class
 	url = git@github.com:socialtext/js-class.git

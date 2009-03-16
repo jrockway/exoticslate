@@ -4,8 +4,11 @@ package Socialtext::Apache::Authen::NTLM;
 use strict;
 use warnings;
 use base qw(Apache::AuthenNTLM);
+use Apache::Constants qw(HTTP_UNAUTHORIZED HTTP_FORBIDDEN HTTP_INTERNAL_SERVER_ERROR);
 use Socialtext::NTLM::Config;
 use Socialtext::Log qw(st_log);
+use Socialtext::l10n qw(loc);
+use Socialtext::Session;
 
 ###############################################################################
 # read in our custom NTLM config, instead of relying on Apache config file to
@@ -63,8 +66,34 @@ sub handler($$) {
     st_log->debug( "turning HTTP Keep-Alives back on" );
     $r->subprocess_env(nokeepalive => undef);
 
-    # call base class to do its work
-    return $class->SUPER::handler($r);
+    # call off to let the base class do its work
+    my $rc = $class->SUPER::handler($r);
+    if ($rc == HTTP_UNAUTHORIZED) {
+        _set_session_error( $r, { type => 'not_logged_in' } );
+    }
+    elsif ($rc == HTTP_FORBIDDEN) {
+        _set_session_error( $r, { type => 'unauthorized_workspace' } );
+    }
+    elsif ($rc == HTTP_INTERNAL_SERVER_ERROR) {
+        # Apache::AuthenNTLM throws a 500 when it can't speak to the PDC, and
+        # this is the *ONLY* time it throws a 500
+        $rc = HTTP_FORBIDDEN;
+        _set_session_error( $r, loc(
+            "The Socialtext system cannot reach the Windows NTLM Domain Controller.  An Admin should check the Domain Controller and/or Socialtext configuration."
+        ) );
+    }
+
+    return $rc;
+}
+
+###############################################################################
+# Throws away any error(s) in the current session and sets the error to the
+# given error.
+sub _set_session_error {
+    my ($r, $error) = @_;
+    my $session    = Socialtext::Session->new($r);
+    my $throw_away = $session->errors();
+    $session->add_error( $error );
 }
 
 1;

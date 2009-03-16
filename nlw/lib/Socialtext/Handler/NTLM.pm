@@ -4,8 +4,9 @@ package Socialtext::Handler::NTLM;
 use strict;
 use warnings;
 use base qw(Socialtext::Handler::Redirect);
-use Socialtext::Apache::User;
+use Apache::Constants qw(FORBIDDEN);
 use Socialtext::Log qw(st_log);
+use Socialtext::Apache::User;
 
 sub real_handler {
     my ($class, $req, $user) = @_;
@@ -17,8 +18,7 @@ sub real_handler {
         st_log->error(
             "have an NTLM authenticated user, but was unable to find him in any of our User Factories"
         );
-        # XXX: custom error response goes here
-        return Apache::Constants::BAD_REQUEST;
+        return FORBIDDEN;
     }
 
     # Set a session cookie into the User's browser; we know they're

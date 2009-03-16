@@ -74,7 +74,7 @@ Wikiwyg - Primary Wikiwyg base class
  =============================================================================*/
 
 // Constructor and class methods
-Class("Wikiwyg", function() {
+Class('Wikiwyg', function() {
 
 var proto = this.prototype;
 
@@ -1551,9 +1551,7 @@ proto.merge_config = function(key, value) {
 /*==============================================================================
 Base class for Wikiwyg Mode classes
  =============================================================================*/
-Class("Wikiwyg.Mode", function() {
-
-this.isa("Wikiwyg.Base");
+Class('Wikiwyg.Mode(Wikiwyg.Base)', function() {
 
 var proto = this.prototype;
 

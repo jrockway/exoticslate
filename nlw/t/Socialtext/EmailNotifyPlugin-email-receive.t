@@ -6,7 +6,11 @@ use warnings;
 
 use Test::Socialtext;
 use Socialtext::EmailReceiver::Factory;
-fixtures( 'admin' );
+
+###############################################################################
+# Fixtures: clean admin
+# - this test requires that it start at a clean slate
+fixtures(qw( clean admin ));
 
 BEGIN {
     unless ( eval { require Email::Send::Test; 1 } ) {

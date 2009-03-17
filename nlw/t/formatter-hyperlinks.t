@@ -11,9 +11,22 @@ filters { regexps => [qw'lines chomp make_regexps'] };
 plan tests => 1 * (map { ($_->regexps) } blocks);
 
 ###############################################################################
+# Get the Workspace that we're testing with/against.
+my $ws = Test::Socialtext::main_hub->current_workspace();
+
+###############################################################################
+# Track this setting, so we can set it back when we're done testing.
+our $external_links_open_new_window = $ws->external_links_open_new_window();
+END {
+    if (defined $external_links_open_new_window) {
+        $ws->update( external_links_open_new_window => $external_links_open_new_window );
+    }
+}
+
+###############################################################################
 # Test once, with external links opening in a new window
 external_links_open_in_new_window: {
-    Test::Socialtext::main_hub()->current_workspace->update( external_links_open_new_window => 1 );
+    $ws->update( external_links_open_new_window => 1 );
     run {
         my $test = shift;
         return if $test->target;
@@ -24,7 +37,7 @@ external_links_open_in_new_window: {
 ###############################################################################
 # Test again, with external links *NOT* opening in a new window
 external_links_open_in_same_window: {
-    Test::Socialtext::main_hub()->current_workspace->update( external_links_open_new_window => 0 );
+    $ws->update( external_links_open_new_window => 0 );
     run {
         my $test = shift;
         return unless $test->target;

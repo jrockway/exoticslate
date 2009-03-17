@@ -36,17 +36,18 @@ push_onload_function = function (fcn) { jQuery(fcn) }
 Socialtext.make_table_sortable = function(table) {
     if (!table) return;
     if (typeof(table.config) != 'undefined') {
-        delete table.config;
+        // table.config = null;
+        $(table).trigger("update");
     }
-
-    $(table).tablesorter();
-    $(table).trigger("update");
+    else {
+        $(table).tablesorter();
+    }
 }
 
 Socialtext.make_table_unsortable = function(table) {
     if (!table) return;
     if (typeof(table.config) != 'undefined') {
-        delete table.config;
+        table.config = null;
     }
 
     $(table).removeClass("sort").find("tr:eq(0) td").unbind("click").unbind("mousedown");

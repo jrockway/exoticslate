@@ -11,7 +11,9 @@ use Socialtext::Attachments;
 use Test::Socialtext tests => 10;
 
 ###############################################################################
-# Fixtures: db
+# Fixtures: populated_rdbms
+# - we not only need a DB, but need stuff in it
+# - Graham thinks this is because of the mocked ST::Hub/ST::Workspace
 fixtures(qw( populated_rdbms ));
 
 BEGIN { use_ok 'Socialtext::EditPlugin' }

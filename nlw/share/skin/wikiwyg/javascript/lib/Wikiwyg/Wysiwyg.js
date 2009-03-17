@@ -668,10 +668,17 @@ proto.enableThis = function() {
         self.set_key_interception_handler();
         self.set_clear_handler();
 
-        jQuery('table.sort', self.get_edit_document())
-            .each(function() {
-                Socialtext.make_table_sortable(this);
-            });
+        jQuery.poll(
+            function() {
+                return jQuery("table.sort", self.get_edit_document()).size() > 0
+            },
+            function() {
+                jQuery('table.sort', self.get_edit_document())
+                    .each(function() {
+                        Socialtext.make_table_sortable(this);
+                    });
+            }, 500, 10000
+        );
 
         self.is_ready = true;
     };
@@ -1277,9 +1284,7 @@ proto.do_table_settings = function() {
                     }
                     else {
                         $table.removeClass("sort");
-                        var table = $table.get(0);
-                        delete table.config;
-                        Socialtext.make_table_unsortable(table);
+                        Socialtext.make_table_unsortable( $table.get(0) );
                     }
 
                     jQuery.hideLightbox();

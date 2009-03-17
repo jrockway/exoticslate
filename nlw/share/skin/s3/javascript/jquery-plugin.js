@@ -11,7 +11,7 @@ $.poll = function (test, callback, interval, maximum) {
         function() {
             if (id) {
                 clearInterval(id);
-                throw("jQuery.poll failed");
+                // throw("jQuery.poll failed");
             }
         }, maximum
     );

@@ -80,10 +80,10 @@ var proto = this.prototype;
 
 Wikiwyg.VERSION = '3.00';
 
-this.new_global().WW_SIMPLE_MODE = 'Wikiwyg.Wysiwyg';
-this.new_global().WW_ADVANCED_MODE = 'Wikiwyg.Wikitext';
-this.new_global().WW_PREVIEW_MODE = 'Wikiwyg.Preview';
-this.new_global().WW_HTML_MODE = 'Wikiwyg.HTML';
+this.addGlobal().WW_SIMPLE_MODE = 'Wikiwyg.Wysiwyg';
+this.addGlobal().WW_ADVANCED_MODE = 'Wikiwyg.Wikitext';
+this.addGlobal().WW_PREVIEW_MODE = 'Wikiwyg.Preview';
+this.addGlobal().WW_HTML_MODE = 'Wikiwyg.HTML';
 
 // Browser support properties
 Wikiwyg.ua = navigator.userAgent.toLowerCase();
@@ -264,7 +264,7 @@ proto.setFirstModeByName = function(mode_name) {
 }
 
 if (! this.global.wikiwyg_nlw_debug)
-    this.new_global().wikiwyg_nlw_debug = false;
+    this.addGlobal().wikiwyg_nlw_debug = false;
 
 if (this.global.wikiwyg_nlw_debug)
     proto.default_config.modeClasses.push(WW_HTML_MODE);
@@ -938,7 +938,7 @@ Wikiwyg.create_element_with_attrs = function(element, attrs, doc) {
     return elem;
 }
 
-this.new_global().die = function(e) { // See IE, below
+this.addGlobal().die = function(e) { // See IE, below
     throw(e);
 }
 
@@ -971,7 +971,7 @@ Wikiwyg.is_safari_unknown = (
     Wikiwyg.ua.indexOf("version/") == -1
 );
 
-this.new_global().setup_wikiwyg = function() {
+this.addGlobal().setup_wikiwyg = function() {
     if (! Wikiwyg.browserIsSupported) return;
 
     if ( jQuery("#st-edit-mode-container").size() != 1 ||

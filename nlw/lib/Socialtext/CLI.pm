@@ -23,6 +23,7 @@ use Socialtext::Locales qw( valid_code );
 use Socialtext::Log qw( st_log st_timed_log );
 use Socialtext::Workspace;
 use Socialtext::User;
+use Socialtext::User::Cache;
 use Socialtext::Timer;
 use Socialtext::SystemSettings qw/get_system_setting set_system_setting/;
 use Socialtext::Pluggable::Adapter;
@@ -2331,6 +2332,8 @@ sub from_input {
     my $self  = shift;
     my $class = ref $self;
 
+    local $Socialtext::User::Cache::Enabled = 1;
+
     my %opts = $self->_get_options( 'from-fixture' );
 
     {
@@ -2347,10 +2350,13 @@ sub from_input {
             my @argv = split( chr(0), $input );
             $class->new( argv => \@argv )->run();
         };
-        $errors .= $@ if $@;
+        my $err = $@;
+        $errors .= $err if $err;
+
+        eval { Socialtext::User::Cache->Clear() };
 
         if ($opts{'from-fixture'}) {
-            print "Errors: $@" if $@;
+            print "Errors: $err" if $err;
             print "Completed $input\n";
         }
     }

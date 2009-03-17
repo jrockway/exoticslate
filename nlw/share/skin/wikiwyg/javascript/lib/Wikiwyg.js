@@ -777,6 +777,13 @@ proto.contentIsModified = function() {
     var current_wikitext = this.get_current_wikitext().replace(
         /\r/g, ''
     );
+
+    /* The initial clearing of "Replace this text with your own." shouldn't
+     * count as modification -- {bz: 2232} */
+    var clearRegex = this.modeByName(WW_ADVANCED_MODE).config.clearRegex;
+    if (this.originalWikitext.match(clearRegex) && current_wikitext.match(/^\n?$/)) {
+        return false;
+    }
     return (current_wikitext != this.originalWikitext);
 }
 

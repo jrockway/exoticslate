@@ -638,7 +638,6 @@ proto.enableThis = function() {
             setTimeout(function() {
                 self.get_edit_document().execCommand("enableObjectResizing", false, false);
                 self.get_edit_document().execCommand("enableInlineTableEditing", false, false);
-                self.get_edit_document().execCommand("justifyLeft", false, false);
             }, 100);
         }
         else if (Wikiwyg.is_ie) {
@@ -677,10 +676,12 @@ proto.enableThis = function() {
         self.is_ready = true;
     };
 
-    if (self.is_ready)
+    if (self.is_ready
+        || (Socialtext.page_id && Socialtext.revision_id && !Socialtext.start_in_edit_mode)
+        || (self.wikiwyg.first_mode.classtype != self.classtype)
+    ) {
         ready();
-    else if (Socialtext.page_id && Socialtext.revision_id && !Socialtext.start_in_edit_mode)
-        ready();
+    }
     else
         jQuery(self.get_edit_window()).one("load", function() {
             var doc = self.get_edit_document();

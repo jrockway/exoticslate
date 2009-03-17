@@ -81,10 +81,9 @@
 | *Comment* | Test Case: Control Panel Reports - Workspace Growth page body exists |  |
 | selectFrame | report-iframe |  |
 | text_like | Workspace Growth - %%testingwrkspace%% |  |
-| text_like | qr/Date\s*Unique Members\s*Unique\s*Contributors\s*Pages\s*Page\s*Views\s*Contributions/i |  |
 
 | *Comment* | Test Case: Control Panel Reports - Workspace Growth page Data Tests |  |
-| text_like | qr/Date\s*Unique members\s*Unique contributors\s*Pages\s*Page views\s*Contributions/i |
+| text_like | qr/Date\s*Unique Members\s*Unique Visitors\s*Unique Contributors\s*Pages\s*Page Views\s*Contributions/i |
 | text_like | qr/Mar\s*2008\s*8\s*4\s*0\s*24\s*5/ |  |
 | text_like | qr/Feb\s*2008\s*7\s*3\s*0\s*22\s*4/ |  |
 | text_like | qr/Jan\s*2008\s*4\s*2\s*0\s*14\s*3/ |  |
@@ -95,7 +94,7 @@
 | selectFrame | relative=top |  |
 | clickAndWait | link=Printer Friendly Report |  |
 | text_like | Workspace Growth - %%testingwrkspace%% |  |
-| text_like | qr/Date\s*Unique\s*members\s*Unique\s*contributors\s*Pages\s*Page\s*views\s*Contributions/i |
+| text_like | qr/Date\s*Unique Members\s*Unique Visitors\s*Unique Contributors\s*Pages\s*Page Views\s*Contributions/i |
 | text_like | qr/Mar 2008\s*8\s*4\s*0\s*24\s*5/ |  |
 | text_like | qr/Feb 2008\s*7\s*3\s*0\s*22\s*4/ |  |
 | text_like | qr/Jan 2008\s*4\s*2\s*0\s*14\s*3/ |  |
@@ -103,7 +102,7 @@
 | text_like | qr/\w\w\w\s*\d\d\d\d\s*\d+\s*\d+\s*\d+\s*\d+\s*\d+/ |  |
 
 TODO: Add this to slideshow?
- open_ok | /nlw/reports/workspace_growth.csv?workspace=growth_report_test&download=1 | pause | 20000 |
+open_ok | /nlw/reports/workspace_growth.csv?workspace=growth_report_test&download=1 | pause | 20000 |
 
 | *Comment* | Test Case: Control Panel Reports (Account-Level, Growth) Setup |  |
 | set_default | testingwrkspace | growth_report_test |
@@ -124,7 +123,7 @@ TODO: Add this to slideshow?
 | *Comment* | Test Case: Control Panel Reports (Account-level, Growth) page body exists |  |
 | selectFrame | report-iframe |  |
 | text_like | Account Growth - %%testingaccount%% |  |
-| text_like | qr/Date\s*Workspaces\s*Unique members\s*Unique contributors\s*Pages\s*Page views\s*Contributions/i |
+| text_like | qr/Date\s*Unique Members\s*Unique Visitors\s*Unique Contributors\s*Pages\s*Page Views\s*Contributions/i |
 | text_like | qr/Apr\s*2008\s*2\s*6\s*0\s*7\s*0\s*0/ |  |
 | text_like | qr/Mar\s*2008\s*2\s*6\s*4\s*37\s*158\s*36/ |  |
 | text_like | qr/Feb\s*2008\s*2\s*6\s*4\s*7\s*76\s*17/ |  |

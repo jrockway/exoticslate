@@ -34,7 +34,6 @@
 | st-name-widget | 1 | signals_widget |
 | st-widget-title-like | signals_widget | Signals |
 | st-select-widget-frame | signals_widget |  |
-| text_like | //body | Super Edit Summary From Signal %%start_time%% |
 | type_ok | signal-field | She rocks in the treehouse, %%start_time%% |
 | click_ok | post |  |
 | pause | 1000 |  |
@@ -47,6 +46,7 @@
 | type_ok | signal-field | Love to hear the robin going %%start_time%% |
 | click_ok | post |  |
 | pause | 1000 |  |
+| text_like | //body | qr/Super.+Edit.+Summary.+From.+Signal.+%%start_time%%/ |
 | text_like | //body | She rocks in the treehouse, %%start_time%% |
 | text_like | //body | Rockin and a bopin %%start_time%% |
 | text_like | //body | All the little birds %%start_time%% |
@@ -60,7 +60,8 @@
 | wait_for_text_present_ok | She rocks in the treehouse, %%start_time%% | 120000 |
 | wait_for_text_present_ok | Rockin and a bopin %%start_time%% | 120000 |
 | wait_for_text_present_ok | All the little birds %%start_time%% | 120000 |
-| wait_for_text_present_ok | %%short_username%% "Love to hear the robin going %%start_time%%" | 120000 |
+| wait_for_text_present_ok | Love to hear the robin going %%start_time%% | 120000 |
+| text_like | //body | qr/Super.+Edit.+Summary.+From.+Signal.+%%start_time%%/ |
 
 | *Comment* | Test Case: Signals widget. Wait for automatic refresh in Updates |  |
 | wait_for_text_present_ok | (one minute ago) | 120000 |
@@ -77,12 +78,11 @@
 | wait_for_text_present_ok | Rockin and a bopin %%start_time%% | 120000 |
 | wait_for_text_present_ok | All the little birds %%start_time%% | 120000 |
 | wait_for_text_present_ok | Love to hear the robin going %%start_time%% | 120000 |
+| text_like | //body | qr/Super.+Edit.+Summary.+From.+Signal.+%%start_time%%/ |
 | wait_for_text_present_ok | 2 minutes ago | 120000 |
 
-| select-frame | relative=parent |  |
-| pause | 25000 |  |
-
 | *Comment* | Test Case: Signals Widget Teardown |  |
+| select-frame | relative=parent |  |
 | st-empty-container |  |  |
 
 | *Comment* | Test Case: Signals Widget COMPLETED |  |

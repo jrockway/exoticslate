@@ -312,6 +312,34 @@ Requires the following PARAMS:
 
 =back
 
+=head2 $authz->plugin_enabled_for_account(PARAMS)
+
+Returns a boolean indicating whether a plugin is enabled for an account.
+
+Requires the following PARAMS:
+
+=over 8
+
+=item * account - a account object or id
+
+=item * plugin_name - the name of the plugin to check
+
+=back
+
+=head2 $authz->plugin_enabled_for_workspace(PARAMS)
+
+Returns a boolean indicating whether a plugin is enabled for a workspace.
+
+Requires the following PARAMS:
+
+=over 8
+
+=item * workspace - a workspace object or id
+
+=item * plugin_name - the name of the plugin to check
+
+=back
+
 =head2 $authz->plugin_enabled_for_users(PARAMS)
 
 Returns a boolean indicating if a plugin can be used for some interaction between two users.  Currently, this is implemented as a check to see if both users share any accounts where the plugin is enabled.  In the future, this may be expanded out to use an access-control mechanism that may or may not use user-specified access assertions.

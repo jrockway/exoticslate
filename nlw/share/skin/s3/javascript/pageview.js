@@ -92,7 +92,7 @@ Page = {
 
                     rev_string = loc('[_1] Revisions', data.revision_count);
                     $('#controls-right-revisions').html(rev_string);
-                    $('#bottom-buttons-revisions').html('(' + rev_string + ')');
+                    $('#bottom-buttons-revisions').html(rev_string);
                     $('#update-attribution .st-username').empty().append(
                             jQuery(".nlw_phrase", jQuery(data.last_editor_html))
                             );

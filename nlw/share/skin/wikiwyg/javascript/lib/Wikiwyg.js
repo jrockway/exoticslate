@@ -228,6 +228,7 @@ proto.switchMode = function(new_mode_key) {
     var new_mode = this.modeByName(new_mode_key);
     var old_mode = this.current_mode;
     var self = this;
+    jQuery("#st-edit-summary").hide();
     new_mode.enableStarted();
     old_mode.disableStarted();
     old_mode.toHtml(
@@ -239,6 +240,8 @@ proto.switchMode = function(new_mode_key) {
             new_mode.enableFinished();
             old_mode.disableFinished();
             self.current_mode = new_mode;
+
+            jQuery("#st-edit-summary").show();
         }
     );
 }
@@ -522,6 +525,7 @@ proto.saveContent = function() {
         return;
     }
 
+    jQuery("#st-edit-summary").hide();
     jQuery('#st-editing-tools-edit ul').hide();
     jQuery('<div id="saving-message" />')
         .html(loc('Saving...'))

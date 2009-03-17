@@ -33,7 +33,6 @@ Edit_save_event: {
 Edit_contention: {
     no warnings 'redefine';
     local *Socialtext::EditPlugin::_there_is_an_edit_contention = sub { 1 };
-    local *Socialtext::EditPlugin::_edit_contention_screen = sub { "" };
     my $ep = setup_plugin();
     ok($ep, "Created an EditPlugin");
     $ep->edit_content();

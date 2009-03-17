@@ -195,3 +195,5 @@ t/Socialtext/Gadgets/ContainerType.t
 t/Socialtext/Gadgets/Container-pathargs.t
 t/Socialtext/Gadgets/Container-scope.t
 t/Socialtext/Gadgets000.t
+t/Socialtext/Gadgets/XML-install-gadget.t
+t/widget/simple.xml

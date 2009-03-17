@@ -6,7 +6,11 @@ use warnings;
 
 use Test::Socialtext tests => 12;
 
-fixtures( 'admin' );
+###############################################################################
+# Fixtures: clean admin
+# - some of our tests expect a "clean" slate to start with, and count up the
+#   number of items in the DB.
+fixtures(qw( clean admin ));
 
 my $hub = new_hub('admin');
 

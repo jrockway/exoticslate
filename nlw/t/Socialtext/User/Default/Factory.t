@@ -8,7 +8,12 @@ use Test::Socialtext::User;
 use Socialtext::User;
 use Socialtext::SQL qw(sql_execute);
 
-fixtures( 'db' );
+###############################################################################
+# Fixtures: rdbms_clean
+# - need to clean out the DB first; our tests explicitly expect a
+#   "fresh/clean" DB to work against.
+fixtures(qw( rdbms_clean ));
+
 use_ok 'Socialtext::User::Default::Factory';
 
 my $start_time = time;

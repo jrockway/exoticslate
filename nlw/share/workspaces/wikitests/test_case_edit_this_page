@@ -9,6 +9,14 @@
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
 | type_ok | st-newpage-pagename-edit | Edit This Page %%start_time%% |
 | type_ok | wikiwyg_wikitext_textarea | Edit This Page content %%start_time%% |
+
+| *Comment* | Test Case: Edit This Page Expand/Normal test |  |
+| wait_for_element_visible_ok | link=Expand | 30000 |
+| click_ok | link=Expand |  |
+| wait_for_element_visible_ok | link=Normal | 10000 |
+| click_ok | link=Normal |  |
+| wait_for_element_visible_ok | link=Expand | 10000 |
+
 | clickAndWait | st-save-button-link |  |
 
 | *Comment* | Test Case: Edit This Page verify editing buttons |  |

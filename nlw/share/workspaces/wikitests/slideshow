@@ -1,26 +1,22 @@
 Selenium iehta mode is broken. IE cannot use HighPermissions.
 
-THIS VERSION OF SLIDESHOW IS FOR IE AND SAFARI. SLIDESHOW PLUS IS FOR FIREFOX.
+THIS VERSION OF SlideShow IS FOR IE AND SAFARI. FireShow IS FOR FIREFOX.
 
 This test case is an aid to visually observing each screen type in the application. The test case cycles through screens, printing out SEE instructions to the test person. The test person should observe the browser under test at each SEE point along the way. The test person may pause at any point to examine the screen visually using CTRL-Z to suspend the testing process and the unix command `fg` to resume it.
 
 CONSIDER:
 pushing all the editor buttons ???
 
-Visit in IE 6 and IE 7
+Visit in IE 6 and IE 7 and Safari
 
 | *Comment* | SlideShow: automation for visual inspection of UI screens |  |
 
 | set_default | wiki | %%workspace%% | defaults to the test workspace |
-| set_default | wikititle | %%title%% | defaults to the test workspace |
 | set_default | pt | 5000 | defaults to five seconds |
 | set_default | popup | 8000 | cancel popups in 8 seconds |
 | include | `[Disable LDAP]` |  | disable LDAP |
 
-| TODO: eliminate wikititle and use title link ID once you have one
-
-* Enable unplugged.
-* Enable Recent Changes and Recently Viewed in Sidebar | *Comment* | SlideShow: enabling unplugged and expanding sidebar |  |
+| *Comment* | SlideShow: enabling unplugged and expanding sidebar |  |
 | st-admin | set-workspace-config --workspace %%wiki%% enable_unplugged 1 |  |
 | st-admin | set-workspace-config --workspace %%wiki%% allows_skin_upload 1 |  |
 
@@ -90,12 +86,11 @@ New Post
 | pause | %%pt%% |  |
 | pause | %%pt%% | extra pause for editing |
 | click_ok | link=Expand |  |
-| pause | %%pt%% |  |
 | *Comment* | SlideShow SEE Untitled Page - Expanded and open for editing |  |
 | pause | %%pt%% |  |
 | click_ok | link=Normal |  |
-| pause | %%pt%% |  |
 | *Comment* | SlideShow SEE Untitled Page - Normal and open for editing |  |
+| pause | %%pt%% |  |
 
 Post by Email popup
 

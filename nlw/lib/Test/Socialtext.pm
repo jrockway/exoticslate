@@ -22,6 +22,7 @@ our $Order_doesnt_matter = 0;
 our @EXPORT = qw(
     fixtures
     new_hub
+    create_test_hub
     SSS
     run_smarter_like
     smarter_like
@@ -364,6 +365,33 @@ sub main_hub {
     $main_hub = shift if @_;
     $main_hub ||= Test::Socialtext::new_hub('admin');
     return $main_hub;
+}
+
+{
+    my $counter = 0;
+
+    sub create_test_hub {
+        my $unique_id = time . $$ . $counter;
+        $counter++;
+
+        # create a new test User
+        my $user = Socialtext::User->create(
+            username      => $unique_id . '@ken.socialtext.net',
+            email_address => $unique_id . '@ken.socialtext.net',
+        );
+
+        # create a new test Workspace
+        my $ws = Socialtext::Workspace->create(
+            name               => $unique_id,
+            title              => $unique_id,
+            created_by_user_id => $user->user_id,
+            account_id         => Socialtext::Account->Default->account_id,
+            skip_default_pages => 1,
+        );
+
+        # create a Hub based on this User/Workspace
+        return new_hub($ws->name, $user->username);
+    }
 }
 
 sub SSS() {

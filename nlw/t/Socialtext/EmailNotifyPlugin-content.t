@@ -24,7 +24,7 @@ my $long_ago = time - (86400 * 10);    # 10 days back
 ###############################################################################
 # TEST: e-mail notifications are sent
 email_notifications_send_emails: {
-    my $hub      = test_hub();
+    my $hub      = create_test_hub();
     my $user     = $hub->current_user();
     my $ws       = $hub->current_workspace();
     my $ws_title = $ws->title();
@@ -101,7 +101,7 @@ email_notifications_send_emails: {
 ###############################################################################
 # TEST: deleting a page does *not* send an e-mail notification
 no_email_notification_on_page_delete: {
-    my $hub  = test_hub();
+    my $hub  = create_test_hub();
     my $user = $hub->current_user();
 
     # create a notifier, and delete a page
@@ -128,34 +128,4 @@ no_email_notification_on_page_delete: {
     my @emails = Email::Send::Test->emails;
 
     is scalar @emails, 0, 'No email was sent for a deleted page.';
-}
-
-###############################################################################
-# Helper method to create a new hub for testing, with custom User+Workspace
-{
-    my $counter = 0;
-
-    sub test_hub {
-        $counter++;
-        my $unique_id = time . $$ . $counter;
-
-        # create a new test User
-        my $user = Socialtext::User->create(
-            username      => $unique_id . '@ken.socialtext.net',
-            email_address => $unique_id . '@ken.socialtext.net',
-        );
-
-        # create a new test Workspace
-        my $ws = Socialtext::Workspace->create(
-            name               => $unique_id,
-            title              => $unique_id,
-            created_by_user_id => $user->user_id,
-            account_id         => Socialtext::Account->Default->account_id,
-            skip_default_pages => 1,
-        );
-
-        # create a new Hub based on this WS/User, and return that back to the
-        # caller
-        return new_hub($ws->name, $user->username);
-    }
 }

@@ -44,7 +44,7 @@ Socialtext.make_table_sortable = function(table) {
 
         // Because the tables inside wysiwyg editing area are expected to be
         // changed, we forcibly update it on every sort.
-        if (wikiwyg &&
+        if (window.wikiwyg &&
             wikiwyg.current_mode.classtype == 'wysiwyg' &&
             $(table).parents("body").get(0) == wikiwyg.current_mode.get_edit_document().body
         ) {

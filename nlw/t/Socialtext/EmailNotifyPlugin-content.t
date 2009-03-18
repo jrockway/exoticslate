@@ -40,21 +40,23 @@ email_notifications_send_emails: {
     my $page_title_two = 'A Second Page for Testing Email Notify';
 
     Email::Send::Test->clear;
-    Socialtext::File::update_mtime( $notifier->run_stamp_file, $long_ago );
-    Socialtext::File::update_mtime( $notifier->_stamp_file_for_user($user),
-        $long_ago );
+    Socialtext::File::update_mtime($notifier->run_stamp_file, $long_ago);
+    Socialtext::File::update_mtime(
+        $notifier->_stamp_file_for_user($user),
+        $long_ago
+    );
 
-    my $page = Socialtext::Page->new( hub => $hub )->create(
+    my $page = Socialtext::Page->new(hub => $hub)->create(
         title   => $page_title_one,
         content => 'This is the page content',
         creator => $user,
-        date    => DateTime->now->add( seconds => 30 ),
+        date    => DateTime->now->add(seconds => 30),
     );
-    my $page2 = Socialtext::Page->new( hub => $hub )->create(
+    my $page2 = Socialtext::Page->new(hub => $hub)->create(
         title   => $page_title_two,
         content => 'This is the other content',
         creator => $user,
-        date    => DateTime->now->add( seconds => 60 ),
+        date    => DateTime->now->add(seconds => 60),
     );
 
     $notify->maybe_send_notifications;
@@ -94,7 +96,7 @@ email_notifications_send_emails: {
         qr{$ws_title/emailprefs},
         'Preferences url action is correct'
     );
- 
+
     like(
         $parts[0]->body,
         qr{\n$page_title_one\n  http},
@@ -108,11 +110,11 @@ email_notifications_send_emails: {
     );
 
     # XXX shouldn't the user get things in their own timezone
-#    like(
-#        $parts[0]->body,
-#        qr{GMT\)\n\n$page_title_two\n},
-#        'Only one blank line between entries'
-#    );
+    #    like(
+    #        $parts[0]->body,
+    #        qr{GMT\)\n\n$page_title_two\n},
+    #        'Only one blank line between entries'
+    #    );
 }
 
 ###############################################################################
@@ -122,26 +124,27 @@ no_email_notification_on_page_delete: {
     my $user = $hub->current_user();
 
     # create a notifier, and delete a page
-    my $notify = $hub->email_notify;
-    my $pages  = $hub->pages;
+    my $notify   = $hub->email_notify;
+    my $pages    = $hub->pages;
     my $notifier = Socialtext::EmailNotifier->new(
         plugin           => $notify,
         notify_frequency => 'notify_frequency'
     );
     Email::Send::Test->clear;
-    Socialtext::File::update_mtime( $notifier->run_stamp_file, $long_ago );
-    Socialtext::File::update_mtime( $notifier->_stamp_file_for_user($user), $long_ago );
+    Socialtext::File::update_mtime($notifier->run_stamp_file, $long_ago);
+    Socialtext::File::update_mtime($notifier->_stamp_file_for_user($user),
+        $long_ago);
 
     my $page = $pages->new_from_name('A New Page for Testing Email Notify');
 
-    $page->delete( user => $user );
+    $page->delete(user => $user);
 
     $notify->maybe_send_notifications;
 
     # make sure that *no* e-mail was sent
     my @emails = Email::Send::Test->emails;
 
-    is( scalar @emails, 0, 'No email was sent for a deleted page.' );
+    is(scalar @emails, 0, 'No email was sent for a deleted page.');
 }
 
 
@@ -151,8 +154,9 @@ no_email_notification_on_page_delete: {
 # Helper method to create a new hub for testing, with custom User+Workspace
 {
     my $counter = 0;
+
     sub test_hub {
-        $counter ++;
+        $counter++;
         my $unique_id = time . $$ . $counter;
 
         # create a new test User
@@ -172,6 +176,6 @@ no_email_notification_on_page_delete: {
 
         # create a new Hub based on this WS/User, and return that back to the
         # caller
-        return new_hub( $ws->name, $user->username );
+        return new_hub($ws->name, $user->username);
     }
 }

@@ -3,21 +3,14 @@
 
 use strict;
 use warnings;
-
-use Test::Socialtext;
-fixtures( 'admin' );
-
-BEGIN {
-    unless ( eval { require Email::Send::Test; 1 } ) {
-        plan skip_all => 'These tests require Email::Send::Test to run.';
-    }
-}
-
-plan tests => 4;
-
-$Socialtext::EmailSender::Base::SendClass = 'Test';
+use Email::Send::Test;
 use Socialtext::EmailNotifier;
 use Socialtext::EmailReceiver::Factory;
+use Test::Socialtext tests => 4;
+
+fixtures( 'admin' );
+
+$Socialtext::EmailSender::Base::SendClass = 'Test';
 
 my $hub = new_hub('admin');
 

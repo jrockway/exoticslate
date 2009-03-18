@@ -3,19 +3,11 @@
 
 use strict;
 use warnings;
-
-use Test::Socialtext;
-fixtures( 'foobar' );
-
-BEGIN {
-    unless ( eval { require Email::Send::Test; 1 } ) {
-        plan skip_all => 'These tests require Email::Send::Test to run.';
-    }
-}
-
-plan tests => 7;
-
+use Email::Send::Test;
 use Readonly;
+use Test::Socialtext tests => 7;
+
+fixtures( 'foobar' );
 
 Readonly my $SYSTEM_EMAIL_ADDRESS => 'noreply@socialtext.com';
 Readonly my $PAGE_NAME            => 'random system page';

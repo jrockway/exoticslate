@@ -3,26 +3,17 @@
 
 use strict;
 use warnings;
-
-use Test::Socialtext;
+use Email::Send::Test;
+use Socialtext::EmailNotifier;
 use Socialtext::EmailReceiver::Factory;
+use Test::Socialtext tests => 4;
 
 ###############################################################################
 # Fixtures: clean admin
 # - this test requires that it start at a clean slate
 fixtures(qw( clean admin ));
 
-BEGIN {
-    unless ( eval { require Email::Send::Test; 1 } ) {
-        plan skip_all => 'These tests require Email::Send::Test to run.';
-    }
-}
-
-plan tests => 4;
-
 $Socialtext::EmailSender::Base::SendClass = 'Test';
-use Socialtext::EmailNotifier;
-use Socialtext::EmailReceiver::Factory;
 
 my $hub = new_hub('admin');
 

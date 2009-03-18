@@ -3,20 +3,11 @@
 
 use strict;
 use warnings;
-
-use Test::Socialtext;
-fixtures( 'admin' );
-
-BEGIN {
-    unless ( eval { require Email::Send::Test; 1 } ) {
-        plan skip_all => 'These tests require Email::Send::Test to run.';
-    }
-}
-
-plan tests => 1;
-
-
+use Email::Send::Test;
 use Socialtext::EmailNotifier;
+use Test::Socialtext tests => 1;
+
+fixtures( 'admin' );
 
 $Socialtext::EmailSender::Base::SendClass = 'Test';
 

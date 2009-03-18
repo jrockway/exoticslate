@@ -1270,6 +1270,9 @@ proto.do_table_settings = function() {
                 if ($table.is(".sort") ){
                     $form.find("input[name=sort]").attr("checked", "checked");
                 }
+                else {
+                    $form.find("input[name=sort]").removeAttr("checked");
+                }
 
                 jQuery("#st-table-settings form").one("reset", function() {
                     jQuery.hideLightbox();

@@ -298,4 +298,20 @@ EOT
     return $pages;
 }
 
+sub ChangedCount {
+    my $class = shift;
+    my %p     = @_;
+    my $workspace_id = $p{workspace_id};
+    my $max_age      = $p{duration};
+
+    my $sth = sql_execute(<<EOT,
+SELECT count(*) FROM page
+    WHERE deleted = 'false'::bool
+      AND workspace_id = ?
+      AND last_edit_time > ('now'::timestamptz - ?::interval)
+EOT
+        $workspace_id, "$max_age seconds",
+    );
+}
+
 1;

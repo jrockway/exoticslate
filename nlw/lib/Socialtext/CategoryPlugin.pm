@@ -319,6 +319,15 @@ sub page_count {
     my $self = shift;
     my $tag  = shift;
 
+    if (lc($tag) eq 'recent changes') {
+        my $prefs = $self->hub->recent_changes->preferences;
+        my $seconds = $prefs->changes_depth->value * 1440 * 60;
+        return 0+Socialtext::Model::Pages->ChangedCount(
+            workspace_id => $self->hub->current_workspace->workspace_id,
+            duration => $seconds,
+        );
+    }
+
     my $result = sql_singlevalue(<<EOT,
 SELECT count(page_id) FROM page_tag
     WHERE workspace_id = ?

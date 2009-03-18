@@ -2,7 +2,7 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
-use Test::More tests => 67;
+use Test::More tests => 70;
 use mocked 'Socialtext::SQL', qw/sql_ok/;
 use mocked 'Socialtext::Page';
 use mocked 'Socialtext::User';
@@ -628,4 +628,24 @@ EOT
         );
         is scalar(@Socialtext::SQL::SQL), 0, 'no other SQL calls were made';
     }
+}
+
+
+Count_of_recent_changes: {
+    Socialtext::Model::Pages->ChangedCount(
+        workspace_id => 9,
+        duration     => 100,
+    );
+    sql_ok(
+        name => 'recent_changes_count',
+        sql => <<EOT,
+SELECT count(*) 
+    FROM page 
+    WHERE deleted = 'false'::bool 
+      AND workspace_id = ? 
+      AND last_edit_time > ('now'::timestamptz - ?::interval)
+EOT
+        args => [9, '100 seconds'],
+    );
+    is scalar(@Socialtext::SQL::SQL), 0, 'no other SQL calls were made';
 }

@@ -41,6 +41,17 @@ Socialtext.make_table_sortable = function(table) {
     }
     else {
         $(table).tablesorter();
+
+        // Because the tables inside wysiwyg editing area are expected to be
+        // changed, we forcibly update it on every sort.
+        if (wikiwyg &&
+            wikiwyg.current_mode.classtype == 'wysiwyg' &&
+            $(table).parents("body").get(0) == wikiwyg.current_mode.get_edit_document().body
+        ) {
+            $(table).bind("sortStart", function() {
+                $(this).trigger("update");
+            });
+        }
     }
 }
 

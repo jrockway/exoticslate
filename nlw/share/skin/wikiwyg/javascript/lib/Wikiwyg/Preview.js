@@ -44,7 +44,7 @@ proto.initializeObject = function() {
 
 proto.enableThis = function() {
     Wikiwyg.Mode.prototype.enableThis.apply(this, arguments);
-    jQuery('table.sort')
+    jQuery('table.sort', this.div)
         .each(function() {
             Socialtext.make_table_sortable(this);
         });

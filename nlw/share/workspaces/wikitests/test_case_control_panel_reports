@@ -8,7 +8,7 @@
 | st-admin | remove-accounts-admin --email %%email%% | %%username%% no longer has accounts admin access |
 | st-admin | give-accounts-admin --email %%email%% | %%username%% now has accounts admin access |
 
- st_qa_setup_reports | | |
+st_qa_setup_reports | | |
 
 | set_default | testingwrkspace | growth_report_test |
 
@@ -81,25 +81,26 @@
 | *Comment* | Test Case: Control Panel Reports - Workspace Growth page body exists |  |
 | selectFrame | report-iframe |  |
 | text_like | Workspace Growth - %%testingwrkspace%% |  |
+| text_like | qr/Date\s*Unique Members\s*Unique\s*Visitors\s*Unique\s*Contributors\s*Pages\s*Page\s*Views\s*Contributions/i |  |
 
 | *Comment* | Test Case: Control Panel Reports - Workspace Growth page Data Tests |  |
-| text_like | qr/Date\s*Unique Members\s*Unique Visitors\s*Unique Contributors\s*Pages\s*Page Views\s*Contributions/i |
-| text_like | qr/Mar\s*2008\s*8\s*4\s*0\s*24\s*5/ |  |
-| text_like | qr/Feb\s*2008\s*7\s*3\s*0\s*22\s*4/ |  |
-| text_like | qr/Jan\s*2008\s*4\s*2\s*0\s*14\s*3/ |  |
-| text_like | qr/Dec\s*2007\s*1\s*1\s*0\s*4\s*2/ |  |
-| text_like | qr/\w\w\w\s*\d\d\d\d\s*\d+\s*\d+\s*\d+\s*\d+\s*\d+/ |  |
+| text_like | qr/Date\s*Unique members\s*Unique Visitors\s*Unique contributors\s*Pages\s*Page views\s*Contributions/i |
+| text_like | qr/Mar\s*2008\s*8\s*8\s*4\s*0\s*24\s*5/ |  |
+| text_like | qr/Feb\s*2008\s*7\s*7\s*3\s*0\s*22\s*4/ |  |
+| text_like | qr/Jan\s*2008\s*4\s*4\s*2\s*0\s*14\s*3/ |  |
+| text_like | qr/Dec\s*2007\s*1\s*1\s*1\s*0\s*4\s*2/ |  |
+| text_like | qr/\w\w\w\s*\d\d\d\d\s*\d+\s*\d+\s*\d+\s*\d+\s*\d+\s*\d+/ |  |
 
 | *Comment* | Test Case: Control Panel Reports - Workspace Growth Printer Friendly |  |
 | selectFrame | relative=top |  |
 | clickAndWait | link=Printer Friendly Report |  |
 | text_like | Workspace Growth - %%testingwrkspace%% |  |
-| text_like | qr/Date\s*Unique Members\s*Unique Visitors\s*Unique Contributors\s*Pages\s*Page Views\s*Contributions/i |
-| text_like | qr/Mar 2008\s*8\s*4\s*0\s*24\s*5/ |  |
-| text_like | qr/Feb 2008\s*7\s*3\s*0\s*22\s*4/ |  |
-| text_like | qr/Jan 2008\s*4\s*2\s*0\s*14\s*3/ |  |
-| text_like | qr/Dec\s*2007\s*1\s*1\s*0\s*4\s*2/ |  |
-| text_like | qr/\w\w\w\s*\d\d\d\d\s*\d+\s*\d+\s*\d+\s*\d+\s*\d+/ |  |
+| text_like | qr/Date\s*Unique\s*members\s*Unique Visitors\s*Unique\s*contributors\s*Pages\s*Page\s*views\s*Contributions/i |  |
+| text_like | qr/Mar 2008\s*8\s*8\s*4\s*0\s*24\s*5/ |  |
+| text_like | qr/Feb 2008\s*7\s*7\s*3\s*0\s*22\s*4/ |  |
+| text_like | qr/Jan 2008\s*4\s*4\s*2\s*0\s*14\s*3/ |  |
+| text_like | qr/Dec\s*2007\s*1\s*1\s*1\s*0\s*4\s*2/ |  |
+| text_like | qr/\w\w\w\s*\d\d\d\d\s*\d+\s*\d+\s*\d+\s*\d+\s*\d+\s*\d+/ |  |
 
 TODO: Add this to slideshow?
 open_ok | /nlw/reports/workspace_growth.csv?workspace=growth_report_test&download=1 | pause | 20000 |
@@ -123,21 +124,21 @@ open_ok | /nlw/reports/workspace_growth.csv?workspace=growth_report_test&downloa
 | *Comment* | Test Case: Control Panel Reports (Account-level, Growth) page body exists |  |
 | selectFrame | report-iframe |  |
 | text_like | Account Growth - %%testingaccount%% |  |
-| text_like | qr/Date\s*Unique Members\s*Unique Visitors\s*Unique Contributors\s*Pages\s*Page Views\s*Contributions/i |
-| text_like | qr/Apr\s*2008\s*2\s*6\s*0\s*7\s*0\s*0/ |  |
-| text_like | qr/Mar\s*2008\s*2\s*6\s*4\s*37\s*158\s*36/ |  |
-| text_like | qr/Feb\s*2008\s*2\s*6\s*4\s*7\s*76\s*17/ |  |
-| text_like | qr/Jan\s*2008\s*2\s*4\s*2\s*6\s*46\s*9/ |  |
-| text_like | qr/Dec\s*2007\s*2\s*2\s*1\s*2\s*24\s*7/ |  |
+| text_like | qr/Date\s*Workspaces\s*Unique members\s*Unique Visitors\s*Unique contributors\s*Pages\s*Page views\s*Contributions/i |  |
+| text_like | qr/Apr\s*2008\s*2\s*6\s*0\s*0\s*7\s*0\s*0/ |  |
+| text_like | qr/Mar\s*2008\s*2\s*6\s*6\s*4\s*37\s*158\s*36/ |  |
+| text_like | qr/Feb\s*2008\s*2\s*6\s*6\s*4\s*7\s*76\s*17/ |  |
+| text_like | qr/Jan\s*2008\s*2\s*4\s*4\s*2\s*6\s*46\s*9/ |  |
+| text_like | qr/Dec\s*2007\s*2\s*2\s*2\s*1\s*2\s*24\s*7/ |  |
 
 | *Comment* | Test Case: Control Panel Reports (Account-level, Growth) Printer Friendly |  |
 | selectFrame | relative=top |  |
 | clickAndWait | link=Printer Friendly Report |  |
-| text_like | qr/Apr\s*2008\s*2\s*6\s*0\s*7\s*0\s*0/ |  |
-| text_like | qr/Mar\s*2008\s*2\s*6\s*4\s*37\s*158\s*36/ |  |
-| text_like | qr/Feb\s*2008\s*2\s*6\s*4\s*7\s*76\s*17/ |  |
-| text_like | qr/Jan\s*2008\s*2\s*4\s*2\s*6\s*46\s*9/ |  |
-| text_like | qr/Dec\s*2007\s*2\s*2\s*1\s*2\s*24\s*7/ |  |
+| text_like | qr/Apr\s*2008\s*2\s*6\s*0\s*0\s*7\s*0\s*0/ |  |
+| text_like | qr/Mar\s*2008\s*2\s*6\s*6\s*4\s*37\s*158\s*36/ |  |
+| text_like | qr/Feb\s*2008\s*2\s*6\s*6\s*4\s*7\s*76\s*17/ |  |
+| text_like | qr/Jan\s*2008\s*2\s*4\s*4\s*2\s*6\s*46\s*9/ |  |
+| text_like | qr/Dec\s*2007\s*2\s*2\s*2\s*1\s*2\s*24\s*7/ |  |
 
 | *Comment* | Test case: Control Panel Reports (Account-level) Get Usage |  |
 | open_ok | /nlw/control |  |

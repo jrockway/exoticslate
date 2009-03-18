@@ -20,8 +20,8 @@ TO DO - Add testability hooks and confirm Grey Ghost Icon
 | wait_for_element_visible_ok | link=All People Tags | 30000 |
 | wait_for_element_visible_ok | link=Recent Conversations | 30000 |
 
- wait_for_element_visible_ok | //a[contains(@href,'?action=add_widget;gadget_id=3')] | 30000 |
-text_like | //link[contains(@href,'?action=add_widget;gadget_id=3')] | Workspaces |
+| wait_for_element_visible_ok | //a[contains(@id,'gallery-widget-Workspaces')] | 30000 |
+| text_like | //a[contains(@id,'gallery-widget-Workspaces')] | Workspaces |
 
 | wait_for_element_visible_ok | link=Wiki Page | 30000 |
 | wait_for_element_visible_ok | link=One Image | 30000 |

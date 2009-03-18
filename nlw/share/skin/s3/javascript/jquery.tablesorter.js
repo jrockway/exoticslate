@@ -292,7 +292,7 @@
 				
 				var meta = ($.metadata) ? true : false; 
 			
-				$tableHeaders = $("tr:eq(0) td", table);
+				$tableHeaders = $("tr:eq(0) td, tr:eq(0) th", table);
 		
 				$tableHeaders.each(function(index) {
 					this.count = 0;

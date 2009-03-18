@@ -15,8 +15,6 @@ $Socialtext::EmailSender::Base::SendClass = 'Test';
 my $ten_days_ago = time - (86400 * 10);
 my $user = Socialtext::User->new( username => 'devnull1@socialtext.com' );
 
-my $hub = new_hub('admin');
-
 {
     my $hub      = new_hub('admin');
     my $notify   = $hub->email_notify;

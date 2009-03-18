@@ -47,13 +47,13 @@ email_notifications_send_emails: {
     my $page = Socialtext::Page->new( hub => $hub )->create(
         title   => $page_title_one,
         content => 'This is the page content',
-        creator => $hub->current_user,
+        creator => $user,
         date    => DateTime->now->add( seconds => 30 ),
     );
     my $page2 = Socialtext::Page->new( hub => $hub )->create(
         title   => $page_title_two,
         content => 'This is the other content',
-        creator => $hub->current_user,
+        creator => $user,
         date    => DateTime->now->add( seconds => 60 ),
     );
 

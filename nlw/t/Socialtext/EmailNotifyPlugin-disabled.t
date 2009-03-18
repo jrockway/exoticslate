@@ -50,8 +50,8 @@ email_notification_sends_nothing_when_disabled: {
 
     $page->content('This is the page content');
     $page->metadata->Subject($page_title_one);
-    $page->metadata->update( user => $hub->current_user );
-    $page->store( user => $hub->current_user );
+    $page->metadata->update( user => $user );
+    $page->store( user => $user );
 
     $notify->maybe_send_notifications;
 

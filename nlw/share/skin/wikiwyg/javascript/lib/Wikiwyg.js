@@ -1087,6 +1087,7 @@ function setup_wikiwyg() {
 
             if (Wikiwyg.is_safari) {
                 delete ww.current_wikitext;
+                jQuery('#wikiwyg_button_table-settings').addClass("disabled");
 
                 // To fix the tab focus order, remove the (unused) iframes.
                 jQuery("#st-page-editing-wysiwyg, #pastebin").remove();

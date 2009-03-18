@@ -544,6 +544,90 @@ sub json_parse {
         $self->{http}->name . " parsed content" . ($@ ? " \$\@=$@" : "");
 }
 
+=head2 json-like
+
+Confirm that the resulting body is a JSON object which is like (ignoring order
+for arrays/dicts) the value given. 
+
+The comparison is as follows between the 'candidate' given as a param in the
+wikitest, and the value object derived from decoding hte json object from the
+wikitest.  this is performed recursively): 1) if the value object is a scalar,
+perform comparison with candidate (both must be scalars), 2) if the object is
+an array, then for each object in the candidate, ensure the object in the is a
+dictionary, then for each key in the candidate object, ensure that the same
+key exists in the value object and that it maps to a value that is equivalent
+to the value mapped to in the candidate object.
+
+*WARNING* - Right now, this is stupid about JSON numbers as strings v.
+numbers. That is, the values "3" and 3 are considered equivalent (e.g.
+{"foo":3} and {"foo":"3"} are considered equivalent - this is a known bug in
+this fixture)
+
+=cut
+
+
+sub json_like {
+    
+    my $self = shift;
+    my $candidate = shift;
+
+    my $json = $self->{json};
+      
+    if (not defined $json ) {
+        fail $self->{http}->name . " no json result";
+    }
+    my $parsed_candidate = eval { decode_json($candidate) };
+    if ($@ || ! defined $parsed_candidate || ref($parsed_candidate) !~ /^|ARRAY|HASH|SCALAR$/)  {
+        fail $self->{http}->name . " failed to find or parse candidate " . ($@ ? " \$\@=$@" : "");
+        return;
+    }
+    
+    my $result=0;
+    $result = eval {$self->_compare_json($parsed_candidate, $json)}; 
+    if (!$@ && $result) {
+        ok !$@ && $result, 
+        $self->{http}->name . " compared content and candidate";
+    } else {
+        fail "$candidate\n and\n ".encode_json($json)."\n" . ($@ ? "\$\@=$@" : "");
+    }
+}
+
+sub _compare_json {
+    my $self = shift;
+    my $candidate = shift;
+    my $json = shift;
+
+
+    die "Candidate is undefined" unless defined $candidate;
+    die "JSON is undefined" unless defined $json;
+    die encode_json($json) . " is not a VAL/SCALAR/HASH/ARRAY" unless ref($json) =~ /^|SCALAR|HASH|ARRAY$/;
+    if (ref($json) eq 'SCALAR' || ref($json) eq '') {
+        die "Type of $json and $candidate are not both values" unless (ref($json) eq ref($candidate));
+        die "No match for \n$candidate\nAND\n$json\n" unless ($json eq $candidate);
+    }
+    elsif (ref($json) eq 'ARRAY') {
+        my $match = 1;
+        die "Expecting array for ". encode_json($candidate) . " with json ".encode_json($json) unless ref ($candidate) eq 'ARRAY'; 
+        foreach (@$candidate) {
+            my $candobj=$_;
+            my $exists = 0;
+            foreach (@$json) {
+                $exists ||= eval {$self->_compare_json($candobj, $_)};
+            }
+            $match &&= $exists;
+        }
+        die "No match for candidate ".encode_json($candidate) . " with json ".encode_json($json) unless $match; 
+    }
+    elsif (ref($json) eq 'HASH') {
+        die  "Expecting hash for ". encode_json($candidate) . " with json ".encode_json($json) unless ref($candidate) eq 'HASH'; 
+        my $match = 1;
+        for my $key (keys %$candidate) {
+            die "Can't find value for key '$key' in JSON ". encode_json($json)  unless defined($json->{$key});
+            $match &&= $self->_compare_json($candidate->{$key}, $json->{$key});
+        }
+        die "No match for candidate ".encode_json($candidate) . " with json ".encode_json($json) unless $match;
+    }
+}
 =head2 json-array-size
 
 Confirm that the resulting body is a JSON array of length X.

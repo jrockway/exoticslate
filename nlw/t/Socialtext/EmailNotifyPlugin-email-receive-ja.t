@@ -41,8 +41,10 @@ receive_email_using_ja_locale: {
     Email::Send::Test->clear;
 
     Socialtext::File::update_mtime($notifier->run_stamp_file, $long_ago);
-    Socialtext::File::update_mtime($notifier->_stamp_file_for_user($user),
-        $long_ago);
+    Socialtext::File::update_mtime(
+        $notifier->_stamp_file_for_user($user),
+        $long_ago
+    );
 
     # send an email to make sure email-in causes notifications
     deliver_email($hub, 'simple');
@@ -51,22 +53,15 @@ receive_email_using_ja_locale: {
     # make sure that an e-mail was sent, *and* that its got the right content
     my @emails = Email::Send::Test->emails;
 
-    is(scalar @emails, 1, 'One email was sent');
-    is(
-        $emails[0]->header('To'), $user->email_address,
-        'Email is addressed to proper recipient'
-    );
-    like(
-        $emails[0]->header('Subject'),
-        qr/\Qrecent changes in $ws_title workspace\E/i,
-        'Subject is correct'
-    );
+    is scalar @emails, 1, 'One email was sent';
+    is $emails[0]->header('To'), $user->email_address,
+        'Email is addressed to proper recipient';
+    like $emails[0]->header('Subject'),
+        qr/\Qrecent changes in $ws_title workspace\E/i, 'Subject is correct';
 
     my @parts = $emails[0]->parts;
-    like(
-        $parts[0]->body, qr/this is a test message again/i,
-        'Recent changes includes URI of page that was just created'
-    );
+    like $parts[0]->body, qr/this is a test message again/i,
+        'Recent changes includes URI of page that was just created';
 }
 
 # XXX - we should also test other things that should generate

@@ -63,11 +63,8 @@ ignore_system_pages: {
         grep { $_->id eq $noreply_page->id or $_->id eq $system_page->id }
         @{$all_pages};
 
-    is_deeply(
-        \@matching_pages,
-        [],
-        '_get_all_pages does not return system pages'
-    );
+    is_deeply \@matching_pages, [],
+        '_get_all_pages does not return system pages';
 }
 
 ###############################################################################
@@ -93,11 +90,11 @@ no_notification_on_system_pages: {
 
     # make sure that we send notification without a Page Id
     my $result = $notify->maybe_send_notifications();
-    is($result, 1, 'notifications attempted when no page id');
+    is $result, 1, 'notifications attempted when no page id';
 
     # make sure that we *don't* send notifications for system pages
     $result = $notify->maybe_send_notifications($system_page->id);
-    is($result, undef, 'no notifications attempted when system page');
+    is $result, undef, 'no notifications attempted when system page';
 
     # reset the notifier
     Email::Send::Test->clear;
@@ -114,10 +111,10 @@ no_notification_on_system_pages: {
 
     # make sure that we send notifications for non-system pages
     $result = $notify->maybe_send_notifications($normal_page->id);
-    is($result, 1, 'notifications attempted when non system page');
+    is $result, 1, 'notifications attempted when non system page';
 
     my @emails = Email::Send::Test->emails;
-    is(scalar @emails, 1, 'one email was sent');
+    is scalar @emails, 1, 'one email was sent';
 }
 
 ###############################################################################

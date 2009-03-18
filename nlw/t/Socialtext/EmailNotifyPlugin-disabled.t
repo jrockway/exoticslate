@@ -44,8 +44,10 @@ email_notification_sends_nothing_when_disabled: {
 
     Email::Send::Test->clear;
     Socialtext::File::update_mtime($notifier->run_stamp_file, $long_ago);
-    Socialtext::File::update_mtime($notifier->_stamp_file_for_user($user),
-        $long_ago);
+    Socialtext::File::update_mtime(
+        $notifier->_stamp_file_for_user($user),
+        $long_ago
+    );
 
     my $page = $pages->new_from_name($page_title_one);
 
@@ -58,7 +60,7 @@ email_notification_sends_nothing_when_disabled: {
 
     # make sure that *NO* e-mails were sent
     my @emails = Email::Send::Test->emails;
-    is(scalar @emails, 0, 'No email was sent');
+    is scalar @emails, 0, 'No email was sent';
 }
 
 ###############################################################################

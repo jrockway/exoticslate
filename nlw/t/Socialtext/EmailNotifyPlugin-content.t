@@ -19,7 +19,7 @@ $Socialtext::EmailSender::Base::SendClass = 'Test';
 ###############################################################################
 ### TEST DATA
 ###############################################################################
-my $long_ago = time - (86400 * 10);                 # 10 days back
+my $long_ago = time - (86400 * 10);    # 10 days back
 
 ###############################################################################
 # TEST: e-mail notifications are sent
@@ -64,50 +64,31 @@ email_notifications_send_emails: {
     # make sure that an e-mail was sent, *and* that its got the right content
     my @emails = Email::Send::Test->emails;
 
-    is(scalar @emails, 1, 'One email was sent');
-    is(
-        $emails[0]->header('To'), $user->email_address,
-        'Email is addressed to proper recipient'
-    );
-    like(
-        $emails[0]->header('Subject'),
-        qr/\Qrecent changes in $ws_title workspace\E/i,
-        'Subject is correct'
-    );
-    is(
-        $emails[0]->header('From'),
-        q{"} . $ws_title . q{" <noreply@socialtext.com>},
-        'From is correct'
-    );
+    is scalar @emails, 1, 'One email was sent';
+    is $emails[0]->header('To'), $user->email_address,
+        'Email is addressed to proper recipient';
+    like $emails[0]->header('Subject'),
+        qr/\Qrecent changes in $ws_title workspace\E/i, 'Subject is correct';
+    is $emails[0]->header('From'),
+        q{"} . $ws_title . q{" <noreply@socialtext.com>}, 'From is correct';
 
     my @parts = $emails[0]->parts;
 
     my $page_uri = $page->uri;
 
     for my $part (@parts) {
-        like(
-            $part->body, qr/\Q$page_uri\E/i,
-            'Recent changes includes URI of page that was just created'
-        );
+        like $part->body, qr/\Q$page_uri\E/i,
+            'Recent changes includes URI of page that was just created';
     }
 
-    like(
-        $parts[0]->body,
-        qr{$ws_title/emailprefs},
-        'Preferences url action is correct'
-    );
+    like $parts[0]->body, qr{$ws_title/emailprefs},
+        'Preferences url action is correct';
 
-    like(
-        $parts[0]->body,
-        qr{\n$page_title_one\n  http},
-        'First page title correct'
-    );
+    like $parts[0]->body, qr{\n$page_title_one\n  http},
+        'First page title correct';
 
-    like(
-        $parts[0]->body,
-        qr{\n$page_title_two\n  http},
-        'Second page title correct'
-    );
+    like $parts[0]->body, qr{\n$page_title_two\n  http},
+        'Second page title correct';
 
     # XXX shouldn't the user get things in their own timezone
     #    like(
@@ -132,8 +113,10 @@ no_email_notification_on_page_delete: {
     );
     Email::Send::Test->clear;
     Socialtext::File::update_mtime($notifier->run_stamp_file, $long_ago);
-    Socialtext::File::update_mtime($notifier->_stamp_file_for_user($user),
-        $long_ago);
+    Socialtext::File::update_mtime(
+        $notifier->_stamp_file_for_user($user),
+        $long_ago
+    );
 
     my $page = $pages->new_from_name('A New Page for Testing Email Notify');
 
@@ -144,11 +127,8 @@ no_email_notification_on_page_delete: {
     # make sure that *no* e-mail was sent
     my @emails = Email::Send::Test->emails;
 
-    is(scalar @emails, 0, 'No email was sent for a deleted page.');
+    is scalar @emails, 0, 'No email was sent for a deleted page.';
 }
-
-
-
 
 ###############################################################################
 # Helper method to create a new hub for testing, with custom User+Workspace

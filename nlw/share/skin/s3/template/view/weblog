@@ -137,7 +137,7 @@
             <span class="st-weblog-previousentries">[% INCLUDE element/ws_link href="${script_name}?action=weblog_display;start=${weblog_previous}", name=loc("Newer entries") %]</span>
         [% END %]
         [% IF weblog_next.defined %]
-            <span class="st-weblog-nextentries">[% INCLUDE element/ws_link href="${script_name}?action=weblog_display;start=${weblog_next}", name=loc("Earlier entries") %]</span>
+            <span class="st-weblog-nextentries">[% INCLUDE element/ws_link href="${script_name}?action=weblog_display;start=${weblog_next}", name=loc("Older entries") %]</span>
         [% END %]
     </div>
     [% END %]

@@ -197,3 +197,4 @@ t/Socialtext/Gadgets/Container-scope.t
 t/Socialtext/Gadgets000.t
 t/Socialtext/Gadgets/XML-install-gadget.t
 t/widget/simple.xml
+t/wikitests/signals/data_signals_mentions.wiki

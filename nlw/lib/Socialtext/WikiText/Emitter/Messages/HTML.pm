@@ -27,9 +27,15 @@ sub insert {
         $output = $ast->{output} || '';
     }
     elsif ( $ast->{wafl_type} eq 'link' ) {
+        if ($self->{callbacks}{noun_link}) {
+            $self->{callbacks}{noun_link}->($ast);
+        }
         $output = qq{<a href="/$ast->{workspace_id}/index.cgi?$ast->{page_id}">$ast->{text}</a>};
     }
     elsif ( $ast->{wafl_type} eq 'user' ) {
+        if ($self->{callbacks}{noun_link}) {
+            $self->{callbacks}{noun_link}->($ast);
+        }
         $output = $self->user_html($ast);
     }
     else {

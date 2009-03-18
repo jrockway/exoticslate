@@ -47,13 +47,6 @@ sub _validate_pagename_length {
     }
 }
 
-sub _signal_edit_summary {
-    my ($self, $edit_summary, $page) = @_;
-    my $user = $self->hub->current_user;
-    return unless $user->can_use_plugin('signals');
-    $page->signal_edit_summary($user, $edit_summary);
-}
-
 sub edit_content {
     my $self = shift;
     my $page_name = $self->cgi->page_name;
@@ -102,16 +95,17 @@ sub edit_content {
         $page->add_tags(@tags); # add_tags auto saves
     }
     else {
-        $page->store( user => $self->hub->current_user );
+        $page->store(
+            user => $self->hub->current_user,
+            signal_edit_summary => $self->cgi->signal_edit_summary,
+            edit_summary => $edit_summary,
+        );
         Socialtext::Events->Record({
             event_class => 'page',
             action => 'edit_save',
             page => $page,
         });
     }
-
-    $self->_signal_edit_summary($edit_summary, $page)
-        if $self->cgi->signal_edit_summary;
 
     # Move attachments uploaded to 'Untitled Page' to the actual page
     my @attach = $self->cgi->attachment;
@@ -188,8 +182,6 @@ sub save {
 
     my $edit_summary
         = Socialtext::String::trim($self->cgi->edit_summary || '');
-    $self->_signal_edit_summary($edit_summary, $page)
-        if $self->cgi->signal_edit_summary;
 
     my @categories =
       sort keys %{+{map {($_, 1)} split /[\n\r]+/, $self->cgi->header}};
@@ -203,6 +195,7 @@ sub save {
         subject          => $subject,
         user             => $self->hub->current_user,
         edit_summary     => $edit_summary,
+        signal_edit_summary => 1,
     );
     Socialtext::Events->Record({
         event_class => 'page',

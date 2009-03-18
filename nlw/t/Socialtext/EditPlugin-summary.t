@@ -7,13 +7,13 @@ use mocked 'Apache';
 use mocked 'Apache::Cookie';
 use mocked 'Socialtext::Events', qw( event_ok is_event_count );
 
-use Test::Socialtext tests => 35;
-use Socialtext::Signal;
+use Test::Socialtext tests => 36;
 
 fixtures( 'admin_no_pages' );
 
 BEGIN {
     use_ok( 'Socialtext::EditPlugin' );
+    use_ok( 'Socialtext::Signal' ) or die "This test requires the Signals plugin";
 }
 
 my $save_revision_id;

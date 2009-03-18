@@ -153,15 +153,14 @@ sub create {
     return $page;
 }
 
-=head2 
-Signal an update for this page 
-
-Requires the user sending the signal, and the text of the edit_summary 
-=cut
-sub signal_edit_summary {
+sub _signal_edit_summary {
     my ($self, $user, $edit_summary) = @_;
-    require Socialtext::Signal;
+    my $signals = $self->hub->pluggable->plugin_class('signals');
+    return unless $signals;
+    return unless $user->can_use_plugin('signals');
+
     my $workspace = $self->hub->current_workspace;
+    $user ||= $self->hub->current_user;
 
     $edit_summary = Socialtext::String::word_truncate($edit_summary, 140);
     my $page_link = sprintf "{link: %s [%s]}", $workspace->name, $self->title;
@@ -169,15 +168,16 @@ sub signal_edit_summary {
         ? loc('"[_1]" (edited [_2] in [_3])', $edit_summary, $page_link, $workspace->title)
         : loc('wants you to know about an edit of [_1] in [_2]', $page_link, $workspace->title);
 
-    my $signal = Socialtext::Signal->Create(
-        user_id => $user->user_id,
+    my $signal = $signals->Send({
+        user    => $user,
         body    => $body,
         account_ids => [ $workspace->account_id ],
-        topic   => {
+        topic => {
             page_id      => $self->id,
             workspace_id => $workspace->workspace_id,
-        }
-    );
+        },
+    });
+    return $signal;
 }
 
 =head2 update_from_remote( %args )
@@ -274,10 +274,10 @@ sub update_from_remote {
         page => $self,
     });
 
-    if ($p{signal_edit_summary} && $user->can_use_plugin('signals')) {
-        $self->signal_edit_summary($user, $edit_summary);
-    };
-    
+    $self->_signal_edit_summary($user, $edit_summary) 
+        if $p{signal_edit_summary};
+
+    return; 
 }
 
 =head2 update( %args )
@@ -297,6 +297,7 @@ various places where this has been done in the past.
         user             => USER_TYPE,
         date             => { can  => [qw(strftime)], default => undef },
         edit_summary     => { type => SCALAR,    default => '' },
+        signal_edit_summary => { type => SCALAR, default => undef },
     };
     sub update {
         my $self = shift;
@@ -330,6 +331,10 @@ various places where this has been done in the past.
         }
         else {
             $self->store( user => $args{user} );
+        }
+
+        if ($args{signal_edit_summary}) {
+            $self->_signal_edit_summary($args{user}, $args{edit_summary});
         }
     }
 }
@@ -797,16 +802,17 @@ sub store {
         $metadata->Control('Deleted');
     }
 
-    $self->_log_edit_summary
-         if $self->metadata->RevisionSummary;
-
     $self->write_file($self->headers, $body);
     $self->_perform_store_actions();
+
+    $self->_log_edit_summary($p{user}) if $self->metadata->RevisionSummary;
+    $self->_signal_edit_summary($p{user}, $p{edit_summary})
+        if $p{signal_edit_summary};
 }
 
 sub _log_edit_summary {
     my $self = shift;
-    my $user = $self->hub->current_user;
+    my $user = shift || $self->hub->current_user;
     my $ws   = $self->hub->current_workspace;
 
     st_log->info(

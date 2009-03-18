@@ -3,6 +3,9 @@
 
 use strict;
 use warnings;
+use File::Slurp qw(slurp);
+use File::Temp;
+use POSIX qw(fcntl_h);
 use Email::Send::Test;
 use Socialtext::EmailNotifier;
 use Socialtext::EmailReceiver::Factory;
@@ -72,21 +75,33 @@ sub deliver_email {
     my $hub  = shift;
     my $name = shift;
 
+    # make sure that the e-mail to deliver exists
     my $file = "t/test-data/email/$name";
     die "No such email $name" unless -f $file;
 
-    open my $fh, '<', $file or die $!;
+    # create a temp copy of the e-mail, which comes from a User that has
+    # access to the Workspace
+    my $valid_email  = $hub->current_user->email_address();
+    my @msg_contents = (
+        "From: $valid_email\n",
+        grep { !/^From: / } slurp($file)
+        );
 
+    my $fh_temp = File::Temp->new();
+    $fh_temp->print(@msg_contents);
+    seek($fh_temp, 0, SEEK_SET);
+
+    # deliver the e-mail
     my $email_receiver = Socialtext::EmailReceiver::Factory->create(
         {
             locale    => 'ja',
-            handle    => $fh,
+            handle    => $fh_temp,
             workspace => $hub->current_workspace()
         }
     );
 
     $email_receiver->receive(
-        handle    => $fh,
+        handle    => $fh_temp,
         workspace => $hub->current_workspace(),
     );
 }

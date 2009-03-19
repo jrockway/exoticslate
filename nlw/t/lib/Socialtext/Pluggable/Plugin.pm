@@ -23,6 +23,8 @@ const scope => 'account';
 const hidden => 1; # hidden to admins
 const read_only => 0; # cannot be disabled/enabled in the control panel
 
+field 'hub';
+
 # perldoc Socialtext::URI for arguments
 #    path = '' & query => {}
 

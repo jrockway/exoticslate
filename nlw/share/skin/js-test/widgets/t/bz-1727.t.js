@@ -15,7 +15,7 @@ t.runAsync([
     function() {
         var widget = WID = t.setup_one_widget(
             {
-                url: "/?action=add_widget;src=http%3A%2F%2Fwww.labpixies.com%2Fcampaigns%2Ftodo%2Ftodo.xml",
+                url: "/?action=add_widget;type=dashboard;src=http%3A%2F%2Fwww.labpixies.com%2Fcampaigns%2Ftodo%2Ftodo.xml",
                 noPoll: true
             },
             t.nextStep()
@@ -23,9 +23,9 @@ t.runAsync([
     },
 
     function(widget) {
-        t.is(
-            widget.$('#menu_div').length,
-            1,
+        t.like(
+            widget.$('body').html(),
+            /Type new task here/,
             "TODO widget initialized correctly"
         );
 

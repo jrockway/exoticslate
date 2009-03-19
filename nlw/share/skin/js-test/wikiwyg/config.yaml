@@ -22,5 +22,4 @@ import_libs:
   - ../../wikiwyg/javascript/lib/Wikiwyg/Wysiwyg.js
   - ../../wikiwyg/javascript/lib/Wikiwyg/Wikitext.js
 template_include_path:
-  - ../common/template
   - ./template

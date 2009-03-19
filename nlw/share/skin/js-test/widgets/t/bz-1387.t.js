@@ -17,7 +17,7 @@ t.runAsync([
     function () {
         var containerID = t.$('#containerID').val();
         $.ajax({
-            url: "/?action=add_widget;src=file:widgets/share/widgets/recent_conversations.xml;container_id=" + containerID,
+            url: "/?action=add_widget;type=dashboard;src=file:widgets/share/widgets/recent_conversations.xml;container_id=" + containerID,
             async: false
         });
         t.open_iframe("/", t.nextStep());

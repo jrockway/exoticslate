@@ -631,7 +631,7 @@ proto.enableThis = function() {
 
     var self = this;
     var ready = function() {
-        if (!self.is_ready)
+        if (!self.is_ready && !self.wikiwyg.previous_mode)
             self.fromHtml( self.wikiwyg.div.innerHTML );
         if (Wikiwyg.is_gecko) {
             self.get_edit_document().designMode = 'on';

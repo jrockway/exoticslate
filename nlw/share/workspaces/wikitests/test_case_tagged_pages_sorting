@@ -172,6 +172,11 @@ Create unique sort order for each sort:
 
 SEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCHSEARCH
 
+| st-admin | index-page --w %%sorting_workspace%% --p search_sort_1 | The Search Sort 1 page in the %%sorting_workspace%% workspace has been indexed. |
+| st-admin | index-page --w %%sorting_workspace%% --p search_sort_2 | The Search Sort 2 page in the %%sorting_workspace%% workspace has been indexed. |
+| st-admin | index-page --w %%sorting_workspace%% --p search_sort_3 | The Search Sort 3 page in the %%sorting_workspace%% workspace has been indexed. |
+| st-admin | index-page --w %%sorting_workspace%% --p search_sort_4 | The Search Sort 4 page in the %%sorting_workspace%% workspace has been indexed. |
+
 | *Comment* | Test Case: Tagged Page Sorting. Sorting search results. SEARCH. |  |
 | open_ok | /%%sorting_workspace%%/index.cgi |  |
 | st-search | simple | Pages containing 'simple' |

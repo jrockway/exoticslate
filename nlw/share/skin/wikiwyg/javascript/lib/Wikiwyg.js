@@ -1186,12 +1186,14 @@ function setup_wikiwyg() {
     }
 
     if (!Socialtext.new_page) {
-        jQuery('#st-save-button-link').click(function() {
-            ww.is_editing = false;
-            ww.showScrollbars();
-            ww.saveButtonHandler();
-            return false;
-        });
+        setTimeout(function() {
+            jQuery('#st-save-button-link').click(function() {
+                ww.is_editing = false;
+                ww.showScrollbars();
+                ww.saveButtonHandler();
+                return false;
+            });
+        }, 5000);
     }
 
     // node handles

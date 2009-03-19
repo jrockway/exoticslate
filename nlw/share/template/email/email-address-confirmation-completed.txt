@@ -8,7 +8,7 @@
 [% loc('Log in with your email address:') %] [% user.email_address %]
 
 [% loc('You may want to keep this email for future reference.') %]
-[% loc('If you have questions, please contact your wiki support at [_1].', appconfig.support_address) %]
+[% loc('If you have questions, please contact support at [_1].', appconfig.support_address) %]
 
 [% PROCESS 'email/standard-footer.txt'
    support_link = 0 %]

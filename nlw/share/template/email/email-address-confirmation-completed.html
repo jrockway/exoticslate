@@ -24,8 +24,9 @@
 
 <p>
 [% loc('You may want to keep this email for future reference.') %]
-[% loc('If you have questions, please contact your wiki support at') %]
-<a href="mailto:[% appconfig.support_address | html %]">[% appconfig.support_address | html %]</a>.
+[% loc('If you have questions, please ') %]
+<a href="[% appconfig.support_address | html %]">
+  [% loc('Contact Support') %]</a>.
 </p>
 
 [% PROCESS 'email/standard-footer.html'

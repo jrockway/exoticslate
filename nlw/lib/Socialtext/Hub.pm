@@ -167,7 +167,7 @@ sub handle_validation_error {
     }
     my $support_address = Socialtext::AppConfig->support_address();
     $msg .=
-        loc('Please send email to <a href="mailto:[_1]">[_1]</a> if you think it should have worked.', $support_address) ;
+        loc('Please <a href="[_1]">Contact Support</a> if you think it should have worked.', $support_address) ;
     $self->fail_home_with_warning( $msg, $error );
 }
 

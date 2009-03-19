@@ -138,6 +138,8 @@
 [% IF config.is_dev %]
     Redirect 301 /favicon.ico http://www.socialtext.net/favicon.ico
 [% END %]
+
+    Header set X-UA-Compatible IE=EmulateIE7
 [% END %][%# server_common %]
 
 

@@ -13,6 +13,7 @@ use Socialtext::ApacheDaemon;
 use Socialtext::Build qw(get_build_setting);
 use Test::More;
 use Test::Socialtext::Environment;
+use Test::Socialtext::User;
 use URI::Escape;
 
 our @Import_options = qw(
@@ -269,7 +270,7 @@ sub request {
                     Content_Type => 'form-data',
                     Content => [
                         embed => $post->{embed},
-                        creator  => 'devnull1@socialtext.com',
+                        creator  => Test::Socialtext::User->test_username(),
                         filename => [$post->{file}],
                     ],
                 );
@@ -341,8 +342,8 @@ sub request {
 
 sub log_in {
     my $self = shift;
-    my $username = shift || 'devnull1@socialtext.com';
-    my $password = shift || 'd3vnu11l';
+    my $username = shift || Test::Socialtext::User->test_username();
+    my $password = shift || Test::Socialtext::User->test_password();
 
     $self->mech->get($self->base_url . '/nlw/login.html');
     $self->mech->submit_form(

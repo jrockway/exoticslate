@@ -15,6 +15,7 @@ use Socialtext::Workspace;
 use Socialtext::HTTP::Ports;
 use Test::More;
 use Test::Socialtext::Fixture;
+use Test::Socialtext::User;
 
 field 'root_dir';
 field 'base_dir';
@@ -127,7 +128,7 @@ sub _make_fixtures_current {
 sub hub_for_workspace {
     my $self = shift;
     my $name = shift || die "no name provided to hub_for_workspace";
-    my $username = shift || 'devnull1@socialtext.com';
+    my $username = shift || Test::Socialtext::User->test_username();
     my $ws = ref $name ? $name : Socialtext::Workspace->new( name => $name )
         or die "No such workspace: $name";
 

@@ -1,19 +1,18 @@
-#!perl
+package Test::HTTP::Socialtext;
 # @COPYRIGHT@
 
-use warnings;
 use strict;
-package Test::HTTP::Socialtext;
-
+use warnings;
 use base 'Test::HTTP';
 use Class::Field;
+use Test::Socialtext::User;
 
 our $Live;
 
 {
     no warnings 'once';
-    $Test::HTTP::BasicUsername        = 'devnull1@socialtext.com';
-    $Test::HTTP::BasicPassword        = 'd3vnu11l';
+    $Test::HTTP::BasicUsername        = Test::Socialtext::User->test_username();
+    $Test::HTTP::BasicPassword        = Test::Socialtext::User->test_password();
     $Test::HTTP::Syntax::Test_package = 'Test::HTTP::Socialtext';
 }
 

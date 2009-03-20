@@ -21,7 +21,7 @@ Tests are defined in the wiki specified below.
 use base 'Test::Live';
 use Class::Field qw(field);
 use Test::Socialtext;
-use Test::Socialtext;
+use Test::Socialtext::User;
 use Test::More;
 
 BEGIN {
@@ -54,8 +54,8 @@ field 'plan_password'  => $ENV{plan_password} || 'wikitest';
 
 # This is the workspace we're testing
 field 'test_workspace' => $ENV{test_workspace} || 'test-data';
-field 'test_username'  => $ENV{test_username}  || 'devnull1@socialtext.com';
-field 'test_password'  => $ENV{test_password}  || 'd3vnu11l';
+field 'test_username'  => $ENV{test_username}  || Test::Socialtext::User->test_username();
+field 'test_password'  => $ENV{test_password}  || Test::Socialtext::User->test_password();
 
 sub new {
     my $class = shift;

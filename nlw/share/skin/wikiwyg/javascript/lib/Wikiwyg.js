@@ -1081,6 +1081,16 @@ this.addGlobal().setup_wikiwyg = function() {
 
         ww.starting_edit = true;
 
+        jQuery.ajax({
+            type: 'POST',
+            url: location.pathname,
+            data: {
+                action: 'edit_start',
+                page_name: Socialtext.wikiwyg_variables.page.title,
+                revision_id: Socialtext.wikiwyg_variables.page.revision_id
+            }
+        });
+
         try {
             // if `Cancel` and then `Edit` buttons are clicked, we need
             // to set a timer to prevent the edit summary box from displaying
@@ -1199,6 +1209,15 @@ this.addGlobal().setup_wikiwyg = function() {
 
     // node handles
     jQuery('#st-cancel-button-link').click(function() {
+        jQuery.ajax({
+            type: 'POST',
+            url: location.pathname,
+            data: {
+                action: 'edit_cancel',
+                page_name: Socialtext.wikiwyg_variables.page.title,
+                revision_id: Socialtext.wikiwyg_variables.page.revision_id
+            }
+        });
         try {
             if (ww.contentIsModified()) {
                 // If it's not confirmed somewhere else, do it right here.

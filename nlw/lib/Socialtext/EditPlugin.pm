@@ -24,6 +24,8 @@ sub register {
     $registry->add(action => 'edit');
     $registry->add(action => 'edit_save');
     $registry->add(action => 'edit_content');
+    $registry->add(action => 'edit_start');
+    $registry->add(action => 'edit_cancel');
 }
 
 sub edit_save {
@@ -281,6 +283,29 @@ sub to_display {
         $self->redirect($path);
     }
 }
+
+sub edit_start  { _add_edit_event(shift, 'edit_start' ) }
+sub edit_cancel { _add_edit_event(shift, 'edit_cancel') }
+
+sub _add_edit_event {
+    my $self        = shift;
+    my $action_name = shift;
+    my $page_name   = $self->cgi->page_name;
+
+    my $page = $self->hub->pages->new_from_name($page_name);
+    return '' unless $self->hub->checker->check_permission('edit');
+
+    eval {
+        Socialtext::Events->Record({
+            event_class => 'page',
+            action => $action_name,
+            page => $page,
+        });
+    };
+    warn $@ if $@;
+    return '';
+}
+
 
 package Socialtext::Edit::CGI;
 

@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 2;
-fixtures('rdbms_clean');
+fixtures(qw( clean db ));
 
 use Socialtext::User;
 use Socialtext::Workspace;

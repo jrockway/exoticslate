@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 8;
-fixtures( 'rdbms_clean' );
+fixtures(qw( clean db ));
 
 use IO::String;
 use Log::Dispatch::Handle;

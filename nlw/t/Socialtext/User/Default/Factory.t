@@ -9,10 +9,10 @@ use Socialtext::User;
 use Socialtext::SQL qw(sql_execute);
 
 ###############################################################################
-# Fixtures: rdbms_clean
+# Fixtures: clean db
 # - need to clean out the DB first; our tests explicitly expect a
 #   "fresh/clean" DB to work against.
-fixtures(qw( rdbms_clean ));
+fixtures(qw( clean db ));
 
 use_ok 'Socialtext::User::Default::Factory';
 

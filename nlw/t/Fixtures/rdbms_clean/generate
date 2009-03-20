@@ -1,8 +1,0 @@
-#!/usr/bin/env perl
-# @COPYRIGHT@
-use strict;
-use warnings;
-use lib "$ENV{NLW_DIR}/lib";
-use Socialtext::Schema;
-
-# Socialtext::Schema->new->recreate(no_dump => 1);

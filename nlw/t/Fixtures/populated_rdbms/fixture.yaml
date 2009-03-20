@@ -1,2 +1,3 @@
 fixtures:
-  - rdbms_clean
+  - clean
+  - db

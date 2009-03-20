@@ -16,7 +16,7 @@ BEGIN {
     use_ok( 'Socialtext::Account' );
     use_ok( 'Socialtext::Workspace' );
 }
-fixtures( 'rdbms_clean' );
+fixtures(qw( clean db ));
 
 is( Socialtext::Account->Count(), 4, 'three accounts in DBMS at start' );
 my $test = Socialtext::Account->create( name => 'Test Account' );

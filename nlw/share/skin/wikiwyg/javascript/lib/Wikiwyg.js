@@ -1193,7 +1193,7 @@ function setup_wikiwyg() {
                 ww.saveButtonHandler();
                 return false;
             });
-        }, 5000);
+        }, 500);
     }
 
     // node handles

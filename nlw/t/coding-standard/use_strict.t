@@ -34,5 +34,8 @@ plan tests => scalar @checkers;
 
 for my $filename ( @checkers ) {
     my $text = read_file( $filename );
-    ok( $text =~ /^use strict;$/m, $filename );
+
+    # either of these is Ok; "use Moose" implies "use strict"
+    my $is_strict = $text =~/^use (?:strict|Moose);$/m;
+    ok $is_strict, $filename;
 }

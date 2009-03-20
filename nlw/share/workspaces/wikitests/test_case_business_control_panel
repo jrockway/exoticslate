@@ -62,6 +62,7 @@
 
 | *Comment* | Test case: Business Control Panel rename account |  |
 | click_and_wait | link=Rename Account |  |
+| wait_for_element_visible_ok | st-new-name | 10000 |
 | type_ok | st-new-name | newacct%%start_time%% |
 | click_and_wait | //input[@value='Rename'] |  |
 | text_like | newacct%%start_time%% account |  |

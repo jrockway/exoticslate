@@ -199,3 +199,4 @@ t/Socialtext/Gadgets/XML-install-gadget.t
 t/widget/simple.xml
 t/wikitests/signals/data_signals_mentions.wiki
 t/Socialtext/Rest/Gadgets/Gallery.t
+t/wikitests/signals/data_signals_replies.wiki

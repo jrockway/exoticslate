@@ -483,7 +483,8 @@ CREATE TABLE signal (
     signal_id bigint NOT NULL,
     "at" timestamptz DEFAULT now(),
     user_id bigint NOT NULL,
-    body text NOT NULL
+    body text NOT NULL,
+    in_reply_to_id bigint
 );
 
 CREATE TABLE signal_account (
@@ -1114,6 +1115,11 @@ ALTER TABLE ONLY gallery_gadget
     ADD CONSTRAINT gallery_gadget_fk
             FOREIGN KEY (gadget_id)
             REFERENCES gadget(gadget_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY signal
+    ADD CONSTRAINT in_reply_to_fk
+            FOREIGN KEY (in_reply_to_id)
+            REFERENCES signal(signal_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_creator_id_fk

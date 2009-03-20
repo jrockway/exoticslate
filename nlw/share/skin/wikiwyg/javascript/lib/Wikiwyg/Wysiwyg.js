@@ -1248,7 +1248,9 @@ proto._do_table_manip = function(callback) {
 
         setTimeout(function() {
             var $table = $cell.parents("table.sort:eq(0)");
-            $table.trigger("update");
+            try {
+                $table.trigger("update");
+            } catch(e) { }
         }, 50);
 
     }, 100);
@@ -1280,13 +1282,11 @@ proto.do_table_settings = function() {
 
                 jQuery("#st-table-settings form").one("submit", function() {
                     if ( $("input[name=sort]", this).is(":checked") ) {
-                        $table.addClass("sort");
                         setTimeout(function() {
                             Socialtext.make_table_sortable($table.get(0));
                         }, 100);
                     }
                     else {
-                        $table.removeClass("sort");
                         Socialtext.make_table_unsortable( $table.get(0) );
                     }
 
@@ -1323,6 +1323,13 @@ proto.do_add_row_above = function() {
     });
 }
 
+proto._rebuild_sortable = function(table) {
+    Socialtext.make_table_unsortable( table );
+    setTimeout(function() {
+        Socialtext.make_table_sortable( table );
+    }, 100);
+}
+
 proto.do_add_col_left = function() {
     var self = this;
     this._do_table_manip(function($cell) {
@@ -1334,7 +1341,9 @@ proto.do_add_col_left = function() {
                     .html("&nbsp;")
             );
         });
-        Socialtext.make_table_unsortable( $cell.parents("table:eq(0)").get(0) );
+
+        var table = $cell.parents("table:eq(0)").get(0);
+        this._rebuild_sortable( table );
     });
 }
 
@@ -1349,7 +1358,9 @@ proto.do_add_col_right = function() {
                     .html("&nbsp;")
             );
         });
-        Socialtext.make_table_unsortable( $cell.parents("table:eq(0)").get(0) );
+
+        var table = $cell.parents("table:eq(0)").get(0);
+        this._rebuild_sortable( table );
     });
 }
 
@@ -1416,6 +1427,9 @@ proto.do_del_col = function() {
         self._traverse_column($cell, function($td) {
             $td.remove();
         });
+
+        var table = $cell.parents("table:eq(0)").get(0);
+        this._rebuild_sortable( table );
 
         var tds = $tr.find('td');
         if (tds.length >= col) {

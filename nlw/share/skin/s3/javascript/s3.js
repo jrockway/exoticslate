@@ -45,11 +45,12 @@ Socialtext.make_table_sortable = function(table) {
     }
 
     if (!table) return;
-    if (typeof(table.config) != 'undefined') {
+    if (typeof(table.config) != 'undefined' && table.config != null) {
         // table.config = null;
         $(table).trigger("update");
     }
     else {
+        $(table).addClass("sort");
         $(table).tablesorter();
 
         // Because the tables inside wysiwyg editing area are expected to be
@@ -67,8 +68,11 @@ Socialtext.make_table_sortable = function(table) {
 
 Socialtext.make_table_unsortable = function(table) {
     if (!table) return;
+    if (typeof(table.config) != 'undefined')  {
+        try { delete table.config; }
+        catch (e) { table.config = null; }
+    }
     $(table).removeClass("sort").find("tr:eq(0) td").unbind("click").unbind("mousedown");
-
 }
 
 $(function() {

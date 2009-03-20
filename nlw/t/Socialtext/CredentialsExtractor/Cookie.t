@@ -10,6 +10,7 @@ use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
 use Socialtext::AppConfig;
 use Socialtext::CredentialsExtractor;
 use Test::Socialtext tests => 7;
+use Test::Socialtext::User;
 
 ###############################################################################
 # Fixtures: base_config
@@ -21,7 +22,7 @@ fixtures(qw( base_config ));
 ###############################################################################
 ### TEST DATA
 ###############################################################################
-my $valid_username = Test::Socialtext::Fixture->test_username();
+my $valid_username = Test::Socialtext::User->test_username();
 my $cookie_name    = USER_DATA_COOKIE();
 
 my $creds_extractors = 'Cookie:Guest';

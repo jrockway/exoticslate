@@ -7,6 +7,7 @@ use mocked 'Apache::Request';
 use Socialtext::CredentialsExtractor;
 use Socialtext::AppConfig;
 use Test::Socialtext tests => 2;
+use Test::Socialtext::User;
 
 ###############################################################################
 # Fixtures: base_config
@@ -18,7 +19,7 @@ fixtures(qw( base_config ));
 ###############################################################################
 ### TEST DATA
 ###############################################################################
-my $valid_username = Test::Socialtext::Fixture->test_username();
+my $valid_username = Test::Socialtext::User->test_username();
 
 my $creds_extractors = 'Apache:Guest';
 

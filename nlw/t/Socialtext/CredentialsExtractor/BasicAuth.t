@@ -8,6 +8,7 @@ use MIME::Base64;
 use Socialtext::CredentialsExtractor;
 use Socialtext::AppConfig;
 use Test::Socialtext tests => 10;
+use Test::Socialtext::User;
 
 ###############################################################################
 # Fixtures: admin
@@ -19,8 +20,8 @@ fixtures('admin');
 ###############################################################################
 ### TEST DATA
 ###############################################################################
-my $valid_username = Test::Socialtext::Fixture->test_username();
-my $valid_password = Test::Socialtext::Fixture->test_password();
+my $valid_username = Test::Socialtext::User->test_username();
+my $valid_password = Test::Socialtext::User->test_password();
 
 my $bad_username = 'unknown_user@socialtext.com';
 my $bad_password = '*bad-password*';

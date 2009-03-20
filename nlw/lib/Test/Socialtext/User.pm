@@ -4,12 +4,21 @@ package Test::Socialtext::User;
 use strict;
 use warnings;
 use Carp qw(croak);
-use Socialtext::SQL qw(sql_execute);
-use Socialtext::User;
-use Socialtext::Cache;
+use Class::Field qw(const);
+
+const 'test_username'      => 'devnull1@socialtext.com';
+const 'test_email_address' => 'devnull1@socialtext.com';
+const 'test_password'      => 'd3vnu11l';
 
 sub delete_recklessly {
     my ($class, $user_or_homunculus) = @_;
+
+    # Load classes on demand
+    require Socialtext::SQL;
+    require Socialtext::User;
+    require Socialtext::Cache;
+
+    # Get a hold of the System User record
     my $system_user = Socialtext::User->SystemUser;
 
     # Get the User Id for the User (which we'll need for doing DB updates
@@ -29,7 +38,7 @@ sub delete_recklessly {
 
     # Re-assign all Workspaces that were "created by" this User so that
     # they're now the responsibility of the System User.
-    sql_execute( q{
+    Socialtext::SQL::sql_execute( q{
         UPDATE "Workspace"
            SET created_by_user_id = ?
          WHERE created_by_user_id = ?
@@ -38,7 +47,7 @@ sub delete_recklessly {
 
     # Re-assign all Pages that were "created by" this User so that they're now
     # the responsibility of the System User.
-    sql_execute( q{
+    Socialtext::SQL::sql_execute( q{
         UPDATE page
            SET creator_id = ?
          WHERE creator_id = ?
@@ -47,7 +56,7 @@ sub delete_recklessly {
 
     # Re-assign all Pages that were "last edited by" this User so that they're
     # now the responsibility of the System User.
-    sql_execute( q{
+    Socialtext::SQL::sql_execute( q{
         UPDATE page
            SET last_editor_id = ?
          WHERE last_editor_id = ?
@@ -56,7 +65,7 @@ sub delete_recklessly {
 
     # Delete the User from the DB, and let this cascade across all other DB
     # tables, nuking data from the DB as it goes.
-    sql_execute( q{
+    Socialtext::SQL::sql_execute( q{
         DELETE FROM users
          WHERE user_id = ?
         }, $user_id

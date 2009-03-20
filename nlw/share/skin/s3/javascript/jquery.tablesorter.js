@@ -61,8 +61,8 @@
  * @option Array sortForce (optional) 			An array containing forced sorting rules. 
  * 												This option let's you specify a default sorting rule, which is prepended to user-selected rules.
  * 												Default value: null
- *  
-  * @option Array sortAppend (optional) 			An array containing forced sorting rules. 
+ *
+ * @option Array sortAppend (optional) 			An array containing forced sorting rules. 
  * 												This option let's you specify a default sorting rule, which is appended to user-selected rules.
  * 												Default value: null
  * 
@@ -142,7 +142,7 @@
 					for (var i=0;i < l; i++) {
 						var p = false;
 						
-						if($.metadata && ($($headers[i]).metadata() && $($headers[i]).metadata().sorter)  ) {
+						if($.metadata && ($($headers[i]).metadata() && $($headers[i]).metadata().sorter) ) {
 						
 							p = getParserById($($headers[i]).metadata().sorter);	
 						
@@ -168,7 +168,10 @@
 			function detectParserForColumn(table,node) {
 				var l = parsers.length;
 				for(var i=1; i < l; i++) {
-					if(parsers[i].is($.trim(getElementText(table.config,node)),table,node)) {
+					if(parsers[i].is(
+						$.trim(getElementText(table.config,node)
+							.replace(/(<br>|&nbsp;)/g, '')
+					),table,node)) {
 						return parsers[i];
 					}
 				}
@@ -205,7 +208,11 @@
 						cache.row.push($(c));
 						
 						for(var j=0; j < totalCells; ++j) {
-							cols.push(parsers[j].format(getElementText(table.config,c.cells[j]),table,c.cells[j]));	
+							cols.push(parsers[j].format(
+								$.trim(getElementText(table.config,c.cells[j])
+									.replace(/(<br>|&nbsp;)/g, '')),
+								table,c.cells[j]
+							));
 						}
 												
 						cols.push(i); // add position for rowCache
@@ -581,7 +588,7 @@
 						$(this).trigger("sortStart");
 						
 						config.sortList = list;
-						
+
 						// update and store the sortlist
 						var sortList = config.sortList;
 						
@@ -681,15 +688,19 @@
 		},
 		type: "text"
 	});
-	
+
 	ts.addParser({
 		id: "digit",
 		is: function(s,table) {
 			var c = table.config;
-			return $.tablesorter.isDigit(s,c);
+			return $.tablesorter.isDigit(
+				s.replace(/(\d)\s*[,\.]\s*(\d)/g, '$1$2'),
+			c);
 		},
 		format: function(s) {
-			return $.tablesorter.formatFloat(s);
+			return $.tablesorter.formatFloat(
+				s.replace(/[^0-9\.\-]/g, '')
+			);
 		},
 		type: "numeric"
 	});
@@ -714,11 +725,11 @@
 			var a = s.split("."), r = "", l = a.length;
 			for(var i = 0; i < l; i++) {
 				var item = a[i];
-			   	if(item.length == 2) {
+				if(item.length == 2) {
 					r += "0" + item;
-			   	} else {
+				} else {
 					r += item;
-			   	}
+				}
 			}
 			return $.tablesorter.formatFloat(r);
 		},
@@ -799,7 +810,7 @@
 		format: function(s) {
 			return $.tablesorter.formatFloat(new Date("2000/01/01 " + s).getTime());
 		},
-	  type: "numeric"
+		type: "numeric"
 	});
 	
 	
@@ -812,7 +823,7 @@
 			var c = table.config, p = (!c.parserMetadataName) ? 'sortValue' : c.parserMetadataName;
 			return $(cell).metadata()[p];
 		},
-	  type: "numeric"
+		type: "numeric"
 	});
 	
 	// add default widgets

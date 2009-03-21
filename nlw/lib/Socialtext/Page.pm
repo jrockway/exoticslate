@@ -30,7 +30,7 @@ use Socialtext::WikiText::Parser;
 use Socialtext::WikiText::Emitter::SearchSnippets;
 use Socialtext::String;
 use Socialtext::Events;
-use Socialtext::SQL qw/:exec :txn get_dbh/;
+use Socialtext::SQL qw/:exec :txn get_dbh sql_parse_timestamptz/;
 use Socialtext::SQL::Builder qw/sql_insert_many/;
 
 use Carp ();
@@ -1834,6 +1834,69 @@ Loads and stores the revision specified by I<$id>.
         $self->load;
         $self->store( user => $p{user} );
     }
+}
+
+=head2 edit_in_progress
+
+Returns a hash containing a user and a timestamp if an edit has been started 
+for this page.
+
+=cut
+
+sub edit_in_progress {
+    my $self = shift;
+
+    my $events = Socialtext::Events->Get( $self->hub->current_user,
+        event_class => 'page',
+        page_workspace_id => $self->hub->current_workspace->workspace_id,
+        page_id => $self->id,
+    ) || [];
+
+    my $cur_rev = $self->revision_id;
+    my @relevant_events;
+    for my $evt (@$events) {
+        last if $evt->{context}{revision_id} < $cur_rev;
+
+        unshift @relevant_events, $evt;
+    }
+
+    my %open_edits;
+    for my $evt (@relevant_events) {
+        my $actor_id = $evt->{actor}{id};
+        if ($evt->{action} eq 'edit_start') {
+            if (my $e = $open_edits{ $actor_id }) {
+                push @{ $open_edits{ $actor_id }}, $evt;
+            }
+            else {
+                $open_edits{ $actor_id } = [ $evt ];
+            }
+        }
+
+        if ($evt->{action} eq 'edit_cancel') {
+            my $evts = $open_edits{ $actor_id };
+            if ($evts) {
+                pop @$evts;
+                delete $open_edits{$actor_id} if @$evts == 0;
+            }
+            # otherwise ignore the cancel
+        }
+    }
+
+    if (%open_edits) {
+        my @edits = sort { $a->{at} cmp $b->{at} }
+                    map { @{$open_edits{$_}} }
+                    keys %open_edits;
+        for my $evt (@edits) {
+            (my $at = $evt->{at}) =~ s/Z$//;
+            my $epoch = sql_parse_timestamptz($at)->epoch;
+            return {
+                user => Socialtext::User->new(user_id => $evt->{actor}{id}),
+                timestamp => $epoch,
+            };
+        }
+    }
+
+    return undef;
 }
 
 sub _get_index_file {

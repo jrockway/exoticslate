@@ -30,7 +30,7 @@ BEGIN {
     delete $ENV{NLW_APPCONFIG};
 }
 
-plan tests => 65;
+plan tests => 64;
 
 my $user = getpwuid($>);
 

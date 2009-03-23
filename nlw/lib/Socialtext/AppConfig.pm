@@ -451,11 +451,6 @@ sub db_connect_params {
     return %connect_params;
 }
 
-sub support_address_as_mailto {
-    my $addr = __PACKAGE__->support_address;
-    return qq{<a href="$addr">Contact Support</a>};
-}
-
 sub shortcuts_file {
     my $self = shift;
     $self = $self->instance()

@@ -55,10 +55,6 @@ my $addr = get_build_setting( 'support-address' );
 is( Socialtext::AppConfig->support_address, $addr,
     'support_address is default value before file is changed' );
 
-is( Socialtext::AppConfig->support_address_as_mailto,
-    qq{<a href="mailto:$addr">$addr</a>},
-    'support address as mailto is default before file is changed' );
-
 Update_the_config_file: {
     my $test_address = 'testing@example.com';
     (my $config_dir = $config_file) =~ s#(.+)/.+#$1#;

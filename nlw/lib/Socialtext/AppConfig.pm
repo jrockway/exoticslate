@@ -1214,10 +1214,6 @@ key, the name of the schema to which we connect. It may also have any
 of "user", "password", "host", and "port" if these are set in the
 configuration object. If they are not set, the key is not present.
 
-=head2 Socialtext::AppConfig->support_address_as_mailto
-
-Returns the support_address as a link inside an C<< <a> >> tag.
-
 =head2 Socialtext::AppConfig->has_value($key)
 
 Given a key, this method returns true if that key has a value, either

@@ -209,11 +209,11 @@ and/or C<--backup> domain contollers.
 Removes the configuration for the given C<--domain> from the configuration
 file.
 
-=item --primary E<lt>primaryE<gt>
+=item --primary E<lt>pdcE<gt>
 
 Specifies the Primary Domain Controller.
 
-=item --backup
+=item --backup E<lt>bdcE<gt>
 
 Specifies the Backup Domain Controller.  May be specified multiple times on
 the command line, if you want to list multiple BDCs.

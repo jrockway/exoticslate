@@ -200,3 +200,5 @@ t/widget/simple.xml
 t/wikitests/signals/data_signals_mentions.wiki
 t/Socialtext/Rest/Gadgets/Gallery.t
 t/wikitests/signals/data_signals_replies.wiki
+lib/Socialtext/Gadgets/Gallery/View.pm
+lib/Socialtext/Gadgets/Gallery/Global.pm

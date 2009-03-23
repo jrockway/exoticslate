@@ -7,6 +7,7 @@ use base 'Exporter';
 use Log::Dispatch;
 use Log::Dispatch::Syslog;
 use Socialtext::AppConfig;
+use Socialtext::JSON qw/encode_json/;
 use Class::Field qw(field);
 use Encode;
 
@@ -90,15 +91,17 @@ sub st_timed_log {
     my $data = shift || {};
     my $times = shift || {};
 
-    my $message = uc($command) . ',' . uc($name) . ',' . 'ACTOR_ID:' . ($user ? $user->user_id : 0). ',';
-
-    $message .= join(',', map { $_.':'.$data->{$_} } sort keys %$data);
-
-    # list timers descending by time
     my $time = join(',', map { $_.':'.$times->{$_} } 
                          sort { $times->{$b} <=> $times->{$a} } 
                          keys %$times);
-    $message .= ",[$time]" if ($time);
+    $data->{timers} = $time if $time;
+
+    my $message = join(',',
+        uc($command),
+        uc($name),
+        'ACTOR_ID:' . ($user ? $user->user_id : 0),
+        encode_json($data),
+    );
 
     return st_log($method, $message);
 }

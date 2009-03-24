@@ -103,6 +103,9 @@ Page = {
 
                     Page.setPageContent(data.html);
 
+                    $('table.sort')
+                        .each(function() { Socialtext.make_table_sortable(this) });
+
                     // After upload, refresh the wikitext contents.
                     if ($('#wikiwyg_wikitext_textarea').size()) {
                         $.ajax({

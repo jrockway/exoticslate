@@ -9,6 +9,7 @@ use Class::Field qw( const field );
 use IO::File;
 use Socialtext::AppConfig;
 use Socialtext::Helpers;
+use Socialtext::HTTP qw/:codes/;
 use Socialtext::Exceptions;
 use Socialtext::TT2::Renderer;
 use Socialtext::l10n qw(loc system_locale);
@@ -55,20 +56,30 @@ sub attachments_download {
     my $attachment = $self->hub->attachments->new_attachment( id => $id );
 
     eval { $attachment->load };
-    return $self->failure_message(
-        loc("Attachment not found. The page name, file name or identifer number in the link may be incorrect, or the attachment may have been deleted or is not present in this workspace."),
-        $@, $self->hub->pages->current
-
-    ) if $@;
-
-    my $file = $attachment->full_path;
-
-    unless ( -e $file ) {
-
-        # TODO: make 404 a real HTTP 404
-        die "404: File Not Found: '$file'";
+    if ($@) {
+        my $message = 'Attachment not found. The page name, file name or '
+            . 'identifer number in the link may be incorrect, or the '
+            . 'attachment may have been deleted or is not present in this '
+            . 'workspace.';
+        return $self->failure_message(
+            loc($message),
+            $@,
+            $self->hub->pages->current
+        );
     }
-    my $fh = new IO::File $file, 'r';
+
+    my $file    = $attachment->full_path;
+    my $headers = $self->hub->headers;
+
+    # TODO: make 404 a real HTTP 404, this is more or less a placeholder
+    # to prevent an app error.
+    unless ( -e $file ) {
+        $headers->status( HTTP_404_Not_Found );
+        $headers->content_type( 'text/plain' );
+        return "The attachment you are looking for cannot be found.";
+    }
+
+    my $fh = IO::File->new($file);
     die "Cannot read $file: $!" unless $fh;
 
     my $mime_type = $attachment->mime_type;

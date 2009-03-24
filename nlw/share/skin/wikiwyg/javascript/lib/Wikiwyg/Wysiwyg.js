@@ -663,10 +663,12 @@ proto.enableThis = function() {
             self.set_clear_handler();
         }
 
-        self.set_focus();
-        self.enable_keybindings();
-        self.set_key_interception_handler();
-        self.set_clear_handler();
+        if (self.is_ready) {
+            self.set_focus();
+            self.enable_keybindings();
+            self.set_key_interception_handler();
+            self.set_clear_handler();
+        }
 
         jQuery.poll(
             function() {
@@ -687,6 +689,7 @@ proto.enableThis = function() {
         || (Socialtext.page_id && Socialtext.revision_id && !Socialtext.start_in_edit_mode)
         || (self.wikiwyg.first_mode.classtype != self.classtype)
     ) {
+        console.log('ready');
         ready();
     }
     else

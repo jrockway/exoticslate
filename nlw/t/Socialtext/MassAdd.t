@@ -10,7 +10,7 @@ BEGIN {
         exit;
     }
     
-    plan tests => 102;
+    plan tests => 108;
 }
 
 use mocked 'Socialtext::People::Profile', qw(save_ok);
@@ -314,6 +314,50 @@ EOT
 
     # try to add the user
     $mass_add->from_csv($ODD_ORDER_CSV);
+
+    # make sure we were able to add the user
+    is_deeply \@successes, ['Added user guybrush'], 'success message ok';
+    is_deeply \@failures, [], 'no failure messages';
+}
+
+csv_with_dos_windows_crlf: {
+    (my $DOS_FORMAT_CSV = $PIRATE_CSV) =~ s/\n/\r\n/g;
+
+    # make sure that the CSV has DOS/Windows CR/LF at EOL
+    like $DOS_FORMAT_CSV, qr/\r\n/, 'DOS/Windows formatted CSV';
+
+    # set up the MassAdd-er
+    my @successes;
+    my @failures;
+    my $mass_add = Socialtext::MassAdd->new(
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+
+    # try to add the user
+    $mass_add->from_csv($DOS_FORMAT_CSV);
+
+    # make sure we were able to add the user
+    is_deeply \@successes, ['Added user guybrush'], 'success message ok';
+    is_deeply \@failures, [], 'no failure messages';
+}
+
+csv_with_mac_crlf: {
+    (my $MAC_FORMAT_CSV = $PIRATE_CSV) =~ s/\n/\r/g;
+
+    # make sure that the CSV has Mac LF at EOL
+    like $MAC_FORMAT_CSV, qr/\r/, 'Mac formatted CSV';
+
+    # set up the MassAdd-er
+    my @successes;
+    my @failures;
+    my $mass_add = Socialtext::MassAdd->new(
+        pass_cb => sub { push @successes, shift },
+        fail_cb => sub { push @failures,  shift },
+    );
+
+    # try to add the user
+    $mass_add->from_csv($MAC_FORMAT_CSV);
 
     # make sure we were able to add the user
     is_deeply \@successes, ['Added user guybrush'], 'success message ok';

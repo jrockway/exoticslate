@@ -49,15 +49,17 @@ sub from_csv {
     # Text::CSV_XS isn't going to parse UTF8 properly
     $csv = Socialtext::Encode::ensure_is_utf8($csv);
 
+    # convert the CSV from whatever EOL format it has to Unix-style EOL
+    $csv =~ s/\r\n/\n/g;        # DOS/Windows -> Unix EOL
+    $csv =~ s/\r/\n/g;          # Mac -> Unix EOL
+
     # create a CSV parser, and set up our parse state
-    my $parser = Text::CSV_XS->new();
+    my $parser = Text::CSV_XS->new( { eol => "\n" } );
     $self->{line} = 0;
     $self->{from_csv} = 1;
 
     # split up the CSV data into individual _lines_ so that they can be parsed
     # individually.
-    #
-    # XXX: does this handle *both* Unix _and_ DOS formatted files?
     my @lines = split "\n", $csv;
 
     # parse the CSV data

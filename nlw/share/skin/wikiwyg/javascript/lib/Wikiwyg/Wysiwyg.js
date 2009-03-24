@@ -689,7 +689,6 @@ proto.enableThis = function() {
         || (Socialtext.page_id && Socialtext.revision_id && !Socialtext.start_in_edit_mode)
         || (self.wikiwyg.first_mode.classtype != self.classtype)
     ) {
-        console.log('ready');
         ready();
     }
     else

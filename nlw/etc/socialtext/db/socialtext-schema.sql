@@ -876,6 +876,9 @@ CREATE INDEX ix_signal_at
 CREATE INDEX ix_signal_at_user
 	    ON signal ("at", user_id);
 
+CREATE INDEX ix_signal_reply
+	    ON signal (in_reply_to_id);
+
 CREATE INDEX ix_signal_user_at
 	    ON signal (user_id, "at");
 

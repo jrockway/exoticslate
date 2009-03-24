@@ -11,6 +11,8 @@ ALTER TABLE signal
         FOREIGN KEY (in_reply_to_id)
         REFERENCES signal(signal_id) ON DELETE CASCADE;
 
+CREATE INDEX ix_signal_reply ON signal (in_reply_to_id);
+
 UPDATE "System"
    SET value = '45'
  WHERE field = 'socialtext-schema-version';

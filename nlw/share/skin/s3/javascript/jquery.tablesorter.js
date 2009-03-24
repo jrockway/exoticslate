@@ -502,7 +502,7 @@
 					
 					// apply event handling to headers
 					// this is to big, perhaps break it out?
-					$headers.click(function(e) {
+					$headers.bind("click dblclick", function(e) {
 						
 						$this.trigger("sortStart");
 						

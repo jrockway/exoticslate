@@ -146,30 +146,26 @@ sub log_timings {
         # in the template path
         my %template_vars = $handler->getTemplateVars($path);
 
-        my $query_string;
+        my $query_hash = {};
         if ( $method eq 'GET' ) {
             # get any query string data
-            $query_string =
-                $handler->request->args
-                ? scalar( $handler->request->args )
-                : '';
+            $query_hash = { $handler->request->args };
         }
         elsif ( $method eq 'POST' ) {
             my $query = $handler->query;
             my @params = $query->param();
-            my @strings = ( scalar @params )
-                ? map {
+            $query_hash = {
+                map {
                     my $val = $query->param($_);
                     # 254 is ~ page id size
-                    length($val) > 254 ? () : "$_=$val";
+                    length($val) > 254 ? () : ($_ => $val)
                 } @params
-                : ();
-            $query_string = join ';', @strings;
+            };
         }
 
         my $data = {
             %template_vars,
-            ( $query_string ? (q => $query_string) : () ),
+            ( keys(%$query_hash) ? (q => $query_hash) : () ),
         };
 
         st_timed_log(

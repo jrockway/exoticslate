@@ -35,6 +35,9 @@ proto.initializeObject = function() {
 
     var self = this;
     $("img.wikiwyg_button", this.div).bind("click", function(e) {
+        if ($(this).hasClass('disabled')) {
+            return;
+        }
         var action = $(this).attr("id").replace(/^wikiwyg_button_/, '');
         self.wikiwyg.current_mode.process_command(action);
     });

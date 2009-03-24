@@ -785,7 +785,7 @@ proto.toolbarStyling = function() {
 
             jQuery("#wikiwyg_button_table").addClass("disabled");
             jQuery("#wikiwyg_button_table-settings").removeClass("disabled");
-            if (jQuery(cursor_state.table).find('tr').size() < 2) {
+            if (cursor_state.has_selection || (jQuery(cursor_state.table).find('tr').size() < 2)) {
                 jQuery("#wikiwyg_button_table-settings").addClass("disabled");
             }
 
@@ -803,6 +803,9 @@ proto.toolbarStyling = function() {
             }
             if (cursor_state.last_column) {
                 jQuery("#wikiwyg_button_move-col-right").addClass("disabled");
+            }
+            if (cursor_state.has_selection) {
+                jQuery("#wikiwyg_button_move-row-up, #wikiwyg_button_move-row-down, #wikiwyg_button_move-col-left, #wikiwyg_button_move-col-right, #wikiwyg_button_add-row-above, #wikiwyg_button_add-row-below, #wikiwyg_button_add-col-left, #wikiwyg_button_add-col-right, #wikiwyg_button_del-row, #wikiwyg_button_del-col").addClass("disabled");
             }
         }
         else {
@@ -832,7 +835,8 @@ proto.get_cursor_state = function() {
         header_row: false,
         first_row: false,
         last_row: false,
-        last_column: false
+        last_column: false,
+        has_selection: Boolean(this.get_selection_text())
     };
 
     var $table = jQuery(anchor, this.get_edit_window()).parents("table");

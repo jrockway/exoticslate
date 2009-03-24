@@ -149,7 +149,19 @@ sub log_timings {
         my $query_hash = {};
         if ( $method eq 'GET' ) {
             # get any query string data
-            $query_hash = { $handler->request->args };
+            my $args = [ $handler->request->args ];
+            if (@$args % 2) {
+                $query_hash = {
+                    page_name => shift @$args,
+                    @$args,
+                };
+            }
+            else {
+                $query_hash = { @$args };
+            }
+
+            use Data::Dumper;
+            warn Dumper $query_hash;
         }
         elsif ( $method eq 'POST' ) {
             my $query = $handler->query;

@@ -1345,7 +1345,9 @@ proto.do_add_col_left = function() {
         });
 
         var table = $cell.parents("table:eq(0)").get(0);
-        this._rebuild_sortable( table );
+        if ($(table).hasClass('sort')) {
+            this._rebuild_sortable( table );
+        }
     });
 }
 
@@ -1362,7 +1364,9 @@ proto.do_add_col_right = function() {
         });
 
         var table = $cell.parents("table:eq(0)").get(0);
-        this._rebuild_sortable( table );
+        if ($(table).hasClass('sort')) {
+            this._rebuild_sortable( table );
+        }
     });
 }
 

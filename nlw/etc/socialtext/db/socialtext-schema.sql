@@ -747,6 +747,9 @@ CREATE UNIQUE INDEX "Workspace___lower___name"
 CREATE INDEX "Workspace_account_id"
 	    ON "Workspace" (account_id);
 
+CREATE INDEX gallery_gadget_gadget_id_idx
+	    ON gallery_gadget (gadget_id);
+
 CREATE INDEX ix_container_account_id
 	    ON container (account_id);
 

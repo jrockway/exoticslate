@@ -15,6 +15,9 @@ ALTER TABLE gallery_gadget
     ALTER COLUMN section SET NOT NULL,
      DROP COLUMN socialtext;
 
+CREATE INDEX gallery_gadget_gadget_id_idx
+    ON gallery_gadget (gadget_id);
+
 UPDATE "System"
    SET value = '44'
  WHERE field = 'socialtext-schema-version';

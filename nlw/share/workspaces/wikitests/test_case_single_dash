@@ -13,12 +13,12 @@ Set test_string to such a string, then make a widget with that as the link text,
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | st-newpage-pagename-edit | 30000 |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| type_ok | st-newpage-pagename-edit | Single Dash %%start_time%% |
 
 | *Comment* | put the string in as widget link text |  |
 | type_ok | wikiwyg_wikitext_textarea | `"%%test_string%%"{link: help [Socialtext Documentation]}` |
+| type_ok | st-newpage-pagename-edit | Single Dash %%start_time%% |
 | click_ok | link=Rich Text |  |
-| pause | 10000 | wait for the Rich Text editor to load |
+| pause | 5000 | wait for the Rich Text editor to load |
 | wait_for_element_visible_ok | st-save-button-link | 30000 |
 | click_and_wait | st-save-button-link |  |
 

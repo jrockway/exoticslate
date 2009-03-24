@@ -33,7 +33,9 @@ cd $(dirname $0)/..
 ./dev-bin/create-skinlinks
 
 set -x
-PORT=$(($START_PORT+$UID)) ./configure --dev=1 --apache-proxy=$FDEFS_PROXY --server-admin=support@socialtext.com
+PORT=$(($START_PORT+$UID)) ./configure --dev=1 --apache-proxy=$FDEFS_PROXY \
+    --server-admin=support@socialtext.com \
+    --support-address='http://www.socialtext.com/customers/support_request.php'
 set +x
 
 # Remove a bunch of stuff

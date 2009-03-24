@@ -264,7 +264,7 @@ sub _syndicate {
         type      => $p{type},
         pages     => $p{pages},
         feed_id   => $self->hub->current_workspace->uri,
-        contact   => Socialtext::AppConfig->support_address,
+        contact   => 'support@socialtext.com',
         generator => "Socialtext Workspace v"
             . $self->hub->main->product_version,
         feed_link => $self->hub->cgi->full_uri_with_query,

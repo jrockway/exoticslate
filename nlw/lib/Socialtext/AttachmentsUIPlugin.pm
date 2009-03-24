@@ -57,12 +57,8 @@ sub attachments_download {
 
     eval { $attachment->load };
     if ($@) {
-        my $message = 'Attachment not found. The page name, file name or '
-            . 'identifer number in the link may be incorrect, or the '
-            . 'attachment may have been deleted or is not present in this '
-            . 'workspace.';
         return $self->failure_message(
-            loc($message),
+            loc('Attachment not found. The page name, file name or identifer number in the link may be incorrect, or the attachment may have been deleted or is not present in this workspace.'),
             $@,
             $self->hub->pages->current
         );
@@ -79,7 +75,7 @@ sub attachments_download {
         return "The attachment you are looking for cannot be found.";
     }
 
-    my $fh = IO::File->new($file);
+    my $fh = IO::File->new($file, 'r');
     die "Cannot read $file: $!" unless $fh;
 
     my $mime_type = $attachment->mime_type;

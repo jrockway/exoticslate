@@ -177,22 +177,27 @@ configure with a fully-qualified URL parameter, such as:
 EOF
     }
 
-    my %email_addresses = (
-        'server-admin' => 'server administrator',
-        'support-address' => 'support address',
-    );
+    my $support_address = $settings{'support-address'}->{value};
+    unless ( looks_like_email( $support_address ) 
+        || $support_address =~ m{^https?://.+} ) {
 
-    for my $addr_parm ( sort keys %email_addresses ) {
-        my $addr = $settings{$addr_parm}->{value};
-        my $parm_desc = $email_addresses{$addr_parm};
-        if ( !looks_like_email( $addr ) ) {
-            $ok = 0;
-            print <<EOT;
-Your $parm_desc parameter "$addr"
-doesn't look like an email address.  Please specify '--$addr_parm'
+        $ok = 0;
+        print <<EOT;
+Your support-address parameter "$support_address"
+doesn't look like an email address or a URL. Please specify
+'--support-address'
 
 EOT
-        }
+    }
+
+    my $server_admin = $settings{'server-admin'}->{value};
+    unless ( looks_like_email( $server_admin ) ) {
+        $ok = 0;
+        print <<EOT;
+Your server-admin parameter "$server_admin"
+doesn't look like an email address.  Please specify '--server-admin'
+
+EOT
     }
 
     # Proxy requires apache2

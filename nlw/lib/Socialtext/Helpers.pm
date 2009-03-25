@@ -15,6 +15,8 @@ use Socialtext::Stax;
 use Socialtext::Timer;
 use Socialtext::String ();
 use Apache::Cookie;
+use Email::Address;
+use Email::Valid;
 
 sub class_id { 'helpers' }
 
@@ -354,6 +356,66 @@ sub _get_wiki_info {
         comment_by_email           => $wiki->comment_by_email,
         email_in_address           => $wiki->email_in_address,
     };
+}
+
+sub validate_email_addresses {
+    my $self = shift;
+    my @emails;
+    my @invalid;
+    if ( my $ids = shift ) {
+        my @lines = $self->_split_email_addresses( $ids );
+
+        unless (@lines) {
+            $self->add_error(loc("No email addresses specified"));
+            return;
+        }
+
+        for my $line (@lines) {
+            my ( $email, $first_name, $last_name )
+              = $self->_parse_email_address($line);
+            unless ($email) {
+                push @invalid, $line;
+                next;
+            }
+
+            push @emails, {
+                email_address => $email,
+                first_name => $first_name,
+                last_name => $last_name,
+            }
+        }
+    }
+    else
+    {
+        push @invalid, loc("No email addresses specified");
+    }
+
+    return(\@emails, \@invalid);
+}
+
+sub _split_email_addresses {
+    my $self = shift;
+    return grep /\S/, split(/[,\r\n]+\s*/, $_[0]);
+}
+
+sub _parse_email_address {
+    my $self = shift;
+    my $email = shift;
+
+    return unless defined $email;
+
+    my ($address) = Email::Address->parse($email);
+    return unless $address;
+
+    my ( $first, $last );
+    if ( grep { defined && length } $address->name ) {
+        my $name = $address->name;
+        $name =~ s/^\s+|\s+$//g;
+
+        ( $first, $last ) = split /\s+/, $name, 2;
+    }
+
+    return lc $address->address, $first, $last;
 }
 
 1;

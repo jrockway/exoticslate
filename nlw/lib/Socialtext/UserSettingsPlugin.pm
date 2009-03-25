@@ -6,8 +6,6 @@ use warnings;
 use base 'Socialtext::Plugin';
 
 use Class::Field qw( const field );
-use Email::Address;
-use Email::Valid;
 use Socialtext::AppConfig;
 use Socialtext::EmailSender::Factory;
 use Socialtext::Permission qw( ST_ADMIN_WORKSPACE_PERM );
@@ -16,6 +14,7 @@ use Socialtext::User;
 use Socialtext::WorkspaceInvitation;
 use Socialtext::URI;
 use Socialtext::l10n qw( loc system_locale);
+use Socialtext::Helpers;
 
 sub class_id {'user_settings'}
 const cgi_class => 'Socialtext::UserSettings::CGI';
@@ -286,37 +285,11 @@ sub users_invite {
         $self->hub->assert_current_user_is_admin;
     }
 
-    my @emails;
-    my @invalid;
-    if ( my $ids = $self->cgi->users_new_ids ) {
-        my @lines = $self->_split_email_addresses( $ids );
+    my ($emails, $invalid) = Socialtext::Helpers->validate_email_addresses(
+        $self->cgi->users_new_ids
+    );
 
-        unless (@lines) {
-            $self->add_error(loc("No email addresses specified"));
-            return;
-        }
-
-        for my $line (@lines) {
-            my ( $email, $first_name, $last_name )
-              = $self->_parse_email_address($line);
-            unless ($email) {
-                push @invalid, $line;
-                next;
-            }
-
-            push @emails, {
-                email_address => $email,
-                first_name => $first_name,
-                last_name => $last_name,
-            }
-        }
-    }
-    else
-    {
-        push @invalid, loc("No email addresses specified");
-    }
-
-    my $html = $self->_invite_users(\@emails, \@invalid);
+    my $html = $self->_invite_users($emails, $invalid);
     return $html if $html;
 }
 
@@ -428,31 +401,6 @@ sub _invite_users {
         display_title     => loc('Users: Invite New Users'),
         pref_list         => $self->_get_pref_list,
     );
-}
-
-sub _split_email_addresses {
-    my $self = shift;
-    return grep /\S/, split(/[,\r\n]+\s*/, $_[0]);
-}
-
-sub _parse_email_address {
-    my $self = shift;
-    my $email = shift;
-
-    return unless defined $email;
-
-    my ($address) = Email::Address->parse($email);
-    return unless $address;
-
-    my ( $first, $last );
-    if ( grep { defined && length } $address->name ) {
-        my $name = $address->name;
-        $name =~ s/^\s+|\s+$//g;
-
-        ( $first, $last ) = split /\s+/, $name, 2;
-    }
-
-    return lc $address->address, $first, $last;
 }
 
 sub invite_request_to_admin {

@@ -2225,7 +2225,7 @@ ul.normal ul ul {
     font-weight: bold;
 }
 
-#settingsPage dd {
+dl.invite dd, #settingsPage dd {
     line-height: 1.2em;
     margin-bottom: 4px;
 }

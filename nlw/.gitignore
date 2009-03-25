@@ -75,8 +75,6 @@ lib/Socialtext/People/Rest/Profiles.pm
 lib/Socialtext/People/Rest/Tags.pm
 lib/Socialtext/People/Rest/Watchers.pm
 lib/Socialtext/People/Rest/Watchlist.pm
-lib/Socialtext/Noun/Signal.pm
-lib/Socialtext/Signal/PageTopic.pm
 share/console-template/
 share/template/control
 share/widgets/*.png
@@ -170,7 +168,6 @@ lib/Socialtext/Appliance/SupportRequest.pm
 etc/socialtext/uri_map.d/widgets.yaml
 t/wikitests/people/avatar-cache.wiki
 t/widget/lang/Test_fallback.xml
-t/Socialtext/Signal/PageTopic.t
 t/Socialtext/Gadgets/Container-admin.t
 t/widget/Test1.xml
 t/widget/Test2.xml
@@ -202,3 +199,5 @@ t/Socialtext/Rest/Gadgets/Gallery.t
 t/wikitests/signals/data_signals_replies.wiki
 lib/Socialtext/Gadgets/Gallery/View.pm
 lib/Socialtext/Gadgets/Gallery/Global.pm
+lib/Socialtext/Signal/Topic.pm
+t/Socialtext/Signal/Topic.t

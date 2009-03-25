@@ -17,6 +17,7 @@ use Socialtext::String ();
 use Apache::Cookie;
 use Email::Address;
 use Email::Valid;
+use Socialtext::Appliance::Config;
 
 sub class_id { 'helpers' }
 
@@ -256,7 +257,20 @@ sub global_template_vars {
         $self->hub->pluggable->hooked_template_vars,
     );
     if ($self->hub->current_user->can_use_plugin('people')) {
-        $result{invite_url} = '/?action=invite';
+        my $appliance_config_allows_invitation = 1;
+
+        # Wrap this in a eval{} because /etc/socialtext/appliance.conf 
+        # is not accessible in a devenv.
+        { local $@; eval {
+            $appliance_config_allows_invitation
+                = Socialtext::Appliance::Config->new->value(
+                    'allow_network_invitation'
+                );
+        } };
+
+        if ($appliance_config_allows_invitation) {
+            $result{invite_url} = '/?action=invite';
+        }
 
         require Socialtext::People::Profile;
         # This is expensive, and often not even needed (for /data/*, say)

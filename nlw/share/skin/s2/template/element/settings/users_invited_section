@@ -24,10 +24,10 @@
  </table>
 
 [% BLOCK users_listing %]
-  <p>[% label %]</p>
+  <p style="font-weight: bold; margin-top: 5px">[% label %]</p>
   <ul>
     [% FOREACH user IN users %]
-      <li>[% user %]</li>
+      <li style="font-family: monospace">[% user %]</li>
     [% END %]
   </ul>
 [% END %]

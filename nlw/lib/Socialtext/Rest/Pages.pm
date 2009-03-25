@@ -26,6 +26,7 @@ sub get_resource {
     # If we're filtering, get that from the DB directly
     my $minimal = $self->rest->query->param('minimal_pages');
     my $filter  = $self->rest->query->param('filter');
+    my $count   = $self->rest->query->param('count') || 100;
     if ($minimal and $content_type eq 'application/json' 
             and $filter and $filter =~ m#^\\b(.+)#) {
         my $page_filter = $1;
@@ -33,7 +34,7 @@ sub get_resource {
         return Socialtext::Model::Pages->Minimal_by_name(
             workspace_id => $self->hub->current_workspace->workspace_id,
             page_filter => $page_filter,
-            limit => 100,
+            limit => $count,
             type => $self->rest->query->param('type'),
         );
     }

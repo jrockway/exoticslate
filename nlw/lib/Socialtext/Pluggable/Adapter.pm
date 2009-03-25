@@ -295,6 +295,7 @@ sub hook {
             };
             if ($@) {
                 (my $err = $@) =~ s/\n.+//sm;
+                warn $@;
                 return $err;
             }
 

@@ -379,17 +379,7 @@ proto.enable_button = function(mode_name) {
     if (mode_name == WW_PREVIEW_MODE) return;
     var button = this.modeButtonMap[mode_name];
     if (! button) return; // for when the debugging button doesn't exist
-
-    if (Socialtext.S3) {
-        jQuery(button).removeClass('disabled');
-    }
-    else {
-        button.style.fontWeight = 'normal';
-        button.style.background = 'none';
-        button.style.textDecoration = 'underline';
-        button.style.color = 'blue';  // XXX should not be hardcoded
-    }
-
+    jQuery(button).removeClass('disabled');
     jQuery(button).unbind('click').click(this.button_enabled_func(mode_name));
 }
 
@@ -414,18 +404,13 @@ proto.button_enabled_func = function(mode_name) {
 }
 
 proto.disable_button = function(mode_name) {
+    var self = this;
     if (mode_name == WW_PREVIEW_MODE) return;
     var button = this.modeButtonMap[mode_name];
-    if (Socialtext.S3) {
-        jQuery(button).addClass('disabled');
-    }
-    else {
-        button.style.fontWeight = 'bold';
-        button.style.textDecoration = 'none';
-        button.style.background = 'none';
-        button.style.color = 'black';
-    }
-    button.onclick = this.button_disabled_func(mode_name);
+    jQuery(button).addClass('disabled');
+    jQuery(button).click(function () {
+        self.button_disabled_func(mode_name);
+    });
 }
 
 proto.button_disabled_func = function(mode_name) {
@@ -834,17 +819,15 @@ proto.get_wikitext_from_html = function(html) {
 }
 
 proto.set_edit_tips_span_display = function() {
-    if (Socialtext.S3) {
-        jQuery('#st-edit-tips')
-            .unbind('click')
-            .click(function () {
-                jQuery.showLightbox({
-                    content: '#st-ref-card',
-                    close: '#st-ref-card-close'
-                });
-                return false;
+    jQuery('#st-edit-tips')
+        .unbind('click')
+        .click(function () {
+            jQuery.showLightbox({
+                content: '#st-ref-card',
+                close: '#st-ref-card-close'
             });
-    }
+            return false;
+        });
 }
 
 proto.editMode = function() {
@@ -981,7 +964,7 @@ this.addGlobal().setup_wikiwyg = function() {
     if ( jQuery("#st-edit-mode-container").size() != 1 ||
          jQuery("iframe#st-page-editing-wysiwyg").size() != 1 ) {
         Socialtext.wikiwyg_variables.loc = loc;
-        var template = Socialtext.S3 ? 'edit_wikiwyg' : 'layout/edit_wikiwyg';
+        var template = 'edit_wikiwyg';
         var html = Jemplate.process(template, Socialtext.wikiwyg_variables);
 
         if (jQuery.browser.mozilla || (jQuery.browser.version == 6 && jQuery.browser.msie)) {
@@ -1109,13 +1092,12 @@ this.addGlobal().setup_wikiwyg = function() {
                 jQuery("#st-page-editing-uploadbutton").hide();
             }
             
-            if (!Socialtext.S3)
-                jQuery("#st-all-footers").hide();
+            jQuery("#st-all-footers").hide();
 
             jQuery("#st-display-mode-container").hide();
 
             // See the comment about "two seconds" below
-            if (Socialtext.S3 && (firstMode == WW_SIMPLE_MODE)) {
+            if (firstMode == WW_SIMPLE_MODE) {
                 jQuery("#st-editing-tools-edit .editModeSwitcher a").hide();
             }
 
@@ -1160,7 +1142,7 @@ this.addGlobal().setup_wikiwyg = function() {
                 });
             }
 
-            if (Socialtext.S3 && (firstMode == WW_SIMPLE_MODE)) {
+            if (firstMode == WW_SIMPLE_MODE) {
                 // Give the browser two seconds to render the initial iframe.
                 // If we don't do this, click on "Wiki text" prematurely will
                 // hang the editor up.  Humans usually take more than 1000ms
@@ -1237,7 +1219,7 @@ this.addGlobal().setup_wikiwyg = function() {
                     encodeURIComponent(location.href);
                 return false;
             }
-            else if (Socialtext.S3 && jQuery.browser.msie) {
+            else if (jQuery.browser.msie) {
                 // Cheap-and-cheerful-but-not-fun workaround for {bz: 1261}.
                 // XXX TODO XXX - Implement a proper fix!
                 window.location.reload();
@@ -1466,21 +1448,15 @@ this.addGlobal().setup_wikiwyg = function() {
                             jQuery('#st-tagqueue-list').hide();
                         return false;
                     })
-                    .html(Socialtext.S3
-                        ? '<img src="/static/skin/common/images/delete.png" width="16" height="16" border="0" />'
-                        : '[x]'
+                    .html(
+                        '<img src="/static/skin/common/images/delete.png" width="16" height="16" border="0" />'
                     )
             );
 
        return false;
     };
 
-    if (Socialtext.S3) {
-        jQuery('#st-tagqueue').submit(add_tag);
-    }
-    else {
-        jQuery('#st-tagqueue-submitbutton').click(add_tag);
-    }
+    jQuery('#st-tagqueue').submit(add_tag);
 
     jQuery('#st-edit-mode-uploadbutton').click(function () {
         Attachments.showUploadInterface();

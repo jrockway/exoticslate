@@ -81,7 +81,8 @@ sub handler ($$) {
 
             # if we're redirecting to a miki page, use the miki login page
             # instead
-            if ($self->{args}{redirect_to} =~ m#^(?:https?://[^/]+)?/lite/#) {
+            my $redirect_to = $self->{args}{redirect_to} || '';
+            if ($redirect_to =~ m#^(?:https?://[^/]+)?/lite/#) {
                 return $self->_redirect( $vars->{miki_url} );
             }
 

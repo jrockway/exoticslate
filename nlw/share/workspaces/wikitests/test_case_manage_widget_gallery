@@ -20,6 +20,7 @@
 | click_and_wait | link=Add Content |  |
 | wait_for_text_present_ok | Widget Gallery |  |
 | text_like | st-wiki-title | Widget Gallery |
+| wait_for_element_not_present_ok | link=Manage Gallery for Accounts | 5000 |
 | text_unlike | controlsRight | Manage Gallery for Accounts |
 
 | *Comment* | Test Case: Manage Widget Gallery - add accounts admin |  |

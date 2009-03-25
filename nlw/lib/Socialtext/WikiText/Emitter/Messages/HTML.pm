@@ -2,56 +2,27 @@ package Socialtext::WikiText::Emitter::Messages::HTML;
 # @COPYRIGHT@
 use strict;
 use warnings;
-
+use base 'Socialtext::WikiText::Emitter::Messages::Base';
 use Socialtext::l10n qw/loc/;
-use base 'WikiText::Receiver';
+use Readonly;
 
-sub content {
-    my $self = shift;
-    my $content = $self->{output};
-    $content =~ s/\s*\z//;
-    return $content;
-}
+Readonly my %markup => (
+    asis => [ '',                '' ],
+    b    => [ '<b>',             '</b>' ],
+    i    => [ '<i>',             '</i>' ],
+    del  => [ '<del>',           '</del>' ],
+    a    => [ '<a href="HREF">', '</a>' ],
+);
 
-sub init {
-    my $self = shift;
-    $self->{output} = '';
-}
+sub msg_markup_table { return \%markup }
 
-sub insert {
+sub msg_format_link {
     my $self = shift;
     my $ast = shift;
-    my $output = '';
-
-    if (not(defined($ast->{wafl_type}))) {
-        $output = $ast->{output} || '';
-    }
-    elsif ( $ast->{wafl_type} eq 'link' ) {
-        if ($self->{callbacks}{noun_link}) {
-            $self->{callbacks}{noun_link}->($ast);
-        }
-        $output = qq{<a href="/$ast->{workspace_id}/index.cgi?$ast->{page_id}">$ast->{text}</a>};
-    }
-    elsif ( $ast->{wafl_type} eq 'user' ) {
-        if ($self->{callbacks}{noun_link}) {
-            $self->{callbacks}{noun_link}->($ast);
-        }
-        $output = $self->user_html($ast);
-    }
-    else {
-        $output = qq{{$ast->{wafl_type}: not supported}};
-    }
-
-    $self->{output} .= $output;
+    return qq{<a href="/$ast->{workspace_id}/index.cgi?$ast->{page_id}">$ast->{text}</a>};
 }
 
-my $markup = {
-    'b' => ['<b>', '</b>'],
-    'i' => ['<i>', '</i>'],
-    'del' => ['<del>', '</del>'],
-};
-
-sub user_html {
+sub msg_format_user {
     my $self = shift;
     my $ast = shift;
     my $userid = $ast->{user_string};
@@ -71,40 +42,15 @@ sub user_html {
     }
 }
 
-sub begin_node {
-    my $self = shift;
-    my $match = shift;
-
-    if ($match->{type} eq 'a') {
-        $self->{output} .= qq{<a href="$match->{attributes}{href}">};
-    }
-    elsif (exists $markup->{$match->{type}}) {
-        $self->{output} .= $markup->{$match->{type}}->[0];
-    }
-}
-
-sub end_node {
-    my $self = shift;
-    my $match = shift;
-
-    if ($match->{type} eq 'a') {
-        $self->{output} .= "</a>";
-    }
-    elsif (exists $markup->{$match->{type}}) {
-        $self->{output} .= $markup->{$match->{type}}->[1];
-    }
-}
-
 sub text_node {
     my $self = shift;
     my $text = shift;
-    $text =~ s/\s+/ /g;
+    return unless defined $text;
+    $text =~ s/\s{2,}/ /g;
     $text =~ s/&/&amp;/g;
     $text =~ s/</&lt;/g;
     $text =~ s/>/&gt;/g;
-#     $text =~ s/^\s?(.*)s?/$1/g;
-#     $text =~ s/\n/ /g;
-    $self->{output} .= "$text";
+    $self->{output} .= $text;
 }
 
 1;

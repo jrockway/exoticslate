@@ -1,53 +1,36 @@
-# @COPYRIGHT@
 package Socialtext::WikiText::Emitter::Messages::Canonicalize;
+# @COPYRIGHT@
 use strict;
 use warnings;
-
-use base 'WikiText::Receiver';
+use base 'Socialtext::WikiText::Emitter::Messages::Base';
 use Socialtext::l10n qw/loc/;
+use Readonly;
 
-my $markup = {
+Readonly my %markup => (
     asis => [ '{{', '}}' ],
-    b    => [ '*',  '*'  ],
-    i    => [ '_',  '_'  ],
-    del  => [ '-',  '-'  ],
-    a    => [ '',   ''   ], # Handled as a special case below
-};
+    b    => [ '*',  '*' ],
+    i    => [ '_',  '_' ],
+    del  => [ '-',  '-' ],
+    a    => [ '"',  '"<HREF>' ],
+);
 
-sub content {
-    my $self = shift;
-    my $content = $self->{output};
-    $content =~ s/\s\s+/ /g;
-    $content =~ s/\s*\z//;
-    return $content;
-}
+sub msg_markup_table { return \%markup }
 
-sub init {
-    my $self = shift;
-    $self->{output} = '';
-}
-
-sub insert {
+sub msg_format_link {
     my $self = shift;
     my $ast = shift;
-    my $output = '';
+    return "{$ast->{wafl_type}: $ast->{wafl_string}}"
+}
 
-    if (not(defined($ast->{wafl_type}))) {
-        $output = $ast->{output} || '';
-    }
-    elsif ($ast->{wafl_type} eq 'user') {
-        if ($self->{callbacks}{decanonicalize}) {
-            $output = $self->user_as_username( $ast );
-        }
-        else {
-            $output = $self->user_as_id( $ast );
-        }
+sub msg_format_user {
+    my $self = shift;
+    my $ast = shift;
+    if ($self->{callbacks}{decanonicalize}) {
+        return $self->user_as_username( $ast );
     }
     else {
-        $output = "{$ast->{wafl_type}: $ast->{wafl_string}}";
+        return $self->user_as_id( $ast );
     }
-
-    $self->{output} .= $output;
 }
 
 sub user_as_id {
@@ -78,36 +61,6 @@ sub user_as_username {
     else {
         return $user->best_full_name;
     }
-}
-
-sub begin_node {
-    my $self = shift;
-    my $ast = shift;
-
-    if ($ast->{type} eq 'a') {
-        $self->{output} .= '"';
-    }
-    elsif (exists $markup->{$ast->{type}}) {
-        $self->{output} .= $markup->{$ast->{type}}->[0];
-    }
-}
-
-sub end_node {
-    my $self = shift;
-    my $ast = shift;
-    if ($ast->{type} eq 'a') {
-        $self->{output} .= '"<' . $ast->{attributes}{href}. '>';
-    }
-    elsif (exists $markup->{$ast->{type}}) {
-        $self->{output} .= $markup->{$ast->{type}}->[1];
-    }
-}
-
-sub text_node {
-    my $self = shift;
-    my $text = shift;
-    $text =~ s/\n/ /g;
-    $self->{output} .= "$text";
 }
 
 1;

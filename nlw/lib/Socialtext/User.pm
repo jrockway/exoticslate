@@ -1507,7 +1507,7 @@ sub send_confirmation_completed_signal {
             require Socialtext::Signal;
             my $signal = Socialtext::Signal->Create(
                 user_id => $self->user_id,
-                in_reply_to_id => $self->user_id,
+#                in_reply_to_id => $self->user_id,
                 account_ids => [ $self->primary_account_id ],
                 body => '{user: ' .  $self->user_id . '} '.
                         'just joined the ' . $self->primary_account->name . ' network. Hi everybody!',

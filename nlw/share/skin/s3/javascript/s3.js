@@ -129,7 +129,9 @@ $(function() {
         })
         .lookahead({
             url: Page.workspaceUrl() + '/tags',
-            exceptUrl: Page.pageUrl() + '/tags',
+            params: {
+                exclude_from: Socialtext.page_id
+            },
             linkText: function (i) {
                 return i.name
             },

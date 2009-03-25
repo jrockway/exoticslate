@@ -1505,7 +1505,6 @@ sub send_confirmation_completed_signal {
         local $@;
         eval {
             require Socialtext::Signal;
-            my $self = $self->hub->current_user;
             my $signal = Socialtext::Signal->Create(
                 user_id => $self->user_id,
                 in_reply_to_id => $self->user_id,

@@ -32,15 +32,22 @@ sub collection_name { "Tags for " . $_[0]->workspace->title . "\n" }
 sub _entities_for_query {
     my $self = shift;
 
-    my $sth = sql_execute( <<EOT,
-SELECT tag AS name,
-       count(page_id) AS page_count
-    FROM page_tag
-    WHERE workspace_id = ?
-    GROUP BY tag
-EOT
-        $self->hub->current_workspace->workspace_id,
-    );
+    my @params = $self->hub->current_workspace->workspace_id;
+
+    my $sql = "
+        SELECT tag AS name, count(page_id) AS page_count
+          FROM page_tag
+         WHERE workspace_id = ?
+    ";
+
+    if (my $except_page = $self->rest->query->param('exclude_from')) {
+        $sql .= "AND tag NOT IN (SELECT tag FROM page_tag WHERE page_id = ?)\n";
+        push @params, $except_page;
+    };
+
+    $sql .= "GROUP BY tag";
+
+    my $sth = sql_execute($sql, @params);
     return @{ $sth->fetchall_arrayref({}) };
 }
 

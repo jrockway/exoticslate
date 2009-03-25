@@ -2155,6 +2155,10 @@ the user in UserConfirmationEmail.
 
 Create and return an Socialtext::User::EmailConfirmation object for the user.
 
+=head2 $user->send_confirmation_completed_signal()
+
+If possible, send a signal to the system saying that the user has been confirmed.
+
 =head1 AUTHOR
 
 Socialtext, Inc., <code@socialtext.com>

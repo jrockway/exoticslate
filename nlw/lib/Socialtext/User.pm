@@ -25,6 +25,7 @@ use Socialtext::l10n qw(system_locale loc);
 use Socialtext::EmailSender::Factory;
 use Socialtext::User::Cache;
 use Socialtext::Timer;
+use Carp qw/croak/;
 use base qw( Socialtext::MultiPlugin );
 
 use Readonly;
@@ -455,7 +456,7 @@ sub _get_full_name {
         my $workspace = $p{workspace};
         my $user = $p{user};
 
-        die "Either workspace or user is required"
+        croak "Either workspace or user is required"
             unless $user or $workspace && $workspace->real;
 
         my $email = $self->email_address;
@@ -757,7 +758,7 @@ sub is_deactivated {
 sub deactivate {
     my $self = shift;
 
-    die 'You may not deactivate ' . $self->username
+    croak 'You may not deactivate ' . $self->username
         if $self->is_system_created;
 
     if ($self->can_update_store) {
@@ -874,7 +875,7 @@ sub Resolve {
     my $maybe_user = shift;
     my $user;
 
-    die "no user identifier specified" unless $maybe_user;
+    croak "no user identifier specified" unless $maybe_user;
 
     if (ref($maybe_user) && $maybe_user->can('user_id')) {
         return $maybe_user;
@@ -886,7 +887,7 @@ sub Resolve {
     $user ||= Socialtext::User->new(username => $maybe_user);
     $user ||= Socialtext::User->new(email_address => $maybe_user);
 
-    die "no such user '$maybe_user'" unless defined $user;
+    croak "no such user '$maybe_user'" unless defined $user;
     return $user;
 }
 

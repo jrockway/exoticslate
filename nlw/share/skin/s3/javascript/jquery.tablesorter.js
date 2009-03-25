@@ -151,7 +151,7 @@
 							p = getParserById(table.config.headers[i].sorter);
 						}
 						if(!p) {
-							p = detectParserForColumn(table,cells[i]);
+							p = detectParserForColumn(table, cells[i], i);
 						}
 	
 						if(table.config.debug) { parsersDebug += "column:" + i + " parser:" +p.id + "\n"; }
@@ -165,13 +165,20 @@
 				return list;
 			};
 			
-			function detectParserForColumn(table,node) {
+			function detectParserForColumn(table, node, i) {
+				var str = $.trim(
+					getElementText(table.config,node)
+						.replace(/(<br>|&nbsp;)/g, '')
+				);
+				if (! str.length) {
+					var $row = $(node).parents('tr').next();
+					if ($row.size()) {
+						return detectParserForColumn(table, $row.find('td')[i], i);
+					}
+				}
 				var l = parsers.length;
 				for(var i=1; i < l; i++) {
-					if(parsers[i].is(
-						$.trim(getElementText(table.config,node)
-							.replace(/(<br>|&nbsp;)/g, '')
-					),table,node)) {
+					if(parsers[i].is(str,table,node)) {
 						return parsers[i];
 					}
 				}

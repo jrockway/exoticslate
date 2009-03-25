@@ -38,10 +38,7 @@ sub root {
         return $self->redirect( $ws_list_uri );
     }
 
-    # everyone else goes to the login page (with embedded public Workspace
-    # List)
-    my $login_uri = $is_mobile ? '/lite/login' : '/nlw/login.html';
-    return $self->redirect( $login_uri );
+    return $self->redirect_to_login;
 }
 
 sub user_name {

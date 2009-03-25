@@ -13,7 +13,7 @@ use Socialtext::Storage;
 use Socialtext::AppConfig;
 use Socialtext::JSON qw(encode_json);
 use Socialtext::User;
-use URI::Escape ();
+use URI::Escape qw(uri_escape);
 use Socialtext::Formatter::Parser;
 use Socialtext::Cache;
 use Socialtext::Authz::SimpleChecker;
@@ -283,6 +283,18 @@ sub cgi_vars {
 sub full_uri {
     my $self = shift;
     return $self->hub->cgi->full_uri_with_query;
+}
+
+sub redirect_to_login {
+    my $self = shift;
+    my $uri = uri_escape($ENV{REQUEST_URI});
+
+    if (Socialtext::BrowserDetect::is_mobile()) {
+        return $self->redirect('/lite/login');
+    }
+
+    my $login_uri = Socialtext::AppConfig->logout_redirect_uri;
+    return $self->redirect("$login_uri?redirect_to=$uri");
 }
 
 sub redirect {

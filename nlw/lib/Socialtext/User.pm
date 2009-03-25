@@ -1492,7 +1492,29 @@ sub confirm_email_address {
     return unless $uce;
 
     $uce->delete;
-    $self->send_confirmation_completed_email unless $uce->is_password_change;
+
+    return if $uce->is_password_change;
+
+    $self->send_confirmation_completed_email;
+    $self->send_confirmation_completed_signal;
+}
+
+sub send_confirmation_completed_signal {
+    my $self = shift;
+    if ($self->can_use_plugin('signals')) {
+        local $@;
+        eval {
+            require Socialtext::Signal;
+            my $self = $self->hub->current_user;
+            my $signal = Socialtext::Signal->Create(
+                user_id => $self->user_id,
+                in_reply_to_id => $self->user_id,
+                account_ids => [ $self->primary_account_id ],
+                body => '{user: ' .  $self->user_id . '} '.
+                        'just joined the ' . $self->primary_account->name . ' network. Hi everybody!',
+            );
+        }
+    }
 }
 
 sub email_confirmation {

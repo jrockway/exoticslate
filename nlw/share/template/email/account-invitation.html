@@ -1,0 +1,13 @@
+[%# @COPYRIGHT@ -%]
+[% SET escaped_str = account_name | html %]
+<html>
+<head>
+ <title>[% loc('An Invitation to join [_1]', escaped_str) %]</title>
+</head>
+
+<body>
+
+[% PROCESS $account_invitation_body %]
+
+</body>
+</html>

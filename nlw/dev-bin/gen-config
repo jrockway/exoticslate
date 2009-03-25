@@ -266,7 +266,7 @@ sub main {
                     'workspaces-to-be-indexed'
                 );
                 eval {
-                    shell_run( "st-admin list-workspaces > $list_of_workspaces" );
+                    shell_run( "st-admin list-workspaces > $list_of_workspaces 2> /dev/null" );
                 };
                 if ($@) {
                     warn "Looks like that failed, lets try something else.\n";

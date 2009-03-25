@@ -75,7 +75,7 @@ sub invite_notify {
 
     my $template_dir = 'st'; # XXX - Per-account OpenID?
 
-    my $subject = loc("I'm inviting you into the [_1] account", $account->name);
+    my $subject = loc("I'm inviting you into the [_1] network", $account->name);
 
     my $renderer = Socialtext::TT2::Renderer->instance();
 

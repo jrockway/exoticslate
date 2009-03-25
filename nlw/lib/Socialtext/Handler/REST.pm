@@ -159,9 +159,6 @@ sub log_timings {
             else {
                 $query_hash = { @$args };
             }
-
-            use Data::Dumper;
-            warn Dumper $query_hash;
         }
         elsif ( $method eq 'POST' ) {
             my $query = $handler->query;

@@ -24,16 +24,14 @@ html body#dashBoard div#controls div#controlsRight.peoplelist {
     -width: 200px !important;
 }
 
-/* Fix IE7 top offset shift for controlsRight dashboard buttons */
-html body#dashBoard div#controls div#controlsRight ul.profile-links li {
-    margin-top: -11px;
-    -margin-top: 0px;
-}
-
 html body#dashBoard div#controls div#controlsRight ul.profile-links li a,
 html body#dashBoard div#controls div#controlsRight ul.dashboard-links li a {
-    vertical-align: top;
+    vertical-align: middle;
     white-space: nowrap;
+}
+
+html body#dashBoard div#controls div#controlsRight ul.profile-links li a {
+    height: 15px;
 }
 
 #st-edit-mode-container {

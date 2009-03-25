@@ -27,6 +27,12 @@ It should be the last testset in this run, but it will re-enable LDAP when it fi
 * [Widgets Testcases]
 * [Test Case: Gadgets Galore]
 
+* [Test Case: Administer Dashboards]
+
+TC: Reset to Default Dashboard doesn't work in FF3 !
+
+* [Test Case: Reset to Default Dashboard]
+
 IE 7 uses the RSS Icons High Permissions test case
 
 For some reason, no combination of Selenium servers and multiwindow and

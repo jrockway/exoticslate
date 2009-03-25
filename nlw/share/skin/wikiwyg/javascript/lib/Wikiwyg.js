@@ -1199,12 +1199,14 @@ this.addGlobal().setup_wikiwyg = function() {
     }
 
     if (!Socialtext.new_page) {
-        jQuery('#st-save-button-link').click(function() {
-            ww.is_editing = false;
-            ww.showScrollbars();
-            ww.saveButtonHandler();
-            return false;
-        });
+        setTimeout(function() {
+            jQuery('#st-save-button-link').click(function() {
+                ww.is_editing = false;
+                ww.showScrollbars();
+                ww.saveButtonHandler();
+                return false;
+            });
+        }, 500);
     }
 
     // node handles

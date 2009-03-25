@@ -631,7 +631,7 @@ proto.enableThis = function() {
 
     var self = this;
     var ready = function() {
-        if (!self.is_ready)
+        if (!self.is_ready && !self.wikiwyg.previous_mode)
             self.fromHtml( self.wikiwyg.div.innerHTML );
         if (Wikiwyg.is_gecko) {
             self.get_edit_document().designMode = 'on';
@@ -663,10 +663,12 @@ proto.enableThis = function() {
             self.set_clear_handler();
         }
 
-        self.set_focus();
-        self.enable_keybindings();
-        self.set_key_interception_handler();
-        self.set_clear_handler();
+        if (self.is_ready) {
+            self.set_focus();
+            self.enable_keybindings();
+            self.set_key_interception_handler();
+            self.set_clear_handler();
+        }
 
         jQuery.poll(
             function() {
@@ -783,7 +785,7 @@ proto.toolbarStyling = function() {
 
             jQuery("#wikiwyg_button_table").addClass("disabled");
             jQuery("#wikiwyg_button_table-settings").removeClass("disabled");
-            if (jQuery(cursor_state.table).find('tr').size() < 2) {
+            if (cursor_state.has_selection || (jQuery(cursor_state.table).find('tr').size() < 2)) {
                 jQuery("#wikiwyg_button_table-settings").addClass("disabled");
             }
 
@@ -801,6 +803,9 @@ proto.toolbarStyling = function() {
             }
             if (cursor_state.last_column) {
                 jQuery("#wikiwyg_button_move-col-right").addClass("disabled");
+            }
+            if (cursor_state.has_selection) {
+                jQuery("#wikiwyg_button_move-row-up, #wikiwyg_button_move-row-down, #wikiwyg_button_move-col-left, #wikiwyg_button_move-col-right, #wikiwyg_button_add-row-above, #wikiwyg_button_add-row-below, #wikiwyg_button_add-col-left, #wikiwyg_button_add-col-right, #wikiwyg_button_del-row, #wikiwyg_button_del-col").addClass("disabled");
             }
         }
         else {
@@ -830,7 +835,8 @@ proto.get_cursor_state = function() {
         header_row: false,
         first_row: false,
         last_row: false,
-        last_column: false
+        last_column: false,
+        has_selection: Boolean(this.get_selection_text())
     };
 
     var $table = jQuery(anchor, this.get_edit_window()).parents("table");
@@ -1248,7 +1254,9 @@ proto._do_table_manip = function(callback) {
 
         setTimeout(function() {
             var $table = $cell.parents("table.sort:eq(0)");
-            $table.trigger("update");
+            try {
+                $table.trigger("update");
+            } catch(e) { }
         }, 50);
 
     }, 100);
@@ -1280,13 +1288,11 @@ proto.do_table_settings = function() {
 
                 jQuery("#st-table-settings form").one("submit", function() {
                     if ( $("input[name=sort]", this).is(":checked") ) {
-                        $table.addClass("sort");
                         setTimeout(function() {
                             Socialtext.make_table_sortable($table.get(0));
                         }, 100);
                     }
                     else {
-                        $table.removeClass("sort");
                         Socialtext.make_table_unsortable( $table.get(0) );
                     }
 
@@ -1323,6 +1329,13 @@ proto.do_add_row_above = function() {
     });
 }
 
+proto._rebuild_sortable = function(table) {
+    Socialtext.make_table_unsortable( table );
+    setTimeout(function() {
+        Socialtext.make_table_sortable( table );
+    }, 100);
+}
+
 proto.do_add_col_left = function() {
     var self = this;
     this._do_table_manip(function($cell) {
@@ -1334,7 +1347,11 @@ proto.do_add_col_left = function() {
                     .html("&nbsp;")
             );
         });
-        Socialtext.make_table_unsortable( $cell.parents("table:eq(0)").get(0) );
+
+        var table = $cell.parents("table:eq(0)").get(0);
+        if ($(table).hasClass('sort')) {
+            this._rebuild_sortable( table );
+        }
     });
 }
 
@@ -1349,7 +1366,11 @@ proto.do_add_col_right = function() {
                     .html("&nbsp;")
             );
         });
-        Socialtext.make_table_unsortable( $cell.parents("table:eq(0)").get(0) );
+
+        var table = $cell.parents("table:eq(0)").get(0);
+        if ($(table).hasClass('sort')) {
+            this._rebuild_sortable( table );
+        }
     });
 }
 
@@ -1416,6 +1437,9 @@ proto.do_del_col = function() {
         self._traverse_column($cell, function($td) {
             $td.remove();
         });
+
+        var table = $cell.parents("table:eq(0)").get(0);
+        this._rebuild_sortable( table );
 
         var tds = $tr.find('td');
         if (tds.length >= col) {

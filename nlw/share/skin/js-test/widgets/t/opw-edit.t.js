@@ -21,7 +21,7 @@ t.runAsync([
     function() {
         var widget = WID = t.setup_one_widget(
             {
-                url: "/?action=add_widget;src=file:widgets/share/widgets/one_page.xml",
+                url: "/?action=add_widget;type=dashboard;src=file:widgets/share/widgets/one_page.xml",
                 noPoll: true
             },
             t.nextStep()

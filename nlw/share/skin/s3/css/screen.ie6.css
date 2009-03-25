@@ -46,3 +46,12 @@ div#st-editing-tools-edit ul.buttonRight {
 	padding:0;
 }
 
+#st-edit-summary form .field label {
+    margin: 1.4em 0 -1.8em 0;
+}
+
+#st-edit-summary .signal {
+    float: left;
+    margin-top: 1em;
+}
+

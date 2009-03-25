@@ -25,21 +25,28 @@
 | *Comment* | Test Case: Settings: User verify settings menu |  |
 | st-admin | set-workspace-config --workspace %%workspace%% email_notify_is_enabled 1 |  |
 | click_and_wait | link=Settings |  |
-| text_like | contentContainer | My Settings |
-| text_like | contentContainer | List All Users |
-| text_like | contentContainer | My Workspaces |
-| text_like | contentContainer | Unsubscribe |
-| text_like | contentContainer | Create New Weblog |
-| text_like | contentContainer | Page Editing |
-| text_like | contentContainer | Screen Layout |
-| text_like | contentContainer | Email Notification |
-| text_like | contentContainer | Your Notepad |
-| text_like | contentContainer | What's New |
-| text_like | contentContainer | Syndicate |
-| text_like | contentContainer | Time |
-| text_like | contentContainer | Watchlist |
-| text_like | contentContainer | Weblogs |
-| text_unlike | contentContainer | Manage All Users |
+| text_like | contentLeft | My Settings |
+| text_like | contentLeft | List All Users |
+| text_like | contentLeft | My Workspaces |
+| text_like | contentLeft | Unsubscribe |
+| text_like | contentLeft | Create New Weblog |
+| text_like | contentLeft | Page Editing |
+| text_like | contentLeft | Screen Layout |
+| text_like | contentLeft | Email Notification |
+| text_like | contentLeft | Your Notepad |
+| text_like | contentLeft | What's New |
+| text_like | contentLeft | Syndicate |
+| text_like | contentLeft | Time |
+| text_like | contentLeft | Watchlist |
+| text_like | contentLeft | Weblogs |
+
+| text_unlike | contentLeft | Manage All Users |
+| text_unlike | contentLeft | Invite New Users |
+| text_unlike | contentLeft | Create New Workspace |
+| text_unlike | contentLeft | Clone This Workspace |
+| text_unlike | contentLeft | Workspace Appearance |
+| text_unlike | contentLeft | Workspace Features |
+| text_unlike | contentLeft | Workspace Privacy |
 
 | *Comment* | Test Case: Settings: User test my settings functionality |  |
 | text_like | contentContainer | qr/First Name:/i |

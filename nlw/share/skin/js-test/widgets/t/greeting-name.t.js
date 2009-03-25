@@ -20,9 +20,10 @@ t.runAsync([
     function step4() {
         $(t.iframe).width(1000);
         t.scrollTo(50);
-        var message = t.$("span.welcome div").text()
-            .replace(/^\s*(.*?)\s*$/, '$1');
-        var expected = 'Please complete your profile now.';
+        var message = t.$("div.welcome").text()
+            .replace(/^\s*([\s\S]*?)\s*$/, '$1')
+            .replace(/\s+/g, ' ');
+        var expected = 'Welcome, New User Please complete your profile now.';
         t.is(message, expected,
             'Message is correct (' + expected + ') when user has no name'
         );

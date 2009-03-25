@@ -11,6 +11,7 @@
 | text_like | contentLeft | Invite New Users |
 | text_like | contentLeft | My Workspaces |
 | text_like | contentLeft | Create New Workspace |
+| text_like | contentLeft | Clone This Workspace |
 | text_like | contentLeft | Unsubscribe |
 | text_like | contentLeft | Workspace Appearance |
 | text_like | contentLeft | Workspace Features |
@@ -65,13 +66,27 @@
 | click_and_wait | link=Go to |  |
 | location_like | /newspace-%%start_time%%/index.cgi?newspace_%%start_time%% |  |
 
+| *Comment* | Test Case: Settings: Admin test Clone Workspace functionality |  |
+| click_and_wait | link=Settings |  |
+| click_and_wait | link=Clone This Workspace |  |
+| type_ok | title | Newspace Clone %%start_time%% |
+| type_ok | name | newspace-clone-%%start_time%% |
+| click_and_wait | link=Save |  |
+| text_like | contentContainer | You have just created "Newspace Clone %%start_time%%" |
+| click_and_wait | link=Go to |  |
+| location_like | /newspace-clone-%%start_time%%/index.cgi?newspace_clone_%%start_time%% |  |
+
 | *Comment* | Test Case: Settings: Admin test Workspace Appearance using newspace-%%start_time%% |  |
+| open_ok | /newspace-%%start_time%% |  |
+| location_like | /newspace-%%start_time%%/index.cgi?newspace_%%start_time%% |  |
 | click_and_wait | link=Settings |  |
 | click_and_wait | link=Workspace Appearance |  |
-| type_ok | title | newtitle %%start_time%% |
+| type_ok | title | New Title %%start_time%% |
 | text_like | contentContainer | choose an image |
 | text_like | contentContainer | When users click |
 | click_and_wait | link=Save |  |
+| open_ok | /newspace-%%start_time%% |  |
+| location_like | /newspace-%%start_time%%/index.cgi?new_title_%%start_time%% |  |
 
 | *Comment* | Test Case: Settings: Admin test Workspace Features using newspace-%%start_time%% |  |
 | *Comment* | Test Case: Settings: Admin set up testing weblog |  |
@@ -123,6 +138,7 @@
 
 | *Comment* | Test Case: Settings: Admin Teardown |  |
 | st-admin | delete-workspace --workspace newspace-%%start_time%% --no-export |  |
+| st-admin | delete-workspace --workspace newspace-clone-%%start_time%% --no-export |  |
 | st-admin | remove-member --email invite_%%start_time%%@ken.socialtext.net --workspace %%workspace%% |  |
 | st-admin | remove-member --email user_%%start_time%%@ken.socialtext.net --workspace %%workspace%% |  |
 

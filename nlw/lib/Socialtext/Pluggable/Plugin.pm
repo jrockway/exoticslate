@@ -262,8 +262,11 @@ sub _transform_classname {
 sub plugins {
     my $self = shift;
     # XXX: should the list be limited like this?
-    return grep { $self->user->can_use_plugin($_) }
-           $self->hub->pluggable->plugin_list;
+    return grep { $self->user->can_use_plugin($_) } $self->all_plugins
+}
+
+sub all_plugins {
+    return $_[0]->hub->pluggable->plugin_list;
 }
 
 sub plugin_dir {

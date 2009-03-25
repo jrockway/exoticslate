@@ -56,6 +56,9 @@
                 [% loc('Logged in as [_1]', '<b>' _ user.username _ '</b>') | decorate('logged_in_as') %]
               </li>
             [% END %]
+            [% IF invite_url %]
+            <li id="st-wikinav-invite"><a href="[% invite_url %]">[% loc('Invite people to your network!') %]</a></li>
+            [% END %]
             [% IF miki_url %]
             <li id="st-wikinav-mobile"><a href="[% miki_url %]">[% loc('Mobile') %]</a></li>
             [% END %]

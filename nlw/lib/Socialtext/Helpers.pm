@@ -254,6 +254,8 @@ sub global_template_vars {
         $self->hub->pluggable->hooked_template_vars,
     );
     if ($self->hub->current_user->can_use_plugin('people')) {
+        $result{invite_url} = '/?action=invite';
+
         require Socialtext::People::Profile;
         # This is expensive, and often not even needed (for /data/*, say)
         my $cache;

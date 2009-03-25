@@ -72,6 +72,8 @@ Socialtext.make_table_unsortable = function(table) {
 }
 
 $(function() {
+    setTimeout(function() { $('#contentWarning').hide('slow') }, 10000);
+
     $('table.sort')
         .each(function() { Socialtext.make_table_sortable(this) });
 

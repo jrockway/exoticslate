@@ -4287,3 +4287,7 @@ body#contentPage div#controls div#controlsRight ul li a#st-edit-pagetools-expand
     background-image: url(../images/contract-icon.png);
 }
 
+div#contentWarning {
+    padding: 3px;
+    background: #ffff80;
+}

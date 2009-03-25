@@ -413,6 +413,7 @@ sub _get_page_info {
         Socialtext::BrowserDetect::safari()
                 ? (raw_wikitext => $page->content)
                 : (),
+        edit_in_progress => $page->edit_in_progress(),
     }
 }
 

@@ -85,6 +85,9 @@
   </div>
 
   <div id="contentColumns" class="[% IF st_page_accessories == 'show'%]showbox[% ELSE %]hidebox[% END %]">
+    [% IF page.edit_in_progress %]
+    <div id="contentWarning">Please Note: [% page.edit_in_progress.user.best_full_name %] started editing this page [% "9 minutes" %] ago</div>
+    [% END %]
     <div id="contentLeft">
       <div id="st-page-content">[% page.content %]</div>
     </div>

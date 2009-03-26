@@ -141,6 +141,7 @@ Time::HiRes: 1.73
 Time::Local: 1.11
 Time::Piece: 0
 Time::Piece::Range: 0
+TheSchwartz: 1.07
 # Part of URI
 URI::Escape: 3.28
 URI::FromHash: 0.02

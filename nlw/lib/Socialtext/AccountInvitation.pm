@@ -118,10 +118,6 @@ sub invite_notify {
         }
     );
 
-    open FH, '>/tmp/2';
-    print FH $html_body;
-    close FH;
-
     my $locale = system_locale();
     my $email_sender = Socialtext::EmailSender::Factory->create($locale);
     $email_sender->send(

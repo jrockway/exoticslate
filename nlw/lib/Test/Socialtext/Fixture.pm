@@ -252,7 +252,8 @@ sub _create_user {
     my $account = Socialtext::Account->Default;
     my $adapter = Socialtext::Pluggable::Adapter->new;
     $account->enable_plugin($_)
-        for grep { $adapter->plugin_class($_)->scope eq 'account' }
+        for grep { defined }
+            grep { $adapter->plugin_class($_)->scope eq 'account' }
             $adapter->plugin_list;
     $account->update(skin_name => 's3');
 

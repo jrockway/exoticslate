@@ -28,6 +28,7 @@ my $iter =
 
 my @checkers;
 while ( my $filename = $iter->() ) {
+    next if $filename =~ m#share/skin/common/submodule#;
     push( @checkers, $filename );
 }
 

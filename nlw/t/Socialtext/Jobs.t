@@ -11,26 +11,25 @@ BEGIN {
     use_ok 'Socialtext::Job::Test';
 }
 
-# Clean up the schwartz state
-sql_singlevalue('truncate job');
+my $jobs = Socialtext::Jobs->new;
+$jobs->clear_jobs();
 
 Queue_job: {
-    my $jorbs = Socialtext::Jobs->new;
-    my @jobs = $jorbs->list_jobs(
+    my @jobs = $jobs->list_jobs(
         funcname => 'Test',
     );
     is scalar(@jobs), 0, 'no jobs to start with';
 
-    $jorbs->work_asynchronously( 'Test', test => 1 );
+    $jobs->work_asynchronously( 'Test', test => 1 );
 
-    @jobs = $jorbs->list_jobs(
+    @jobs = $jobs->list_jobs(
         funcname => 'Test',
     );
     is scalar(@jobs), 1, 'found a job';
     my $j = shift @jobs;
     is $j->funcname, 'Socialtext::Job::Test', 'funcname is correct';
 
-    $jorbs->clear_jobs();
+    $jobs->clear_jobs();
     is scalar(@jobs), 0, 'no jobs to start with';
 }
 

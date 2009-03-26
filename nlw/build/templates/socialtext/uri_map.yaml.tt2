@@ -6,10 +6,12 @@
             'text/html':              *default
             'application/json':       [Socialtext::Rest::Events, GET_json]
             'application/atom+xml':   [Socialtext::Rest::Events, GET_atom]
-            'text/plain':             [Socialtext::Rest::Events, GET_text][% IF config.is_dev_install %]
+            'text/plain':             [Socialtext::Rest::Events, GET_text]
+[%- IF config.is_dev_install %]
         'POST':
             '*/*':              [Socialtext::Rest::Events, POST_form]
-            'application/json': [Socialtext::Rest::Events, POST_json][% END %]
+            'application/json': [Socialtext::Rest::Events, POST_json]
+[%- END %]
         '*':                    [Socialtext::Rest::Events, bad_method]
 -
     '/data/events/activities/:user':

@@ -12,7 +12,8 @@ use namespace::clean -except => 'meta';
 
 sub work_asynchronously {
     my $self = shift;
-    $self->_do_it( insert => @_ );
+    my $job_class = 'Socialtext::Job::' . (shift || die "Class is mandatory");
+    $self->_do_it( insert => $job_class => @_ );
 }
 
 sub list_jobs {

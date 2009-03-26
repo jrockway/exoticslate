@@ -6,7 +6,7 @@
 | set | acct | ADB %%start_time%% |
 | set | mwgmail | adb-%%start_time%%@ken.socialtext.net |
 | st-admin | create-account --name "%%acct%%" | created |
-| st-admin | enable-plugin --account "%%acct%%" --plugin dashboard | The dashboard plugin is now enabled |
+| st-admin | enable-plugin --account "%%acct%%" --plugin dashboard |  |
 | st-admin | create-user --e %%mwgmail%% --p %%password%% --account "%%acct%%" | created |
 
 | *Comment* | Test Case: Administer Dashboards non-admin cannot manage |  |
@@ -165,13 +165,13 @@ Even though the wait_for and the click_ok succeeds, the Yes button does not clic
 I worked a lot on this to no avail, so I'm removing the test for now.
 TODO: make it work. |  |
 
- *Comment* | Test Case: Administer Dashboards Wikipedia and RSS are gone | |
+*Comment* | Test Case: Administer Dashboards Wikipedia and RSS are gone | |
 open_ok | /?dashboard | 60000 |
 wait_for_element_visible_ok | link=Add Content | 30000 |
 wait_for_element_visible_ok | link=Administer Dashboards | 5000 |
 click_and_wait | link=Administer Dashboards | |
 
- wait_for_element_visible_ok | link=Revert to Default... | |
+wait_for_element_visible_ok | link=Revert to Default... | |
 wait_for_text_not_present_ok | Wikipedia | 30000 |
 wait_for_text_not_present_ok | Socialtext blog | 30000 |
 st-name-widget | 1 | topcat |

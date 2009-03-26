@@ -7,7 +7,7 @@
 | set | acct | RDB %%start_time%% |
 | set | mwgmail | rdb-%%start_time%%@ken.socialtext.net |
 | st-admin | create-account --name "%%acct%%" | created |
-| st-admin | enable-plugin --account "%%acct%%" --plugin dashboard | The dashboard plugin is now enabled |
+| st-admin | enable-plugin --account "%%acct%%" --plugin dashboard |  |
 | st-admin | create-user --e %%mwgmail%% --p %%password%% --account "%%acct%%" | created |
 
 | *Comment* | Test Case: Reset to Default Dashboard - add accounts admin |  |
@@ -80,8 +80,8 @@
 | wait_for_text_present_ok | Are you sure you want to revert to the Socialtext defaults? | 30000 |
 | wait_for_element_visible_ok | link=Yes | 30000 |
 | click_ok | link=Yes |  |
-|  wait_for_text_not_present_ok |  Wikipedia |  30000 |
-|  wait_for_text_not_present_ok |  Socialtext blog |  30000 |
+| wait_for_text_not_present_ok | Wikipedia | 30000 |
+| wait_for_text_not_present_ok | Socialtext blog | 30000 |
 
 | *Comment* | Test Case: Reset to Default Dashboard Wikipedia and RSS are gone |  |
 | open_ok | /?dashboard | 60000 |

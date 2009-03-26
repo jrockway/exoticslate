@@ -561,6 +561,11 @@ CREATE TABLE topic_signal_page (
     page_id text NOT NULL
 );
 
+CREATE TABLE topic_signal_user (
+    signal_id bigint NOT NULL,
+    user_id bigint NOT NULL
+);
+
 CREATE TABLE users (
     user_id bigint NOT NULL,
     driver_key text NOT NULL,
@@ -761,6 +766,10 @@ ALTER TABLE ONLY tag_people__person_tags
 ALTER TABLE ONLY topic_signal_page
     ADD CONSTRAINT topic_signal_page_pk
             PRIMARY KEY (signal_id, workspace_id, page_id);
+
+ALTER TABLE ONLY topic_signal_user
+    ADD CONSTRAINT topic_signal_user_pk
+            PRIMARY KEY (signal_id, user_id);
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey
@@ -1309,6 +1318,16 @@ ALTER TABLE ONLY topic_signal_page
     ADD CONSTRAINT topic_signal_page_reverse
             FOREIGN KEY (signal_id)
             REFERENCES signal(signal_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY topic_signal_user
+    ADD CONSTRAINT tsu_signal_fk
+            FOREIGN KEY (signal_id)
+            REFERENCES signal(signal_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY topic_signal_user
+    ADD CONSTRAINT tsu_user_fk
+            FOREIGN KEY (user_id)
+            REFERENCES users(user_id) ON DELETE CASCADE;
 
 ALTER TABLE ONLY "UserMetadata"
     ADD CONSTRAINT usermeta_account_fk

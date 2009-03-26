@@ -93,7 +93,7 @@ END_OF_RANT
 
     my $changes = $hub->recent_changes->get_recent_changes;
     my $row     = $changes->{rows}->[0];
-    use YAML; warn Dump($row);
+    use YAML; warn Dump($changes->{rows});
     is( $row->{Subject}, $TITLE, "most recently modified page is $TITLE" );
     is($row->{Revision}, 1, 'recent_changes revision number is restored.');
     is($row->{revision_count}, 3, 'recent_changes revision count is correct.');

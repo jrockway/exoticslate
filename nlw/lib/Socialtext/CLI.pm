@@ -1887,46 +1887,16 @@ sub index_workspace {
     # Rather than call index_workspace on the indexer object (which is
     # synchronous), we create ChangeEvents to trigger the appropriate
     # indexer activity.
-    require Socialtext::ChangeEvent::IndexPage;
-    require Socialtext::ChangeEvent::IndexAttachment;
-
-    for my $page_id ( $hub->pages()->all_ids() ) {
-        my $page = $hub->pages()->new_page($page_id);
-
-        next if $page->deleted();
-
-        if ( $search_config eq 'rampup' ) {
-            Socialtext::ChangeEvent::RampupIndexPage->Record($page);
-        }
-        else {
-            Socialtext::ChangeEvent::IndexPage->Record($page);
-        }
-
-        $self->_index_attachments_for_page($page, $search_config);
+    require Socialtext::Job::PageIndex;
+    for my $page_id ( $hub->pages->all_ids() ) {
+        my $page = $hub->pages->new_page($page_id);
+        next if $page->deleted;
+        Socialtext::Job::PageIndex->Record($page, $search_config);
     }
 
     $self->_success( 'The '
             . $hub->current_workspace()->name()
             . ' workspace has been indexed.' );
-}
-
-# Helper for index_workspace
-sub _index_attachments_for_page {
-    my ( $self, $page, $search_config ) = @_;
-
-    my $attachments
-        = $page->hub()->attachments()->all( page_id => $page->id() );
-
-    foreach my $attachment (@$attachments) {
-        next if $attachment->deleted();
-
-        if ( $search_config eq 'rampup' ) {
-            Socialtext::ChangeEvent::RampupIndexAttachment->Record($attachment);
-        }
-        else {
-            Socialtext::ChangeEvent::IndexAttachment->Record($attachment);
-        }
-    }
 }
 
 sub delete_search_index {

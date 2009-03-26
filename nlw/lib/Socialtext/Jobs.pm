@@ -4,7 +4,8 @@ use warnings;
 use Socialtext::SQL qw/sql_execute get_dbh/;
 use Socialtext::Schema;
 use Moose;
-use Module::Pluggable search_path => 'Socialtext::Job', sub_name => 'job_types';
+use Module::Pluggable search_path => 'Socialtext::Job', sub_name => 'job_types',
+                      require => 1;
 use Data::ObjectDriver::Driver::DBI ();
 use TheSchwartz;
 

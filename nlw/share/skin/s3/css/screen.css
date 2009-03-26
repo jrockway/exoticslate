@@ -1571,10 +1571,24 @@ div.widgetContent div#calendarControl ul li.next a {
 	padding-right: 15px;
 }
 
+        div.widgetHeader a.fixed, div.widgetHeader a.unfixed {
+		width: 15px;
+		height: 15px;
+		display: block;
+		margin-right: 4px;
+		position: relative;
+		top: 12px;
+		float: right;
+		text-indent: -9999px;
+        }
 
+	div.widgetHeader a.fixed {
+		background: url(../images/lockedIcon.png) no-repeat top left;
+	}
 
-
-
+	div.widgetHeader a.unfixed {
+		background: url(../images/unlockedIcon.png) no-repeat top left;
+	}
 	
 	div.widgetHeader a.settings {
 		background: url(../images/settingsIcon.png) no-repeat top left;
@@ -3847,7 +3861,7 @@ span.st-weblog-nextentries:before {
 .widgetHeaderButtons {
     text-align: right;
     float: right;
-    width: 70px;
+    width: 89px;
 }
 
 .widgetHeaderTitle {

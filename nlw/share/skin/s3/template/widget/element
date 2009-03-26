@@ -1,9 +1,9 @@
-<li[% IF !gadget.fixed %] class="draggable"[% END %]>
+<li id="[% gadget.id %]-li" class="[% gadget.fixed ? "fixed" : "draggable" %]">
 <div class="[% IF gadget.fixed %]widgetTan[% ELSE %]widget[% END %]" id="[% gadget.id %]">
 [% IF gadget.is_authorized %]
     <div class="widgetHeader">
         <div class="widgetHeaderButtons">
-        [% IF !gadget.fixed %]
+        [% IF container.name == "editing" || !gadget.fixed %]
             <a class="close" href="#" onclick="gadgets.container.remove('[% gadget.id %]'); return false"></a>
         <a class="minimize" href="#" onclick="gadgets.container.minimize('[% gadget.id %]'); return false"></a>
             [% IF gadget.minimized %]
@@ -17,15 +17,16 @@
                 --></script>
             [% END %]
         [% END %]
-        [% IF gadget.has_prefs %]
+        [% IF gadget.has_prefs && (container.name == 'editing' || !gadget.fixed) %]
             <a class="settings" href="#" id="st-widget-settings[% gadget.id %]" onclick="gadgets.container.toggleSetup('[% gadget.id %]'); return false"></a>
+        [% END %]
+        [% IF container.name == "editing" %]
+            <a class="fix [% gadget.fixed ? "fixed" : "unfixed" %]" href="#" onclick="gadgets.container.fix('[% gadget.id %]'); return false"></a>
         [% END %]
         </div>
         <div class="widgetHeaderTitle">
             <h4 id="[% gadget.id %]-title" class="widgetHeaderTitleBox">
-                [% IF !gadget.fixed %]
-                <img src="[% share %]/images/[% gadget.icon %].png" />
-                [% END %]
+                <img [% IF gadget.fixed %]style="display: none"[% END %] class="icon" src="[% share %]/images/[% gadget.icon %].png" />
                 <span id="[% gadget.id %]-title-text" class="widgetHeaderTitleText" title="[% gadget.title %]">
                     [% gadget.title %]
                 </span>

@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Socialtext::SQL qw/sql_execute get_dbh/;
 use Socialtext::Schema;
-use Moose;
+use MooseX::Singleton;
 use Module::Pluggable search_path => 'Socialtext::Job', sub_name => 'job_types',
                       require => 1;
 use Data::ObjectDriver::Driver::DBI ();
@@ -32,19 +32,18 @@ sub schwartz_run {
     my $self = shift;
     my $func = shift;
 
-    my $dbh  = get_dbh();
-    Use_the_force: {
-        no warnings 'redefine';
-        local *Data::ObjectDriver::Driver::DBI::init_db = sub {$dbh};
-        local *DBI::disconnect                          = sub {0e0};
-
-        my %params = Socialtext::Schema->connect_params();
-        $self->{client} ||= TheSchwartz->new( 
-            databases => [ { dsn => "dbi:Pg:database=$params{db_name}" } ],
-            verbose => 1,
-        );
-        return $self->{client}->$func(@_);
-    }
+    # Use an extra DB connection for now until we sort out how to
+    # re-use the same DBH as the main apache.
+    my %params = Socialtext::Schema->connect_params();
+    $self->{client} ||= TheSchwartz->new( 
+        databases => [ { 
+            dsn => "dbi:Pg:database=$params{db_name}",
+            user => $params{user},
+        } ],
+        driver_cache_expiration => 300,
+        verbose => 1,
+    );
+    return $self->{client}->$func(@_);
 }
 
 __PACKAGE__->meta->make_immutable;

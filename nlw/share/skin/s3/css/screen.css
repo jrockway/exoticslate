@@ -231,27 +231,34 @@ div#mainNav ul li a.selected ,div#homeLink a.selected {
 	color: #a6e4fc;
 }	
 
-div#mainNav div#workSpaceLink {
+div#mainNav div#mainRightNav {
 	width: 40%;
 	background: url(../images/mainNavRight.png) no-repeat top right;
 	float: right;
 }
 	
-div#mainNav div#workSpaceLink a {
+div#mainNav div#mainRightNav a {
 	float: right;
 	line-height: 34px;
 	font-size: 12px;
 	color: #fefefe;
-	margin-right: 15px;
-	padding-right: 26px;
-	background: url(../images/doubleArrow.png) no-repeat center right;
 }
-	
-div#mainNav div#workSpaceLink a:hover {	
+
+div#mainNav div#mainRightNav a:hover {	
 	color: #a6e4fc;
 	text-decoration: none;
 }
 
+div#mainNav div#workSpaceLink a {
+	margin-right: 15px;
+	padding-right: 26px;
+	background: url(../images/doubleArrow.png) no-repeat center right;
+}
+
+#st-invite-link {
+        margin-right: 5px;
+        padding-right: 6px;
+}
 /* mainNav End */
 
 /* contentWrap Start */

@@ -13,14 +13,14 @@ use namespace::clean -except => 'meta';
 sub work_asynchronously {
     my $self = shift;
     my $job_class = 'Socialtext::Job::' . (shift || die "Class is mandatory");
-    $self->_do_it( insert => $job_class => @_ );
+    $self->schwartz_run( insert => $job_class => @_ );
 }
 
 sub list_jobs {
     my $self = shift;
     my %args = @_;
     $args{funcname} = "Socialtext::Job::$args{funcname}";
-    $self->_do_it(list_jobs => \%args);
+    $self->schwartz_run(list_jobs => \%args);
 }
 
 sub clear_jobs {
@@ -28,7 +28,7 @@ sub clear_jobs {
     sql_execute('DELETE FROM job');
 }
 
-sub _do_it {
+sub schwartz_run {
     my $self = shift;
     my $func = shift;
 

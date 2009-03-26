@@ -1,14 +1,12 @@
 package Socialtext::Jobs;
 use strict;
 use warnings;
-use Socialtext::SQL qw/sql_execute/;
+use Socialtext::SQL qw/sql_execute get_dbh/;
 use Socialtext::Schema;
-use Socialtext::SQL qw/get_dbh/;
 use Moose;
+use Module::Pluggable search_path => 'Socialtext::Job', sub_name => 'job_types';
 use Data::ObjectDriver::Driver::DBI ();
 use TheSchwartz;
-
-use namespace::clean -except => 'meta';
 
 sub work_asynchronously {
     my $self = shift;
@@ -19,7 +17,8 @@ sub work_asynchronously {
 sub list_jobs {
     my $self = shift;
     my %args = @_;
-    $args{funcname} = "Socialtext::Job::$args{funcname}";
+    $args{funcname} = "Socialtext::Job::$args{funcname}"
+        unless $args{funcname} =~ m/::/;
     $self->schwartz_run(list_jobs => \%args);
 }
 

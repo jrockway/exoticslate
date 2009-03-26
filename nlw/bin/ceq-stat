@@ -2,48 +2,38 @@
 # @COPYRIGHT@
 use warnings;
 use strict;
-
-# XXX This could use some tests.
-
 use Getopt::Long;
 use Pod::Usage 1.12;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
+use Socialtext::Jobs;
+use Socialtext::l10n qw/loc/;
 
 GetOptions(
     'h|help|?'      => sub {pod2usage({-verbose => 1, -input => $0}); exit},
     'H|man'         => sub {pod2usage({-verbose => 2, -input => $0}); exit},
 ) or die;
 
-use Socialtext::Ceqlotron 'foreach_event';
-
-my ( $attachment_count, $page_count, $workspace_count ) = ( 0, 0, 0 );
-
-foreach_event( sub {
-    my ( $event ) = @_;
-
-    ++$attachment_count if $event->isa('Socialtext::ChangeEvent::Attachment');
-    ++$page_count       if $event->isa('Socialtext::ChangeEvent::Page');
-    ++$workspace_count  if $event->isa('Socialtext::ChangeEvent::Workspace');
-}, sub { });
-
-print_summary();
-sub print_summary {
-    my $sum = $attachment_count + $page_count + $workspace_count;
-
-    printf <<'EOT', $attachment_count, $page_count, $workspace_count, $sum;
-Changes in queue:
-  Attachment  %5d
-  Page        %5d
-  Workspace   %5d
-
-  TOTAL       %5d
-EOT
+my %count;
+my $jobs = Socialtext::Jobs->new;
+for my $type ($jobs->job_types) {
+    my @jobs = $jobs->list_jobs(funcname => $type);
+    (my $name = $type) =~ s/.+:://;
+    $count{$name} = @jobs;
 }
+
+my $sum = 0;
+print "Jobs in the queue:\n";
+for my $name (sort keys %count) {
+    next if $name eq 'Test';
+    printf "  %12s %5d\n", $name, $count{$name};
+    $sum += $count{$name};
+}
+printf "  %12s %5d\n", loc("Total"), $sum;
 
 =head1 NAME
 
-ceq-stat - Provide a human-readable summary of the change events in
+ceq-stat - Provide a human-readable summary of the jobs in
 ceqlotron's queue.
 
 =head1 SYNOPSIS
@@ -74,8 +64,5 @@ ceq-stat does not lock the job queue directory when scanning for jobs, so occasi
 will try and report on a job that disappears out from underneath as it completes processing.
 This is known and is done to keep looking at the queue from impacting performance of 
 processing the queue.
-
-    readlink '/var/spool/socialtext/ceq/e6e04910-41df-4818-87a7-90e4045bf064': \
-      No such file or directory at /usr/share/perl5/Socialtext/ChangeEvent.pm line 56.
 
 =cut

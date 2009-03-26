@@ -588,17 +588,19 @@ proto.on_key_enter = function(e) {
 
 proto.set_key_interception_handler = function() {
     var self = this;
+    self.pastebin = jQuery('#pastebin').attr('contentWindow');
 
-    self.pastebin = jQuery("#pastebin").get(0).contentWindow;
-    if (!self.pastebin.document.body) {
-        setTimeout(function() {
-            self.set_key_interception_handler();
-        }, 500);
-        return;
+    if (self.pastebin) {
+        if (!self.pastebin.document.body) {
+            setTimeout(function() {
+                self.set_key_interception_handler();
+            }, 500);
+            return;
+        }
+
+        self.pastebin.document.body.innerHTML = "";
+        self.pastebin.document.designMode = "on";
     }
-
-    self.pastebin.document.body.innerHTML = "";
-    self.pastebin.document.designMode = "on";
 
     var event_name = "keydown";
     if (jQuery.browser.mozilla && navigator.oscpu.match(/Mac/)) {
@@ -607,17 +609,22 @@ proto.set_key_interception_handler = function() {
 
     jQuery( self.get_edit_document() ).unbind(event_name).bind(event_name, function(e) {
         if ((e.ctrlKey || e.metaKey) && (e.which == 86 || e.which == 118)) {
-            self.pastebin.focus();
+            if (self.pastebin) {
+                self.pastebin.focus();
 
-            setTimeout(function() {
-                var html = self.pastebin.document.body.innerHTML;
-                self.pastebin.document.body.innerHTML = "";
+                setTimeout(function() {
+                    var html = self.pastebin.document.body.innerHTML;
+                    self.pastebin.document.body.innerHTML = "";
 
-                self.on_pasted(html);
-            }, 100);
+                    self.on_pasted(html);
+                }, 100);
+            }
+        }
+        else if (self.on_key_handler) {
+            return self.on_key_handler(e);
         }
         else if (e.which == 13) {;
-             self.on_key_enter(e);
+            self.on_key_enter(e);
         }
     });
 }
@@ -686,6 +693,7 @@ proto.enableThis = function() {
     };
 
     if (self.is_ready
+        || self.wikiwyg.config.justStart
         || (Socialtext.page_id && Socialtext.revision_id && !Socialtext.start_in_edit_mode)
         || (self.wikiwyg.first_mode.classtype != self.classtype)
     ) {
@@ -990,7 +998,7 @@ proto.insert_link_wafl_widget = function(wafl, widget_element) {
     var self = this;
     jQuery.ajax({
         type: 'post',
-        url: location.pathname,
+        url: this.wikiwyg.config.postUrl || location.pathname,
         data: {
             action: "wikiwyg_generate_widget_image",
             widget: widget_text,
@@ -1916,6 +1924,7 @@ proto.toHtml = function(func) {
 
 proto.setWidgetHandlers = function() {
     var self = this;
+    if (this.wikiwyg.config.noWidgetHandlers) return;
     var win = this.get_edit_window();
     var doc = this.get_edit_document();
 
@@ -2383,7 +2392,7 @@ proto.insert_generated_image = function (widget_string, elem, cb) {
     var self = this;
     var widget_text = self.getWidgetImageText(widget_string);
     jQuery.post(
-        location.pathname,
+        this.wikiwyg.config.postUrl || location.pathname,
         { action: 'wikiwyg_generate_widget_image'
         , widget: widget_text
         , widget_string: widget_string
@@ -2402,7 +2411,7 @@ proto.insert_generated_image = function (widget_string, elem, cb) {
 proto.insert_real_image = function(widget, elem, cb) {
     var self = this;
     jQuery.get(
-        location.pathname,
+        this.wikiwyg.config.postURL || location.pathname,
         'action=preview' +
         ';wiki_text=' + encodeURIComponent(widget) +
         ';page_name=' + encodeURIComponent(Socialtext.page_id),

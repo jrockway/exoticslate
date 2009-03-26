@@ -155,7 +155,7 @@ proto.initializeObject = function(div, config) {
         : this.config.modeClasses[0];
     this.setFirstModeByName(firstMode);
 
-    if (this.config.toolbarClass) {
+    if (this.config.toolbarClass && !this.config.noToolbar) {
         var class_name = this.config.toolbarClass;
         this.toolbarObject = eval('new ' + class_name + '()');
         this.toolbarObject.wikiwyg = this;
@@ -216,7 +216,7 @@ proto.displayMode = function() {
         var mode_object = this.modeByName(mode_class);
         mode_object.disableThis();
     }
-    this.toolbarObject.disableThis();
+    if (!this.config.noToolbar) this.toolbarObject.disableThis();
     this.div.style.display = 'block';
     this.divHeight = this.div.offsetHeight;
 
@@ -836,7 +836,7 @@ proto.editMode = function() {
     this.hideScrollbars();
     this.current_mode = this.first_mode;
     this.current_mode.fromHtml(this.div.innerHTML);
-    this.toolbarObject.resetModeSelector();
+    if (!this.config.noToolbar) this.toolbarObject.resetModeSelector();
     this.current_mode.enableThis();
 }
 
@@ -1567,7 +1567,8 @@ var proto = this.prototype;
 proto.enableThis = function() {
     this.div.style.display = 'block';
     this.display_unsupported_toolbar_buttons('none');
-    this.wikiwyg.toolbarObject.enableThis();
+    if (!this.wikiwyg.config.noToolbar)
+        this.wikiwyg.toolbarObject.enableThis();
     this.wikiwyg.div.style.display = 'none';
 }
 
@@ -1575,6 +1576,8 @@ proto.display_unsupported_toolbar_buttons = function(display) {
     if (!this.config) return;
     var disabled = this.config.disabledToolbarButtons;
     if (!disabled || disabled.length < 1) return;
+
+    if (this.wikiwyg.config.noToolbar) return;
 
     var toolbar_div = this.wikiwyg.toolbarObject.div;
     var toolbar_buttons = toolbar_div.childNodes;
@@ -1718,12 +1721,19 @@ proto.get_offset_top = function (e) {
 // XXX - Hardcoded until we can get height of Save/Preview/Cancel buttons
 proto.get_edit_height = function() {
     var available_height = jQuery(window).height();
-    var edit_height = available_height -
+
+    var edit_height = this.wikiwyg.config.editHeight;
+    if (!edit_height) {
+        edit_height = available_height -
                       this.get_offset_top(this.div) -
-                      this.wikiwyg.toolbarObject.div.offsetHeight -
                       this.footer_offset;
 
-    if (edit_height < 100) edit_height = 100;
+        if (!this.wikiwyg.config.noToolbar) {
+            edit_height += this.wikiwyg.toolbarObject.div.offsetHeight;
+        }
+        if (edit_height < 100) edit_height = 100;
+    }
+
     return edit_height;
 }
 

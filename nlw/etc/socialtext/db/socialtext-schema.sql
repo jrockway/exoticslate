@@ -236,7 +236,7 @@ CREATE VIEW account_user AS
   SELECT "Workspace".account_id, "UserWorkspaceRole".user_id
    FROM "UserWorkspaceRole"
    JOIN "Workspace" USING (workspace_id)
-UNION ALL 
+UNION ALL
  SELECT "UserMetadata".primary_account_id AS account_id, "UserMetadata".user_id
    FROM "UserMetadata";
 
@@ -274,6 +274,13 @@ CREATE SEQUENCE default_gadget_id
     NO MINVALUE
     CACHE 1;
 
+CREATE TABLE error (
+    error_time integer NOT NULL,
+    jobid bigint NOT NULL,
+    message varchar(255) NOT NULL,
+    funcid integer DEFAULT 0 NOT NULL
+);
+
 CREATE TABLE event (
     "at" timestamptz NOT NULL,
     "action" text NOT NULL,
@@ -285,6 +292,19 @@ CREATE TABLE event (
     person_id integer,
     tag_name text,
     signal_id bigint
+);
+
+CREATE TABLE exitstatus (
+    jobid bigint NOT NULL,
+    funcid integer DEFAULT 0 NOT NULL,
+    status smallint,
+    completion_time integer,
+    delete_after integer
+);
+
+CREATE TABLE funcmap (
+    funcid serial NOT NULL,
+    funcname varchar(255) NOT NULL
 );
 
 CREATE TABLE gadget (
@@ -379,6 +399,24 @@ CREATE SEQUENCE gallery_id
     NO MAXVALUE
     NO MINVALUE
     CACHE 1;
+
+CREATE TABLE job (
+    jobid serial NOT NULL,
+    funcid integer NOT NULL,
+    arg bytea,
+    uniqkey varchar(255),
+    insert_time integer,
+    run_after integer NOT NULL,
+    grabbed_until integer NOT NULL,
+    priority smallint,
+    "coalesce" varchar(255)
+);
+
+CREATE TABLE note (
+    jobid bigint NOT NULL,
+    notekey varchar(255) NOT NULL,
+    value bytea
+);
 
 CREATE TABLE page (
     workspace_id bigint NOT NULL,
@@ -523,11 +561,6 @@ CREATE TABLE topic_signal_page (
     page_id text NOT NULL
 );
 
-CREATE TABLE topic_signal_user (
-    signal_id bigint NOT NULL,
-    user_id bigint NOT NULL
-);
-
 CREATE TABLE users (
     user_id bigint NOT NULL,
     driver_key text NOT NULL,
@@ -625,6 +658,14 @@ ALTER TABLE ONLY container_type
     ADD CONSTRAINT container_type_pk
             PRIMARY KEY (container_type);
 
+ALTER TABLE ONLY exitstatus
+    ADD CONSTRAINT exitstatus_pkey
+            PRIMARY KEY (jobid);
+
+ALTER TABLE ONLY funcmap
+    ADD CONSTRAINT funcmap_funcname_key
+            UNIQUE (funcname);
+
 ALTER TABLE ONLY gadget_instance
     ADD CONSTRAINT gadget_instace_pk
             PRIMARY KEY (gadget_instance_id);
@@ -656,6 +697,14 @@ ALTER TABLE ONLY gallery
 ALTER TABLE ONLY gallery
     ADD CONSTRAINT gallery_pk
             PRIMARY KEY (gallery_id);
+
+ALTER TABLE ONLY job
+    ADD CONSTRAINT job_funcid_key
+            UNIQUE (funcid, uniqkey);
+
+ALTER TABLE ONLY note
+    ADD CONSTRAINT note_pkey
+            PRIMARY KEY (jobid, notekey);
 
 ALTER TABLE ONLY page
     ADD CONSTRAINT page_pkey
@@ -713,10 +762,6 @@ ALTER TABLE ONLY topic_signal_page
     ADD CONSTRAINT topic_signal_page_pk
             PRIMARY KEY (signal_id, workspace_id, page_id);
 
-ALTER TABLE ONLY topic_signal_user
-    ADD CONSTRAINT topic_signal_user_pk
-            PRIMARY KEY (signal_id, user_id);
-
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey
             PRIMARY KEY (user_id);
@@ -755,6 +800,21 @@ CREATE UNIQUE INDEX "Workspace___lower___name"
 
 CREATE INDEX "Workspace_account_id"
 	    ON "Workspace" (account_id);
+
+CREATE INDEX error_funcid_errortime
+	    ON error (funcid, error_time);
+
+CREATE INDEX error_jobid
+	    ON error (jobid);
+
+CREATE INDEX error_time
+	    ON error (error_time);
+
+CREATE INDEX exitstatus_deleteafter
+	    ON exitstatus (delete_after);
+
+CREATE INDEX exitstatus_funcid
+	    ON exitstatus (funcid);
 
 CREATE INDEX gallery_gadget_gadget_id_idx
 	    ON gallery_gadget (gadget_id);
@@ -900,6 +960,12 @@ CREATE INDEX ix_topic_signal_page_reverse
 CREATE INDEX ix_tsu_user
 	    ON topic_signal_user (user_id);
 
+CREATE INDEX job_funcid_coalesce
+	    ON job (funcid, "coalesce");
+
+CREATE INDEX job_funcid_runafter
+	    ON job (funcid, run_after);
+ 
 CREATE INDEX page_creator_time
 	    ON page (creator_id, create_time);
 
@@ -1244,16 +1310,6 @@ ALTER TABLE ONLY topic_signal_page
             FOREIGN KEY (signal_id)
             REFERENCES signal(signal_id) ON DELETE CASCADE;
 
-ALTER TABLE ONLY topic_signal_user
-    ADD CONSTRAINT tsu_signal_fk
-            FOREIGN KEY (signal_id)
-            REFERENCES signal(signal_id) ON DELETE CASCADE;
-
-ALTER TABLE ONLY topic_signal_user
-    ADD CONSTRAINT tsu_user_fk
-            FOREIGN KEY (user_id)
-            REFERENCES users(user_id) ON DELETE CASCADE;
-
 ALTER TABLE ONLY "UserMetadata"
     ADD CONSTRAINT usermeta_account_fk
             FOREIGN KEY (primary_account_id)
@@ -1285,4 +1341,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '46');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '47');

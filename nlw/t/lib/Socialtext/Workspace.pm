@@ -75,6 +75,7 @@ sub real { 1 }
 sub account { 
     return Socialtext::Account->new(account_id => $_[0]->{account_id} || 1);
 }
+sub account_id { shift->account->account_id }
 
 sub All {
     return Socialtext::MultiCursor->new(

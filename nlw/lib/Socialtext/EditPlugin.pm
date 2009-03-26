@@ -99,7 +99,7 @@ sub edit_content {
     else {
         $page->store(
             user => $self->hub->current_user,
-            signal_edit_summary => $self->cgi->signal_edit_summary,
+            signal_edit_summary => scalar($self->cgi->signal_edit_summary),
             edit_summary => $edit_summary,
         );
         Socialtext::Events->Record({

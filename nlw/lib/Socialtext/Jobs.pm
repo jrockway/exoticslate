@@ -22,6 +22,12 @@ sub list_jobs {
     $self->_do_it(list_jobs => \%args);
 }
 
+sub clear_jobs {
+    my $self = shift;
+    my @jobs = $self->list_jobs(@_);
+    $_->completed for @jobs;
+}
+
 sub _do_it {
     my $self = shift;
     my $func = shift;

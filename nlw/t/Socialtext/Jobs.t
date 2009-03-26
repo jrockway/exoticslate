@@ -30,6 +30,11 @@ Queue_job: {
     my $j = shift @jobs;
     is $j->funcname, 'Socialtext::Job::Test', 'funcname is correct';
 
+    $jorbs->clear_jobs( funcname => 'Socialtext::Job::Test' );
+    is scalar(@jobs), 0, 'no jobs to start with';
+}
+
+Time_is_okay: {
     my $time = sql_singlevalue("select 'now'::timestamptz");
     unlike $time, qr/[+-]0000$/, 'we have a timezone again';
 }

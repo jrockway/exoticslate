@@ -233,7 +233,6 @@ div#mainNav ul li a.selected ,div#homeLink a.selected {
 
 div#mainNav div#mainRightNav {
 	width: 40%;
-	background: url(../images/mainNavRight.png) no-repeat top right;
 	float: right;
 }
 	
@@ -247,6 +246,10 @@ div#mainNav div#mainRightNav a {
 div#mainNav div#mainRightNav a:hover {	
 	color: #a6e4fc;
 	text-decoration: none;
+}
+
+div#mainNav div#workSpaceLink {
+	background: url(../images/mainNavRight.png) no-repeat top right;
 }
 
 div#mainNav div#workSpaceLink a {

@@ -10,7 +10,7 @@
 
 <p>
 [% SET acct_name = account_name | html %]
-[% loc("Hi, I'm inviting you to join the [_1] network at [_2].", acct_name, host) %]
+[% loc("I'm inviting you to join the [_1] network at [_2].", acct_name, host) %]
 [% UNLESS requires_confirmation %]
 [% loc('Sign in using the information below:') %]
 [% END %]

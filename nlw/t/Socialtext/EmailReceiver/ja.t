@@ -4,14 +4,22 @@ use strict;
 use warnings;
 
 use Test::Socialtext tests => 255;
-fixtures( 'admin_no_pages' );
+use Socialtext::Account;
+use Socialtext::Workspace;
 
 use_ok('Socialtext::EmailReceiver::Factory');
 
 my $test_locale = 'ja';
-my $hub = new_hub('admin');
+my $wksp = Socialtext::Workspace->create(
+    name => "ja$$",
+    title => "Ja$$",
+    account_id => Socialtext::Account->Default->account_id,
+    skip_default_pages => 1,
+);
+my $wksp_name = $wksp->name;
+my $hub = new_hub($wksp_name);
 isa_ok( $hub, 'Socialtext::Hub' );
-my $ws = $hub->current_workspace();
+$wksp->add_user( user => $hub->current_user );
 
 RECEIVE_STRING_SIMPLE: {
     my $file = 't/test-data/email/EmailReceiver';
@@ -19,7 +27,7 @@ RECEIVE_STRING_SIMPLE: {
         or die "Cannot read $file: $!";
     my $email = do { local $/ = undef; <$fh> };
 
-    allow_guest_email_in($ws);
+    allow_guest_email_in($wksp);
 
     receive_ok(string => $email);
 
@@ -33,7 +41,7 @@ RECEIVE_STRING_SIMPLE: {
     isa_ok( $page, 'Socialtext::Page' );
     $page->purge();
 
-    remove_guest_email_in($ws);
+    remove_guest_email_in($wksp);
 }
 
 RECEIVE_HANDLE_SIMPLE: {
@@ -41,13 +49,13 @@ RECEIVE_HANDLE_SIMPLE: {
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    allow_guest_email_in($ws);
+    allow_guest_email_in($wksp);
 
     receive_ok( handle => $fh );
 
     tests_for_email();
 
-    remove_guest_email_in($ws);
+    remove_guest_email_in($wksp);
 }
 
 sub tests_for_email {
@@ -82,11 +90,11 @@ sub tests_for_email {
 }
 
 WS_INCOMING_EMAIL_PLACEMENT_REPLACE: {
-    $ws->update( incoming_email_placement => 'replace' );
+    $wksp->update( incoming_email_placement => 'replace' );
 
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name\@example.com
 Subject: Start Here
 
 This replaces the start here page.
@@ -102,11 +110,11 @@ EOF
 }
 
 WS_INCOMING_EMAIL_PLACEMENT_TOP: {
-    $ws->update( incoming_email_placement => 'top' );
+    $wksp->update( incoming_email_placement => 'top' );
 
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name\@example.com
 Subject: Start Here
 
 This goes at the top.
@@ -124,11 +132,11 @@ EOF
 
 
 WS_INCOMING_EMAIL_PLACEMENT_BOTTOM: {
-    $ws->update( incoming_email_placement => 'bottom' );
+    $wksp->update( incoming_email_placement => 'bottom' );
 
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name\@example.com
 Subject: Start Here
 
 This goes at the bottom.
@@ -150,9 +158,9 @@ EOF
 }
 
 OVERRIDE_PLACEMENT_REPLACE: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name\@example.com
 Subject: Start Here
 
 Replace: 1
@@ -173,9 +181,9 @@ EOF
 }
 
 OVERRIDE_PLACEMENT_TOP: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name\@example.com
 Subject: Start Here
 
 Append: Top
@@ -198,9 +206,9 @@ EOF
 }
 
 CATEGORY_IN_TO_ADDRESS: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin+New=20Cat@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name+New=20Cat\@example.com
 Subject: In New Cat
 
 Blah blah
@@ -218,10 +226,10 @@ EOF
 }
 
 CATEGORY_IN_CC_ADDRESS: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: bubba@example.com
-Cc: admin+New=20Cat2@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: bubba\@example.com
+Cc: $wksp_name+New=20Cat2\@example.com
 Subject: In New Cat2
 
 Blah blah
@@ -239,10 +247,10 @@ EOF
 }
 
 CATEGORY_IN_ADDRESS_WITH_DOT: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: bubba@example.com
-Cc: admin.New=20Cat3@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: bubba\@example.com
+Cc: $wksp_name.New=20Cat3\@example.com
 Subject: In New Cat3
 
 Blah blah
@@ -260,9 +268,9 @@ EOF
 }
 
 CATEGORY_IN_ADDRESS_UTF8: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin+=E6=96=B0=E5=8A=A0=E5=9D=A1_Weblog@test.socialtext.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name+=E6=96=B0=E5=8A=A0=E5=9D=A1_Weblog\@test.socialtext.com
 Subject: utf8 category
 
 Blah blah
@@ -284,9 +292,9 @@ EOF
 }
 
 CATEGORY_IN_TO_ADDRESS_WS_MIXED_CASE: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: AdMin+New=20Cat@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name+New=20Cat\@example.com
 Subject: mixed case ws name
 
 Blah blah
@@ -307,9 +315,9 @@ CATEGORY_COMMANDS: {
     # This tests several aspects - multiple Category commands,
     # multiple categories in one command, and case-insensitivity for
     # command names
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name\@example.com
 Subject: Cats in Body
 
 Category: Cat1
@@ -334,9 +342,9 @@ EOF
 }
 
 TAG_COMMANDS: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name\@example.com
 Subject: Tags in Body
 
 Tag: Cat1
@@ -360,9 +368,9 @@ EOF
 }
 
 CATEGORY_COMMAND_NO_BLANK_LINES: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name\@example.com
 Subject: Cats in Body2
 
 Category: Cat1
@@ -609,7 +617,7 @@ MP_ALT_PREFER_HTML: {
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    $ws->update( prefers_incoming_html_email => 1 );
+    $wksp->update( prefers_incoming_html_email => 1 );
 
     receive_ok( handle => $fh );
 
@@ -637,7 +645,7 @@ MP_ALT_PREFER_HTML: {
 
     $page->purge();
 
-    $ws->update( prefers_incoming_html_email => 0 );
+    $wksp->update( prefers_incoming_html_email => 0 );
 }
 
 # This is included because in QA we found that this email generated a
@@ -647,7 +655,7 @@ GMAIL_HTML_MAIL: {
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    $ws->update( prefers_incoming_html_email => 1 );
+    $wksp->update( prefers_incoming_html_email => 1 );
 
     receive_ok( handle => $fh );
 
@@ -662,15 +670,15 @@ GMAIL_HTML_MAIL: {
     is( $attachments->[0]->mime_type(), 'text/html', 'attachment type is text/html' );
     ok( $attachments->[0]->content(), 'html attachment has some content' );
 
-    $ws->update( prefers_incoming_html_email => 0 );
+    $wksp->update( prefers_incoming_html_email => 0 );
 
     $page->purge();
 }
 
 NO_SUBJECT: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name\@example.com
 Date: Thu, 20 Jul 2006 12:00:00
 
 No subject
@@ -711,7 +719,7 @@ CID_IMG_URIS: {
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    $ws->update( prefers_incoming_html_email => 1 );
+    $wksp->update( prefers_incoming_html_email => 1 );
 
     receive_ok( handle => $fh );
 
@@ -738,7 +746,7 @@ CID_IMG_URIS: {
     like( $page->content(), qr/test {image: \Q$filename\E}/ ,
         '{image} wafl refers to attachment by correct filename in page body' );
 
-    $ws->update( prefers_incoming_html_email => 0 );
+    $wksp->update( prefers_incoming_html_email => 0 );
 }
 
 # See RT 20857
@@ -747,7 +755,7 @@ FOWARDED_HTML_EMAIL: {
     open my $fh, '<', $file
         or die "Cannot read $file: $!";
 
-    $ws->update( prefers_incoming_html_email => 1 );
+    $wksp->update( prefers_incoming_html_email => 1 );
 
     receive_ok( handle => $fh );
 
@@ -758,18 +766,18 @@ FOWARDED_HTML_EMAIL: {
     like( $page->content(), qr{\QTo: Ken Pier <},
           'page contains headers from forwarded mail' );
 
-    $ws->update( prefers_incoming_html_email => 0 );
+    $wksp->update( prefers_incoming_html_email => 0 );
 }
 
 ACL_CHECKS: {
-    $ws->permissions->remove(
+    $wksp->permissions->remove(
         role       => Socialtext::Role->AuthenticatedUser(),
         permission => Socialtext::Permission->new( name => 'email_in' ),
     );
 
-    my $email = <<'EOF';
-From: i.love.you@spam.com
-To: admin@example.com
+    my $email = <<EOF;
+From: i.love.you\@spam.com
+To: $wksp_name\@example.com
 Date: Thu, 20 Jul 2006 12:00:00
 
 No subject
@@ -779,14 +787,14 @@ EOF
         receive_ok( string => $email );
     };
 
-    ok( $@, 'exception was thrown delivering mail from guest to admin' );
+    ok( $@, 'exception was thrown delivering mail from guest to $wksp_name' );
     isa_ok( $@, 'Socialtext::Exception::Auth', 'exception is an Auth exception' );
     ok( ! defined Socialtext::User->new( email_address => 'i.love.you@spam.com' ),
         'no new user is created when the sender does not have email_in permission' );
 
-    $email = <<'EOF';
-From: devnull2@socialtext.com
-To: admin@example.com
+    $email = <<EOF;
+From: devnull2\@socialtext.com
+To: $wksp_name\@example.com
 Date: Thu, 20 Jul 2006 12:00:00
 
 No subject
@@ -796,7 +804,7 @@ EOF
         receive_ok( string => $email );
     };
 
-    ok( $@, 'exception was thrown delivering mail from authenticated user to admin' );
+    ok( $@, 'exception was thrown delivering mail from authenticated user to $wksp_name' );
     isa_ok( $@, 'Socialtext::Exception::Auth', 'exception is an Auth exception' );
 }
 
@@ -825,9 +833,9 @@ sub remove_guest_email_in {
 use utf8;
 
 TITLE_IS_JAPANESE: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name\@example.com
 Subject: 日本語タイトル
 
 abcdefg
@@ -842,9 +850,9 @@ EOF
 }
  
 TITLE_IS_JAPANESE_HANKAKU: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name\@example.com
 Subject: 日本語ﾀｲﾄﾙ
 
 abcdefg
@@ -859,9 +867,9 @@ EOF
 }
  
 BODY_IS_JAPANESE: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name\@example.com
 Subject: Start Here by Japanese 1
 
 日本語ボディ
@@ -875,9 +883,9 @@ EOF
 }
  
 BODY_IS_JAPANESE_HANKAKU: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name\@example.com
 Subject: Start Here by Japanese 2
 
 日本語ﾎﾞﾃﾞｨ
@@ -891,9 +899,9 @@ EOF
 }
 
 CATEGORY_IS_JAPANESE_IN_TO_ADDRESS: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin+New=20=E3=82=BF=E3=82=B0@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name+New=20=E3=82=BF=E3=82=B0\@example.com
 Subject: In New Cat by Japanese
 
 Blah blah
@@ -911,10 +919,10 @@ EOF
 }
 
 CATEGORY_IS_JAPANESE_IN_CC_ADDRESS: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: bubba@example.com
-Cc: admin+New=20=E3=82=BF=E3=82=B0@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: bubba\@example.com
+Cc: $wksp_name+New=20=E3=82=BF=E3=82=B0\@example.com
 Subject: In New Cat2 by Japanese
 
 Blah blah
@@ -932,9 +940,9 @@ EOF
 }
 
 CATEGORY_COMMANDS_JA: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name\@example.com
 Subject: Cats in Body by Japanese
 
 Category: タグ１
@@ -959,9 +967,9 @@ EOF
 }
 
 TAG_COMMANDS_JA: {
-    my $email = <<'EOF';
-From: devnull1@socialtext.com
-To: admin@example.com
+    my $email = <<EOF;
+From: devnull1\@socialtext.com
+To: $wksp_name\@example.com
 Subject: Tags in Body by Japanese
 
 Tag: タグ１
@@ -1207,7 +1215,7 @@ TEXT_HTML_BODY_DIALECT: {
 sub receive_ok {
     my $args = {
         locale => $test_locale,
-        workspace => $ws,
+        workspace => $wksp,
         @_
     };
     my $email_receiver = Socialtext::EmailReceiver::Factory->create($args);

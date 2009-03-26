@@ -142,6 +142,7 @@ sub all_in_workspace {
     my $self = shift;
     my @attachments;
     my $hash = $self->index->read_only_hash;
+
     for my $page_id (keys %$hash) {
         next unless Socialtext::Page->new( hub => $self->hub, id => $page_id )->active;
         my $entry = $hash->{$page_id};

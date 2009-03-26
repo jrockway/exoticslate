@@ -36,7 +36,10 @@ my @skip_paths = qw(
     share/skin/common/javascript/Wikiwyg-2007-07-17
     share/skin/common/javascript/YAML-0.11
     share/workspaces
+    share/skin/js-test/common/plugins/socialcalc/submodule
     share/plugin/socialcalc/share/javascript/dbrick
+    share/plugin/socialcalc/submodule
+    share/skin/common/submodule
 );
 my %skip_paths = map { ($_,1) } @skip_paths;
 

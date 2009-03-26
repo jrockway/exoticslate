@@ -24,13 +24,13 @@ Queue_job: {
     $jorbs->work_asynchronously( 'Test', test => 1 );
 
     @jobs = $jorbs->list_jobs(
-        funcname => 'Socialtext::Job::Test',
+        funcname => 'Test',
     );
     is scalar(@jobs), 1, 'found a job';
     my $j = shift @jobs;
     is $j->funcname, 'Socialtext::Job::Test', 'funcname is correct';
 
-    $jorbs->clear_jobs( funcname => 'Socialtext::Job::Test' );
+    $jorbs->clear_jobs();
     is scalar(@jobs), 0, 'no jobs to start with';
 }
 

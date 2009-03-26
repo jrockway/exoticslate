@@ -1,7 +1,7 @@
 package Socialtext::Jobs;
 use strict;
 use warnings;
-
+use Socialtext::SQL qw/sql_execute/;
 use Socialtext::Schema;
 use Socialtext::SQL qw/get_dbh/;
 use Moose;
@@ -19,13 +19,13 @@ sub work_asynchronously {
 sub list_jobs {
     my $self = shift;
     my %args = @_;
+    $args{funcname} = "Socialtext::Job::$args{funcname}";
     $self->_do_it(list_jobs => \%args);
 }
 
 sub clear_jobs {
     my $self = shift;
-    my @jobs = $self->list_jobs(@_);
-    $_->completed for @jobs;
+    sql_execute('DELETE FROM job');
 }
 
 sub _do_it {

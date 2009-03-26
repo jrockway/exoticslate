@@ -14,6 +14,8 @@ GetOptions(
     'H|man'         => sub {pod2usage({-verbose => 2, -input => $0}); exit},
 ) or die;
 
+$TheSchwartz::FIND_JOB_BATCH_SIZE = 50000;
+
 my %count;
 my $jobs = Socialtext::Jobs->new;
 for my $type ($jobs->job_types) {

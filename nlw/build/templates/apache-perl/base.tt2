@@ -3,21 +3,21 @@
 # Load modules
 ClearModuleList
 AddModule mod_so.c
-[% PROCESS 'apache-perl/modules.tt2' %]
+[%- PROCESS 'apache-perl/modules.tt2' %]
   
-[% IF config.single %]
+[%- IF config.single %]
 Port [% config.apache2_port %]
 Listen [% config.apache2_port %]
 Listen [% config.apache2_ssl_port %]
-[% ELSE %]
+[%- ELSE %]
 Port [% config.apache_perl_port %]
 Listen [% config.apache_perl_port %]
 Listen [% config.apache_perl_ssl_port %]
-[% END %]
+[%- END %]
 
-[% PROCESS 'shared/common.tt2' %]
+[%- PROCESS 'shared/common.tt2' %]
 
 Include [% config.apache_perl_etc_dir %]/auto-generated.d/*.conf
-[% IF !config.is_dev %]
+[%- IF !config.is_dev %]
 Include [% config.apache_perl_etc_dir %]/conf.d/*.conf
-[% END %]
+[%- END %]

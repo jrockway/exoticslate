@@ -1,40 +1,40 @@
-[% required = {} %]
-[% MACRO simple_handler( loc, handler ) BLOCK %]
+[%- required = {} -%]
+[%- MACRO simple_handler( loc, handler ) BLOCK %]
     <Location [% loc %]>
         SetHandler  perl-script
-        [% UNLESS required.$handler %]
+        [%- UNLESS required.$handler %]
             PerlModule [% handler %]
-            [% required.$handler = 1 %]
-        [% END %]
+            [%- required.$handler = 1 -%]
+        [%- END %]
         PerlHandler [% handler %]
     </Location>
-[% END %][%# simple_handler() %]
+[%- END %][%# simple_handler() %]
 
-[% MACRO match_handler( locpattern, handler ) BLOCK %]
+[%- MACRO match_handler( locpattern, handler ) BLOCK %]
     <LocationMatch [% locpattern %]>
         SetHandler  perl-script
         PerlHandler +[% handler %]
     </LocationMatch>
-[% END %][%# match_handler() %]
+[%- END %][%# match_handler() %]
 
-[% MACRO vhost_common( for_ssl_vhost ) BLOCK %]
+[%- MACRO vhost_common( for_ssl_vhost ) BLOCK %]
     ServerAdmin [% config.server_admin %]
     DocumentRoot [% config.data_root_dir %]/docroot
     PerlSetEnv HOME [% config.prefix_dir %]/var/www
-[% IF config.is_dev %]
+[%- IF config.is_dev %]
     PerlPassEnv NLW_APPCONFIG
-[% END %]
+[%- END %]
     PerlSetEnv APACHE_LOG_DIR [% config.log_dir %]
 
-[% IF config.is_dev %]
+[%- IF config.is_dev %]
     ErrorDocument 500 /nlw/errors/500.html
 
     PerlSetVar ReloadAll Off
     PerlSetVar ReloadModules "Socialtext::WebApp Socialtext::WebApp::* Socialtext::* Socialtext::Handler Socialtext::Handler::* Socialtext::RequestContext"
     PerlInitHandler  +Apache::Reload
-[% END %]
+[%- END %]
 
-[% IF config.apache_status %]
+[%- IF config.apache_status %]
     # Status handlers
     <Location /status>
         SetHandler server-status
@@ -54,11 +54,11 @@
         Deny from all
         Allow from [% config.apache_status %]
     </Location>
-[% END %]
+[%- END %]
 
-[% IF config.single %]
+[%- IF config.single %]
     [% PROCESS 'shared/rewrite.tt2' %]
-[% END %]
+[%- END %]
 
     PerlCleanupHandler  +Socialtext::Handler::Cleanup
     PerlPostReadRequestHandler +Socialtext::Apache::ForwardedFor
@@ -83,13 +83,13 @@
         ErrorDocument       403     /nlw/login.html
     </Location>
 
-[% IF not config.socialtext_open %]
+[%- IF not config.socialtext_open %]
     <Location /nlw/control>
         SetHandler  perl-script
         PerlHandler +Socialtext::Handler::ControlPanel
         PerlAccessHandler  +Socialtext::AccessHandler::IsBusinessAdmin
     </Location>
-[% END %]
+[%- END %]
 
     <LocationMatch "^/[^/]+/index\.cgi">
         ErrorDocument 404 /index.cgi
@@ -102,9 +102,9 @@
         # as files.
         SetHandler default-handler
     </Location>
-[% END -%]
+[%- END %]
 
-[% END %][%# MACRO vhost_common %]
+[%- END %][%# MACRO vhost_common %]
 
 [%# Real code starts here %]
 # This file is the Socialtext-specific Apache configuration.  It is designed
@@ -132,7 +132,7 @@ PerlSetVar st_max_unshared_size 240000
 # This sets the minimum amount of shared memory the process must have.
 # PerlSetVar st_min_shared_size   70000
 
-[% PROCESS 'apache-perl/modules.tt2' %]
+[%- PROCESS 'apache-perl/modules.tt2' %]
 [%- IF config.inc -%]
     <Perl>
         use lib
@@ -144,14 +144,14 @@ PerlSetVar st_max_unshared_size 240000
 
 PerlSetEnv  NLW_CONFIG      [% config.nlw_config_file %]
 PerlSetEnv  APACHE_LOG_DIR  [% config.log_dir %]
-[% IF ENV.HARNESS_ACTIVE %]
+[%- IF ENV.HARNESS_ACTIVE %]
 PerlSetEnv  HARNESS_ACTIVE  [% ENV.HARNESS_ACTIVE %]
-[% END %]
+[%- END %]
 [%# REVIEW - hack to make Socialtext::Workspace->uri work in devs envs %]
-[% IF config.is_dev %]
+[%- IF config.is_dev %]
 PerlSetEnv  NLW_FRONTEND_PORT  [% config.apache2_port %]
 PerlSetEnv  NLW_DEV_MODE  1
-[% END %]
+[%- END %]
 
 # These are the only modules we load with PerlModule.  All the other handlers
 # load via the PerlHandler +HandlerName mechanism.
@@ -159,20 +159,20 @@ PerlModule  Socialtext::ModPerl
 
 
 <VirtualHost *:[% config.backend_port %]>
-[% IF !config.apache_proxy  %]
+[%- IF !config.apache_proxy  %]
     ServerName [% config.nlw_server_hostname %]
-[% END %]
+[%- END %]
 [% vhost_common( 0 ) %]
 </VirtualHost>
 
-[% IF config.apache_proxy %]
+[%- IF config.apache_proxy %]
 <VirtualHost *:[% config.backend_ssl_port %]>
     SetEnv  NLWHTTPSRedirect  1
 [% vhost_common( 1 ) %]
 </VirtualHost>
-[% END %][%# config.apache_proxy %]
+[%- END %][%# config.apache_proxy %]
 
-[% IF config.eu_httpd_exists %]
+[%- IF config.eu_httpd_exists %]
 <VirtualHost 10.8.0.1:[% config.backend_port %]>
     ServerName www.eu.socialtext.net
 [% vhost_common( 1 ) %]
@@ -183,4 +183,4 @@ PerlModule  Socialtext::ModPerl
     SetEnv  NLWHTTPSRedirect  1
 [% vhost_common( 1 ) %]
 </VirtualHost>
-[% END %][%# config.eu_httpd_exists %]
+[%- END %][%# config.eu_httpd_exists %]

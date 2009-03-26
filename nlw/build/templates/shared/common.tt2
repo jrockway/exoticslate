@@ -48,13 +48,13 @@ LogFormat "%h %l %u %t \"%r\" %>s %b" common
 LogFormat "%{Referer}i -> %U" referer
 LogFormat "%{User-agent}i" agent
 
-[% IF config.is_dev %]
+[%- IF config.is_dev %]
 CustomLog [% config.log_dir %]/[% config.app_prefix %]access.log debug
 ErrorLog [% config.log_dir %]/[% config.app_prefix %]error.log
-[% ELSE %]
+[%- ELSE %]
 CustomLog [% config.log_dir %]/access.log debug
 ErrorLog [% config.log_dir %]/error.log
-[% END %]
+[%- END %]
 
 ServerSignature On
 

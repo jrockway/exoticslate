@@ -143,15 +143,13 @@
               </ul>
           </li>
           [% END %]
-        </ul>
-        <div id="mainRightNav">
         [% IF invite_url %]
-        <a id="st-invite-link" href="[% invite_url %]">[% loc("Invite people to your network!") %]</a>
+          <li><a id="st-wiki-subnav-link-invite" href="[% invite_url %]">[% loc("Invite people to your network!") %]</a>
         [% END %]
+        </ul>
         <div id="workSpaceLink">
          &nbsp; 
         </div><!-- workSpaceLink END -->
-        </div>
       </div><!-- mainNav END -->
 
       <div id="st-actions-bar">

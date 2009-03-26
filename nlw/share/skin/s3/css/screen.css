@@ -231,36 +231,29 @@ div#mainNav ul li a.selected ,div#homeLink a.selected {
 	color: #a6e4fc;
 }	
 
-div#mainNav div#mainRightNav {
+div#mainNav div#workSpaceLink {
 	width: 40%;
 	float: right;
+	background: url(../images/mainNavRight.png) no-repeat top right;
 }
 	
-div#mainNav div#mainRightNav a {
+div#mainNav div#workSpaceLink a {
 	float: right;
 	line-height: 34px;
 	font-size: 12px;
 	color: #fefefe;
-}
-
-div#mainNav div#mainRightNav a:hover {	
-	color: #a6e4fc;
-	text-decoration: none;
-}
-
-div#mainNav div#workSpaceLink {
-	background: url(../images/mainNavRight.png) no-repeat top right;
-}
-
-div#mainNav div#workSpaceLink a {
 	margin-right: 15px;
 	padding-right: 26px;
 	background: url(../images/doubleArrow.png) no-repeat center right;
 }
 
-#st-invite-link {
-        margin-right: 5px;
-        padding-right: 6px;
+div#mainNav div#workSpaceLink a:hover {	
+	color: #a6e4fc;
+	text-decoration: none;
+}
+
+div#mainNav ul.level1>li>a#st-wiki-subnav-link-invite { 
+    background: none;
 }
 /* mainNav End */
 

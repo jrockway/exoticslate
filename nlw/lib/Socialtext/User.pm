@@ -1502,19 +1502,20 @@ sub confirm_email_address {
 
 sub send_confirmation_completed_signal {
     my $self = shift;
-    if ($self->can_use_plugin('signals')) {
-        local $@;
-        eval {
-            require Socialtext::Signal;
-            my $signal = Socialtext::Signal->Create(
-                user_id => $self->user_id,
-#                in_reply_to_id => $self->user_id,
-                account_ids => [ $self->primary_account_id ],
-                body => '{user: ' .  $self->user_id . '} '.
-                        'just joined the ' . $self->primary_account->name . ' network. Hi everybody!',
-            );
-        }
-    }
+    my $signals = Socialtext::Pluggable::Adapter->plugin_class('signals');
+    return unless $signals;
+
+    my $user_wafl = '{user: '.$self->user_id.'}';
+    my $body =
+        loc('[_1] just joined the [_2] network. Hi everybody!', $user_wafl, $self->primary_account->name);
+    eval {
+        $signals->Send({
+            user => $self,
+            account_ids => [ $self->primary_account_id ],
+            body => $body,
+        });
+    };
+    warn $@ if $@;
 }
 
 sub email_confirmation {

@@ -15,6 +15,7 @@ use Socialtext::ChangeEvent::Workspace;
 use Socialtext::File;
 use Socialtext::Log 'st_log';
 use Socialtext::Paths;
+use Socialtext::Jobs;
 
 =head1 NAME
 
@@ -116,26 +117,24 @@ sub Record {
     my $object = shift;
     defined($object) or die "one single argument is required";
 
-    Socialtext::File::ensure_directory(Socialtext::Paths::change_event_queue_dir);
     $self->_record_object($object);
 
     return $self;
 }
 
-# REVIEW: Rather than dispatching here we should use a 
-# language that cares about types. Or subclass. Or
-# something. Going for the quick and dirty right now
-# with room for later refactoring.
 sub _record_object {
     my $self = shift;
     my $object = shift;
 
-    # where's my case statement?
-    # REVIEW: The arguments to _link_to suggest an interface that
-    # all these object should support, perhaps path()?
+    my $jobs = Socialtext::Jobs->new;
     if ($object->isa('Socialtext::Page')) {
         $self->_log_page_action($object);
-        $self->_link_to($object->file_path);
+
+        $jobs->work_asynchronously(
+            'PageIndex',
+            workspace_id => $object->hub->current_workspace->workspace_id,
+            page_id => $object->id,
+        );
     }
     elsif ($object->isa('Socialtext::Attachment')) {
         $self->_link_to($object->full_path);

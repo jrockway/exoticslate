@@ -26,10 +26,10 @@ my $sum = 0;
 print "Jobs in the queue:\n";
 for my $name (sort keys %count) {
     next if $name eq 'Test';
-    printf "  %12s %5d\n", $name, $count{$name};
+    printf "  %15s %5d\n", $name, $count{$name};
     $sum += $count{$name};
 }
-printf "  %12s %5d\n", loc("Total"), $sum;
+printf "  %15s %5d\n", loc("Total"), $sum;
 
 =head1 NAME
 

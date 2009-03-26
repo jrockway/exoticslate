@@ -143,7 +143,7 @@
                     background: '#B4DCEC',
                     border: '1px solid black',
                     display: 'none',
-                    padding: '0px',
+                    padding: '0px'
                 })
                 .prependTo('body');
         }

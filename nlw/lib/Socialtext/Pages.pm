@@ -19,6 +19,7 @@ use Socialtext::Validate qw( validate DIR_TYPE );
 use Socialtext::Workspace;
 use Socialtext::l10n qw( loc );
 use Socialtext::String ();
+use Socialtext::SQL qw/sql_execute/;
 
 sub class_id { 'pages' }
 const class_title => 'NLW Pages';
@@ -57,13 +58,17 @@ sub all_active {
 sub all_ids {
     my $self = shift;
     Socialtext::Timer->Continue('all_ids');
-    my @pages = grep { not /^\./ } Socialtext::File::all_directory_directories(
-        Socialtext::Paths::page_data_directory(
-            $self->hub->current_workspace->name
-        )
+    my $sth = sql_execute(<<EOT,
+SELECT page_id 
+    FROM page
+    WHERE workspace_id = ?
+    ORDER BY last_edit_time DESC
+EOT
+        $self->hub->current_workspace->workspace_id,
     );
+    my $pages = $sth->fetchall_arrayref();
     Socialtext::Timer->Pause('all_ids');
-    return @pages;
+    return map { $_->[0] } @$pages;
 }
 
 =head2 $pages->all_ids_newest_first()
@@ -75,20 +80,7 @@ sorted in reverse date order. Skips symlinks.
 
 sub all_ids_newest_first {
     my $self = shift;
-    Socialtext::Timer->Continue('all_ids_newest_first');
-    my $path = Socialtext::Paths::page_data_directory(
-        $self->hub->current_workspace->name );
-
-    my @files;
-    foreach my $page_id ( $self->all_ids ) {
-        my $file = Socialtext::File::catfile( $path, $page_id, 'index.txt' );
-        next unless -f $file;
-        push @files, [ $page_id, ( stat _ )[9] ];
-    }
-
-    my @pages = map { $_->[0] } sort { $b->[1] <=> $a->[1] } @files;
-    Socialtext::Timer->Pause('all_ids_newest_first');
-    return @pages;
+    return $self->all_ids;
 }
 
 sub all_newest_first {
@@ -103,15 +95,23 @@ sub all_newest_first {
 
 sub all_since {
     my $self = shift;
+    my $minutes = shift;
+    my $active_only = ((shift) ? "AND deleted = false" : '');
+
     Socialtext::Timer->Continue('all_since');
-    my ($minutes, $active_only) = @_;
-    my @pages_since;
-    for my $page_id ($self->all_ids_newest_first) {
-        my $page = $self->new_page($page_id);
-        next if $active_only && ! $page->active;
-        last if $page->age_in_minutes > $minutes;
-        push @pages_since, $page;
-    }
+    my $sth = sql_execute(<<EOT,
+SELECT page_id 
+    FROM page
+    WHERE workspace_id = ?
+        AND last_edit_time > ('now'::timestamptz - ?::interval)
+        $active_only
+    ORDER BY last_edit_time DESC
+EOT
+        $self->hub->current_workspace->workspace_id,
+        "$minutes minutes",
+    );
+    my $pages = $sth->fetchall_arrayref();
+    my @pages_since = map { $self->new_page($_->[0]) } @$pages;
     Socialtext::Timer->Pause('all_since');
     return @pages_since;
 }
@@ -119,21 +119,19 @@ sub all_since {
 sub random_page {
     my $self = shift;
     Socialtext::Timer->Continue('random_page');
-    my @page_ids = $self->all_ids;
-    my $random_page;
 
-    while (@page_ids) {
-        my $index = int( rand(@page_ids) );
-        my $id    = $page_ids[$index];
-        my $page  = $self->new_page($id);
-
-        # Don't repeat inactive pages
-        if ( $page->active ) {
-            $random_page = $page;
-            last;
-        }
-        splice @page_ids, $index, 1;
-    }
+    my $sth = sql_execute(<<EOT,
+SELECT page_id 
+    FROM page
+    WHERE workspace_id = ?
+      AND deleted = false
+    ORDER BY RANDOM()
+    LIMIT 1
+EOT
+        $self->hub->current_workspace->workspace_id,
+    );
+    my $pages = $sth->fetchall_arrayref();
+    my $random_page = (@$pages ? $self->new_page($pages->[0][0]) : undef );
     Socialtext::Timer->Pause('random_page');
     return $random_page;
 }

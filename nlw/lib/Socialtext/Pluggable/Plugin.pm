@@ -316,9 +316,9 @@ sub logged_in {
 }
 
 sub share {
-    my $self = shift;
-    my $name = $self->name;
-    return "/nlw/plugin/$prod_ver/$name";
+    my ($self, $plugin) = @_;
+    $plugin ||= $self->name;
+    return "/nlw/plugin/$prod_ver/$plugin";
 }
 
 sub template_render {

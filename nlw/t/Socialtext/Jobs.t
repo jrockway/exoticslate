@@ -4,7 +4,7 @@ use warnings;
 use Test::Socialtext qw/no_plan/;
 use Socialtext::SQL qw/sql_singlevalue/;
 
-fixtures 'clean';
+fixtures 'db';
 
 BEGIN {
     use_ok 'Socialtext::Jobs';
@@ -31,6 +31,18 @@ Queue_job: {
 
     $jobs->clear_jobs();
     is scalar(@jobs), 0, 'no jobs to start with';
+}
+
+Process_a_job: {
+    $jobs->work_asynchronously( 'Test', test => 1 );
+    is scalar($jobs->list_jobs( funcname => 'Test' )), 1;
+    is $Socialtext::Job::Test::Work_count, 0;
+   
+    $jobs->schwartz_run( can_do => 'Socialtext::Job::Test' );
+    $jobs->schwartz_run( 'work_once' );
+
+    is scalar($jobs->list_jobs( funcname => 'Test' )), 0;
+    is $Socialtext::Job::Test::Work_count, 1;
 }
 
 Time_is_okay: {

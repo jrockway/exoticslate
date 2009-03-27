@@ -9,7 +9,7 @@ use Socialtext::Log qw/st_log/;
 sub Record {
     my $class = shift;
     my $page  = shift;
-    my $search_config = shift;
+    my $search_config = shift || '';
 
     $class->_log_page_action($page);
 

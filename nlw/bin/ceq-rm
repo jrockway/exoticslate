@@ -43,6 +43,7 @@ exit;
 sub remove_if_match {
     my $job = shift;
     my $args = $job->arg;
+    return unless ref($args) eq 'HASH';
     my $target = $job->jobid;
     $target .= ";ws=$args->{workspace_id}" if $args->{workspace_id};
     $target .= ";page=$args->{page_id}" if $args->{page_id};

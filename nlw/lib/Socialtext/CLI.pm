@@ -1885,7 +1885,7 @@ sub index_workspace {
     }
 
     # Rather than call index_workspace on the indexer object (which is
-    # synchronous), we create ChangeEvents to trigger the appropriate
+    # synchronous), we create jobs to trigger the appropriate
     # indexer activity.
     require Socialtext::Job::PageIndex;
     for my $page_id ( $hub->pages->all_ids() ) {

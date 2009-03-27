@@ -41,7 +41,7 @@ sub schwartz_run {
             user => $params{user},
         } ],
         driver_cache_expiration => 300,
-        verbose => 1,
+        verbose => $ENV{ST_JOBS_VERBOSE},
     );
     return $self->{client}->$func(@_);
 }

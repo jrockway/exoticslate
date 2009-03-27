@@ -11,7 +11,6 @@ use File::Copy ();
 use File::Path ();
 use Socialtext::Attachment;
 use Socialtext::ArchiveExtractor;
-use Socialtext::ChangeEvent;
 use Socialtext::Encode;
 use Socialtext::File;
 use Socialtext::Indexes;

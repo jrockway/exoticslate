@@ -86,25 +86,11 @@ div.clear {
 }
 
 div#mainWrap {
-	min-width: 720px;
-}
-
-
-body#blog div#mainWrap,body#dashBoard div#mainWrap {
-       min-width: 795px;
-}
-
-body#listPage div#mainWrap {
-	min-width: 800px;
-}
-
-div#mainWrap {
+        min-width: 947px;
 	width: 90%;
 	margin: 0 auto;
 	text-align: left;
 }
-
-
 
 /* header Start */
 div#header {
@@ -3335,16 +3321,6 @@ span.person img.avatar {
 a.incipient {
     text-decoration: none;
     border-bottom: 1px dashed;
-}
-
-body#contentPage div#controls div#controlsRight,
-body#dashBoard div#controls div#controlsRight,
-body#settingsPage div#controls div#controlsRight {
-    max-width: 550px;
-}
-
-body div#mainWrap {
-    min-width: 947px;
 }
 
 body div#controls div#st-editing-tools-edit ul li a.disabled {

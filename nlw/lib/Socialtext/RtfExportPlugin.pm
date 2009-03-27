@@ -178,7 +178,7 @@ use File::Temp;
 use LWP::UserAgent;
 use RTF::Writer qw(rtfesc);
 use RTF::Writer::TableRowDecl;
-use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
+use Socialtext::HTTP::Cookie;
 
 my $InHref = 0;
 my $In_Table = 0;
@@ -390,9 +390,13 @@ sub _proxy_cookies {
         # -mml 2007-01-16
         my $cookies = Apache::Cookie->fetch;
         if ($cookies) {
-            my $cookie = $cookies->{USER_DATA_COOKIE()};
+            my $cookie_name = Socialtext::HTTP::Cookies->cookie_name();
+            my $cookie      = $cookies->{$cookie_name};
             if ($cookie) {
+                # Cookie is UA-specific (see ST:HTTP::Cookie), *HAVE* to pass
+                # along the UA as well as the cookie itself.
                 $ua->default_header( 'Cookie' => $cookie->as_string );
+                $ua->agent( $ENV{HTTP_USER_AGENT} );
             }
         }
     }

@@ -5,14 +5,14 @@ use strict;
 use warnings;
 
 use Apache::Cookie;
-use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
+use Socialtext::HTTP::Cookie;
 
 sub extract_credentials {
     my $class = shift;
     my $request = shift;
 
-    my %user_data = _get_cookie_value(USER_DATA_COOKIE);
-
+    my $cookie_name = Socialtext::HTTP::Cookie->cookie_name($request);
+    my %user_data   = _get_cookie_value($cookie_name);
     return unless keys %user_data;
 
     my $mac = Socialtext::HTTP::Cookie->MAC_for_user_id( $user_data{user_id} );

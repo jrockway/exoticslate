@@ -117,12 +117,17 @@ sub _authenticates {
 
 =head2 check_cookie
 
-Looks for a standard login cookie (ST::HTTP::Cookie->USER_DATA_COOKIE).
+Checks to see if the request could be authenticated via a registered
+Credentials Extractor.  Returns 1 if it can, 0 otherwise.
+
+As a side-effect, this method also sets C<$r-E<gt>connection-E<gt>user()> to
+the logged in username.
+
+Yes, this is poorly named; we do have other Credentials Extractors that aren't
+cookie based.
 
 =cut
 
-# Return 1 if able to authenticate via the cookie mechanism, 0 if not.  Sets
-# $r->connection->user to the username as a side effect.
 sub check_cookie {
     my ($r) = @_;
 

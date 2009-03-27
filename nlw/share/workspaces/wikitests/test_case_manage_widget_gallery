@@ -8,7 +8,7 @@
 | set | acct | MWG %%start_time%% |
 | set | mwgmail | mwg-%%start_time%%@ken.socialtext.net |
 | st-admin | create-account --name "%%acct%%" | created |
-| st-admin | enable-plugin --account "%%acct%%" --plugin dashboard | The dashboard plugin is now enabled |
+| st-admin | enable-plugin --account "%%acct%%" --plugin dashboard |  |
 | st-admin | create-user --e %%mwgmail%% --p %%password%% --account "%%acct%%" | created |
 
 | *Comment* | Test Case: Manage Widget Gallery non-admin cannot manage |  |
@@ -106,7 +106,7 @@
 | wait_for_element_visible_ok | link=Close | 30000 |
 | click_ok | link=Close |  |
 
-| *Comment* | Test Case: Manage Widget Gallery - Add Widgets to Gallery - Cheeky Quote |  |
+| *Comment* | Test Case: Manage Widget Gallery add a Cheeky Quote |  |
 | open_ok | /?dashboard | 60000 |
 | wait_for_element_visible_ok | link=Add Content | 30000 |
 | click_and_wait | link=Add Content |  |
@@ -116,7 +116,7 @@
 | st-name-widget | 1 | cheeky_quote |
 | st-widget-title-like | cheeky_quote | Cheeky Quote |
 
-| *Comment* | Test Case: Manage Widget Gallery - Add Widgets to Gallery - Boss Spy |  |
+| *Comment* | Test Case: Manage Widget Gallery add a Boss Spy |  |
 | click_and_wait | link=Add Content |  |
 | wait_for_element_visible_ok | link=Boss Spy | 30000 |
 | click_and_wait | link=Boss Spy |  |

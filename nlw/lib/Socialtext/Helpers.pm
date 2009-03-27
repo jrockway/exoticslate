@@ -268,7 +268,7 @@ sub global_template_vars {
                 );
         } };
 
-        if ($appliance_config_allows_invitation) {
+        if (!defined $appliance_config_allows_invitation or $appliance_config_allows_invitation) {
             $result{invite_url} = '/?action=invite';
         }
 

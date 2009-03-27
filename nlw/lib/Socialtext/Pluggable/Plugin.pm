@@ -100,9 +100,26 @@ sub user {
     return $self->hub->current_user;
 }
 
+sub viewer {
+    my $self = shift;
+    return $self->hub->viewer;
+}
+
 sub username {
     my $self = shift;
     return $self->user->username;
+}
+
+sub resolve_user {
+    my ($self, $username) = @_;
+    my $user = eval { Socialtext::User->Resolve($username) };
+    $user->hub($self->hub) if $user and $self->hub and !$user->hub;
+    return $user;
+}
+
+sub authz {
+    my $self = shift;
+    return $self->hub ? $self->hub->authz : undef;
 }
 
 sub best_full_name {
@@ -312,7 +329,8 @@ sub redirect {
 
 sub logged_in {
     my $self = shift;
-    return !$self->hub->current_user->is_guest()
+    return 0 unless $self->hub;
+    return !$self->hub->current_user->is_guest();
 }
 
 sub share {

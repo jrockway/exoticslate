@@ -150,6 +150,8 @@ package Socialtext::FetchRSS::Wafl;
 use Socialtext::Formatter::WaflPhrase;
 use base 'Socialtext::Formatter::WaflPhraseDiv';
 use Apache::Request;
+use Socialtext::Log qw/st_log/;
+use Socialtext::l10n qw/loc/;
 
 sub html {
     my $self = shift;
@@ -171,13 +173,21 @@ sub html {
         return $title;
     };
 
-    $self->hub->template->process('fetchrss.html',
-        full => $full,
-        method => $self->method,
-        fetchrss_url => $url,
-        feed => $feed,
-        fetchrss_error => $self->hub->fetchrss->error,
-    );
+    my $html = '';
+    eval { 
+        $html = $self->hub->template->process('fetchrss.html',
+            full => $full,
+            method => $self->method,
+            fetchrss_url => $url,
+            feed => $feed,
+            fetchrss_error => $self->hub->fetchrss->error,
+        );
+    };
+    if ($@) {
+        st_log()->debug("FetchRSS error on $url: $@");
+        $html = loc('Error loading feed: [_1]', $url);
+    }
+    return $html;
 }
 
 # This is a hack to prevent the system from recursing when we call

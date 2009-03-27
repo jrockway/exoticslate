@@ -893,7 +893,7 @@ parallel.
 
 Default: 5
 
-=for code type => POSITIVE_INT_TYPE
+=for code type => POSITIVE_FLOAT_TYPE
 
 =head2 ceqlotron_period
 

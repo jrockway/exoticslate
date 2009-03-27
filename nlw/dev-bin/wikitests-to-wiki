@@ -5,14 +5,11 @@
 PORT=`perl -e 'print $> + 20000'`
 SERVER=http://`hostname`:$PORT
 DIR=$ST_CURRENT/nlw/share/workspaces/wikitests
-echo Server is $SERVER
 
-echo Preparing wikitests workspace
 $ST_CURRENT/nlw/bin/st-admin delete-workspace --workspace wikitests --dir $DIR
 $ST_CURRENT/nlw/bin/st-admin create-workspace --title 'Wikitests' --name wikitests --empty
 $ST_CURRENT/nlw/bin/st-admin add-workspace-admin  --email devnull1@socialtext.com --workspace wikitests
 
-echo Adding user tester to wikitests workspace
 $ST_CURRENT/nlw/bin/st-admin  create-user --e tester@ken.socialtext.net --p wikitest
 $ST_CURRENT/nlw/bin/st-admin add-member  --e tester@ken.socialtext.net --w wikitests
 

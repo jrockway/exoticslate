@@ -32,4 +32,5 @@ jemplate/widget_weblog_list_edit.html
 jemplate/widget_yahoo_edit.html
 jemplate_wikiwyg.js
 socialtext-editor.js
+socialtext-editor-mini.js
 

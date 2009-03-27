@@ -4,13 +4,14 @@ use warnings;
 use strict;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-use Socialtext::Ceqlotron;
+use Socialtext::Jobs;
 use Socialtext::File qw/get_contents/;
-use Socialtext::Log 'st_log';
+use Socialtext::Log 'st_log', 'st_timed_log';
 use Socialtext::Paths;
+use Socialtext::SQL qw/get_dbh/;
+use Socialtext::Timer;
 use Getopt::Long;
 use Pod::Usage;
-use POSIX qw( :sys_wait_h :signal_h );
 use Parallel::ForkManager;
 use Time::HiRes qw/sleep/;
 
@@ -62,6 +63,11 @@ $Jobs->can_do('AttachmentIndex');
 
 my $max_concurrency = Socialtext::AppConfig->ceqlotron_max_concurrency;
 my $PM = Parallel::ForkManager->new($max_concurrency);
+$PM->run_on_finish( sub { $RunningChildren-- } );
+$PM->run_on_start(  sub { 
+        $RunningChildren++;
+        st_log->info("ceqlotron fork - concurrency $RunningChildren");
+    } );
 
 main_loop();
 wait_for_all_children();
@@ -69,15 +75,12 @@ exit_gracefully();
 
 
 
-sub with_sigchld_blocked(&);
-
 sub install_signal_handlers {
     $SIG{TERM} = sub {
         st_log->notice("ceqlotron caught SIGTERM.  Will exit ASAP.");
         $ExitPlease = 1;
     };
     $SIG{INT} = \&exit_gracefully;
-    $SIG{CHLD} = \&reap;
 }
 
 sub exit_gracefully {
@@ -90,26 +93,8 @@ sub exit_gracefully {
 
 sub wait_for_all_children {
     return unless $RunningChildren;
-    with_sigchld_blocked {
-        st_log->debug("ceqlotron waiting for children to exit");
-        $PM->wait_all_children;
-    };
-}
-
-sub reap {
-    # XXX i am assuming, as perlipc implies, that the signal handler is
-    # uninstalled prior to entry here.  thus no need to mask SIGCHLD or worry
-    # about reentry.  also assuming that saved up SIGCHLD signals will get
-    # here after we reinstall the handler at the end.  but this should be
-    # confirmed.
-    while ( my $pid = waitpid( -1, WNOHANG ) ) {
-        last unless $pid > 0;
-
-        --$RunningChildren;
-        st_log->debug("ceqlotron reaped $pid - concurrency $RunningChildren");
-    }
-    # reinstall signal handler
-    $SIG{CHLD} = \&reap;
+    st_log->info("ceqlotron waiting for $RunningChildren children to exit");
+    $PM->wait_all_children;
 }
 
 sub write_pid_file {
@@ -124,13 +109,15 @@ sub main_loop {
     LOOP: while (1) {
         while (my $job = $Jobs->find_job_for_workers()) {
             last LOOP if $ExitPlease;
-            if ($PM->start) {
-                $RunningChildren++;
-                st_log->debug("ceqlotron fork - concurrency $RunningChildren");
-                next;
-            }
+            $PM->start and next;
 
+            # Force disconnect the database handle, child will re-connect
+            get_dbh()->disconnect;
+
+            my $t = Socialtext::Timer->new;
             $Jobs->work_once($job);
+            st_log->info(
+                sprintf('Finished %s in %0.2fs',$job->funcname, $t->elapsed));
             exit;
         }
 
@@ -164,23 +151,6 @@ sub maybe_fork {
     }
 }
 
-sub with_sigchld_blocked(&) {
-    my ( $code ) = @_;
-
-    my $sigset = POSIX::SigSet->new(SIGCHLD);
-    my $old_sigset = POSIX::SigSet->new;
-
-    unless (defined sigprocmask(SIG_BLOCK, $sigset, $old_sigset)) {
-        die "block SIGCHLD: $!";
-    }
-    my $retval = &$code;
-    unless (defined sigprocmask(SIG_SETMASK, $old_sigset)) {
-        die "unblock SIGCHLD: $!";
-    }
-
-    return $retval;
-}
-
 sub exit_if_already_running {
     return unless -e $PID_FILE;
     my $pid = get_contents($PID_FILE);
@@ -190,7 +160,7 @@ sub exit_if_already_running {
 
 =head1 NAME
 
-ceqlotron - Execute asynchronous processes triggered by change events.
+ceqlotron - Execute asynchronous jobs.
 
 =head1 SYNOPSIS
 
@@ -208,25 +178,10 @@ L<Socialtext::AppConfig> variable C<ceqlotron_period>.
 
 =head1 MAIN LOOP
 
-C<ceqlotron> uses L<Socialtext::AppConfig> to find the value
-C<change_event_queue_dir>.  If the regular file B<change_event_queue_dir>/lock
-does not exist, it is created.  C<ceqlotron> then attempts to acquire a lock
-on B<change_event_queue_dir>/lock using L<flock(2)> with LOCK_EX|LOCK_NB.  If
-this fails because another process already has the lock, then C<ceqlotron>
-exits the loop.
+If jobs are available to be run, C<ceqlotron> will fork a child process
+(up to C<ceqlotron_max_concurrency> as defined in L<Socialtext::AppConfig>.
 
-If the lock is acquired, ceqlotron examines each symbolic link in
-B<change_event_queue_dir> and, for each symbolic link, forks and execs
-
-    st-admin workspace from_input,
-
-sends the text described in L<DISPATCH> on STDIN, and then unlinks the
-symlink.
-
-By default, C<ceqlotron> will not start more than 5 child processes at once.
-If a sixth process is needed, C<ceqlotron> waits until one of the children
-exits.  This value can be overridden with the L<Socialtext::AppConfig> variable
-C<ceqlotron_max_concurrency>.
+The child process will run the job, and then exit.
 
 =head1 OPTIONS
 
@@ -237,25 +192,6 @@ C<ceqlotron_max_concurrency>.
     -O,--output=FILE        Redirect stdout and stderr to FILE.
     -h,--help               Show help.
 
-=head1 DISPATCH
-
-Different symbolic links produce different commands sent to nlw.
-
-=head2 Symlink to a page directory.
-
-    index_page page_id
-    weblog_ping page_id
-    email_notify
-    watchlist_email_notify
-
-=head2 Symlink to an attachment directory.
-
-    index_attachment attachment_id page_id
-
-=head2 Symlink to a workspace directory.
-
-    index_workspace
-
 =head1 SIGNALS
 
     TERM        stop forking; exit gracefully as soon as all children
@@ -265,7 +201,6 @@ Different symbolic links produce different commands sent to nlw.
 =head1 EXIT CODES
 
     0       normal exit
-    1       ceqlotron was never able to acquire the lock
     2       ceqlotron received an INT or TERM signal and exited
             gracefully
     255     exceptional error condition (there should be a diagnostic

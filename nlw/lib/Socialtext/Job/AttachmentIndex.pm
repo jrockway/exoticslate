@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use base qw( TheSchwartz::Worker );
 use Socialtext::Jobs;
+use base 'Socialtext::Job';
 
 sub Record {
     my $class = shift;
@@ -22,8 +23,14 @@ sub Record {
 sub work {
     my $class = shift;
     my TheSchwartz::Job $job = shift;
+    my $args = $job->arg;
 
-    warn __PACKAGE__ . " is not implemented yet";
+    my $wksp = Socialtext::Workspace->new(workspace_id => $args->{workspace_id});
+    my $indexer = $class->_create_indexer($wksp, $args->{search_config}) or return;
+    $indexer->index_attachment( $args->{page_id}, $args->{attach_id} );
+
+    # Is this really necessary?
+    # $indexer->index_page( $page->id() );
 
     $job->completed();
 }

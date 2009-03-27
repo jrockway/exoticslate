@@ -5,6 +5,8 @@ use base qw( TheSchwartz::Worker );
 use Socialtext::Jobs;
 use Socialtext::Job::AttachmentIndex;
 use Socialtext::Log qw/st_log/;
+use Socialtext::Workspace;
+use base 'Socialtext::Job';
 
 sub Record {
     my $class = shift;
@@ -27,8 +29,14 @@ sub Record {
 sub work {
     my $class = shift;
     my TheSchwartz::Job $job = shift;
+    my $args = $job->arg;
 
-    warn __PACKAGE__ . " is not implemented yet";
+    my $wksp = Socialtext::Workspace->new(workspace_id => $args->{workspace_id});
+    my $indexer = $class->_create_indexer($wksp, $args->{search_config}) or return;
+
+    my $hub = $class->_make_hub( $wksp );
+    my $page = $hub->pages->new_page( $args->{page_id} );
+    $indexer->index_page( $page->id() );
 
     $job->completed();
 }

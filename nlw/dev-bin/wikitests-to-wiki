@@ -25,9 +25,6 @@ $ST_CURRENT/nlw/bin/st-admin index-workspace --w wikitests --sync
 # get rid of superfluous ceq indexing AGAIN
 $ST_CURRENT/nlw/bin/ceq-rm wikitests
 
-# make a tarball so you don't have to run this script after fdefs
-$ST_CURRENT/nlw/bin/st-admin export-workspace --w wikitests --dir $ST_CURRENT/nlw/share/workspaces/wikitests
-
 echo
 echo "Wikitests are now available at: $SERVER/wikitests"
 echo Use run-wiki-tests --plan-server $SERVER  --plan-workspace wikitests

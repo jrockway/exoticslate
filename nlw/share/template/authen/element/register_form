@@ -3,32 +3,49 @@
 <form id="st-register-form" name="register" method="post" action="/nlw/submit/register">
   <input type="hidden" name="redirect_to" value="[% redirect_to | html %]" />
 
-  <div class="label-value">
-    <label for="email_address">[% loc('Email Address:') %]</label>
-    <input id="email_address" name="email_address" type="text" size="30" value="" />
-  </div>
+  <dl class="form">
+    <dd>[% loc("Please fill in the following information.") %]</dd>
+    <dd><a href="/nlw/login.html?redirect_to=[% redirect_to | html %]">[% loc('Click here to log in with an existing account.') %]</a></dd>
+  </dl>
 
-  <div class="label-value">
-    <label for="password">[% loc('Password:') %]</label>
-    <input id="password" name="password" type="password" size="30" value="" />
-  </div>
+  <dl class="form">
+    <dt> <label for="email_address">[% loc('Email Address:') %]</label> </dt> </dt>
+    <dd> <input id="email_address" name="email_address" type="text" size="30" value="" /> </dd>
+  </dl>
 
-  <div class="label-value">
-    <label for="password2">[% loc('Re-type Password:') %]</label>
-    <input id="password2" name="password2" type="password" size="30" value="" />
-  </div>
+  <dl class="form">
+    <dt <label for="password">[% loc('Password:') %]</label> </dt>
+    <dd> <input id="password" name="password" type="password" size="30" value="" /> </dd>
+  </dl>
 
-  <div class="label-value">
-    <label for="first_name">[% loc('First Name:') %]</label>
-    <input id="first_name" name="first_name" type="text" size="30" value="" /> [% loc('(Optional)') %]
-  </div>
+  <dl class="form">
+    <dt <label for="password2">[% loc('Re-type Password:') %]</label> </dt>
+    <dd> <input id="password2" name="password2" type="password" size="30" value="" /> </dd>
+  </dl>
 
-  <div class="label-value">
-    <label for="last_name">[% loc('Last Name:') %]</label>
-    <input id="last_name" name="last_name" type="text" size="30" value="" /> [% loc('(Optional)') %]
-  </div>
+  <dl class="form">
+    <dt <label for="first_name">[% loc('First Name:') %]</label> </dt>
+    <dd> <input id="first_name" name="first_name" type="text" size="30" value="" /> <i> [% loc('(Optional)') %]</i> </dd> 
+  </dl>
 
-  <div class="form-element">
-    <input class="button" type="submit" value="[% loc('Register') %]" />
-  </div>
+  <dl class="form">
+    <dt <label for="last_name">[% loc('Last Name:') %]</label> </dt>
+    <dd> <input id="last_name" name="last_name" type="text" size="30" value="" /> <i> [% loc('(Optional)') %]</i> </dd> 
+  </dl>
+
+  <br/>
+
+  <input type="submit" value="submit" style="display:none"/>
+
+  <ul class="formButtons" style="float: left">
+    <li class="flexButtonBlue">
+      <a class="genericBlueButton" href="#" onclick="document.forms['register'].submit(); return false">
+        [% loc('Register') %]
+      </a>
+    </li>
+  </ul>
+
+  <br/>
+  <br/>
+
 </form>

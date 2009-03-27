@@ -21,14 +21,14 @@ sub _make_hub {
 sub _create_indexer {
     my $class = shift;
     my $wksp  = shift;
-    my $search_type = shift || 'live';
+    my $type  = shift || 'live';
+    my $job   = shift;
 
     require Socialtext::Search::AbstractFactory;
-
     my $indexer
         = Socialtext::Search::AbstractFactory->GetFactory->create_indexer(
         $wksp->name,
-        config_type => $search_type,
+        config_type => $type,
     );
     if ( !$indexer ) {
         $job->permanent_failure("Couldn't create a indexer");

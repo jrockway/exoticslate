@@ -32,7 +32,8 @@ sub work {
     my $args = $job->arg;
 
     my $wksp = Socialtext::Workspace->new(workspace_id => $args->{workspace_id});
-    my $indexer = $class->_create_indexer($wksp, $args->{search_config}) or return;
+    my $indexer = $class->_create_indexer($wksp, $args->{search_config}, $job)
+        or return;
 
     my $hub = $class->_make_hub( $wksp );
     my $page = $hub->pages->new_page( $args->{page_id} );

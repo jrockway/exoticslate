@@ -26,7 +26,8 @@ sub work {
     my $args = $job->arg;
 
     my $wksp = Socialtext::Workspace->new(workspace_id => $args->{workspace_id});
-    my $indexer = $class->_create_indexer($wksp, $args->{search_config}) or return;
+    my $indexer = $class->_create_indexer($wksp, $args->{search_config}, $job)
+        or return;
     $indexer->index_attachment( $args->{page_id}, $args->{attach_id} );
 
     # Is this really necessary?

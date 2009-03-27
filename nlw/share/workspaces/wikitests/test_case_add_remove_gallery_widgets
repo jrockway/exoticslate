@@ -1,0 +1,112 @@
+| *Comment* | STARTING Test Case: Add Remove Gallery Widgets |
+
+| *Comment* | Test Case: Add Remove Gallery Widgets create a fresh account |  |
+| set | acct | MWG %%start_time%% |
+| set | mwgmail | mwg-%%start_time%%@ken.socialtext.net |
+| st-admin | create-account --name "%%acct%%" | created |
+| st-admin | enable-plugin --account "%%acct%%" --plugin dashboard |  |
+| st-admin | create-user --e %%mwgmail%% --p %%password%% --account "%%acct%%" | created |
+| st-admin | give-accounts-admin --e %%mwgmail%% --account "%%acct%%" | now has accounts admin access |
+
+| *Comment* | Test Case: Add Remove Gallery Widgets login as fresh user |  |
+| st-logoutin | %%mwgmail%% | %%password%% |
+| open_ok | /?dashboard | 60000 |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| click_and_wait | link=Add Content |  |
+| wait_for_element_visible_ok | link=Manage Gallery for Accounts | 30000 |
+| click_ok | link=Manage Gallery for Accounts |  |
+
+| *Comment* | Test Case: Add Remove Gallery Widgets - Add Cheeky Quote via URL |  |
+| wait_for_element_visible_ok | link=Add Widget to Gallery | 30000 |
+| click_ok | link=Add Widget to Gallery |  |
+| wait_for_element_visible_ok | widget-url | 30000 |
+| wait_for_element_visible_ok | st-add-widget | 30000 |
+| click_ok | widget-url | seems to be needed |
+| type_ok | widget-url | `http://hosting.gmodules.com/ig/gadgets/file/112764733758979090903/CheekyQuote.xml` |
+| click_ok | st-add-widget |  |
+| wait_for_text_present_ok | Successfully added your widget | 30000 |
+| wait_for_element_visible_ok | link=Close | 30000 |
+| click_ok | link=Close |  |
+
+| *Comment* | Test Case: Manage Widget Gallery remove a 3rd party widget |  |
+| open_ok | /?dashboard | 60000 |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| click_and_wait | link=Add Content |  |
+| wait_for_element_visible_ok | link=Manage Gallery for Accounts | 30000 |
+| click_and_wait | link=Manage Gallery for Accounts |  |
+| wait_for_element_visible_ok | //a[@id='gallery-remove-Google Calendar'] | 30000 |
+| text_like | //a[@id='gallery-remove-Google Calendar'] | `(remove)` |
+| click_ok | //a[@id='gallery-remove-Google Calendar'] |  |
+| wait_for_text_present_ok | Are you sure you want to remove the "Google Calendar" widget? | 30000 |
+| wait_for_element_visible_ok | link=Yes | 30000 |
+| click_ok | link=Yes |  |
+
+| *Comment* | Test Case: Manage Widget Gallery removed a 3rd party widget |  |
+| open_ok | /?dashboard | 60000 |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| click_and_wait | link=Add Content |  |
+| wait_for_element_visible_ok | link=Manage Gallery for Accounts | 30000 |
+| click_and_wait | link=Manage Gallery for Accounts |  |
+| wait_for_element_visible_ok | //a[@id='gallery-restore-Google Calendar'] | 30000 |
+| wait_for_element_not_present_ok | //a[@id='gallery-remove-Google Calendar'] | 30000 |
+| text_like | //a[@id='gallery-restore-Google Calendar'] | `(restore)` |
+
+| *Comment* | Test Case: Manage Widget Gallery restore a 3rd party widget |  |
+| click_ok | //a[@id='gallery-restore-Google Calendar'] |  |
+| wait_for_text_present_ok | Are you sure you want to restore the "Google Calendar" widget? | 30000 |
+| wait_for_element_visible_ok | link=Yes | 30000 |
+| click_ok | link=Yes |  |
+
+| *Comment* | Test Case: Manage Widget Gallery restored a 3rd party widget |  |
+| open_ok | /?dashboard | 60000 |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| click_and_wait | link=Add Content |  |
+| wait_for_element_visible_ok | link=Manage Gallery for Accounts | 30000 |
+| click_and_wait | link=Manage Gallery for Accounts |  |
+| wait_for_element_visible_ok | //a[@id='gallery-remove-Google Calendar'] | 30000 |
+| wait_for_element_not_present_ok | //a[@id='gallery-restore-Google Calendar'] | 30000 |
+| text_like | //a[@id='gallery-remove-Google Calendar'] | `(remove)` |
+
+| *Comment* | Test Case: Manage Widget Gallery remove an uploaded widget |  |
+| open_ok | /?dashboard | 60000 |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| click_and_wait | link=Add Content |  |
+| wait_for_element_visible_ok | link=Manage Gallery for Accounts | 30000 |
+| click_and_wait | link=Manage Gallery for Accounts |  |
+| wait_for_element_visible_ok | //a[@id='gallery-remove-Cheeky Quote'] | 30000 |
+| text_like | //a[@id='gallery-remove-Cheeky Quote'] | `(remove)` |
+| click_ok | //a[@id='gallery-remove-Cheeky Quote'] |  |
+| wait_for_text_present_ok | Are you sure you want to remove the "Cheeky Quote" widget? | 30000 |
+| wait_for_element_visible_ok | link=Yes | 30000 |
+| click_ok | link=Yes |  |
+
+| *Comment* | Test Case: Manage Widget Gallery removed an uploaded widget |  |
+| open_ok | /?dashboard | 60000 |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| click_and_wait | link=Add Content |  |
+| wait_for_element_visible_ok | link=Manage Gallery for Accounts | 30000 |
+| click_and_wait | link=Manage Gallery for Accounts |  |
+| wait_for_element_visible_ok | //a[@id='gallery-restore-Cheeky Quote'] | 30000 |
+| wait_for_element_not_present_ok | //a[@id='gallery-remove-Cheeky Quote'] | 30000 |
+| text_like | //a[@id='gallery-restore-Cheeky Quote'] | `(restore)` |
+
+| *Comment* | Test Case: Manage Widget Gallery restore an uploaded widget |  |
+| click_ok | //a[@id='gallery-restore-Cheeky Quote'] |  |
+| wait_for_text_present_ok | Are you sure you want to restore the "Cheeky Quote" widget? | 30000 |
+| wait_for_element_visible_ok | link=Yes | 30000 |
+| click_ok | link=Yes |  |
+
+| *Comment* | Test Case: Manage Widget Gallery restored an uploaded widget |  |
+| open_ok | /?dashboard | 60000 |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| click_and_wait | link=Add Content |  |
+| wait_for_element_visible_ok | link=Manage Gallery for Accounts | 30000 |
+| click_and_wait | link=Manage Gallery for Accounts |  |
+| wait_for_element_visible_ok | //a[@id='gallery-remove-Cheeky Quote'] | 30000 |
+| wait_for_element_not_present_ok | //a[@id='gallery-restore-Cheeky Quote'] | 30000 |
+| text_like | //a[@id='gallery-remove-Cheeky Quote'] | `(remove)` |
+
+| *Comment* | Test Case: Manage Widget Gallery TEARDOWN |  |
+| *Comment* | Test Case: Manage Widget Gallery. No teardown, throw away the account and the user. |  |
+
+| *Comment* | Test Case: Manage Widget Gallery COMPLETED |

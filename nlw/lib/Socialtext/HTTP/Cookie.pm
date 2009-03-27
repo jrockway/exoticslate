@@ -4,6 +4,7 @@ package Socialtext::HTTP::Cookie;
 # Required inclusions.
 use strict;
 use warnings;
+use Class::Field qw(const);
 use Digest::SHA qw(sha1_base64);
 use Socialtext::AppConfig;
 
@@ -15,7 +16,7 @@ our %EXPORT_TAGS = (
     );
 our @EXPORT_OK = map { @{$_} } values %EXPORT_TAGS;
 
-sub USER_DATA_COOKIE { 'NLW-user' };
+const USER_DATA_COOKIE => 'NLW-user';
 
 ###############################################################################
 sub MAC_for_user_id {

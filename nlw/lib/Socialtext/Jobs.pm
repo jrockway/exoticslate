@@ -9,6 +9,8 @@ use Module::Pluggable search_path => 'Socialtext::Job', sub_name => 'job_types',
 use Data::ObjectDriver::Driver::DBI ();
 use TheSchwartz;
 
+__PACKAGE__->job_types(); # force load the plugins up front
+
 sub work_asynchronously {
     my $self = shift;
     my $job_class = 'Socialtext::Job::' . (shift || die "Class is mandatory");
@@ -23,9 +25,14 @@ sub list_jobs {
     $self->schwartz_run(list_jobs => \%args);
 }
 
-sub clear_jobs {
+sub clear_jobs           { sql_execute('DELETE FROM job') }
+sub find_job_for_workers { shift->schwartz_run(find_job_for_workers => @_) }
+sub work_once            { shift->schwartz_run(work_once => @_) }
+
+sub can_do               {
     my $self = shift;
-    sql_execute('DELETE FROM job');
+    my $job_class = 'Socialtext::Job::' . (shift || die "Class is mandatory");
+    $self->schwartz_run(can_do => $job_class);
 }
 
 sub schwartz_run {

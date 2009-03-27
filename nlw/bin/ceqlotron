@@ -2,23 +2,22 @@
 # @COPYRIGHT@
 use warnings;
 use strict;
-
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-
 use Socialtext::Ceqlotron;
-
-use Getopt::Long;
+use Socialtext::File qw/get_contents/;
 use Socialtext::Log 'st_log';
 use Socialtext::Paths;
+use Getopt::Long;
 use Pod::Usage;
 use POSIX qw( :sys_wait_h :signal_h );
-use Readonly;
+use Parallel::ForkManager;
+use Time::HiRes qw/sleep/;
 
 # don't run as root
 die "$0 must not run as root" if $> == 0;
 
-Readonly my $PID_FILE => Socialtext::Paths::pid_file('ceqlotron');
+my $PID_FILE = Socialtext::Paths::pid_file('ceqlotron');
 
 # Number of child processes we have running.
 my $RunningChildren = 0;
@@ -26,29 +25,49 @@ my $RunningChildren = 0;
 # Whether or not an exit has been requested.
 my $ExitPlease = 0;
 
-# Have we ever gotten the lock?
-my $HaveEverGottenTheLock = 0;
-
 # Initialize and parse command-line switches.
 my ( $WantHelp, $RunInForeground, $OnlyOnce, $OutputTo ) = ( 0, 0, 0, '' );
+my $PrintPid;
 Getopt::Long::Configure('bundling');
 GetOptions(
     'help|h'       => \$WantHelp,
     'foreground|f' => \$RunInForeground,
     'output|O=s'   => \$OutputTo,
     'once|o'       => \$OnlyOnce,
+    'pid'          => \$PrintPid,
 ) or exit 1;
 
 pod2usage(verbose => 1) if $WantHelp;
 
+if ($PrintPid) {
+    exit 0 unless -e $PID_FILE;
+    my $pid = get_contents($PID_FILE);
+    chomp $pid;
+    print "$pid\n";
+    exit 0;
+}
+
+exit_if_already_running();
 redirect_output();
 maybe_fork();
-log_start();
-install_signal_handlers();
 write_pid_file();
+st_log->notice("ceqlotron starting");
+install_signal_handlers();
+
+# Lets be explicit here about what jobs we want to process
+my $Jobs = Socialtext::Jobs->new;
+$Jobs->can_do('Test');
+$Jobs->can_do('PageIndex');
+$Jobs->can_do('AttachmentIndex');
+
+my $max_concurrency = Socialtext::AppConfig->ceqlotron_max_concurrency;
+my $PM = Parallel::ForkManager->new($max_concurrency);
+
 main_loop();
-wait_until_children_less_than(1);
+wait_for_all_children();
 exit_gracefully();
+
+
 
 sub with_sigchld_blocked(&);
 
@@ -66,24 +85,15 @@ sub exit_gracefully {
         unlink $PID_FILE or die "Cannot unlink $PID_FILE: $!";
     }
     st_log->notice("ceqlotron exiting");
-    exit ( $HaveEverGottenTheLock ? 0 : 1 );
+    exit 0;
 }
 
-sub wait_until_children_less_than {
-    my ( $too_many ) = @_;
-    
+sub wait_for_all_children {
+    return unless $RunningChildren;
     with_sigchld_blocked {
-        while ($RunningChildren >= $too_many) {
-            st_log->debug(
-                "ceqlotron waiting for children to be under"
-                . " $too_many (currently $RunningChildren)"
-            );
-            if ( wait > 0 ) {
-                --$RunningChildren;
-            }
-        }
+        st_log->debug("ceqlotron waiting for children to exit");
+        $PM->wait_all_children;
     };
-    st_log->debug("ceqlotron fewer than $too_many children ok");
 }
 
 sub reap {
@@ -111,52 +121,22 @@ sub write_pid_file {
 }
 
 sub main_loop {
-    Socialtext::Ceqlotron::ensure_queue_directory();
-    Socialtext::Ceqlotron::ensure_lock_file();
     LOOP: while (1) {
-        if ( Socialtext::Ceqlotron::acquire_lock() ) {
-            $HaveEverGottenTheLock = 1;
+        while (my $job = $Jobs->find_job_for_workers()) {
+            last LOOP if $ExitPlease;
+            if ($PM->start) {
+                $RunningChildren++;
+                st_log->debug("ceqlotron fork - concurrency $RunningChildren");
+                next;
+            }
 
-            fork_some_children();
-            Socialtext::Ceqlotron::release_lock();
+            $Jobs->work_once($job);
+            exit;
         }
+
         last LOOP if $ExitPlease || $OnlyOnce;
         sleep Socialtext::AppConfig->ceqlotron_period;
     }
-}
-
-# Idea due to cdent.  At some point, a more elegant way to do this would be to
-# figure out how many children we want to fork (max_concurrency -
-# $RunningChildren), acquire the lock, grab and unlink up to that many events,
-# release the lock, then fork and go.  We will have the lock for much fewer
-# syscalls, so this will be faster.  Probably not a huge deal, but worth
-# considering.
-sub fork_some_children {
-    my $max_concurrency = Socialtext::AppConfig->ceqlotron_max_concurrency;
-
-    Socialtext::Ceqlotron::foreach_event( sub {
-        if (there_is_room()) {
-            run_event(@_);
-        } else {
-            st_log->debug("ceqlotron reached max concurrency: $max_concurrency");
-            Socialtext::Ceqlotron::last_event();
-        }
-    } );
-}
-
-sub run_event {
-    if ( my $new_children = Socialtext::Ceqlotron::_dispatch_symlink(@_) ) {
-        with_sigchld_blocked {    # To avoid a race on $RunningChildren.
-            $RunningChildren += $new_children;
-            st_log->debug("ceqlotron fork - concurrency $RunningChildren");
-        }
-    }
-}
-
-sub there_is_room {
-    with_sigchld_blocked {
-        $RunningChildren < Socialtext::AppConfig->ceqlotron_max_concurrency
-    };
 }
 
 sub redirect_output {
@@ -167,6 +147,7 @@ sub redirect_output {
         open STDERR, '>>', $OutputTo or die "STDERR > $OutputTo: $!";
         select STDERR; $| = 1;
         select $oldfh;
+        close STDIN;
     }
 }
 
@@ -181,10 +162,6 @@ sub maybe_fork {
     elsif ($child_pid != 0) { # in the parent
         exit 0;
     }
-}
-
-sub log_start {
-    st_log->notice("ceqlotron starting");
 }
 
 sub with_sigchld_blocked(&) {
@@ -202,6 +179,13 @@ sub with_sigchld_blocked(&) {
     }
 
     return $retval;
+}
+
+sub exit_if_already_running {
+    return unless -e $PID_FILE;
+    my $pid = get_contents($PID_FILE);
+    my $alive = kill 0 => $pid;
+    exit if $alive;
 }
 
 =head1 NAME

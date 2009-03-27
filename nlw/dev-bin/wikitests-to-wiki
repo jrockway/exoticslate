@@ -4,13 +4,11 @@
 
 PORT=`perl -e 'print $> + 20000'`
 SERVER=http://`hostname`:$PORT
+DIR=$ST_CURRENT/nlw/share/workspaces/wikitests
+echo Server is $SERVER
 
-echo Creating wikitests workspace
-WIKITESTS=`$ST_CURRENT/nlw/bin/st-admin list-workspaces | grep wikitests` || true
-
-if [ "$WIKITESTS" == "wikitests" ]; then
-    echo WARNING: $WIKITESTS  already exists
-fi
+echo Preparing wikitests workspace
+$ST_CURRENT/nlw/bin/st-admin delete-workspace --workspace wikitests --dir $DIR
 $ST_CURRENT/nlw/bin/st-admin create-workspace --title 'Wikitests' --name wikitests --empty
 $ST_CURRENT/nlw/bin/st-admin add-workspace-admin  --email devnull1@socialtext.com --workspace wikitests
 
@@ -18,10 +16,7 @@ echo Adding user tester to wikitests workspace
 $ST_CURRENT/nlw/bin/st-admin  create-user --e tester@ken.socialtext.net --p wikitest
 $ST_CURRENT/nlw/bin/st-admin add-member  --e tester@ken.socialtext.net --w wikitests
 
-echo Server is $SERVER
-
-DIR=$ST_CURRENT/nlw/share/workspaces/wikitests
-stu-local-copy -s $SERVER -w wikitests  -u devnull1@socialtext.com -p d3vnu11l --from $DIR
+$ST_CURRENT/nlw/dev-bin/fast-import-pages --workspace wikitests --from $DIR
 
 # get rid of superfluous ceq indexing then index
 $ST_CURRENT/nlw/bin/ceq-rm wikitests

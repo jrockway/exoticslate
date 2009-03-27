@@ -35,7 +35,8 @@ Dashboard, People, and Signals tests
 * [Widgets Testcases]
 * [Test Case: Gadgets Galore]
 * [Profile Testcases]
-* [Test Case: Manage Widget Gallery]
+* [Test Case: Upload Update Gallery Widgets]
+* [Test Case: Add Remove Gallery Widgets]
 * [Test Case: Administer Dashboards]
 
 ^ All pages tagged 'Testcase' (only a list, visit the pages above for tests)

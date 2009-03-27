@@ -1,0 +1,130 @@
+* HighPermissions
+
+| *Comment* | STARTING Test Case: Manage Widget Gallery |
+
+* Fixture: SocialWidgets
+
+| *Comment* | Test Case: Manage Widget Gallery create a fresh account |  |
+| set | acct | MWG %%start_time%% |
+| set | mwgmail | mwg-%%start_time%%@ken.socialtext.net |
+| st-admin | create-account --name "%%acct%%" | created |
+| st-admin | enable-plugin --account "%%acct%%" --plugin dashboard |  |
+| st-admin | create-user --e %%mwgmail%% --p %%password%% --account "%%acct%%" | created |
+
+| *Comment* | Test Case: Manage Widget Gallery non-admin cannot manage |  |
+| st-logoutin | %%mwgmail%% | %%password%% |
+| open_ok | /?dashboard | 60000 |
+
+| *Comment* | Test Case: Manage Widget Gallery - bring up gallery, no manage button |  |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| click_and_wait | link=Add Content |  |
+| wait_for_text_present_ok | Widget Gallery |  |
+| text_like | st-wiki-title | Widget Gallery |
+| wait_for_element_not_present_ok | link=Manage Gallery for Accounts | 5000 |
+| text_unlike | controlsRight | Manage Gallery for Accounts |
+
+| *Comment* | Test Case: Manage Widget Gallery - add accounts admin |  |
+| st-admin | give-accounts-admin --e %%mwgmail%% --account "%%acct%%" | now has accounts admin access |
+| open_ok | /?dashboard | 60000 |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| click_and_wait | link=Add Content |  |
+| wait_for_element_visible_ok | link=Manage Gallery for Accounts | 30000 |
+| click_ok | link=Manage Gallery for Accounts |  |
+
+| *Comment* | Test Case: Manage Widget Gallery - Add Widgets to Gallery - cancel |  |
+| wait_for_element_visible_ok | link=Add Widget to Gallery | 30000 |
+| click_ok | link=Add Widget to Gallery |  |
+| wait_for_element_visible_ok | widget-url | 30000 |
+| wait_for_element_visible_ok | link=Close | 30000 |
+| click_ok | link=Close |  |
+
+| *Comment* | Test Case: Manage Widget Gallery. VooDoo #1 - open dashboard again |  |
+| open_ok | /?dashboard | 60000 |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| click_and_wait | link=Add Content |  |
+| wait_for_element_visible_ok | link=Manage Gallery for Accounts | 30000 |
+| click_ok | link=Manage Gallery for Accounts |  |
+
+| *Comment* | Test Case: Manage Widget Gallery - Add Cheeky Quote via URL |  |
+| wait_for_element_visible_ok | link=Add Widget to Gallery | 30000 |
+| click_ok | link=Add Widget to Gallery |  |
+| wait_for_element_visible_ok | widget-url | 30000 |
+| wait_for_element_visible_ok | st-add-widget | 30000 |
+| click_ok | widget-url | seems to be needed |
+| type_ok | widget-url | `http://hosting.gmodules.com/ig/gadgets/file/112764733758979090903/CheekyQuote.xml` |
+| click_ok | st-add-widget |  |
+| wait_for_text_present_ok | Successfully added your widget | 30000 |
+| wait_for_element_visible_ok | link=Close | 30000 |
+| click_ok | link=Close |  |
+
+| *Comment* | Test Case: Manage Widget Gallery. VooDoo #2 - open dashboard again |  |
+| open_ok | /?dashboard | 60000 |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| click_and_wait | link=Add Content |  |
+| wait_for_element_visible_ok | link=Manage Gallery for Accounts | 30000 |
+| click_ok | link=Manage Gallery for Accounts |  |
+
+| *Comment* | Test Case: Manage Widget Gallery add bogus URL |  |
+| wait_for_element_visible_ok | link=Add Widget to Gallery | 30000 |
+| click_ok | link=Add Widget to Gallery |  |
+| wait_for_element_visible_ok | widget-url | 30000 |
+| wait_for_element_visible_ok | st-add-widget | 30000 |
+| click_ok | widget-url | seems to be needed |
+| type_ok | widget-url | `http://hosting.gmodules.com/ig/gadgets/file/112764733758979090903/nosuchanimal.xml` |
+| click_ok | st-add-widget |  |
+| wait_for_text_present_ok | The URL you provided does not contain a widget file | 30000 |
+| wait_for_element_visible_ok | link=Close | 30000 |
+| click_ok | link=Close |  |
+
+| open_ok | /?dashboard | 60000 |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| click_and_wait | link=Add Content |  |
+| wait_for_element_visible_ok | link=Manage Gallery for Accounts | 30000 |
+| click_ok | link=Manage Gallery for Accounts |  |
+
+| *Comment* | Test Case: Manage Widget Gallery add bogus file |  |
+| wait_for_element_visible_ok | link=Add Widget to Gallery | 30000 |
+| click_ok | link=Add Widget to Gallery |  |
+| wait_for_element_visible_ok | widget-file | 30000 |
+| wait_for_element_visible_ok | st-add-widget | 30000 |
+| click_ok | widget-file | seems to be needed |
+| type_ok | widget-file | %%wikitest_client_files%%wikitest.txt |
+| click_ok | st-add-widget |  |
+| wait_for_text_present_ok | The file you provided does not appear to be valid XML | 30000 |
+| wait_for_element_visible_ok | link=Close | 30000 |
+| click_ok | link=Close |  |
+
+| *Comment* | Test Case: Manage Widget Gallery add bosspy.xml file |  |
+| wait_for_element_visible_ok | link=Add Widget to Gallery | 30000 |
+| click_ok | link=Add Widget to Gallery |  |
+| wait_for_element_visible_ok | widget-file | 30000 |
+| wait_for_element_visible_ok | st-add-widget | 30000 |
+| click_ok | widget-file | seems to be needed |
+| type_ok | widget-file | %%wikitest_client_files%%bosspy.xml |
+| click_ok | st-add-widget |  |
+| wait_for_text_present_ok | Successfully added your widget | 30000 |
+| wait_for_element_visible_ok | link=Close | 30000 |
+| click_ok | link=Close |  |
+
+| *Comment* | Test Case: Manage Widget Gallery add a Cheeky Quote |  |
+| open_ok | /?dashboard | 60000 |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| click_and_wait | link=Add Content |  |
+| wait_for_element_visible_ok | link=Cheeky Quote | 30000 |
+| click_and_wait | link=Cheeky Quote |  |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| st-name-widget | 1 | cheeky_quote |
+| st-widget-title-like | cheeky_quote | Cheeky Quote |
+
+| *Comment* | Test Case: Manage Widget Gallery add a Boss Spy |  |
+| click_and_wait | link=Add Content |  |
+| wait_for_element_visible_ok | link=Boss Spy | 30000 |
+| click_and_wait | link=Boss Spy |  |
+| wait_for_element_visible_ok | link=Add Content | 30000 |
+| st-name-widget | 1 | boss_spy |
+| st-widget-title-like | boss_spy | Boss Spy |
+
+| *Comment* | Test Case: Manage Widget Gallery TEARDOWN |  |
+| *Comment* | Test Case: Manage Widget Gallery. No teardown, throw away the account and the user. |  |
+
+| *Comment* | Test Case: Manage Widget Gallery COMPLETED |

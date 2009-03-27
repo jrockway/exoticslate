@@ -78,12 +78,19 @@ sub new {
         unshift @{$self->{fixtures}}, 'clean';
     }
 
+    $self->_create_log_dir;
     $self->_clean_if_last_test_was_destructive;
     $self->_init_fixtures;
     $self->_set_url;
     $self->_make_fixtures_current;
 
     return $self;
+}
+
+sub _create_log_dir {
+    my $self = shift;
+    my $log_dir = "$nlw_dir/t/tmp/log";
+    mkpath $log_dir unless -d $log_dir;
 }
 
 sub _clean_if_last_test_was_destructive {

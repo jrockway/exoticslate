@@ -16,7 +16,9 @@ use Parallel::ForkManager;
 use Time::HiRes qw/sleep/;
 
 # don't run as root
-die "$0 must not run as root" if $> == 0;
+if ($> == 0) {
+    exec(qw/sudo -u www-data/, $0, @ARGV);
+}
 
 my $PID_FILE = Socialtext::Paths::pid_file('ceqlotron');
 

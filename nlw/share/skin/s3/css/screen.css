@@ -206,9 +206,13 @@ div#homeLink {
 	float: left;
 	background: url(../images/mainNavLeft.png) no-repeat top left;
 	}
+div#inviteLink {
+	float: right;
+	}
+	
 	
 
-div#mainNav ul li a,div#homeLink a {
+div#mainNav ul li a,div#homeLink a, div#inviteLink a{
 	float: left;
 	display: block;
 	line-height: 34px;

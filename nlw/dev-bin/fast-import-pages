@@ -27,11 +27,12 @@ sub load_pages_from_disk {
     for my $f (@files) {
         my $data = decode_json(get_contents($f));
         (my $content_file = $f) =~ s/\.json$//;
+        my $content = get_contents($content_file),
 
         print "  Creating $data->{name}\n";
         Socialtext::Page->new(hub => $hub)->create(
             title => $data->{name},
-            content => get_contents($content_file),
+            content => $content,
             creator => Socialtext::User->SystemUser,
             categories => $data->{tags},
         );

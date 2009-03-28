@@ -8,7 +8,7 @@ use Socialtext::Jobs;
 use Socialtext::File qw/get_contents/;
 use Socialtext::Log 'st_log', 'st_timed_log';
 use Socialtext::Paths;
-use Socialtext::SQL qw/get_dbh/;
+use Socialtext::SQL qw/get_dbh sql_execute/;
 use Socialtext::Timer;
 use Getopt::Long;
 use Pod::Usage;
@@ -31,6 +31,7 @@ my $ExitPlease = 0;
 # Initialize and parse command-line switches.
 my ( $WantHelp, $RunInForeground, $OnlyOnce, $OutputTo ) = ( 0, 0, 0, '' );
 my $PrintPid;
+my $Kick;
 Getopt::Long::Configure('bundling');
 GetOptions(
     'help|h'       => \$WantHelp,
@@ -38,6 +39,7 @@ GetOptions(
     'output|O=s'   => \$OutputTo,
     'once|o'       => \$OnlyOnce,
     'pid'          => \$PrintPid,
+    'kick'         => \$Kick,
 ) or exit 1;
 
 pod2usage(verbose => 1) if $WantHelp;
@@ -47,6 +49,21 @@ if ($PrintPid) {
     my $pid = get_contents($PID_FILE);
     chomp $pid;
     print "$pid\n";
+    exit 0;
+}
+
+if ($Kick) {
+    print "This action will reset grabbed status for jobs.\n"
+        . "You should not do this while jobs are currently being run.\n"
+        . "\nType 'yes' to continue...\n";
+    my $ans = <STDIN>; chomp $ans;
+    if ($ans eq 'yes') {
+        print "Updating jobs ...\n";
+        sql_execute('UPDATE job SET grabbed_until = 0');
+    }
+    else {
+        print "Not updating jobs ...\n";
+    }
     exit 0;
 }
 
@@ -191,6 +208,8 @@ The child process will run the job, and then exit.
                             in the foreground.
     -o,--once               This causes ceqlotron to run through
                             the MAIN LOOP only once.
+    --kick                  Reset the grabbed time for all jobs.
+    --pid                   Print the current daemon pid (if running).
     -O,--output=FILE        Redirect stdout and stderr to FILE.
     -h,--help               Show help.
 

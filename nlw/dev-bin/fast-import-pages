@@ -7,7 +7,7 @@ use lib "$FindBin::Bin/../lib";
 use Test::Socialtext;
 use Socialtext::User;
 use Getopt::Long;
-use Socialtext::File qw/get_contents/;
+use Socialtext::File;
 use Socialtext::JSON qw/decode_json/;
 
 my $workspace;
@@ -25,9 +25,9 @@ exit;
 sub load_pages_from_disk {
     my @files = glob("$from_dir/*.json");
     for my $f (@files) {
-        my $data = decode_json(get_contents($f));
+        my $data = decode_json(Socialtext::File::get_contents_utf8($f));
         (my $content_file = $f) =~ s/\.json$//;
-        my $content = get_contents($content_file),
+        my $content = Socialtext::File::get_contents_utf8($content_file),
 
         print "  Creating $data->{name}\n";
         Socialtext::Page->new(hub => $hub)->create(

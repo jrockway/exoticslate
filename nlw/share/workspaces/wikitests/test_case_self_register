@@ -1,11 +1,7 @@
-Test definition: [Test: Login/Registration Workflow]
-
-Results: [Test case: Self Register Results]
-
 | *Comment* | Test Case: Self Register user registration |  |
 | st-logout |  |  |
 | open_ok | /nlw/register.html |  |
-| text_like | //body | Log in with an existing account |
+| text_like | Click here to log in with an existing account |  |
 | set | reg_email | reg_%%start_time%%@ken.socialtext.net |
 | type_ok | email_address | %%reg_email%% |
 | type_ok | password | password |

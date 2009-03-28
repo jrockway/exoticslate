@@ -44,7 +44,7 @@ Create unique sort order for each sort:
 | open_ok | /%%sorting_workspace%%/?Search Sort 2 |  |
 | type_ok | username | %%user_3%% |
 | type_ok | password | 123456 |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 
 | *Comment* | Test Case: Tagged Page Sorting . Add Tagged Page %%start_time%% to 4 pages |  |
 | wait_for_element_visible_ok | link=Add Tag | 30000 |
@@ -66,7 +66,7 @@ Create unique sort order for each sort:
 | open_ok | /%%sorting_workspace%%/?Search Sort 3 |  |
 | type_ok | username | %%user_4%% |
 | type_ok | password | 123456 |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | wait_for_element_visible_ok | link=Add Tag | 30000 |
 | click_ok | link=Add Tag |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
@@ -87,7 +87,7 @@ Create unique sort order for each sort:
 | open_ok | /%%sorting_workspace%%/?Search Sort 4 |  |
 | type_ok | username | %%user_1%% |
 | type_ok | password | 123456 |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | wait_for_element_visible_ok | link=Add Tag | 30000 |
 | click_ok | link=Add Tag |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
@@ -109,7 +109,7 @@ Create unique sort order for each sort:
 | open_ok | /%%sorting_workspace%%/?Search Sort 1 |  |
 | type_ok | username | %%user_2%% |
 | type_ok | password | 123456 |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | wait_for_element_visible_ok | link=Add Tag | 30000 |
 | click_ok | link=Add Tag |  |
 | wait_for_element_visible_ok | st-tags-field | 30000 |
@@ -127,7 +127,7 @@ Create unique sort order for each sort:
 | open_ok | /%%sorting_workspace%%/?Search Sort 1 |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 
 | *Comment* | Test Case: Tagged Page Sorting needs to sort using time in seconds |  |
 | click_and_wait | link=Settings |  |

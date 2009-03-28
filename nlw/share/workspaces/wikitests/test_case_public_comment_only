@@ -32,7 +32,7 @@
 | st-admin | create-user --email user_%%start_time%%@ken.socialtext.net --password 123456 |  |
 | type_ok | username | user_%%start_time%%@ken.socialtext.net |
 | type_ok | password | 123456 |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 
 | text_like | contentLeft | My Settings |
 | text_like | contentLeft | List All Users |

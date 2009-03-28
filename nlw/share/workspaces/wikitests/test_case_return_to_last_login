@@ -34,7 +34,7 @@
 | text_like | errors-and-messages | You must login to view this page. |
 | type_ok | username | %%login_user%% |
 | type_ok | password | test%%start_time%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | text_like | st-central-page-link | Private %%start_time%% |
 | click_and_wait | link=Private %%start_time%% |  |
 | text_like | st-page-wiki-title | Private %%start_time%% |
@@ -44,7 +44,7 @@
 | *Comment* | Fresh login goes to last visited workspace. In the past, we'd go to the first workspace name alphebetically we were a member of, which would be the aaa-%%start_time%% workspace. Now we should go to private-%%start_time%%. |  |
 | type_ok | username | %%login_user%% |
 | type_ok | password | test%%start_time%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | text_like | st-wiki-title | Dashboard: Private %%start_time%% |
 | st_logout |  |  |
 
@@ -56,7 +56,7 @@
 | text_like | errors-and-messages | You must login to view this page. |
 | type_ok | username | %%login_user%% |
 | type_ok | password | test%%start_time%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | text_like | st-page-wiki-title | Login to Edit %%start_time%% |
 | st_logout |  |  |
 | text_like | st-login-to-edit-button-link | Edit |
@@ -64,7 +64,7 @@
 | text_like | errors-and-messages | You must login to view this page. |
 | type_ok | username | %%login_user%% |
 | type_ok | password | test%%start_time%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | wait_for_text_present_ok | Editing: Login to Edit %%start_time%% |  |
 | click_and_wait | st-save-button-link |  |
 | st_logout |  |  |
@@ -74,7 +74,7 @@
 | click_and_wait | link=Login |  |
 | type_ok | username | %%login_user%% |
 | type_ok | password | test%%start_time%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | open_ok | public-%%start_time%% |
 | wait_for_text_present_ok | Public %%start_time%% |  |
 | st_logout |  |  |
@@ -83,7 +83,7 @@
 | text_like | errors-and-messages | You must login to view this page. |
 | type_ok | username | %%login_user%% |
 | type_ok | password | test%%start_time%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | wait_for_text_present_ok | Public %%start_time%% |  |
 | st_logout |  |  |
 
@@ -92,7 +92,7 @@
 | click_and_wait | link=Login |  |
 | type_ok | username | %%login_user%% |
 | type_ok | password | test%%start_time%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | open_ok | private-%%start_time%% |  |
 | text_like | st-wiki-title | Dashboard: Private %%start_time%% |
 | st_logout |  |  |
@@ -100,7 +100,7 @@
 | text_like | support_link | qr/.+\@.*\.?socialtext\..../ |
 | type_ok | username | %%login_user%% |
 | type_ok | password | test%%start_time%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | text_like | st-wiki-title | Dashboard: Private %%start_time%% |
 | st_logout |  |  |
 
@@ -109,7 +109,7 @@
 | text_like | support_link | qr/.+\@.*\.?socialtext\..../ |
 | type_ok | username | %%login_user%% |
 | type_ok | password | test%%start_time%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | open_ok | aaa-public-%%start_time%% |  |
 | wait_for_text_present_ok | AAA Public %%start_time%% |  |
 | st_logout |  |  |
@@ -119,7 +119,7 @@
 | text_like | support_link | qr/.+\@.*\.?socialtext\..../ |
 | type_ok | username | %%login_user%% |
 | type_ok | password | test%%start_time%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | wait_for_text_present_ok | Public %%start_time%% |  |
 | st_logout |  |  |
 
@@ -129,7 +129,7 @@
 | text_like | errors-and-messages | You must login to view this page. |
 | type_ok | username | %%login_user%% |
 | type_ok | password | test%%start_time%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | text_like | st-wiki-title | Dashboard: Private %%start_time%% |
 | open_ok | aaa-%%start_time%% |  |
 | text_like | st-wiki-title | Dashboard: AAA %%start_time%% |
@@ -138,7 +138,7 @@
 | st-admin | delete-workspace --workspace aaa-%%start_time%% --no-export |  |
 | type_ok | username | %%login_user%% |
 | type_ok | password | test%%start_time%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | text_like | st-wiki-title | Dashboard: Private %%start_time%% |
 | st_logout |  |  |
 

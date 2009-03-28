@@ -10,7 +10,7 @@ Results: [Test case: Self Register Results]
 | type_ok | email_address | %%reg_email%% |
 | type_ok | password | password |
 | type_ok | password2 | password |
-| click_and_wait | //input[@value='Register'] |  |
+| click_and_wait | register_btn |  |
 | st-message | An email confirming your registration has been sent to %%reg_email%% |  |
 
 | *Comment* | Test Case: Self Register User does not confirm their email address and tries to login. |  |
@@ -23,7 +23,7 @@ Results: [Test case: Self Register Results]
 | st-message | The confirmation email has been resent. |  |
 | type_ok | username | %%reg_email%% |
 | type_ok | password | password |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 | st-message | You need to confirm your email address to activate this account. |  |
 | st-message | You should have received an email with a confirmation link. |  |
 
@@ -36,6 +36,6 @@ Results: [Test case: Self Register Results]
 | *Comment* | DO NOT change the following explicit login commands to st-login |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
-| click_and_wait | //input[@value='Log in'] |
+| click_and_wait | login_btn |
 
 | *Comment* | Test case: Self Register COMPLETED |  |

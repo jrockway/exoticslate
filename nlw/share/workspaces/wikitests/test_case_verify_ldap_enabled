@@ -33,7 +33,7 @@ This testcase traverses the UI to all the places that differ from the Default UI
 | type_ok | email_address | %%email%% |
 | type_ok | password | %%password%% |
 | type_ok | password2 | %%password%% |
-| click_and_wait | //input[@value='Register'] |  |
+| click_and_wait | link=Register |  |
 | text-like | A user with this email address (%%email%%) already exists. |  |
 
 | *Comment* | Test Case: Verify LDAP Enabled: My Settings (no settings) |  |

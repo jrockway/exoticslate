@@ -167,18 +167,7 @@ sub formatted_unlike() {
 }
 
 sub ceqlotron_run_synchronously() {
-    # We have to do this here because at compile time, gen-config may
-    # not have yet created the appconfig file, and Socialtext::Ceqlotron uses
-    # Socialtext::AppConfig.
-    require Socialtext::Ceqlotron;
-    import Socialtext::Ceqlotron;
-
-    # Temporarily override ceqlotron_synchronous.
-    my $prev_appconfig = $ENV{NLW_APPCONFIG} || '';
-    local $ENV{NLW_APPCONFIG} = "ceqlotron_synchronous=1,$prev_appconfig";
-
-    # Actually run the queue.
-    Socialtext::Ceqlotron::run_current_queue();
+    shell_run("$ENV{NLW_CURRENT}nlw/bin/ceqlotron -f -o");
 }
 
 # Create a temp directory and setup an AppConfig using that directory.

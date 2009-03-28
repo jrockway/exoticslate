@@ -8,13 +8,13 @@ use Test::Socialtext tests => 40;
 fixtures( 'admin' );
 
 use Socialtext::Page ();
-use Socialtext::Ceqlotron ();
+use Socialtext::Jobs;
 
 BEGIN {
     use_ok("Socialtext::Lite");
 }
 
-Socialtext::Ceqlotron::clean_queue_directory();
+Socialtext::Jobs->clear_jobs();
 
 my $Singapore = join '', map { chr($_) } 26032, 21152, 22369;
 

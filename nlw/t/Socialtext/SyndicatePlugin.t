@@ -16,7 +16,7 @@ use DateTime;
 BEGIN {
     use_ok( "Socialtext::SyndicatePlugin" );
     use_ok( "Socialtext::Page" );
-    use_ok( "Socialtext::Ceqlotron" );
+    use_ok( "Socialtext::Jobs" );
 }
 
 my $hub = new_hub('auth-to-edit');
@@ -26,7 +26,7 @@ no warnings 'redefine';
     host => 'local.example.com',
     scheme => 'http',
 };
-Socialtext::Ceqlotron::clean_queue_directory();
+Socialtext::Jobs->clear_jobs();
 
 my $date = DateTime->now->add( seconds => 600 );
 

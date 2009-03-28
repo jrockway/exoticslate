@@ -10,13 +10,10 @@ use SOAP::Lite;
 #use SOAP::Lite +trace => 'all';
 use Data::Dumper;
 use CGI::Cookie;
-
-use Socialtext::Ceqlotron;
+use Socialtext::System qw/shell_run/;
+use Socialtext::Jobs;
 use Socialtext::Page;
 use Socialtext::User;
-
-my $old_config = $ENV{NLW_APPCONFIG} || '';
-local $ENV{NLW_APPCONFIG} = "ceqlotron_synchronous=1,$old_config";
 
 # this test insn't stable with regards to changes in fixtures or
 # extra pages
@@ -281,7 +278,7 @@ SETPAGE_ACT_AS: {
 
 # clean the ceq queue prior to this save so it's the only thing
 # in the queue
-Socialtext::Ceqlotron::clean_queue_directory();
+Socialtext::Jobs->clear_jobs();
 
 # do the same page again
 RESETPAGE: {
@@ -296,7 +293,7 @@ RESETPAGE: {
 }
 
 # run the ceqlotron
-Socialtext::Ceqlotron::run_current_queue();
+shell_run("$ENV{ST_CURRENT}/nlw/bin/ceqlotron -o -f");
 
 SEARCH: {
     my $response = _getSearch('ontology');

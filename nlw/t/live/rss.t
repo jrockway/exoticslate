@@ -6,7 +6,8 @@ use warnings;
 use Encode 'decode_utf8';
 
 use Test::Live;
-use Socialtext::Ceqlotron;
+use Socialtext::Jobs;
+use Socialtext::System qw/shell_run/;
 
 
 my $tl = Test::Live->new(dont_log_in => 1);
@@ -14,12 +15,12 @@ my $tl = Test::Live->new(dont_log_in => 1);
 { # Create and index a page with a Unicode name, for a test below.
     my $hub = Test::Socialtext::Environment->instance->hub_for_workspace(
         'public');
-    Socialtext::Ceqlotron::clean_queue_directory();
+    Socialtext::Jobs->clear_jobs();
     my $page = $hub->pages->new_from_name(decode_utf8('繁體中'));
     $page->title(decode_utf8('繁體中'));
     $page->content('cows love cancer');
     $page->store( user => Socialtext::User->Guest );
-    Socialtext::Ceqlotron::run_current_queue();
+    shell_run("$ENV{ST_CURRENT}/nlw/bin/ceqlotron -o -f");
 }
 
 $tl->standard_query_validation;

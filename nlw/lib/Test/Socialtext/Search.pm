@@ -8,7 +8,7 @@ use File::Spec;
 use Test::More;
 use Test::Socialtext ();
 use Test::Socialtext::Environment;
-use Socialtext::Ceqlotron;
+use Socialtext::Jobs;
 use Socialtext::Paths;
 
 require Exporter;
@@ -18,7 +18,7 @@ our @EXPORT = qw(init delete_page search_for_term
                  create_and_confirm_page turn_on_rampup
                  turn_off_rampup);
 
-Socialtext::Ceqlotron::clean_queue_directory();
+Socialtext::Jobs->clear_jobs();
 our $hub;
 
 sub hub {

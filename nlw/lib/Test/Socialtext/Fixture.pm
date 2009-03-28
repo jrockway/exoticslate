@@ -398,11 +398,9 @@ sub _generate_help_workspace {
         role => Socialtext::Role->WorkspaceAdmin(),
     );
 }
-
 sub _unlink_existing_pages {
     my $self = shift;
     my $ws = shift;
-    my $workspace_name = $ws->name;
 
     my $user = Socialtext::User->SystemUser();
     my $hub = Socialtext::Hub->new(
@@ -414,20 +412,16 @@ sub _unlink_existing_pages {
         $p->delete(user => $user);
     }
 
-    $self->_clean_workspace_ceqlotron_tasks($workspace_name);
+    $self->_clean_workspace_ceqlotron_tasks($ws);
 }
 
 # remove the ceqlotron jobs we don't want
 sub _clean_workspace_ceqlotron_tasks {
-    my $self           = shift;
-    my $workspace_name = shift;
-
-    require Socialtext::Ceqlotron;
-    Socialtext::Ceqlotron::ensure_queue_directory();
-    Socialtext::Ceqlotron::ensure_lock_file();
+    my $self = shift;
+    my $ws   = shift;
 
     my $program = $self->env->nlw_dir . '/bin/ceq-rm';
-    system($program, $workspace_name) and die "$program failed: $!";
+    system($program, ";ws=" . $ws->workspace_id . ";") and die "$program failed: $!";
 }
 
 sub _create_ordered_pages {

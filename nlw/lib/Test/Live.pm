@@ -708,23 +708,6 @@ sub do_special_action {
             $self->mech->default_header($header => $value);
             return;
         },
-        cleanCeqlotron => sub {
-            Test::More::diag("cleaning the ceqlotron queue\n")
-                if $ENV{TEST_VERBOSE};
-            require Socialtext::Ceqlotron;
-            import Socialtext::Ceqlotron;
-            Socialtext::Ceqlotron::clean_queue_directory();
-            return;
-        },
-        runCeqlotron => sub {
-            Test::More::diag("calling the ceqlotron\n") if $ENV{TEST_VERBOSE};
-            require Socialtext::Ceqlotron;
-            import Socialtext::Ceqlotron;
-            my $old_config = $ENV{NLW_APPCONFIG} || '';
-            local $ENV{NLW_APPCONFIG} = "ceqlotron_synchronous=1,$old_config";
-            Socialtext::Ceqlotron::run_current_queue();
-            return;
-        },
         setWorkspaceConfig => sub {
             my( $config_name, $config_value ) = @args;
             my $workspace

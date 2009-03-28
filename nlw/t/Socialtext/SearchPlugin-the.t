@@ -7,10 +7,10 @@ use warnings;
 use Test::Socialtext tests => 6;
 fixtures( 'admin' );
 
-use Socialtext::Ceqlotron;
+use Socialtext::Jobs;
 use Socialtext::Search::AbstractFactory;
 
-Socialtext::Ceqlotron::clean_queue_directory();
+Socialtext::Jobs->clear_jobs();
 
 my $hub = new_hub('admin');
 Socialtext::Search::AbstractFactory->GetFactory->create_indexer('admin')

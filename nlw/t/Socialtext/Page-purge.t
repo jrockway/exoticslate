@@ -1,14 +1,10 @@
 #!perl
 # @COPYRIGHT@
-
 use warnings;
 use strict;
-
 use Test::Socialtext tests => 5;
 fixtures( 'admin', 'destructive' );
-
-use Socialtext::Ceqlotron;
-use Socialtext::ChangeEvent;
+use Socialtext::Jobs;
 
 
 my $hub = new_hub('admin');
@@ -21,7 +17,7 @@ my $page = $hub->pages->new_from_name('Start here');
 }
 
 {
-    Socialtext::Ceqlotron::clean_queue_directory();
+    Socialtext::Jobs->clear_jobs();
 
     my $attachment_path =
         join '/', $page->hub->attachments->plugin_directory, $page->id;

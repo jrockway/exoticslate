@@ -11,7 +11,6 @@ BEGIN {
     fixtures( 'admin' );
 }
 use Test::Socialtext::Search;
-use Socialtext::Ceqlotron;
 use Socialtext::Search::AbstractFactory;
 
 my $hub = Test::Socialtext::Search::hub();

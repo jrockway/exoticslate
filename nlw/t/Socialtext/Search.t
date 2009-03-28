@@ -8,7 +8,6 @@ use Test::Socialtext tests => 4;
 fixtures('foobar', 'help');
 
 use Socialtext::User;
-use Socialtext::Ceqlotron;
 use t::SocialtextTestUtils qw/index_page/;
 
 BEGIN {

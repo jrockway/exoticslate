@@ -133,9 +133,8 @@ test_http "GET pages search" {
 # This is much faster than indexing everything
 #
 
-use Socialtext::Ceqlotron;
-warn "# Cleaning the Ceqlotron queue\n";
-Socialtext::Ceqlotron::clean_queue_directory();
+use Socialtext::Jobs;
+Socialtext::Jobs->clear_jobs();
 
 $ENV{NLW_APPCONFIG} = 'ceqlotron_synchronous=1';
 warn "# Indexing pages for IWS Rest test\n";

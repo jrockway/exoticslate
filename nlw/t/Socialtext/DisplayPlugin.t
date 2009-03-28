@@ -5,7 +5,6 @@ use strict;
 use warnings;
 use mocked 'Apache::Cookie';
 use mocked 'Socialtext::CGI';
-use mocked 'Socialtext::ChangeEvent';
 use Test::Socialtext tests => 8;
 fixtures( 'admin' );
 

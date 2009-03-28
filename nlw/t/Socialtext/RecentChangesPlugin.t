@@ -8,7 +8,6 @@ use warnings;
 use strict;
 
 use mocked 'Socialtext::CGI';
-use mocked 'Socialtext::ChangeEvent';
 use Socialtext::User;
 use Socialtext::Page;
 use Socialtext::RecentChangesPlugin;

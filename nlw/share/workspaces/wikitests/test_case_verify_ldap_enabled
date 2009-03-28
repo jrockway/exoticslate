@@ -19,9 +19,9 @@ This testcase traverses the UI to all the places that differ from the Default UI
 
 | *Comment* | Test Case: Verify LDAP Enabled: I forgot my Password (LDAP users can't reset pwd) |
 | click_and_wait | link=I don't know my password. |  |
-| text_like | Socialtext password help | |
+| text_like | Socialtext password help |  |
 | type_ok | username | %%username%% |
-| click_and_wait | //input[@value='Submit'] | |
+| click_and_wait | //input[@value='Submit'] |  |
 | st-message | there is no way to reset your password |  |
 | click_and_wait | link=Log in to Socialtext |  |
 
@@ -33,7 +33,7 @@ This testcase traverses the UI to all the places that differ from the Default UI
 | type_ok | email_address | %%email%% |
 | type_ok | password | %%password%% |
 | type_ok | password2 | %%password%% |
-| click_and_wait | link=Register |  |
+| click_and_wait | register_btn |  |
 | text-like | A user with this email address (%%email%%) already exists. |  |
 
 | *Comment* | Test Case: Verify LDAP Enabled: My Settings (no settings) |  |

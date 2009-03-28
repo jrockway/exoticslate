@@ -8,6 +8,7 @@ use lib Cwd::abs_path('./lib');
 
 use base 'Socialtext::Base';
 
+use Carp;
 use Class::Field qw( field );
 use File::chdir;
 use File::Path;
@@ -130,7 +131,7 @@ sub hub_for_workspace {
     my $name = shift || die "no name provided to hub_for_workspace";
     my $username = shift || Test::Socialtext::User->test_username();
     my $ws = ref $name ? $name : Socialtext::Workspace->new( name => $name )
-        or die "No such workspace: $name";
+        or croak "No such workspace: $name";
 
     my $main = Socialtext->new()->debug();
     my $hub  = $main->load_hub(

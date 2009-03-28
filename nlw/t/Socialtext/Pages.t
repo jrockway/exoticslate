@@ -9,6 +9,12 @@ BEGIN {
     use_ok( 'Socialtext::Pages' );
 }
 
+###############################################################################
+# Fixtures: admin
+# - don't need *this* Workspace, but we *do* need the "devnull1" User to have
+#   been created (as that's the default User used by 'new_hub()'
+fixtures(qw( admin ));
+
 my $wksp = Socialtext::Workspace->create(
     name => "wksp$$",
     title => "wksp$$",

@@ -21,15 +21,29 @@ my $jobs = Socialtext::Jobs->new;
 for my $type ($jobs->job_types) {
     my @jobs = $jobs->list_jobs(funcname => $type);
     (my $name = $type) =~ s/.+:://;
-    $count{$name} = @jobs;
+    
+    my $grabbed = 0;
+    $grabbed++ for grep { $_->grabbed_until } @jobs;
+    $count{$name} = {
+        queued => scalar(@jobs),
+        grabbed => $grabbed,
+    };
 }
 
 my $sum = 0;
 print "Jobs in the queue:\n";
 for my $name (sort keys %count) {
     next if $name eq 'Test';
-    printf "  %15s %5d\n", $name, $count{$name};
-    $sum += $count{$name};
+    my $c = $count{$name};
+
+    if ($c->{grabbed}) {
+        printf "  %15s %5d (\%d grabbed)\n", $name, $c->{queued},
+            $c->{grabbed};
+    }
+    else {
+        printf "  %15s %5d\n", $name, $c->{queued};
+    }
+    $sum += $c->{queued};
 }
 printf "  %15s %5d\n", loc("Total"), $sum;
 

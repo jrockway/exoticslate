@@ -84,6 +84,7 @@
 | *Comment* | Test Case: Signals Widget Teardown |  |
 | select-frame | relative=parent |  |
 | st-empty-container |  |  |
+| st-admin | purge-page --w %%workspace%% --page edit_summary_signal_%%start_time%% | was purged |
 
 | *Comment* | Test Case: Signals Widget COMPLETED |  |
 

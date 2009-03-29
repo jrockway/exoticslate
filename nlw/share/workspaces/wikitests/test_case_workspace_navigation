@@ -87,5 +87,6 @@
 | click_and_wait | link=Your Notepad |  |
 | type_ok | favorites__which_page |  |
 | click_and_wait | link=Save |  |
+| st-admin | purge-page --w %%workspace%% --page notepad_for_%%start_time%% | was purged |
 
 | *Comment* | Test Case: Workspace Navigation COMPLETED |  |

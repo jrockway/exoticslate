@@ -25,6 +25,9 @@ The only way to tell things went wrong was to know that the final result should 
 | text_like | contentContainer | %%test_string%% |
 | text_unlike | contentContainer | `<!-- wiki:` |
 
+| *Comment* | Test Case: Nasty Double Dashes TEARDOWN |  |
+| st-admin | purge-page --w %%workspace%% --page nasty_double_dashes_%%start_time%% | was purged |
+
 | *Comment* | Test Case: Nasty Double Dashes COMPLETED |  |
 
 ^^ END

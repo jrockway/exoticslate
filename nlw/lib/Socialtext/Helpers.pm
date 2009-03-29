@@ -257,18 +257,7 @@ sub global_template_vars {
         $self->hub->pluggable->hooked_template_vars,
     );
     if ($self->hub->current_user->can_use_plugin('people')) {
-        my $appliance_config_allows_invitation = 1;
-
-        # Wrap this in a eval{} because /etc/socialtext/appliance.conf 
-        # is not accessible in a devenv.
-        { local $@; eval {
-            $appliance_config_allows_invitation
-                = Socialtext::Appliance::Config->new->value(
-                    'allow_network_invitation'
-                );
-        } };
-
-        if ($appliance_config_allows_invitation) {
+        if ($self->appliance_config_allows_invitation) {
             $result{invite_url} = '/?action=invite';
         }
 
@@ -296,6 +285,20 @@ sub global_template_vars {
     Socialtext::Timer->Pause('global_tt2_vars');
 
     return %result;
+}
+
+sub appliance_config_allows_invitation {
+    my $ok;
+
+    # Wrap this in a eval{} because /etc/socialtext/appliance.conf 
+    # is not accessible in a devenv.
+    { local $@; eval {
+        $ok = Socialtext::Appliance::Config->new->value(
+            'allow_network_invitation'
+        );
+    } };
+
+    return (!defined $ok or $ok);
 }
 
 sub miki_path {

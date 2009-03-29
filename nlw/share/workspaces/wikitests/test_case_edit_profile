@@ -22,7 +22,7 @@
 | open_ok | / |  |
 | type_ok | username | %%e_user%% |
 | type_ok | password | %%password%% |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 | wait_for_element_visible_ok | link=Profile | 60000 |
 
 | *Comment* | Verify original first and last names: %%fname%% %%lname%% |  |

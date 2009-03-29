@@ -29,7 +29,7 @@ you will appear to succeed. The workaround is to open a non-existent page instea
 | text_like | You must login to view this page. |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 
 | *Comment* | Test Case: IE Miki Authentication now open central page |  |
 | open_ok | /lite/page/%%miki_space%% |  |
@@ -54,7 +54,7 @@ test latest login scheme:
 | *Comment* | Test Case: Miki Authentication test login and redirect |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 | location_like | /lite/page/%%miki_space%%/ |  |
 
 | *Comment* | Test Case: Miki Authentication test logged in after redirect |  |
@@ -72,7 +72,7 @@ you will appear to succeed. The workaround is to open a non-existent page instea
 | click_and_wait | link=Log in |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 | open_ok | /lite/page/%%miki_space%% |  |
 | text_like | link=Home | Home |
 | text_like | link=Recent Changes | Recent Changes |

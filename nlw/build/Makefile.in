@@ -386,7 +386,6 @@ QUICK_TESTS = \
 	t/coding-standard/tests.t \
 	t/coding-standard/use_strict.t \
 	t/formatter-escape-comments.t \
-	t/formatter/signals-html.t \
 	t/gen-config.t \
 	t/schema-migrations.t \
 	t/Socialtext/AppConfig.t \

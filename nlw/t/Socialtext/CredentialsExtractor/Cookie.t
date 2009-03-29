@@ -6,10 +6,10 @@ use warnings;
 use mocked 'Apache::Request', qw( get_log_reasons );
 use mocked 'Apache::Cookie';
 use Digest::SHA;
-use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
+use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE AIR_USER_COOKIE);
 use Socialtext::AppConfig;
 use Socialtext::CredentialsExtractor;
-use Test::Socialtext tests => 7;
+use Test::Socialtext tests => 9;
 use Test::Socialtext::User;
 
 ###############################################################################
@@ -22,8 +22,10 @@ fixtures(qw( base_config ));
 ###############################################################################
 ### TEST DATA
 ###############################################################################
-my $valid_username = Test::Socialtext::User->test_username();
-my $cookie_name    = USER_DATA_COOKIE();
+my $valid_username  = Test::Socialtext::User->test_username();
+my $cookie_name     = USER_DATA_COOKIE();
+my $air_cookie_name = AIR_USER_COOKIE();
+my $air_user_agent  = 'Mozilla/5.0 (Windows; U; en) AppleWebKit/420+ (KHTML, like Gecko) AdobeAIR/1.0';
 
 my $creds_extractors = 'Cookie:Guest';
 
@@ -107,4 +109,40 @@ cookie_missing: {
     # make sure that nothing got logged as a failure
     my @reasons = get_log_reasons();
     ok !@reasons, '... no failures logged';
+}
+
+###############################################################################
+# TEST: AIR client does NOT share standard HTTP cookie
+adobe_air_separate_cookie: {
+    # create a mocked Apache::Request to extract the credentials from
+    my $mock_request = Apache::Request->new();
+
+    # create the cookie data
+    my $cookie = Apache::Cookie->new(
+        value => {
+            user_id => $valid_username,
+            MAC => Digest::SHA::sha1_base64(
+                $valid_username,
+                Socialtext::AppConfig->MAC_secret()
+            ),
+        },
+    );
+
+    # configure the list of Credentials Extractors to run
+    Socialtext::AppConfig->set(credentials_extractors => $creds_extractors);
+
+    # pretend to be Adobe AIR
+    local $ENV{HTTP_USER_AGENT} = $air_user_agent;
+
+    # TEST: AIR client doesn't get to use standard HTTP cookie
+    local $Apache::Cookie::Data = { $cookie_name => $cookie };
+    my $username
+        = Socialtext::CredentialsExtractor->ExtractCredentials($mock_request);
+    ok !defined $username, 'AIR client does not use regular HTTP cookie';
+
+    # TEST: AIR client uses its own HTTP cookie
+    local $Apache::Cookie::Data = { $air_cookie_name => $cookie };
+    $username
+        = Socialtext::CredentialsExtractor->ExtractCredentials($mock_request);
+    ok !defined $username, 'AIR client uses its own HTTP cookie';
 }

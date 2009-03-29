@@ -11,7 +11,7 @@ Ken is saving this because it might be useful later. There are wikiDtests that t
 | wait_for_element_visible_ok | password | 30000 |
 | type_ok | username | %%write_user%% |
 | type_ok | password | %%password%% |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 
 | *Comment* | Test Include: Signals Widget. Logged in as %%write_user%%. Get a Signals widget |  |
 | st-empty-container |  |  |

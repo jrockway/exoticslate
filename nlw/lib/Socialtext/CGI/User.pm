@@ -7,7 +7,7 @@ our @EXPORT_OK = qw/get_current_user/;
 use Digest::SHA;
 use CGI::Cookie;
 use Socialtext::Apache::User;
-use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
+use Socialtext::HTTP::Cookie;
 
 # Note: A parallel version of this code lives in Socialtext::Apache::User
 # so if this mechanism changes, we need to change the CGI version too
@@ -20,7 +20,8 @@ sub get_current_user {
 }
 
 sub _user_id_or_username {
-    my %user_data = _get_cookie_value(USER_DATA_COOKIE);
+    my $cookie_name = Socialtext::HTTP::Cookie->cookie_name();
+    my %user_data   = _get_cookie_value($cookie_name);
     return unless keys %user_data;
 
     my $mac = Socialtext::HTTP::Cookie->MAC_for_user_id( $user_data{user_id} );

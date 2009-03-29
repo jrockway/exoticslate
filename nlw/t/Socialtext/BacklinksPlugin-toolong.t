@@ -3,11 +3,19 @@
 
 use warnings;
 use strict;
-
 use Test::Socialtext;
-fixtures( 'admin' );
 
-my $hub = new_hub('admin');
+###############################################################################
+# Fixtures: db
+# - need a DB, but don't care what's in it
+fixtures(qw( db ));
+
+###############################################################################
+# Create a test Hub, which gets us a dummy workspace we can stomp on
+# - we *DO* need to do this before calling "blocks()" to get the test blocks,
+#   as we want those to run inside of our Test Workspace and not "admin".
+my $hub = create_test_hub();
+Test::Socialtext->main_hub($hub);
 
 plan tests => 1 * blocks;
 

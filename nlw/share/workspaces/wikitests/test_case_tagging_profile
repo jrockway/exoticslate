@@ -57,7 +57,7 @@ text_like | 所以 | |
 | wait_for_element_visible_ok | username | 60000 |
 | type_ok | username | %%e_user%% |
 | type_ok | password | %%password%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 
 | wait_for_element_visible_ok | link=Profile | 60000 |
 | text_like | st-editing-tools-edit | %%fname%% %%lname%% |

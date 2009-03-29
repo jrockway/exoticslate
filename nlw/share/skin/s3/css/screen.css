@@ -86,25 +86,11 @@ div.clear {
 }
 
 div#mainWrap {
-	min-width: 720px;
-}
-
-
-body#blog div#mainWrap,body#dashBoard div#mainWrap {
-       min-width: 795px;
-}
-
-body#listPage div#mainWrap {
-	min-width: 800px;
-}
-
-div#mainWrap {
+        min-width: 947px;
 	width: 90%;
 	margin: 0 auto;
 	text-align: left;
 }
-
-
 
 /* header Start */
 div#header {
@@ -206,9 +192,13 @@ div#homeLink {
 	float: left;
 	background: url(../images/mainNavLeft.png) no-repeat top left;
 	}
+div#inviteLink {
+	float: right;
+	}
+	
 	
 
-div#mainNav ul li a,div#homeLink a {
+div#mainNav ul li a,div#homeLink a, div#inviteLink a{
 	float: left;
 	display: block;
 	line-height: 34px;
@@ -229,8 +219,8 @@ div#mainNav ul li a.selected ,div#homeLink a.selected {
 
 div#mainNav div#workSpaceLink {
 	width: 40%;
-	background: url(../images/mainNavRight.png) no-repeat top right;
 	float: right;
+	background: url(../images/mainNavRight.png) no-repeat top right;
 }
 	
 div#mainNav div#workSpaceLink a {
@@ -242,12 +232,15 @@ div#mainNav div#workSpaceLink a {
 	padding-right: 26px;
 	background: url(../images/doubleArrow.png) no-repeat center right;
 }
-	
+
 div#mainNav div#workSpaceLink a:hover {	
 	color: #a6e4fc;
 	text-decoration: none;
 }
 
+div#mainNav ul.level1>li>a#st-wiki-subnav-link-invite { 
+    background: none;
+}
 /* mainNav End */
 
 /* contentWrap Start */
@@ -3328,16 +3321,6 @@ span.person img.avatar {
 a.incipient {
     text-decoration: none;
     border-bottom: 1px dashed;
-}
-
-body#contentPage div#controls div#controlsRight,
-body#dashBoard div#controls div#controlsRight,
-body#settingsPage div#controls div#controlsRight {
-    max-width: 550px;
-}
-
-body div#mainWrap {
-    min-width: 947px;
 }
 
 body div#controls div#st-editing-tools-edit ul li a.disabled {

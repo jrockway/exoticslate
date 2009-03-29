@@ -14,7 +14,7 @@
 | open-ok | /%%he_ws%% |  |
 | type_ok | username | %%he_mail%% |
 | type_ok | password | %%password%% |
-| click_and_wait | //input[@value="Log in"] |  |
+| click_and_wait | login_btn |  |
 
 | *Comment* | Test Case: Hidden Email Address for Public wiki. Removed file upload test so IE and Safari will succeed. |  |
 

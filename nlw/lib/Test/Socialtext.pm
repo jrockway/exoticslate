@@ -23,6 +23,9 @@ our @EXPORT = qw(
     fixtures
     new_hub
     create_test_hub
+    create_test_account
+    create_test_user
+    create_test_workspace
     SSS
     run_smarter_like
     smarter_like
@@ -358,25 +361,51 @@ sub main_hub {
 
 {
     my $counter = 0;
-
-    sub create_test_hub {
-        my $unique_id = time . $$ . $counter;
+    sub create_unique_id {
+        my $id = time . $$ . $counter;
         $counter++;
+        return $id;
+    }
 
-        # create a new test User
+    sub create_test_account {
+        my $unique_id = shift || create_unique_id;
+        return Socialtext::Account->create(name => $unique_id);
+    }
+
+    sub create_test_user {
+        my %opts = @_;
+        $opts{unique_id} ||= create_unique_id;
+        $opts{account} ||= Socialtext::Account->Default;
         my $user = Socialtext::User->create(
-            username      => $unique_id . '@ken.socialtext.net',
-            email_address => $unique_id . '@ken.socialtext.net',
+            username      => $opts{unique_id} . '@ken.socialtext.net',
+            email_address => $opts{unique_id} . '@ken.socialtext.net',
         );
+        $user->primary_account($opts{account}->account_id);
+        return $user;
+    }
+
+    sub create_test_workspace {
+        my %opts = @_;
+        $opts{unique_id} ||= create_unique_id;
+        $opts{account} ||= Socialtext::Account->Default;
+        die 'user required' unless $opts{user};
 
         # create a new test Workspace
         my $ws = Socialtext::Workspace->create(
-            name               => $unique_id,
-            title              => $unique_id,
-            created_by_user_id => $user->user_id,
-            account_id         => Socialtext::Account->Default->account_id,
+            name               => $opts{unique_id},
+            title              => $opts{unique_id},
+            created_by_user_id => $opts{user}->user_id,
+            account_id         => $opts{account}->account_id,
             skip_default_pages => 1,
         );
+    }
+
+    sub create_test_hub {
+        my $unique_id = create_unique_id;
+
+        # create a new test User
+        my $user = create_test_user(unique_id => $unique_id);
+        my $ws = create_test_workspace(unique_id => $unique_id, user => $user);
 
         # create a Hub based on this User/Workspace
         return new_hub($ws->name, $user->username);

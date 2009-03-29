@@ -24,7 +24,7 @@
 | clickAndWait | st-login-to-edit-button-link |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
@@ -52,7 +52,7 @@
 | clickAndWait | link=Log in |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | clickAndWait | link=Settings |  |
 | clickAndWait | link=Workspace Privacy |  |
 | click_ok | //input[@name='permission_set_name' and @value='public-comment-only'] |  |
@@ -73,7 +73,7 @@ logout | browser navigates to central page. Edit and comment buttons are present
 | clickAndWait | link=Log in |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | clickAndWait | link=Settings |  |
 | clickAndWait | link=Workspace Privacy |  |
 | click | //input[@name='permission_set_name' and @value='public'] |  |
@@ -95,7 +95,7 @@ logout | browser navigates to central page. Edit and comment buttons are present
 | clickAndWait | link=Log in |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
-| clickAndWait | //input[@value='Log in'] |  |
+| clickAndWait | login_btn |  |
 | clickAndWait | link=Settings |  |
 | clickAndWait | link=Workspace Privacy |  |
 | click_ok | //input[@name='permission_set_name' and @value='member-only'] |  |

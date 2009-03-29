@@ -166,6 +166,7 @@ sub log_timings {
             $query_hash = {
                 map {
                     my $val = $query->param($_);
+                    $val = 'ref:'.ref($val) if ref $val;
                     # 254 is ~ page id size
                     length($val) > 254 ? () : ($_ => $val)
                 } @params

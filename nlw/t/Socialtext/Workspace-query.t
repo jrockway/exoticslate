@@ -3,12 +3,14 @@
 
 use strict;
 use warnings;
-
-use Test::Socialtext tests => 28;
-fixtures( 'populated_rdbms' );
-
 use DateTime::Format::Pg;
 use Socialtext::Workspace;
+use Test::Socialtext tests => 28;
+
+###############################################################################
+# Fixtures: clean populated_rdbms
+# - this test expects a known fresh/clean state to start with
+fixtures(qw( clean populated_rdbms ));
 
 {
     my $workspaces;

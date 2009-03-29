@@ -8,19 +8,19 @@
 | *Comment* | Test Case: Login/Logout Empty email address: |  |
 | type_ok | username |  |
 | type_ok | password | monkey |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 | st-message | You must provide a valid email address. |  |
 
 | *Comment* | Test Case: Login/Logout Malformed email address: |  |
 | type_ok | username | mr.poopypants |
 | type_ok | password | monkey |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 | st-message | "mr.poopypants" is not a valid email address. Please use your email address to log in. |  |
 
 | *Comment* | Test Case: Login/Logout Unregistered email address: |  |
 | type_ok | username | mr.poopypants@socialtext.net |
 | type_ok | password | monkey |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 | st-message | Wrong email address or password - please try again. |  |
 
 | *Comment* | Test Case: Login/Logout Registered addr, wrong password |  |

@@ -4,24 +4,29 @@ use strict;
 use warnings;
 
 use YAML;
-use Test::More;
 use Test::Exception;
 use File::Path 'mkpath';
+use Socialtext::Paths;
 use Socialtext::System qw/shell_run/;
 use Socialtext::Schema;
+use Test::Socialtext;
 
-my $real_dir = 'etc/socialtext/db';
-my $fake_dir = 't/tmp/etc/socialtext/db';
-my $log_dir = 't/tmp/log';
-my $backup_dir = 't/tmp/db-backups';
-my $START_SCHEMA = 2;
+###############################################################################
+# Fixtures: clean base_layout destructive
+# - need to start from a clean slate; we're going to build DB from scratch
+# - we're destructive; you'll want to recreate the DB when we're done
+fixtures(qw( clean base_layout destructive ));
+
+my $real_dir      = 'etc/socialtext/db';
+my $fake_dir      = 't/tmp/etc/socialtext/db';
+my $log_dir       = Socialtext::Paths::log_directory();
+my $backup_dir    = Socialtext::Paths::storage_directory('db-backups');
+my $START_SCHEMA  = 2;
 my $latest_schema = $START_SCHEMA;
 
 # Set up directories and copy schema migrations into t/tmp
 {
-    mkpath $log_dir unless -d $log_dir;
     mkpath $fake_dir unless -d $fake_dir;
-    mkpath $backup_dir unless -d $backup_dir;
     ($latest_schema) = reverse sort { $a <=> $b }
                         map { m/-\d+-to-(\d+)\.sql/ }
                        glob("$real_dir/socialtext-*-to-*.sql");

@@ -50,7 +50,7 @@
 | wait_for_element_visible_ok | username | 10000 |
 | type_ok | username | %%user_1%% |
 | type_ok | password | 123456 |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 | wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
 | click_ok | st-attachments-uploadbutton |  |
 | wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
@@ -69,7 +69,7 @@
 | wait_for_element_visible_ok | username | 10000 |
 | type_ok | username | %%user_2%% |
 | type_ok | password | 123456 |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 | wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
 | click_ok | st-attachments-uploadbutton |  |
 | wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
@@ -87,7 +87,7 @@
 | wait_for_element_visible_ok | username | 10000 |
 | type_ok | username | %%user_3%% |
 | type_ok | password | 123456 |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 | wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
 | click_ok | st-attachments-uploadbutton |  |
 | wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
@@ -105,7 +105,7 @@
 | wait_for_element_visible_ok | username | 10000 |
 | type_ok | username | %%user_4%% |
 | type_ok | password | 123456 |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 | wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
 | click_ok | st-attachments-uploadbutton |  |
 | wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |
@@ -123,7 +123,7 @@
 | wait_for_element_visible_ok | username | 10000 |
 | type_ok | username | %%user_5%% |
 | type_ok | password | 123456 |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 | wait_for_element_visible_ok | st-attachments-uploadbutton | 30000 |
 | click_ok | st-attachments-uploadbutton |  |
 | wait_for_element_visible_ok | st-attachments-attach-filename | 30000 |

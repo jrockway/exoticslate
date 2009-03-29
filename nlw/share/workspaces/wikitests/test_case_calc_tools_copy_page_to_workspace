@@ -78,7 +78,7 @@ NOT the target WS |  |
 | open_ok | /%%newspace%%/?New Copy Page Spreadsheet %%start_time%% |  |
 | type_ok | username | newuser_%%start_time%%@ken.socialtext.net |
 | type_ok | password | 123456 |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 
 | *Comment* | Test Case: Calc Tools: Copy Page to Workspace. User has no copy to workspace menu item. |  |
 | text_unlike | //body | Copy Page to Workspace |

@@ -3,11 +3,13 @@
 
 use strict;
 use warnings;
-
-use Test::Socialtext tests => 37;
-fixtures('populated_rdbms');
-
 use Socialtext::User;
+use Test::Socialtext tests => 37;
+
+###############################################################################
+# Fixtures: clean populated_rdbms
+# - this test expects a known fresh/clean state to start with
+fixtures(qw( clean populated_rdbms ));
 
 {
     my $users = Socialtext::User->All();

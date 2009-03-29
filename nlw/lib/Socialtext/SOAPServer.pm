@@ -100,7 +100,7 @@ use Socialtext::Role;
 use Socialtext::Workspace;
 use Socialtext::User;
 use Socialtext::Validate qw ( validate SCALAR_TYPE );
-use Socialtext::HTTP::Cookie qw(USER_DATA_COOKIE);
+use Socialtext::HTTP::Cookie;
 
 Readonly my $URN => 'urn:NLWSOAP';
 
@@ -548,10 +548,11 @@ sub _pageMetadata {
 sub _get_cookie {
     my $id = shift;
 
-    my $mac = Socialtext::HTTP::Cookie->MAC_for_user_id($id);
+    my $mac         = Socialtext::HTTP::Cookie->MAC_for_user_id($id);
+    my $cookie_name = Socialtext::HTTP::Cookie->cookie_name();
 
     my $cookie = CGI::Cookie->new(
-        -name => USER_DATA_COOKIE,
+        -name => $cookie_name,
         -value => {
             user_id => $id,
             MAC => $mac,
@@ -565,9 +566,10 @@ sub _get_cookie {
 sub _authenticate {
     my $key = shift;
 
-    my %cookies = CGI::Cookie->parse($key);
-    my %user_data = $cookies{USER_DATA_COOKIE()}->value;
-    my $mac = Socialtext::HTTP::Cookie->MAC_for_user_id( $user_data{user_id} );
+    my %cookies     = CGI::Cookie->parse($key);
+    my $cookie_name = Socialtext::HTTP::Cookie->cookie_name();
+    my %user_data   = $cookies{$cookie_name}->value;
+    my $mac = Socialtext::HTTP::Cookie->MAC_for_user_id($user_data{user_id});
     unless ( $mac eq $user_data{MAC} ) {
         _raise_client_fault(
             "Invalid MAC Secret for $user_data{user_id}: $user_data{MAC}");

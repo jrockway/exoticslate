@@ -32,7 +32,7 @@
 | st-admin | create-user --email nonmember_%%start_time%%@ken.socialtext.net --password 123456 |  |
 | type_ok | username | nonmember_%%start_time%%@ken.socialtext.net |
 | type_ok | password | 123456 |
-| click_and_wait | //input[@value='Log in'] |  |
+| click_and_wait | login_btn |  |
 
 | *Comment* | Test Case: Public Authenticate to Edit. Wait for editor to open after login. |  |
 | wait_for_element_visible_ok | st-editing-title | 30000 |

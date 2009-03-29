@@ -19,9 +19,17 @@
     </span>
   </div>
 
-  <div class="form-element">
-    <input class="button" type="submit" value="[% loc('Log in') %]" id="login_btn" />
-  </div>
+  <input type="submit" value="submit" style="display:none"/>
+
+  <ul class="formButtons" style="float: left">
+    <li class="flexButtonBlue">
+      <a id="login_btn" class="genericBlueButton" href="#" onclick="document.forms['login'].submit(); return false">
+        [% loc('Log in') %]
+      </a>
+    </li>
+  </ul>
+
+  <div class="clear"></div>
 </form>
 
 <script type="text/javascript">

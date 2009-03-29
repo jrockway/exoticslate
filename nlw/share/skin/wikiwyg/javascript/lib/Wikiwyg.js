@@ -1188,7 +1188,7 @@ this.addGlobal().setup_wikiwyg = function() {
                 ww.saveButtonHandler();
                 return false;
             });
-        }, 500);
+        }, 200);
     }
 
     // node handles

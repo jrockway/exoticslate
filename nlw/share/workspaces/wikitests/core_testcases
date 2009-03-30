@@ -75,6 +75,7 @@ test env properly and are not testing the test-workspace
 * [Test Case: Create Content]
 * [Test Case: Edit Summaries]
 * [Test Case: People Dashboard Navigation]
+* [Test Case: Invite people to your network]
 
 Put tests that don't use the browser here
 

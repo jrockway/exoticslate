@@ -1,0 +1,100 @@
+| *Comment* | Test Case: Invite people. |  |
+
+| *Comment* | Test Case: Invite people. Define a fresh account and a user in it |  |
+| set | acct | IPN %%start_time%% |
+| set | acct_user | ipn-%%start_time%%@ken.socialtext.net |
+| set | eacct_user | ipn-%%start_time%%\@ken.socialtext.net |
+
+| *Comment* | Test Case: Invite people. Define a brand new user to invite. Make the email address of that user a wiki |  |
+| set | to_ws | ipn-ws-%%start_time%% |
+| set | to_ws_user | %%to_ws%%@%%wikiemail%% |
+| set | eto_ws_user | %%to_ws%%\@%%wikiemail%% |
+
+| *Comment* | Test Case: Invite people. Create new acct, user in it, and brand new (workspace == new user) |  |
+| *Comment* | The user to be invited is %%to_ws_user%% and the wiki to be created is %%to_ws%%, so the user email addr and wiki email addr are identical, so we can read the email in the wiki! |
+| st-admin | create-account --name "%%acct%%" | created |
+| st-admin | enable-plugin --account "%%acct%%" --plugin dashboard |  |
+| st-admin | create-user --e %%acct_user%% --p %%password%% --account "%%acct%%" | created |
+| st-admin | create-workspace --name %%to_ws%% --title "IPN %%to_ws%%" --account "%%acct%%" --empty | created |
+
+| *Comment* | Test Case: Invite people. Define a user in an entirely different account |  |
+| set | guest | guest@socialtext.net |
+| set | eguest | guest\@socialtext.net |
+
+| *Comment* | Test Case: Invite people. Add the test user to the new workspace so he can login and click the new user's verification link |  |
+| st-admin | add-workspace-admin --w %%to_ws%% --e %%email%% |  |
+
+| *Comment* | Test Case: Invite people. Login as account user |  |
+| st-logoutin | %%acct_user%% | %%password%% |
+
+| *Comment* | Test Case: Invite people. Disable People, verify cannot invite |  |
+| st-admin | disable-plugin --account "%%acct%%" --plugin people |  |
+| open_ok | /?dashboard | 60000 |
+| wait_for_element_visible_ok | link=Home | 30000 |
+| wait_for_element_not_present_ok | st-wiki-subnav-link-invite | 10000 |
+| wait_for_text_not_present_ok | link=Invite people to your network! | 10000 |
+
+TODO: verify cannot actually issue invitations via URL
+
+| *Comment* | Test Case: Invite people. Enable People, verify can invite |  |
+| st-admin | enable-plugin --account "%%acct%%" --plugin people | is now enabled |
+| open_ok | /?dashboard | 60000 |
+| wait_for_element_visible_ok | link=Home | 30000 |
+| wait_for_element_visible_ok | st-wiki-subnav-link-invite | 10000 |
+| text_like | st-wiki-subnav-link-invite | Invite people to your network! |
+
+| *Comment* | Test Case: Invite people. Invite UI |  |
+| click_and_wait | link=Invite people to your network! |  |
+| wait_for_element_visible_ok | account_id | 30000 |
+| select_ok | account_id | %%acct%% (primary) |
+
+| *Comment* | Test Case: Invite people. Invite four users to this network |  |
+| *Comment* | existing member, brand new user, %%email%% in another network, and a malformed email addr |  |
+| type_ok | users_new_ids | %%acct_user%%\n%%to_ws_user%%\n%%guest%%\nfoo2bar.com |  |
+| check_ok | append_invitation |  |
+| type_ok | invitation_text | Here is an invitation from %%acct_user%% to join my %%acct%% network. w00t! |
+| click_and_wait | link=Invite |  |
+
+| *Comment* | Test Case: Invite people. Verify the invitations |  |
+| text_like | Invite people to %%acct%% |  |
+| text_like | qr/The following users were already members of this Network\s+%%eacct_user%%/ |  |
+| text_like | qr/The following users were invited into this Network\s+%%eto_ws_user%%/ |  |
+| text_like | qr/The following users were already members of another Network\s+%%eguest%%/ |  |
+| text_like | qr/The following email addresses were invalid\s+foo2bar.com/ |  |
+| click_and_wait | link=Invite more people |  |
+| text_like | Invite people to your network |  |
+
+| *Comment* | Test Case: Invite people. login as %%email%% so you can see the confirmation email |  |
+| st-logoutin |  |
+| open_ok | /%%to_ws%%/?action=recent_changes |  |
+| wait_for_element_visible_ok | link=I'm inviting you into the %%acct%% network |  |
+| click_and_wait | link=I'm inviting you into the %%acct%% network |  |
+
+| *Comment* | Test Case: Invite people. click the confirmation link |  |
+| *Comment* | e.g. `http://talc.socialtext.net:22004/nlw/submit/confirm_email?hash=9XMPtamvY4oV4xJKpZgq%2B3iRVVc` |  |
+| text_like | Here is an invitation from %%acct_user%% to join my %%acct%% network. w00t! |  |
+| wait_for_element_visible_ok | //a[contains(@href,'confirm_email')] | 30000 |
+| click_ok | //a[contains(@href,'confirm_email')] |  |
+
+| *Comment* | Test Case: Invite people. Choose Password opens in new window |  |
+| pause | 5000 |
+| selectWindow | Choose Password |  |
+
+| *Comment* | Test Case: Invite people. Choose a pwd and log in |  |
+| text_like | Choose Password |  |
+| text_like | qr/Username:\s+%%eto_ws_user%%/ |  |
+| type_ok | password | %%password%% |
+| type_ok | password2 | %%password%% |
+| click_and_wait | link=Register |  |
+| text_like | Your password has been set and you can now login |
+| type_ok | username | %%to_ws_user%% |
+| type_ok | password | %%password%% |
+| click_and_wait | link=Log in |
+
+| *Comment* | Test Case: Invite people. log in and go to dashboard. No workspaces |  |
+| text_like | qr/Welcome.+New User/i |  |
+
+| *Comment* | Test Case: Invite people TEARDOWN |  |
+| st-admin | delete-workspace --w %%to_ws%% --no-export | has been deleted |
+
+| *Comment* | Test Case: Invite people COMPLETED |  |

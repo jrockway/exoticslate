@@ -370,7 +370,7 @@ text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_t
 | select_ok | field-type-select | label=Regular |
 | click_ok | //input[@name='is_hidden' and @value='1'] |  |
 | click_and_wait | //input[@value='Save Field'] |  |
-| text_like | qr/ Updated profile field.+The value of this field will be updated from the external source when user data is refreshed. This field is now hidden from users' profiles./ |  |
+| text_like | qr/ Updated profile field.+This field is now hidden from users' profiles./ |  |
 | text_like | un-hide |  |
 
 | *Comment* | TC:BCP make new custom fields |  |
@@ -381,7 +381,7 @@ text_like | qr/0-sort-2-workspace1-%%start_time%%.+0-sort-3-workspace1-%%start_t
 | select | field-type-select | label=Contact |
 | click | //input[@name='is_hidden' and @value='1'] |  |
 | click_and_wait | //input[@value='Create New Field'] |  |
-| text_like | Created profile field "ft %%start_time%%" The value of this field will be updated from the external source when user data is refreshed. This field is now hidden from users' profiles. |  |
+| text_like | qr/Created profile field "ft %%start_time%%".+This field is now hidden from users' profiles./ |  |
 | text_like | qr/ft %%start_time%%.+fn_%%start_time%%.+Contact.+Yes.+External.+(un-hide)/ |  |
 
 | *Comment* | Test case: Business Control Panel teardown. Let %%username%% keep accounts admin privileges. |  |

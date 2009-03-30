@@ -25,4 +25,7 @@ Set test_string to such a string, then make a widget with that as the link text,
 | *Comment* | The last line of the page should contain only %%test_string%% |  |
 | text_like | st-page-content | qr/^\s*%%test_string_escaped%%\s*$/m |
 
+| *Comment* | Test Case: Single Dash TEARDOWN |  |
+| st-admin | purge-page --w %%workspace%% --p single_dash_%%start_time%% | was purged |
+
 | *Comment* | Test Case: Single Dash COMPLETED |  |

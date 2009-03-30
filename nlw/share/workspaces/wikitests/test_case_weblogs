@@ -1,9 +1,12 @@
-| TODO: try automating email to weblog using Email This Page with the right address to create a weblog entry
+TODO: try automating email to weblog using Email This Page with the right address to create a weblog entry
 
-RSS feeds are tested in a separate test | *Comment* | Test Case: Weblogs |
+RSS feeds are tested in a separate test
+
+| *Comment* | Test Case: Weblogs |  |
 
 | *Comment* | Test Case: Weblogs Create test weblog |  |
 | open_ok | /%%workspace%%/?action=users_settings |  |
+
 | click_and_wait | link=Create New Weblog |  |
 | type_ok | weblog_title | Test %%start_time%% Weblog |
 | click_and_wait | link=Save |  |
@@ -20,10 +23,10 @@ RSS feeds are tested in a separate test | *Comment* | Test Case: Weblogs |
 | wait_for_text_present_ok | Weblog: Test %%start_time%% Weblog | 30000 |
 
 Selenium can't "see" feed pages
- open_ok | /feed/workspace/%%workspace%%?category=test_%%start_time%%_weblog | |
- text_like | feedSubscribeLine | Subscribe to this feed |
- text_like | feedBody | This is the first post in test_%%start_time%%_weblog |
- open_ok | /%%workspace%%/index.cgi?action=weblog_display&category=test_%%start_time%%_weblog | |
+open_ok | /feed/workspace/%%workspace%%?category=test_%%start_time%%_weblog | |
+text_like | feedSubscribeLine | Subscribe to this feed |
+text_like | feedBody | This is the first post in test_%%start_time%%_weblog |
+open_ok | /%%workspace%%/index.cgi?action=weblog_display&category=test_%%start_time%%_weblog | |
 
 | *Comment* | Test Case: Weblogs new post |  |
 | click_and_wait | st-weblog-newpost-button |  |
@@ -117,6 +120,7 @@ removed weblog name length test. There is no reason to limit weblog names to 28 
 | *Comment* | Test Case: Weblogs Teardown |  |
 | st-admin | purge-page --w %%workspace%% --page post_1_%%start_time%% | page was purged |
 | st-admin | purge-page --w %%workspace%% --page first_post_in_test_%%start_time%%_weblog | page was purged |
+| st-admin | purge-page --w %%workspace%% --page first_post_in_testx_%%start_time%%_weblog | page was purged |
 | st-admin | purge-page --w %%workspace%% --page first_post_in_x%%start_time%%_blog | page was purged |
 | st-admin | purge-page --w %%workspace%% --page first_post_in_y%%start_time%%_weblog | page was purged |
 | st-admin | purge-page --w %%workspace%% --page first_post_in_z%%start_time%%_weblog | page was purged |

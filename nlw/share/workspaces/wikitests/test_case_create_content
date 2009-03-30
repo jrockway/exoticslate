@@ -120,6 +120,9 @@ TODO: make blank, template, and copied spreadsheets if Selenium can handle it
 
 | *Comment* | Test Case: Create Content. Teardown |  |
 | st-admin | enable-plugin --w %%workspace%% --plugin socialcalc |  |
+| st-admin | purge-page --w %%workspace%% --page create_page_%%start_time%% | was purged |
+| st-admin | purge-page --w %%workspace%% --page create_page_%%start_time%%_from_template | was purged |
+| st-admin | purge-page --w %%workspace%% --page create_page_%%start_time%%_from_copy | was purged |
 
 | *Comment* | Test Case: Create Content. COMPLETED |  |
 

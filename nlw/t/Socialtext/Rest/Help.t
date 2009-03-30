@@ -2,16 +2,17 @@
 # @COPYRIGHT@
 use strict;
 use warnings;
+use mocked 'Socialtext::l10n', qw(system_locale);
+use Socialtext::Workspace;
+use Test::Socialtext tests => 4;
 
-BEGIN {
-    use mocked 'Socialtext::l10n', qw(system_locale);
-    use Socialtext::Workspace;
+###############################################################################
+# Fixtures: help destructive
+# - need to test with the "help" workspace
+# - we *delete* the workspace when we're done, though; we're destructive
+fixtures(qw( help destructive ));
 
-    use Test::Socialtext tests => 4;
-    fixtures('help');
-
-    use_ok('Socialtext::Rest::Help');
-}
+use_ok('Socialtext::Rest::Help');
 
 GET_URI: {
     my $r = FakeRequest->new("/help/foo/matthew/index.cgi?like=2;love=97");

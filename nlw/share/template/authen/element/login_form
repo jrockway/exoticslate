@@ -19,8 +19,11 @@
     </span>
   </div>
 
-  <div class="hidesubmit"><input type="submit"></div>
-
+  [% IF lite %]
+  <br/>
+  <input type="submit" value="[% loc('Log in') %]"/>
+  [% ELSE %]
+  <div class="hidesubmit"><input type="submit"/></div>
   <div class="loginButtons">
     <ul class="formButtons" style="float: left">
       <li class="flexButtonBlue">
@@ -31,6 +34,7 @@
     </ul>
     <div class="clear"></div>
   </div>
+  [% END %]
 
 </form>
 

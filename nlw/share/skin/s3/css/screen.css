@@ -594,7 +594,7 @@ li.flexButton:hover {
 }
 
 li.flexButtonBlue {
-	height: 22px;
+        line-height: 22px;
 	background: url(../images/flexButtonBlue.png) no-repeat;
 	background-position: bottom right;
         white-space: nowrap;
@@ -4288,4 +4288,9 @@ body#contentPage div#controls div#controlsRight ul li a#st-edit-pagetools-expand
 div#contentWarning {
     padding: 3px;
     background: #ffff80;
+}
+
+.loginButtons {
+    margin: 10px 0;
+    clear: none;
 }

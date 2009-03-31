@@ -182,7 +182,8 @@
             var title = self.linkTitle(this);
             if (title.match(re)) {
                 filtered.push({
-                    title: title.replace(re, '<b>$1</b>'),
+                    bolded_title: title.replace(re, '<b>$1</b>'),
+                    title: title,
                     value: self.linkValue(this)
                 });
             }
@@ -196,6 +197,8 @@
         var lookahead = this.getLookahead();
         lookahead.html('');
 
+        var self = this;
+
         if (data.length) {
             this._firstItem = data[0];
             $.each(data, function (i) {
@@ -204,7 +207,7 @@
                     .css({ padding: '3px 5px' })
                     .appendTo(lookahead);
                 $('<a href="#"></a>')
-                    .html(item.title)
+                    .html(item.bolded_title)
                     .attr('value', item.value)
                     .click(function () {
                         self.accept(item);

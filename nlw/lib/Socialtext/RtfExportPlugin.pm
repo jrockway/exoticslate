@@ -390,7 +390,7 @@ sub _proxy_cookies {
         # -mml 2007-01-16
         my $cookies = Apache::Cookie->fetch;
         if ($cookies) {
-            my $cookie_name = Socialtext::HTTP::Cookies->cookie_name();
+            my $cookie_name = Socialtext::HTTP::Cookie->cookie_name();
             my $cookie      = $cookies->{$cookie_name};
             if ($cookie) {
                 # Cookie is UA-specific (see ST:HTTP::Cookie), *HAVE* to pass

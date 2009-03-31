@@ -30,7 +30,7 @@ use Socialtext::Validate qw( validate SCALAR_TYPE OPTIONAL_INT_TYPE HANDLE_TYPE 
 
         if ($new_width and $new_height) {
             local $Socialtext::System::SILENT_RUN = 1;
-            shell_run("convert -quiet $file -scale ${new_width}x${new_height} $file");
+            convert($file, $file, scale => "${new_width}x${new_height}");
         }
     }
 }
@@ -79,12 +79,16 @@ sub process_profile_image {
         die "Invalid size '$size'";
     }
 
-    my ($w, $h) = split ' ', `identify -format '\%w \%h' $img`;
+    my ($w, $h, $scenes) = split ' ', `identify -format '\%w \%h \%n' $img`;
 
-    local $Socialtext::System::SILENT_RUN = 1;
+    if ($scenes != 1) {
+        die "Can't resize animated images";
+    }
+
+    my %opts = ( bordercolor => '#FFFFFF' );
 
     if ($h > $max_h && $w > $max_w) {
-        my ($new_w, $new_h) = Socialtext::Image::get_proportions(
+        my ($new_w, $new_h) = get_proportions(
             new_width  => $w,
             new_height => $h,
             max_width  => $max_w,
@@ -93,40 +97,47 @@ sub process_profile_image {
         my $border_w = int(.5 + ($max_w - $new_w) / 2);
         my $border_h = int(.5 + ($max_h - $new_h) / 2);
 
-        shell_run(
-            "convert -quiet $img -scale ${new_w}x${new_h}! "
-           ."-bordercolor #FFFFFF "
-           ."-border ${border_w}x${border_h} $img"
-        );
+
+        $opts{scale} = "${new_w}x${new_h}!";
+        $opts{border} = "${border_w}x${border_h}";
     }
     elsif ($h > $max_h) {
         my $border_w = int($max_w - $w) / 2;
         my $border_h = 0;
-        shell_run(
-            "convert -quiet $img -crop ${max_w}x${max_h}! "
-           ."-bordercolor #FFFFFF "
-           ."-border ${border_w}x${border_h} $img"
-        );
+        $opts{crop} = "${max_w}x${max_h}!";
+        $opts{border} = "${border_w}x${border_h}";
     }
     elsif ($w > $max_w) {
         my $border_w = 0;
         my $border_h = ($max_h - $h) / 2;
-        shell_run(
-            "convert -quiet $img -crop ${max_w}x${max_h}! "
-           ."-bordercolor #FFFFFF "
-           ."-border ${border_w}x${border_h} $img"
-        );
+
+        $opts{crop} = "${max_w}x${max_h}!";
+        $opts{border} = "${border_w}x${border_h}";
     }
     else {
         # image is smaller than our maximum bounds, so lets create a border
         # around it to pad the edges. this will have the nice side effect of
         # centering the image
         my ($bw, $bh) = (($max_w - $w) / 2, ($max_h - $h) / 2);
-        shell_run(
-            "convert -quiet -bordercolor #FFFFFF "
-           ."-border ${bw}x${bh} $img"
-        );
+        $opts{border} = "${bw}x${bh}";
     }
+
+    # Convert to PNG
+    convert($img, "$img.png");
+    rename "$img.png", $img or die "Error converting to PNG";
+
+    # Resize
+    convert($img, $img, %opts);
+}
+
+sub convert {
+    my ($in, $out, %opts) = @_;
+
+    my $opts = join ' ', map { "-$_ '$opts{$_}'" } keys %opts;
+    my $cmd = "convert $in $opts $out >&2";
+
+    local $Socialtext::System::SILENT_RUN = 1;
+    shell_run $cmd;
 }
 
 sub crop_geometry {

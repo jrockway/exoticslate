@@ -3,15 +3,20 @@
 
 use strict;
 use warnings;
-
-use Test::Socialtext tests => 7;
-fixtures( 'admin' );
-use Socialtext::Pages;
 use DateTime;
+use Socialtext::Pages;
+use Test::Socialtext tests => 7;
 
-my $hub = new_hub('admin');
+###############################################################################
+# Fixtures: db
+# - need a DB but don't care what's in it
+fixtures(qw( db ));
+
+# Create a dummy/test Hub
+my $hub  = create_test_hub();
 my $user = $hub->current_user;
 
+# Create a bunch of pages
 my $date = DateTime->now()->add( seconds => 60 );
 for my $i (0 .. 9) {
     Socialtext::Page->new(hub => $hub)->create(

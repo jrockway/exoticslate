@@ -8,11 +8,6 @@ use utf8;
 use Test::Socialtext tests => 145;
 fixtures( 'admin' );
 
-
-BEGIN { 
-    unlink "t/tmp/etc/socialtext/socialtext.conf";
-}
-
 local *Socialtext::l10n::system_locale = sub {
    return 'ja';
 };

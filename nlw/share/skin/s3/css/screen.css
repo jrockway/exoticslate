@@ -594,6 +594,7 @@ li.flexButton:hover {
 }
 
 li.flexButtonBlue {
+        line-height: 22px;
 	background: url(../images/flexButtonBlue.png) no-repeat;
 	background-position: bottom right;
         white-space: nowrap;
@@ -3844,10 +3845,11 @@ span.st-weblog-nextentries:before {
 .widgetHeaderButtons {
     text-align: right;
     float: right;
-    width: 89px;
+    width: 33%;
 }
 
 .widgetHeaderTitle {
+    width: 67%;
     height: 28px;
     overflow: hidden;
     float: none;
@@ -4287,4 +4289,16 @@ body#contentPage div#controls div#controlsRight ul li a#st-edit-pagetools-expand
 div#contentWarning {
     padding: 3px;
     background: #ffff80;
+}
+
+.loginButtons {
+    margin: 10px 0;
+    clear: none;
+}
+
+div.hidesubmit {
+    border: none;
+    width: 0px;
+    height: 0px;
+    overflow: hidden;
 }

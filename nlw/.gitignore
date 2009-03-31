@@ -201,3 +201,4 @@ lib/Socialtext/Gadgets/Gallery/View.pm
 lib/Socialtext/Gadgets/Gallery/Global.pm
 lib/Socialtext/Signal/Topic.pm
 t/Socialtext/Signal/Topic.t
+t/account.yaml

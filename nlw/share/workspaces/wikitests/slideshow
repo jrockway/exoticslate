@@ -515,8 +515,8 @@ Lightbox screens:
 | open_ok | /%%wiki%%/index.cgi?action=weblog_display;category=recent%20changes |  |
 | *Comment* | SlideShow SEE WEBLOG Recent Changes |  |
 | pause | %%pt%% |  |
-| clickAndWait | link=Earlier entries |  |
-| *Comment* | SlideShow SEE EARLIER ENTRIES weblog view |  |
+| clickAndWait | link=Older entries |  |
+| *Comment* | SlideShow SEE OLDER ENTRIES weblog view |  |
 | pause | %%pt%% |  |
 | clickAndWait | link=Newer entries |  |
 | *Comment* | SlideShow SEE NEWER ENTRIES weblog view |  |
@@ -665,8 +665,8 @@ moved Edit Tips to end because FF on galena can't close it. Bug.
 | wait_for_element_visible_ok | link=Wiki Text | 30000 |
 | click_ok | link=Wiki Text |  |
 | wait_for_element_visible_ok | wikiwyg_wikitext_textarea | 30000 |
-| wait_for_element_visible_ok | link=Edit Tips |  |
-| click_ok | link=Edit Tips |  |
+| wait_for_element_visible_ok | link=(?) |  |
+| click_ok | link=(?) |  |
 | *Comment* | SlideShow Close Edit Tips |  |
 | pause | %%popup%% |  |
 

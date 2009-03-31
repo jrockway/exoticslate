@@ -22,6 +22,8 @@
     DocumentRoot [% config.data_root_dir %]/docroot
     PerlSetEnv HOME [% config.prefix_dir %]/var/www
 [%- IF config.is_dev %]
+    PerlSetEnv ST_APP_CONFIG [% config.appliance_config_file %]
+    PerlPassEnv ST_APP_CONFIG
     PerlPassEnv NLW_APPCONFIG
 [%- END %]
     PerlSetEnv APACHE_LOG_DIR [% config.log_dir %]

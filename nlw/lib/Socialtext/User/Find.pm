@@ -17,7 +17,12 @@ sub typeahead_find {
         unless (defined $filter && length $filter);
 
     $filter = lc Socialtext::String::trim($filter);
+
+    # If we don't get rid of these wildcards, the LIKE operator slows down
+    # significantly.  Matching on anything other than a prefix causes Pg to not
+    # use the 'text_pattern_ops' indexes we've prepared for this query.
     $filter =~ s/[_%]//g; # remove wildcards
+
     $filter .= '%';
     my $sql = q{
         SELECT user_id, first_name, last_name,

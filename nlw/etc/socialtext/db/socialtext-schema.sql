@@ -1026,19 +1026,19 @@ CREATE UNIQUE INDEX users_driver_unique_id
 	    ON users (driver_key, driver_unique_id);
 
 CREATE INDEX users_lower_email
-	    ON users (lower(email_address));
+	    ON users (lower(email_address) text_pattern_ops);
 
 CREATE UNIQUE INDEX users_lower_email_address_driver_key
 	    ON users (lower(email_address), driver_key);
 
 CREATE INDEX users_lower_first_name
-	    ON users (lower(first_name));
+	    ON users (lower(first_name) text_pattern_ops);
 
 CREATE INDEX users_lower_last_name
-	    ON users (lower(last_name));
+	    ON users (lower(last_name) text_pattern_ops);
 
 CREATE INDEX users_lower_username
-	    ON users (lower(driver_username));
+	    ON users (lower(driver_username) text_pattern_ops);
 
 CREATE UNIQUE INDEX users_lower_username_driver_key
 	    ON users (lower(driver_username), driver_key);

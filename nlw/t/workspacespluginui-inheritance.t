@@ -6,15 +6,15 @@
 
 use strict;
 use warnings;
+use Test::Socialtext tests => 20;
 
-use Test::More tests => 20;
-use Test::Socialtext;
-fixtures( 'admin' );
+###############################################################################
+# Fixtures: admin destructive
+# - we test against the Admin workspace
+# - we knowingly stomp on the test-env, so mark it as needing cleanup
+fixtures(qw( admin destructive ));
 
-
-BEGIN {
-    use_ok( "Socialtext::WorkspacesUIPlugin" );
-}
+use_ok( "Socialtext::WorkspacesUIPlugin" );
 
 my $custom_header_logo_link_uri = "http://foo";
 

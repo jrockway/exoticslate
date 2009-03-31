@@ -1,0 +1,50 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use Socialtext::AppConfig;
+
+my $ceq_dir = Socialtext::AppConfig->change_event_queue_dir;
+my $data_dir = Socialtext::AppConfig->data_root_dir;
+
+my @links = glob("$ceq_dir/*");
+for my $link (@links) {
+    next unless -l $link;
+    my $dest = readlink $link;
+    (my $shortlink = $link) =~ s#.+/##;
+
+    (my $shortdest = $dest) =~ s#^\Q$data_dir\E/##;
+    if (-f $link) {
+        queue_attachment_index($shortdest);
+    }
+    else {
+        queue_page_index($shortdest);
+    }
+}
+
+exit 0;
+
+
+sub queue_attachment_index {
+    my $path = shift;
+    # eg: plugin/admin/attachments/admin/20090304185150-25-21807/myconversations128.gif
+    if ($path =~ m#^plugin/([^/]+)/attachments/([^/]+)/([^/]+)/(.+)$#) {
+        my ($ws, $page_id, $attach_id, $attach_name) = ($1, $2, $3, $4);
+        warn "  Found attachment: $ws:$page_id - $attach_name\n";
+    }
+    else {
+        warn "Unknown attachment symlink: $path";
+    }
+}
+
+sub queue_page_index {
+    my $path = shift;
+
+    # data/admin/people/
+    if ($path =~ m#^data/([^/]+)/(.+)$#) {
+        my ($ws, $page_id) = ($1, $2);
+        warn "  Found page $ws:$page_id\n";
+    }
+    else {
+        warn "Unknown page symlink: $path";
+    }
+}

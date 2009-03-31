@@ -126,18 +126,23 @@ sub write_pid_file {
 
 sub main_loop {
     LOOP: while (1) {
-        while (my $job = $Jobs->find_job_for_workers()) {
-            last LOOP if $ExitPlease;
-            $PM->start and next;
+        eval {
+            while (my $job = $Jobs->find_job_for_workers()) {
+                last LOOP if $ExitPlease;
+                $PM->start and next;
 
-            # Force disconnect the database handle, child will re-connect
-            get_dbh()->disconnect;
+                # Force disconnect the database handle, child will re-connect
+                get_dbh()->disconnect;
 
-            my $t = Socialtext::Timer->new;
-            $Jobs->work_once($job);
-            st_log->info(
-                sprintf('Finished %s in %0.2fs',$job->funcname, $t->elapsed));
-            exit;
+                my $t = Socialtext::Timer->new;
+                $Jobs->work_once($job);
+                st_log->info(
+                    sprintf('Finished %s in %0.2fs',$job->funcname, $t->elapsed));
+                exit;
+            }
+        };
+        if ($@) {
+            st_log->info("Ceqltron error: $@");
         }
 
         last LOOP if $ExitPlease || $OnlyOnce;

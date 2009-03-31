@@ -731,7 +731,9 @@ proto.enableLinkConfirmations = function() {
         }
     }
 
+    var self = this;
     window.onunload = function(ev) {
+        self.signal_edit_cancel();
         Attachments.delete_new_attachments();
     }
 
@@ -741,6 +743,18 @@ proto.enableLinkConfirmations = function() {
     jQuery('#st-home-link').click(this.confirmLinkFromEdit);
  
     return false;
+}
+
+proto.signal_edit_cancel = function() {
+    jQuery.ajax({
+        type: 'POST',
+        url: location.pathname,
+        data: {
+            action: 'edit_cancel',
+            page_name: Socialtext.wikiwyg_variables.page.title,
+            revision_id: Socialtext.wikiwyg_variables.page.revision_id
+        }
+    });
 }
 
 proto.disableLinkConfirmations = function() {
@@ -1193,15 +1207,7 @@ this.addGlobal().setup_wikiwyg = function() {
 
     // node handles
     jQuery('#st-cancel-button-link').click(function() {
-        jQuery.ajax({
-            type: 'POST',
-            url: location.pathname,
-            data: {
-                action: 'edit_cancel',
-                page_name: Socialtext.wikiwyg_variables.page.title,
-                revision_id: Socialtext.wikiwyg_variables.page.revision_id
-            }
-        });
+        ww.signal_edit_cancel();
         try {
             if (ww.contentIsModified()) {
                 // If it's not confirmed somewhere else, do it right here.

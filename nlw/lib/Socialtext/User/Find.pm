@@ -43,7 +43,6 @@ sub typeahead_find {
     my $sth = sql_execute($sql, 
         $filter, $self->viewer->user_id, $self->limit, $self->offset);
 
-    warn "GOT ".$sth->rows." rows";
     my $results = $sth->fetchall_arrayref({}) || [];
     return $results;
 }

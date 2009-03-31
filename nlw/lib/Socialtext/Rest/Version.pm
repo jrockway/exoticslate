@@ -11,7 +11,8 @@ use Readonly;
 # 1: iteration-2008-06-27
 # 2: iteration-2009-02-13 (release-3.4.0)
 # 3: iteration-2009-02-27 (release-3.4.1)
-Readonly our $API_VERSION => 3;
+# 4: iteration-2009-03-27 (release-3.5.1): in_reply_to, mentioned_users
+Readonly our $API_VERSION => 4;
 Readonly our $MTIME       => ( stat(__FILE__) )[9];
 
 sub allowed_methods {'GET, HEAD'}

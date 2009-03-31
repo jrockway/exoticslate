@@ -11,6 +11,12 @@ use TheSchwartz;
 
 __PACKAGE__->job_types(); # force load the plugins up front
 
+has client => (
+    is => 'ro',
+    isa => 'TheSchwartz',
+    lazy_build => 1,
+);
+
 sub work_asynchronously {
     my $self = shift;
     my $job_class = 'Socialtext::Job::' . (shift || die "Class is mandatory");
@@ -35,14 +41,14 @@ sub can_do               {
     $self->schwartz_run(can_do => $job_class);
 }
 
-sub schwartz_run {
+sub _build_client {
     my $self = shift;
-    my $func = shift;
 
     # Use an extra DB connection for now until we sort out how to
     # re-use the same DBH as the main apache.
+
     my %params = Socialtext::Schema->connect_params();
-    $self->{client} ||= TheSchwartz->new( 
+    return TheSchwartz->new( 
         databases => [ { 
             dsn => "dbi:Pg:database=$params{db_name}",
             user => $params{user},
@@ -50,7 +56,13 @@ sub schwartz_run {
         driver_cache_expiration => 300,
         verbose => $ENV{ST_JOBS_VERBOSE},
     );
-    return $self->{client}->$func(@_);
+}
+
+sub schwartz_run {
+    my $self = shift;
+    my $func = shift;
+
+    return $self->client->$func(@_);
 }
 
 __PACKAGE__->meta->make_immutable;

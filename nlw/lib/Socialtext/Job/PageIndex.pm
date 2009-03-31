@@ -15,7 +15,7 @@ sub Record {
 
     $class->_log_page_action($page);
 
-    Socialtext::Jobs->new->work_asynchronously(
+    Socialtext::Jobs->work_asynchronously(
         'PageIndex', {
             workspace_id => $page->hub->current_workspace->workspace_id,
             page_id => $page->id,

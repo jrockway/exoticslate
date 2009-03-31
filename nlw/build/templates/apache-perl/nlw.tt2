@@ -22,8 +22,6 @@
     DocumentRoot [% config.data_root_dir %]/docroot
     PerlSetEnv HOME [% config.prefix_dir %]/var/www
 [%- IF config.is_dev %]
-    PerlSetEnv ST_APP_CONFIG [% config.appliance_config_file %]
-    PerlPassEnv ST_APP_CONFIG
     PerlPassEnv NLW_APPCONFIG
 [%- END %]
     PerlSetEnv APACHE_LOG_DIR [% config.log_dir %]
@@ -152,6 +150,7 @@ PerlSetEnv  HARNESS_ACTIVE  [% ENV.HARNESS_ACTIVE %]
 [%# REVIEW - hack to make Socialtext::Workspace->uri work in devs envs %]
 [%- IF config.is_dev %]
 PerlSetEnv  NLW_FRONTEND_PORT  [% config.apache2_port %]
+PerlSetEnv  ST_APP_CONFIG [% config.appliance_config_file %]
 PerlSetEnv  NLW_DEV_MODE  1
 [%- END %]
 

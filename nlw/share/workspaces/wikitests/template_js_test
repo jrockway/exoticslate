@@ -1,0 +1,18 @@
+| *Comment* | Initiating __URL__ |  |
+| open_ok | /static/skin/js-test/__URL__ |  |
+
+The next pause seems to be necessary for the test to run reliably.
+Why doesn't the `wait_for ..` take care of the needed interlock?
+
+| pause | 5000 |  |
+| wait_for_text_present_ok | .. | 20000 |
+
+Then simply wait for the "maximum" execution time (estimate for now)
+
+| *Comment* | Waiting __EXECUTIONTIME__ for __URL__ to complete |  |
+| pause | __EXECUTIONTIME__ |  |
+
+Then check the outcome.
+
+| wait_for_text_not_present_ok | Error | 2000 |
+| wait_for_text_not_present_ok | not ok | 2000 |

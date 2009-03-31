@@ -270,9 +270,6 @@ sub _teardown_cleanup {
         }
     }
     sub _remove_all_but_initial_userids {
-        # if we didn't store an initial set of users, don't do any cleanup
-        return unless %InitialUserIds;
-
         # remove all but the initial set of users that were created and
         # available at startup.
         my $iterator = Socialtext::User->All();
@@ -303,9 +300,6 @@ sub _teardown_cleanup {
         }
     }
     sub _remove_all_but_initial_workspaceids {
-        # if we didn't store an initial set of workspaces, don't do any cleanup
-        return unless %InitialWorkspaceIds;
-
         # remove all but the initial set of workspaces that were created and
         # available at startup.
         my $iterator = Socialtext::Workspace->All();

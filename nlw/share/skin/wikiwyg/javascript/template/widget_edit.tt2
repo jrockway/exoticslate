@@ -89,7 +89,7 @@
 <tr>
   <td class="label">[% loc('<! widget.labels.$field || data.fields.$field !>:') %]</td>
   <td class="st-widget-dialog-editfield">
-    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-<! field !>-rb" value="current" checked>
+    <p class="st-widget-dialog-defaultradio"><input type="radio" name="st-widget-<! field !>-rb" value="current" [% <! field !> ? '' : "checked" %]>
 <! IF field == 'workspace_id' -!>
 [% loc('the current workspace') %]
 <! ELSE -!>
@@ -97,7 +97,7 @@
 <! END -!>
 <i>&nbsp;&nbsp;[% loc('or') %]</i></p>
 <p class="st-widget-dialog-choiceradio">
-  <input type="radio" name="st-widget-<! field !>-rb" value="other">
+  <input type="radio" name="st-widget-<! field !>-rb" value="other" [% <! field !> ? "checked" : '' %] ?>
   <! IF field == 'workspace_id' -!>
 [% loc('the workspace named') %]
 [%- <! widget.id !>_st_widget_<! field !>_rb -%] 

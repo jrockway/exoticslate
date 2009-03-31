@@ -111,6 +111,7 @@ sub login {
     my $session     = Socialtext::Session->new();
     return $self->_process_template(
         $LOGIN_TEMPLATE,
+        title             => loc('Socialtext Login'),
         redirect_to       => $redirect_to,
         errors            => [ $session->errors ],
         messages          => [ $session->messages ],
@@ -214,10 +215,9 @@ public workspaces.
 
 sub workspace_list {
     my $self  = shift;
-    my $title = 'Workspace List';
     return $self->_process_template(
         $WORKSPACE_LIST_TEMPLATE,
-        workspace_title   => $title,
+        title             => loc('Workspace List'),
         login_logout      => $self->_login_logout,
         my_workspaces     => [ $self->hub->workspace_list->my_workspaces ],
         public_workspaces => [ $self->hub->workspace_list->public_workspaces ],

@@ -1161,6 +1161,14 @@ Default: 1
 
 =for code type => BOOLEAN_TYPE
 
+=head2 allow_network_invitation
+
+Set this to false to prevent users from sending invite emails for other people to join their accounts.
+
+Default: 1
+
+=for code type => BOOLEAN_TYPE
+
 =head1 OTHER METHODS
 
 In addition to the methods available for each configuration variable,

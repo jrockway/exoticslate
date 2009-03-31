@@ -17,7 +17,6 @@ use Socialtext::String ();
 use Apache::Cookie;
 use Email::Address;
 use Email::Valid;
-use Socialtext::Appliance::Config;
 
 sub class_id { 'helpers' }
 
@@ -257,7 +256,7 @@ sub global_template_vars {
         $self->hub->pluggable->hooked_template_vars,
     );
     if ($self->hub->current_user->can_use_plugin('people')) {
-        if ($self->appliance_config_allows_invitation) {
+        if (Socialtext::AppConfig->allow_network_invitation()) {
             $result{invite_url} = '/?action=invite';
         }
 
@@ -285,20 +284,6 @@ sub global_template_vars {
     Socialtext::Timer->Pause('global_tt2_vars');
 
     return %result;
-}
-
-sub appliance_config_allows_invitation {
-    my $ok;
-
-    # Wrap this in a eval{} because /etc/socialtext/appliance.conf 
-    # is not accessible in a devenv.
-    { local $@; eval {
-        $ok = Socialtext::Appliance::Config->new->value(
-            'allow_network_invitation'
-        );
-    } };
-
-    return (!defined $ok or $ok);
 }
 
 sub miki_path {

@@ -397,6 +397,8 @@ sub choose_password {
 
     $user->confirm_email_address;
     $self->session->add_message(loc('Your password has been set and you can now login.'));
+    $self->session->add_message(loc('<p style="font-style: italic">(You can also <a target="_blank" href="http://www.socialtext.com/products/desktop_download.php">Get Socialtext Desktop</a> and log in with the same password.)'));
+
     return $self->_redirect("/nlw/login.html");
 }
 

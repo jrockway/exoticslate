@@ -299,3 +299,11 @@ div.pagination-container .paging-forward {
     width: 11em;
 }
 
+#st-edit-check .buttons .flexButton a.continue {
+    width: 83px;
+}
+
+#st-edit-check .buttons .flexButton a.close {
+    width: 130px;
+}
+

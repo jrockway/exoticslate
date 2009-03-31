@@ -4302,3 +4302,49 @@ div.hidesubmit {
     height: 0px;
     overflow: hidden;
 }
+
+#st-edit-check {
+    text-align: left;
+    margin-top: 0;
+}
+#st-edit-check h3 {
+    font-size: 1.8em;
+    line-height: 1.8em;
+    border-bottom: 2px solid;
+}
+
+#st-edit-check p {
+    margin: 1.2em 0;
+}
+
+#st-edit-check .buttons {
+    float: right;
+    margin-bottom: 20px;
+}
+
+#st-edit-check .buttons:after  {
+    content: '.';
+    visibility: 'hidden';
+    clear: both;
+}
+
+#st-edit-check .buttons .flexButton {
+    height: 22px;
+    line-height: 22px;
+    display: block;
+    float: left;
+    margin-right: 15px;
+}
+
+#st-edit-check .buttons .flexButton a {
+    color: #fff;
+    text-indent: 15px;
+    padding-right: 14px;
+    line-height: 20px;
+    height: 22px;
+    display: block;
+    font-weight: bold;
+    background: transparent url(../images/genericOrangeButton.png) no-repeat scroll left bottom;
+}
+
+

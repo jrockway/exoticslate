@@ -13,6 +13,7 @@ use Socialtext::l10n qw(loc);
 use Socialtext::Events;
 use Socialtext::Log qw(st_log);
 use Socialtext::String ();
+use Socialtext::JSON qw/decode_json encode_json/;
 
 sub class_id { 'edit' }
 const class_title => 'Editing Page';
@@ -26,6 +27,7 @@ sub register {
     $registry->add(action => 'edit_content');
     $registry->add(action => 'edit_start');
     $registry->add(action => 'edit_cancel');
+    $registry->add(action => 'edit_check');
 }
 
 sub edit_save {
@@ -306,6 +308,16 @@ sub _add_edit_event {
     return '';
 }
 
+sub edit_check {
+    my $self        = shift;
+    my $page_name   = $self->cgi->page_name;
+
+    my $page = $self->hub->pages->new_from_name($page_name);
+
+    return encode_json(
+        $page->edit_in_progress || {}
+    );
+}
 
 package Socialtext::Edit::CGI;
 

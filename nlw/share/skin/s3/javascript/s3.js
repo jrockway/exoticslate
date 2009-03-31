@@ -346,6 +346,62 @@ $(function() {
     }
 
     Socialtext._setup_editor = function () {
+        var button = this;
+        $('#bootstrap-loader')
+            .css('position', 'absolute')
+            .css('float', 'none')
+            .css('left', $('#st-editing-tools-edit li:last').offset().left + 120 + 'px')
+            .show();
+
+        jQuery.ajax({
+            type: 'GET',
+            url: location.pathname,
+            data: {
+                action: 'edit_check',
+                page_name: Socialtext.wikiwyg_variables.page.title
+            },
+            dataType: 'json',
+            success: function(data) {
+                if (data.user_name) {
+                    get_lightbox("edit_check", function() {
+
+                        $("body").append( Jemplate.process("edit_check.tt2", data) );
+
+                        jQuery.showLightbox({
+                            speed: 0,
+                            content: "#st-edit-check",
+                            close: "#st-edit-check .close",
+                            callback: function() {
+                                $('#bootstrap-loader').hide();
+
+                                var bootstrap = false;
+                                $("#st-edit-check .continue").one("click", function() {
+                                    bootstrap = true;
+                                    Socialtext._bootstrap_editor();
+                                    $.hideLightbox();
+                                });
+
+                                $("#lightbox").one("lightbox-unload", function() {
+                                    if (bootstrap) return;
+
+                                    $(button).one("click", Socialtext._setup_editor);
+                                });
+                            }
+                        });
+
+                    });
+                }
+                else {
+                    Socialtext._bootstrap_editor();
+                }
+            }
+        });
+
+        return false;
+
+    };
+
+    Socialtext._bootstrap_editor = function () {
         $('#bootstrap-loader')
             .css('position', 'absolute')
             .css('float', 'none')

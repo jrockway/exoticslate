@@ -1890,9 +1890,11 @@ sub edit_in_progress {
         for my $evt (@edits) {
             (my $at = $evt->{at}) =~ s/Z$//;
             my $epoch = sql_parse_timestamptz($at)->epoch;
+            my $user = Socialtext::User->new(user_id => $evt->{actor}{id});
             return {
-                user => Socialtext::User->new(user_id => $evt->{actor}{id}),
-                time_ago => Time::Duration::Object->new( time - $epoch )->ago
+                user_name => $user->best_full_name,
+                user_avatar => $self->hub->pluggable->hook('template.user_avatar.content', $user->user_id),
+                time_ago => Time::Duration::Object->new( time - $epoch )->ago . "",
             };
         }
     }

@@ -1,0 +1,11 @@
+<div class="lightbox" id="st-edit-check">
+  <h3>Edit Warning</h3>
+
+  <p>[% user_avatar %] has opened this page for editing [% time_ago %]. If you edit this page now, your changes might conflict.</p>
+
+  <ul class="buttons">
+    <li class="flexButton"><a href="#" class="continue">Edit Anyway</a></li>
+    <li class="flexButton"><a href="#" class="close">Return to Page View</a></li>
+  </ul>
+</div>
+

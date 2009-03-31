@@ -409,7 +409,6 @@ sub get_events {
     if ($opts->{event_class} && !(ref $opts->{event_class}) &&
         $opts->{event_class} eq 'page' && $opts->{contributions})
     {
-        warn "getting page contribs";
         return $self->get_events_page_contribs($opts);
     }
 

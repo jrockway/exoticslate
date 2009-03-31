@@ -3,14 +3,12 @@
 
 use strict;
 use warnings;
-
-use Test::Socialtext tests => 50;
-fixtures(qw( clean db ));
-
 use Socialtext::Account;
 use Socialtext::Permission qw( ST_ADMIN_WORKSPACE_PERM ST_EMAIL_IN_PERM );
 use Socialtext::Role;
 use Socialtext::Workspace;
+use Test::Socialtext tests => 50;
+fixtures(qw( clean db ));
 
 {
     for my $set_name (

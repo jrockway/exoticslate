@@ -3845,10 +3845,11 @@ span.st-weblog-nextentries:before {
 .widgetHeaderButtons {
     text-align: right;
     float: right;
-    width: 89px;
+    width: 33%;
 }
 
 .widgetHeaderTitle {
+    width: 71%;
     height: 28px;
     overflow: hidden;
     float: none;

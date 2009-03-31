@@ -41,6 +41,7 @@ use Email::Valid;
 use File::Path;
 use Readonly;
 use Text::Autoformat;
+use Time::Duration::Object;
 use Socialtext::Validate qw(validate :types SCALAR ARRAYREF BOOLEAN POSITIVE_INT_TYPE USER_TYPE);
 
 Readonly my $SYSTEM_EMAIL_ADDRESS       => 'noreply@socialtext.com';
@@ -1891,7 +1892,7 @@ sub edit_in_progress {
             my $epoch = sql_parse_timestamptz($at)->epoch;
             return {
                 user => Socialtext::User->new(user_id => $evt->{actor}{id}),
-                timestamp => $epoch,
+                time_ago => Time::Duration::Object->new( time - $epoch )->ago
             };
         }
     }

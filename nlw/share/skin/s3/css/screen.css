@@ -4294,3 +4294,10 @@ div#contentWarning {
     margin: 10px 0;
     clear: none;
 }
+
+div.hidesubmit {
+    border: none;
+    width: 0px;
+    height: 0px;
+    overflow: hidden;
+}

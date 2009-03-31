@@ -33,9 +33,10 @@
     <dd> <input id="last_name" name="last_name" type="text" size="30" value="" /> <i> [% loc('(Optional)') %]</i> </dd> 
   </dl>
 
+  <div class="hidesubmit"><input type="submit"></div>
+
   <div class="loginButtons">
     <ul class="formButtons" style="float: left">
-      <input type="submit" value="submit" style="display:none"/>
       <li class="flexButtonBlue">
         <a class="genericBlueButton" id="register_btn" href="#" onclick="document.forms['register'].submit(); return false">
           [% loc('Register') %]

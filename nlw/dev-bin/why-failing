@@ -1,0 +1,313 @@
+#!/usr/bin/perl
+$|=1;
+
+use strict;
+use warnings;
+use Getopt::Long;
+use Pod::Usage;
+use LWP::Simple qw(get);
+use YAML qw();
+use File::Path qw(rmtree);
+use List::MoreUtils qw(before_incl last_index);
+use File::Slurp qw(slurp);
+use Text::ParseWords qw(quotewords);
+
+###############################################################################
+# Read in our command line arguments
+my ($help, $man, $verbose);
+my $stci_url = 'http://galena.socialtext.net/stci';
+my $branch   = 'master';
+my $testrun  = 'current';
+my $testset  = 'socialtext';
+my $unittest = undef;
+
+GetOptions(
+    'stci=s'   => \$stci_url,
+    'branch=s' => \$branch,
+    'run=s'    => \$testrun,
+    'verbose'  => \$verbose,
+    'help|?'   => \$help,
+    'man'      => \$man,
+) || pod2usage(1);
+pod2usage(1) if ($help);
+pod2usage(-exitstatus => 0, -verbose => 2) if ($man);
+
+$unittest = shift @ARGV;
+pod2usage(1) unless ($unittest);
+
+###############################################################################
+# Make sure that the failing test exists
+unless (-e $unittest) {
+    die "Can't find '$unittest'; did you 'cdnlw'?\n";
+}
+
+###############################################################################
+# Go get the YAML file outlining the order in which the tests were run.
+my $order_yaml = get("$stci_url/$branch/$testrun/test-order.yaml");
+die "Unable to get test order YAML file.\n" unless $order_yaml;
+
+my $order     = YAML::Load($order_yaml);
+my @all_tests = @{ $order->{$testset} };
+
+###############################################################################
+# Build up a set of "candidate tests"; everything that we think ran since the
+# last "clean" or "destructive" fixture, leading up to the failing test.
+
+# everything before (and including) the failing test
+my @tests = before_incl { $_ eq $unittest } @all_tests;
+unless (@tests) {
+    die "Couldn't find '$unittest' in the YAML; has that test run yet?\n";
+}
+
+# remove everything that ran before the most recent 'clean' fixture
+my $last_clean = last_index { is_fixture_used_by_test('clean', $_) } @tests;
+if ($last_clean > -1) {
+    @tests = splice @tests, $last_clean;
+}
+
+# remove everything that ran before (and including) the most recent
+# 'destructive' fixture
+my $last_destructive
+    = last_index { is_fixture_used_by_test('destructive', $_) } @tests;
+if (($last_destructive > -1) && ($last_destructive < $#tests)) {
+    @tests = splice @tests, $last_destructive + 1;
+}
+
+###############################################################################
+# Make sure that the test runs cleanly on its own.
+status("Verifying test passes in clean environment");
+if (run_tests($unittest)) {
+    die "FAIL: test fails when run in clean environment.\n";
+}
+
+###############################################################################
+# Run the tests to verify failure and to count up the number of failing tests.
+status("Reproducing test failure");
+verbose("... candidates:");
+map { verbose("... ... $_") } @tests;
+
+my $initial_failures = run_tests(@tests);
+unless ($initial_failures) {
+    die "Selected candidate tests didn't produce failure:\n",
+        map {"\t$_\n"} @tests;
+}
+verbose("... failures: $initial_failures");
+
+###############################################################################
+# Run the tests, trying to remove ones that aren't contributing to the overall
+# failure count.  When we can't remove anything from the list, we're done.
+while (1) {
+    my @leftover = brute_force_test_removal(@tests);
+    last if (scalar(@leftover) == scalar(@tests));
+    @tests = @leftover;
+}
+
+###############################################################################
+# Display the set of tests we're left with; that's the minimal set of tests
+# needed to reproduce the failure.
+status("Shortest set of tests needed to reproduce failure:");
+status(map {"\t$_"} @tests);
+
+###############################################################################
+# All done; exit peacefully.
+exit;
+
+
+###############################################################################
+# Tries to do a brute-force removal of unit tests, getting rid of anything
+# that isn't contributing directly to the failure.
+sub brute_force_test_removal {
+    my @tests  = @_;
+    my @to_run = @tests;
+
+    status("Making pass at test removal");
+    foreach my $test (@to_run) {
+        verbose("... trying '$test'");
+
+        my @try_these = grep { $_ ne $test } @tests;
+        my $failures  = run_tests(@try_these);
+
+        if ($failures == $initial_failures) {
+            verbose("... ... failures unchanged; removing test");
+            @tests = @try_these;
+        }
+        else {
+            verbose("... ... failures changed ($failures); leaving in place");
+        }
+    }
+    return @tests;
+}
+
+###############################################################################
+# Checks to see if the given fixture is used by the test.  Returns true if it
+# is, false otherwise.
+sub is_fixture_used_by_test {
+    my ($fixture, $test) = @_;
+    my %fixtures = fixtures_used_by_test($test);
+    return defined $fixtures{$fixture} ? 1 : 0;
+}
+
+###############################################################################
+# Returns a hash of the fixtures that are used by the given unit test.  Hash
+# has some cruft in it, but we'll ignore that for now.
+sub fixtures_used_by_test {
+    my $test = shift;
+    my %fixtures;
+
+    my @lines = grep {/^\s*fixtures\(/} slurp $test;
+    foreach my $line (@lines) {
+        $line =~ s/fixtures\((.+)\)\s*;/$1/;              # remove fixtures()
+        $line =~ s/qw[\(\[\{\|](.+)[\)\]\}\|]\s*$/$1/;    # remove qw()
+        $line =~ s/,//g;                                  # remove commas
+    }
+
+    my @words = quotewords('\s+', 0, @lines);
+    foreach my $word (grep { defined $_ } @words) {
+        $fixtures{$word}++;
+    }
+
+    return %fixtures;
+}
+
+###############################################################################
+# Runs the tests, and returns the number of failures.
+sub run_tests {
+    my @tests = @_;
+
+    # clean out the test environment
+    clean_test_environment();
+
+    # run the tests
+    my @results =
+        grep {/Tests:.*Failed/} `prove -l -Q @tests 2>/dev/null`;
+
+    # count up the number of failures
+    my $failures = 0;
+    foreach my $line (@results) {
+        if ($line =~ /Tests:\s+\d+\s+Failed:\s+(\d+)/) {
+            $failures += $1;
+        }
+    }
+
+    return $failures;
+}
+
+###############################################################################
+# Cleans out the test environment
+sub clean_test_environment {
+    my $HOME = $ENV{HOME};
+    rmtree("$HOME/.nlw", 0);
+    rmtree("$HOME/stci/socialtext/nlw/t/tmp");
+    rmtree("$HOME/src/st/socialtext/nlw/t/tmp");
+
+    my $USERNAME = $ENV{USER};
+    `dropdb NLW_${USERNAME}_testing 2>/dev/null`;
+}
+
+###############################################################################
+# Spits out status.
+sub status {
+    map { print "$_\n" } @_;
+}
+
+sub verbose {
+    status(@_) if ($verbose);
+}
+
+
+=head1 NAME
+
+why-failing - find out why a unit test is failing
+
+=head1 SYNOPSIS
+
+  why-failing [options] <test>
+
+  Options:
+    --stci <url>        URL to STCI results (default Galena)
+    --branch <branch>   Branch test is failing on (default 'master')
+    --run <testrun>     Test run test is failing on (default 'current')
+    --verbose           Display verbose output
+    --help/-?           Display a brief usage statement
+    --man               Display full man page
+
+  Example:
+    why-failing -v -b iteration-2009-03-27 t/Socialtext/HTMLArchive.t
+
+=head1 DESCRIPTION
+
+C<why-failing> aims to help narrow the focus as to why a unit test might be
+failing.
+
+Our test fixtures are cached from one test to the next, so its I<entirely
+possible> that the test isn't failing because of something it is (or isn't)
+doing, but because some other test stomped on the test environment and left a
+mess around which is tripping up the failing test.
+
+C<why-failing> tries to help narrow the focus on finding out why it is that
+the test is failing, by pulling up the list of tests that ran before this one
+and zeroing on the smallest set of tests necessary to reproduce the failure.
+
+With that information in hand, you can then examine those tests in order to
+determine what's going on and why they're causing failure.
+
+B<NOTE>, when run, this script will B<forcably clean out your test
+environment>, including:
+
+=over
+
+=item * dropping your test DB
+
+=item * erasing ~/.nlw/
+
+=item * erasing t/tmp/ in your dev-env
+
+=item * erasing t/tmp/ in your stci environment
+
+=back
+
+=head1 OPTIONS
+
+=over
+
+=item B<--stci E<lt>urlE<gt>>
+
+Specifies the URL to the STCI test results server.
+
+Defaults to C<http://galena.socialtext.net/stci>
+
+=item B<--branch E<lt>branchE<gt>>
+
+Specifies the branch whose test results we should be examining.
+
+Defaults to "master".
+
+=item B<--run E<lt>testrunE<gt>>
+
+Specifies the test run whose results we should be examining.
+
+Defaults to "current", but "in-progress" is another viable option.
+
+=item B<--verbose>
+
+Displays verbose output while zeroing in on shortest failure path.
+
+=item B<--help>
+
+Displays a brief usage statement.
+
+=item B<--man>
+
+Displays the man page.
+
+=back
+
+=head1 AUTHOR
+
+Graham TerMarsch (graham.termarsch@socialtext.com)
+
+=head1 COPYRIGHT
+
+Copyright 2009 Socialtext, Inc., All Rights Reserved.
+
+=cut

@@ -15,61 +15,72 @@ sub allowed_methods {'GET, HEAD, PUT, POST'}
 
 field errors        => [];
 
-# We punt to the permission handling stuff below.
-sub permission { +{ GET => undef } }
+sub if_authorized {
+    my $self = shift;
+    my $method = shift;
+    my $call = shift;
 
-sub POST {
+    if ($method eq 'POST') {
+        return $self->not_authorized
+            unless $self->_user_is_business_admin_p;
+    }
+    else {
+        return $self->bad_method;
+    }
+
+    return $self->$call(@_);
+}
+
+sub POST_json {
+    my $self = shift;
+    return $self->if_authorized('POST', '_POST_json', @_);
+}
+
+sub _POST_json {
     my $self = shift;
     my $rest = shift;
 
-    unless ($self->_user_is_business_admin_p( ) ) {
-        $rest->header(
-                      -status => HTTP_401_Unauthorized,
-                     );
-        return '';
-    }
-    my $create_request_hash = decode_json( $rest->getContent() );
+    my $create_request_hash = decode_json($rest->getContent());
 
-    unless ( $create_request_hash->{username} and
-             $create_request_hash->{email_address} ) {
+    unless ($create_request_hash->{username} and
+            $create_request_hash->{email_address}) 
+    {
         $rest->header(
             -status => HTTP_400_Bad_Request,
-            -type  => 'text/plain', );
+            -type   => 'text/plain',
+        );
         return "username, email_address required";
     }
     
-    my ( $new_user ) = eval {
-        $self->_create_user(
-                            creator => $self->rest->user(),
-                            %{$create_request_hash} );
+    my ($new_user) = eval {
+        Socialtext::User->create(
+            %{$create_request_hash},
+            creator => $self->rest->user()
+        );
     };
 
-    if ( my $e = Exception::Class->caught('Socialtext::Exception::DataValidation') ) {
-        $rest->header(
-                      -status => HTTP_400_Bad_Request,
-                      -type   => 'text/plain' );
-        return join( "\n", $e->messages );
-    } elsif ( $@ ) {
+    if (my $e = Exception::Class->caught('Socialtext::Exception::DataValidation')) {
         $rest->header(
             -status => HTTP_400_Bad_Request,
-            -type   => 'text/plain' );
+            -type   => 'text/plain'
+        );
+        return join("\n", $e->messages);
+    }
+    elsif ($@) {
+        $rest->header(
+            -status => HTTP_400_Bad_Request,
+            -type   => 'text/plain'
+        );
         # REVIEW: what kind of system logging should we be doing here?
         return "$@";
     }
 
     $rest->header(
-                  -status => HTTP_201_Created,
-                  -type   => 'application/json',
-                  -Location => $self->full_url('/', $new_user->username()),
-                 );
+        -status   => HTTP_201_Created,
+        -type     => 'application/json',
+        -Location => $self->full_url('/', $new_user->username()),
+    );
     return '';
 }
 
-sub _create_user {
-    my $self = shift;
-    my %p    = @_;
-
-    my $new_user = Socialtext::User->create( %p );
-
-    return ($new_user);
-}
+1;

@@ -290,7 +290,7 @@
     '/data/users':
         'POST':
             '*/*':              [Socialtext::Rest::Users, bad_type]
-            'application/json': [Socialtext::Rest::Users, POST]
+            'application/json': [Socialtext::Rest::Users, POST_json]
         '*':                    [Socialtext::Rest::Users, bad_method]
 -
     '/data/accounts':

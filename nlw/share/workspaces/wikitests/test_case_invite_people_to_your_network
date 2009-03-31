@@ -31,8 +31,8 @@
 | st-admin | disable-plugin --account "%%acct%%" --plugin people |  |
 | open_ok | /?dashboard | 60000 |
 | wait_for_element_visible_ok | link=Home | 30000 |
-| wait_for_element_not_present_ok | st-wiki-subnav-link-invite | 10000 |
-| wait_for_text_not_present_ok | link=Invite people to your network! | 10000 |
+| wait_for_element_not_present_ok | st-wiki-subnav-link-invite | 30000 |
+| wait_for_text_not_present_ok | link=Invite people to your network! | 30000 |
 
 TODO: verify cannot actually issue invitations via URL
 
@@ -40,7 +40,7 @@ TODO: verify cannot actually issue invitations via URL
 | st-admin | enable-plugin --account "%%acct%%" --plugin people | is now enabled |
 | open_ok | /?dashboard | 60000 |
 | wait_for_element_visible_ok | link=Home | 30000 |
-| wait_for_element_visible_ok | st-wiki-subnav-link-invite | 10000 |
+| wait_for_element_visible_ok | st-wiki-subnav-link-invite | 30000 |
 | text_like | st-wiki-subnav-link-invite | Invite people to your network! |
 
 | *Comment* | Test Case: Invite people. Invite UI |  |

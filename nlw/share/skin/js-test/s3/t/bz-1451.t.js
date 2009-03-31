@@ -15,7 +15,10 @@ t.runAsync([
             
     function() { 
         t.$('#st-preview-button-link').click();
-        t.callNextStep(5000);
+        t.poll(function(){
+            return t.$('#st-page-preview').is(':visible');
+        }, function () { t.callNextStep() } );
+
     },
             
     function() { 

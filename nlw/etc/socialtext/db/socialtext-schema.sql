@@ -236,7 +236,7 @@ CREATE VIEW account_user AS
   SELECT "Workspace".account_id, "UserWorkspaceRole".user_id
    FROM "UserWorkspaceRole"
    JOIN "Workspace" USING (workspace_id)
-UNION ALL
+UNION ALL 
  SELECT "UserMetadata".primary_account_id AS account_id, "UserMetadata".user_id
    FROM "UserMetadata";
 
@@ -974,7 +974,7 @@ CREATE INDEX job_funcid_coalesce
 
 CREATE INDEX job_funcid_runafter
 	    ON job (funcid, run_after);
- 
+
 CREATE INDEX page_creator_time
 	    ON page (creator_id, create_time);
 
@@ -1025,8 +1025,20 @@ CREATE INDEX storage_key_value_viewer_ix
 CREATE UNIQUE INDEX users_driver_unique_id
 	    ON users (driver_key, driver_unique_id);
 
+CREATE INDEX users_lower_email
+	    ON users (lower(email_address));
+
 CREATE UNIQUE INDEX users_lower_email_address_driver_key
 	    ON users (lower(email_address), driver_key);
+
+CREATE INDEX users_lower_first_name
+	    ON users (lower(first_name));
+
+CREATE INDEX users_lower_last_name
+	    ON users (lower(last_name));
+
+CREATE INDEX users_lower_username
+	    ON users (lower(driver_username));
 
 CREATE UNIQUE INDEX users_lower_username_driver_key
 	    ON users (lower(driver_username), driver_key);
@@ -1360,4 +1372,4 @@ ALTER TABLE ONLY workspace_plugin
             REFERENCES "Workspace"(workspace_id) ON DELETE CASCADE;
 
 DELETE FROM "System" WHERE field = 'socialtext-schema-version';
-INSERT INTO "System" VALUES ('socialtext-schema-version', '47');
+INSERT INTO "System" VALUES ('socialtext-schema-version', '48');

@@ -19,12 +19,14 @@ my $stci_url = 'http://galena.socialtext.net/stci';
 my $branch   = 'master';
 my $testrun  = 'current';
 my $testset  = 'socialtext';
+my $dryrun   = undef;
 my $unittest = undef;
 
 GetOptions(
     'stci=s'   => \$stci_url,
     'branch=s' => \$branch,
     'run=s'    => \$testrun,
+    'dryrun'   => \$dryrun,
     'verbose'  => \$verbose,
     'help|?'   => \$help,
     'man'      => \$man,
@@ -34,6 +36,8 @@ pod2usage(-exitstatus => 0, -verbose => 2) if ($man);
 
 $unittest = shift @ARGV;
 pod2usage(1) unless ($unittest);
+
+$verbose += $dryrun;    # --dryrun implies --verbose
 
 ###############################################################################
 # Make sure that the failing test exists
@@ -73,6 +77,16 @@ if (($last_destructive > -1) && ($last_destructive < $#tests)) {
     @tests = splice @tests, $last_destructive + 1;
 }
 
+# spit out information on the selected candidates
+verbose("Candidate Tests:");
+map { verbose("... $_") } @tests;
+
+###############################################################################
+# If we're just doing a dry-run, STOP!
+if ($dryrun) {
+    exit;
+}
+
 ###############################################################################
 # Make sure that the test runs cleanly on its own.
 status("Verifying test passes in clean environment");
@@ -83,8 +97,6 @@ if (run_tests($unittest)) {
 ###############################################################################
 # Run the tests to verify failure and to count up the number of failing tests.
 status("Reproducing test failure");
-verbose("... candidates:");
-map { verbose("... ... $_") } @tests;
 
 my $initial_failures = run_tests(@tests);
 unless ($initial_failures) {
@@ -227,6 +239,7 @@ why-failing - find out why a unit test is failing
     --stci <url>        URL to STCI results (default Galena)
     --branch <branch>   Branch test is failing on (default 'master')
     --run <testrun>     Test run test is failing on (default 'current')
+    --dryrun            Dry-run; show candidates, but don't run tests
     --verbose           Display verbose output
     --help/-?           Display a brief usage statement
     --man               Display full man page
@@ -287,6 +300,12 @@ Defaults to "master".
 Specifies the test run whose results we should be examining.
 
 Defaults to "current", but "in-progress" is another viable option.
+
+=item B<--dryrun>
+
+Dry-run; show the selected candidate tests, but don't actually do a test run.
+
+Implies C<--verbose>.
 
 =item B<--verbose>
 

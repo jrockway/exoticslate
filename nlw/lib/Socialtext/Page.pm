@@ -1845,7 +1845,9 @@ for this page.
 
 sub edit_in_progress {
     my $self = shift;
+    return undef;
 
+    # This is incredislow!
     my $events = Socialtext::Events->Get( $self->hub->current_user,
         event_class => 'page',
         page_workspace_id => $self->hub->current_workspace->workspace_id,

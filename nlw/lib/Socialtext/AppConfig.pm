@@ -541,8 +541,8 @@ sub write {
     die "Cannot call write() on an object without a file unless an output file is specified.\n"
         unless $file;
 
-    open my $fh, '>', $file
-        or die "Cannot write to $file: $!";
+    open my $fh, '>', "$file.tmp.$$"
+        or die "Cannot write to $file.tmp.$$: $!";
 
     my $time = scalar localtime();
     print $fh <<"EOF";
@@ -592,6 +592,11 @@ EOF
 
         print $fh "\n";
     }
+
+    close $fh;
+
+    rename "$file.tmp.$$" => $file
+        or die "Cannot rename $file.tmp.$$ to $file: $!";
 }
 
 # NOTE: AppConfig.pm is a dependency of ST/l10n.pm, so we cannot rely on

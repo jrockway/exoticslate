@@ -22,7 +22,7 @@ that follow it. So we do this test in a scratch workspace instead
 | text_like | You must login to view this page. |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
-| click_and_wait | login_btn |  |
+| click_and_wait | //input[@value='Log in'] |  |
 | text_like | link=Home | Home |
 | text_like | link=Recent Changes | Recent Changes |
 | text_like | link=Search | Search |
@@ -43,7 +43,7 @@ test latest login scheme:
 | *Comment* | Test Case: Miki Authentication test login and redirect |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
-| click_and_wait | login_btn |  |
+| click_and_wait | //input[@value='Log in'] |  |
 | location_like | /lite/page/%%miki_space%%/ |  |
 | *Comment* | Test Case: Miki Authentication test logged in after redirect |  |
 | text_like | link=Edit | Edit |
@@ -57,7 +57,7 @@ test latest login scheme:
 | click_and_wait | link=Log in |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
-| click_and_wait | login_btn |  |
+| click_and_wait | //input[@value='Log in'] |  |
 | text_like | link=Home | Home |
 | text_like | link=Recent Changes | Recent Changes |
 | text_like | link=Search | Search |
@@ -68,10 +68,5 @@ test latest login scheme:
 
 | *Comment* | Test Case: Miki Authentication Teardown |  |
 | st-admin | delete-workspace --workspace %%miki_space%% --no-export |  |
-
-login as a courtesy to any subsequent test which might be run using include
-
-| *Comment* | Test Case: Miki Authentication Teardown login |  |
-| st-login |  |  |
 
 | *Comment* | Test case: Miki Authentication COMPLETED |  |

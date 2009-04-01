@@ -3,7 +3,7 @@
 If this test fails it leaves the workspace in auth-to-edit mode because it does not run teardown and that breaks all tests
 that follow it. So we do this test in a scratch workspace instead.
 
-This version of the Miki Authentication test is deliberately jiggered to defeat IE 6 caching. It is not as strong a test as 
+This version of the Miki Authentication test is deliberately jiggered to defeat IE 6 caching. It is not as strong a test as
 the original but it is better than failing completely because IE 6 caches Miki pages.
 
 | *Comment* | Test Case: IE Miki Authentication setup |  |
@@ -29,7 +29,7 @@ you will appear to succeed. The workaround is to open a non-existent page instea
 | text_like | You must login to view this page. |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
-| click_and_wait | login_btn |  |
+| click_and_wait | //input[@value='Log in'] |  |
 
 | *Comment* | Test Case: IE Miki Authentication now open central page |  |
 | open_ok | /lite/page/%%miki_space%% |  |
@@ -54,7 +54,7 @@ test latest login scheme:
 | *Comment* | Test Case: Miki Authentication test login and redirect |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
-| click_and_wait | login_btn |  |
+| click_and_wait | //input[@value='Log in'] |  |
 | location_like | /lite/page/%%miki_space%%/ |  |
 
 | *Comment* | Test Case: Miki Authentication test logged in after redirect |  |
@@ -72,7 +72,7 @@ you will appear to succeed. The workaround is to open a non-existent page instea
 | click_and_wait | link=Log in |  |
 | type_ok | username | %%username%% |
 | type_ok | password | %%password%% |
-| click_and_wait | login_btn |  |
+| click_and_wait | //input[@value='Log in'] |  |
 | open_ok | /lite/page/%%miki_space%% |  |
 | text_like | link=Home | Home |
 | text_like | link=Recent Changes | Recent Changes |

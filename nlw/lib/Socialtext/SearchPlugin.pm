@@ -48,12 +48,13 @@ sub register {
     my $registry = shift;
     $registry->add( wafl => search => 'Socialtext::Search::Wafl' );
     $registry->add( wafl => search_full => 'Socialtext::Search::Wafl' );
-    $registry->add( preference => $self->default_search_order );
+    $registry->add( preference => $self->default_search_order_pref );
+    $registry->add( preference => $self->show_summaries_pref );
 }
 
-# This preference is updated whenever you change your sorting. It does not
+# These preference is updated whenever you change your sorting. It does not
 # have a settings page like most other workspace preferences.
-sub default_search_order {
+sub default_search_order_pref {
     my $self = shift;
     my $p = $self->new_preference('default_search_order');
     $p->type('pulldown');
@@ -65,16 +66,22 @@ sub default_search_order {
     return $p;
 }
 
+sub show_summaries_pref {
+    my $self = shift;
+    my $p = $self->new_preference('show_summaries');
+    $p->type('boolean');
+    $p->default(1);
+    return $p;
+}
+
 sub search {
     my $self = shift;
     my $timer = Socialtext::Timer->new;
 
     if (my $cgi_sortby = $self->cgi->sortby) {
         if ($self->sortdir->{$cgi_sortby}) {
-            $self->preferences->store(
-                $self->hub->current_user->email_address,
-                $self->class_id,
-                { default_search_order => $cgi_sortby },
+            $self->_store_preferences(
+                default_search_order => $cgi_sortby,
             );
             $self->sortby($cgi_sortby);
         }
@@ -327,9 +334,32 @@ sub write_result_set {
 sub show_summaries {
     my $self = shift;
 
-    return ( defined $self->cgi->summaries and $self->cgi->summaries ne '' )
-        ? $self->cgi->summaries
-        : 1;
+    if (defined(my $cgi_summary = $self->cgi->summaries)) {
+        if ($cgi_summary ne '') {
+            $self->_store_preferences( show_summaries => $cgi_summary );
+            return $cgi_summary;
+        }
+    }
+    return $self->preferences->show_summaries->value;
+}
+
+sub _store_preferences {
+    my $self = shift;
+    my %p = @_;
+
+    my %opts = (
+        show_summaries => $p{show_summaries},
+        default_search_order => $p{default_search_order}
+                || $self->preferences->default_search_order->value,
+    );
+    $opts{show_summaries} = $self->preferences->show_summaries->value
+        unless defined $opts{show_summaries};
+
+    $self->preferences->store(
+        $self->hub->current_user->email_address,
+        $self->class_id,
+        \%opts,
+    );
 }
 
 package Socialtext::Search::CGI;

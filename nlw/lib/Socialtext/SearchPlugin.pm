@@ -48,13 +48,40 @@ sub register {
     my $registry = shift;
     $registry->add( wafl => search => 'Socialtext::Search::Wafl' );
     $registry->add( wafl => search_full => 'Socialtext::Search::Wafl' );
+    $registry->add( preference => $self->default_search_order );
+}
+
+# This preference is updated whenever you change your sorting. It does not
+# have a settings page like most other workspace preferences.
+sub default_search_order {
+    my $self = shift;
+    my $p = $self->new_preference('default_search_order');
+    $p->type('pulldown');
+
+    $p->choices( [
+        map { $_ => $_ } keys %{ $self->sortdir }
+    ] );
+    $p->default('Relevance');
+    return $p;
 }
 
 sub search {
     my $self = shift;
     my $timer = Socialtext::Timer->new;
 
-    $self->sortby( $self->cgi->sortby || 'Relevance' );
+    if (my $cgi_sortby = $self->cgi->sortby) {
+        if ($self->sortdir->{$cgi_sortby}) {
+            $self->preferences->store(
+                $self->hub->current_user->email_address,
+                $self->class_id,
+                { default_search_order => $cgi_sortby },
+            );
+            $self->sortby($cgi_sortby);
+        }
+    }
+    else {
+        $self->sortby($self->preferences->default_search_order->value);
+    }
 
     my $search_term;
     my $scope = $self->cgi->scope || '_';

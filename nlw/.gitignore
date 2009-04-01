@@ -201,3 +201,7 @@ lib/Socialtext/Gadgets/Gallery/View.pm
 lib/Socialtext/Gadgets/Gallery/Global.pm
 lib/Socialtext/Signal/Topic.pm
 t/Socialtext/Signal/Topic.t
+lib/Socialtext/Gadgets/GadgetInstance.pm
+t/wikitests/signals/data_signals_direct.wiki
+lib/Socialtext/Gadgets.pm
+lib/Socialtext/Rest/Gadgets.pm

@@ -4,6 +4,7 @@ use Moose;
 use Socialtext::SQL qw/get_dbh sql_execute/;
 use Socialtext::String;
 use namespace::clean -except => 'meta';
+use Socialtext::User;
 
 has viewer => (is => 'rw', isa => 'Socialtext::User', required => 1);
 has limit => (is => 'rw', isa => 'Maybe[Int]');
@@ -23,7 +24,10 @@ sub typeahead_find {
     # use the 'text_pattern_ops' indexes we've prepared for this query.
     $filter =~ s/[_%]//g; # remove wildcards
 
+    # Remove start of word character
+    $filter =~ s/\\b//g;
     $filter .= '%';
+
     my $sql = q{
         SELECT user_id, first_name, last_name,
                email_address, driver_username AS username
@@ -49,6 +53,11 @@ sub typeahead_find {
         $filter, $self->viewer->user_id, $self->limit, $self->offset);
 
     my $results = $sth->fetchall_arrayref({}) || [];
+
+    for my $row (@$results) {
+        my $user = Socialtext::User->new(user_id => $row->{user_id});
+        $row->{best_full_name} = $user->best_full_name;
+    }
     return $results;
 }
 

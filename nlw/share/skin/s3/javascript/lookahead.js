@@ -35,7 +35,7 @@
  *       filterName: 'title_filter',
  *
  *       // OPTIONAL: handler run when a value is accepted
- *       onAccept: function (val) {
+ *       onAccept: function (val, item) {
  *       },
  *
  *       // NOT IMPLEMENTED: additional args to pass to the server
@@ -122,6 +122,9 @@
     Lookahead.prototype.clearLookahead = function () {
         this._cache = {};
         this.hide();
+        if ($.isFunction(this.opts.onBlur)) {
+            this.opts.onBlur();
+        }
     };
 
     Lookahead.prototype.getLookahead = function () {
@@ -249,7 +252,7 @@
         }
 
         if (this.opts.onAccept) {
-            this.opts.onAccept.call(this.input, value);
+            this.opts.onAccept.call(this.input, value, item);
         }
     }
 
@@ -336,7 +339,7 @@
         var params = { order: 'alpha', count: FETCH_COUNT };
         if (opts.filterValue) val = opts.filterValue(val);
         var filterName = opts.filterName || 'filter';
-        params[filterName] = '\\b' + val;
+        params[filterName] = val;
         
         this._loading_lookahead = true;
         $.ajax({

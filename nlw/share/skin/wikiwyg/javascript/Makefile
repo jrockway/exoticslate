@@ -27,6 +27,7 @@ EDITOR_SOURCE_FILES= \
 MINI_EDITOR_FILE=socialtext-mini-editor.js
 MINI_EDITOR_SOURCE_FILES= \
 		$(S3_JAVASCRIPT)/jquery-plugin.js \
+		$(S3_JAVASCRIPT)/lookahead.js \
 		$(S3_JAVASCRIPT)/Class.js \
 		$(S3_JAVASCRIPT)/loc.js \
 		$(S2_JAVASCRIPT)/main.js \

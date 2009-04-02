@@ -9,7 +9,7 @@ use unmocked 'Data::Dumper';
 use unmocked 'DateTime::Format::Pg';
 
 our @EXPORT_OK = qw(
-    get_dbh disconnect_dbh
+    get_dbh disconnect_dbh invalidate_dbh
     sql_execute sql_execute_array sql_selectrow sql_singlevalue
     sql_commit sql_begin_work sql_rollback sql_in_transaction
     sql_convert_to_boolean sql_convert_from_boolean
@@ -52,6 +52,7 @@ sub sql_execute {
 }
 
 sub disconnect_dbh { }
+sub invalidate_dbh { }
 my $in_transaction = 0;
 sub sql_in_transaction { $in_transaction }
 sub sql_begin_work { $in_transaction = 1 }

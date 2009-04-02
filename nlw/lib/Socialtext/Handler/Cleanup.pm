@@ -5,7 +5,8 @@ use warnings;
 
 use Apache;
 use File::Temp 0.16 ();
-use Socialtext::Cache;
+use Socialtext::Cache ();
+use Socialtext::SQL ();
 
 sub handler {
     my $r = shift;
@@ -14,6 +15,8 @@ sub handler {
     Socialtext::Cache->clear();
 
     File::Temp::cleanup();
+
+    Socialtext::SQL::invalidate_dbh();
 
     # This must always come last since it may cause the process to
     # exit.

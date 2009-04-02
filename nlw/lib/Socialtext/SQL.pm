@@ -7,7 +7,7 @@ use Socialtext::Timer;
 use DateTime::Format::Pg;
 use DBI;
 use base 'Exporter';
-use Carp qw/croak cluck/;
+use Carp qw/carp croak cluck/;
 
 =head1 NAME
 
@@ -15,7 +15,7 @@ Socialtext::SQL - wrapper interface around SQL methods
 
 =head1 SYNOPSIS
 
-  use Socialtext::SQL qw/sql_execute sql_begin_work sql_commit sql_rollback/;
+  use Socialtext::SQL qw/:exec :txn/;
 
   # Regular, auto-commit style:
   my $sth = sql_execute( $SQL, @BIND );
@@ -34,12 +34,10 @@ Socialtext::SQL - wrapper interface around SQL methods
 
 Provides methods with extra error checking and connections to the database.
 
-=head1 METHODS
-
 =cut
 
 our @EXPORT_OK = qw(
-    get_dbh disconnect_dbh
+    get_dbh disconnect_dbh invalidate_dbh
     sql_execute sql_execute_array sql_selectrow sql_singlevalue 
     sql_commit sql_begin_work sql_rollback sql_in_transaction
     sql_convert_to_boolean sql_convert_from_boolean
@@ -59,47 +57,90 @@ our %EXPORT_TAGS = (
 our $DEBUG = 0;
 our $TRACE_SQL = 0;
 our $PROFILE_SQL = 0;
-our %DBH;
 our $Level = 0;
+
+protect_the_dbh: {
+    my $DBH;
+    my $NEEDS_PING = 1;
+
+=head1 Connection
 
 =head2 get_dbh()
 
-Returns a handle to the database.
+Returns a raw C<DBI> handle to the database.  The connection will be cached.
+
+When forking a new process be sure to, C<disconnect_dbh()> first.
 
 =cut
 
-sub get_dbh {
-    Socialtext::Timer->Continue('get_dbh');
-    if ($DBH{handle} and $DBH{handle}->ping) {
-        warn "Returning existing handle $DBH{handle}" if $DEBUG;
-        Socialtext::Timer->Pause('get_dbh');
-        return $DBH{handle} 
-    }
-    cluck "Creating a new DBH" if $DEBUG;
-    my %params = Socialtext::AppConfig->db_connect_params();
-    my $dsn = "dbi:Pg:database=$params{db_name}";
+    sub get_dbh {
+        if ($DBH && !$NEEDS_PING) {
+            warn "Returning cached connection" if $DEBUG;
+            return $DBH
+        }
 
-    $DBH{handle} = DBI->connect($dsn, $params{user}, "",  {
-            AutoCommit => 0,
-            pg_enable_utf8 => 1,
-            PrintError => 0,
-            RaiseError => 0,
-        }) or croak "Could not connect to database with dsn: $dsn: $!";
-    $DBH{st_in_transaction} = 0;
-    Socialtext::Timer->Pause('get_dbh');
-    return $DBH{handle};
-}
+        Socialtext::Timer->Continue('get_dbh');
+        eval {
+            if (!$DBH) {
+                warn "No connection" if $DEBUG;
+                _connect_dbh();
+            }
+            elsif ($NEEDS_PING && !$DBH->ping()) {
+                warn "dbh ping failed\n";
+                disconnect_dbh();
+                _connect_dbh();
+            }
+        };
+        my $err = $@;
+        Socialtext::Timer->Pause('get_dbh');
+
+        croak $err if $@;
+        return $DBH;
+    }
+
+    sub _connect_dbh {
+        cluck "Creating a new DBH" if $DEBUG;
+        my %params = Socialtext::AppConfig->db_connect_params();
+        my $dsn = "dbi:Pg:database=$params{db_name}";
+
+        $DBH = DBI->connect($dsn, $params{user}, "",  {
+                AutoCommit => 1,
+                pg_enable_utf8 => 1,
+                PrintError => 0,
+                RaiseError => 0,
+            });
+
+        die "Could not connect to database with dsn: $dsn: $!\n" unless $DBH;
+
+        $DBH->do("SET client_min_messages TO 'WARNING'");
+
+        $NEEDS_PING = 0;
+    }
 
 =head2 disconnect_dbh
 
-Forces the DBH to disconnect.  Useful for scripts to avoid deadlocks.
+Forces the DBI connection to close.  Useful for scripts to avoid deadlocks.
 
 =cut
 
-sub disconnect_dbh {
-    if ($DBH{handle}) {
-        $DBH{handle}->disconnect;
-        %DBH = ();
+    sub disconnect_dbh {
+        warn "Disconnecting dbh" if $DEBUG;
+        $DBH->disconnect if $DBH;
+        $DBH = undef;
+        return;
+    }
+
+=head2 invalidate_dbh
+
+Make the next call to C<get_dbh()> ping the database.  If the ping fails, a
+reconnect will occur.  This should be used before sleeping or entering a
+blocking-wait state (e.g. at apache request boundaries)
+
+=cut
+
+    sub invalidate_dbh {
+        warn "Invalidating dbh" if $DEBUG;
+        $NEEDS_PING = 1
     }
 }
 

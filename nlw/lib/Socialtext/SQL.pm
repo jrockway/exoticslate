@@ -113,6 +113,9 @@ When forking a new process be sure to, C<disconnect_dbh()> first.
         die "Could not connect to database with dsn: $dsn: $!\n" unless $DBH;
 
         $DBH->do("SET client_min_messages TO 'WARNING'");
+        $DBH->{'private_Socialtext::SQL'} = {
+            txn_stack => [],
+        };
 
         $NEEDS_PING = 0;
     }
@@ -125,6 +128,10 @@ Forces the DBI connection to close.  Useful for scripts to avoid deadlocks.
 
     sub disconnect_dbh {
         warn "Disconnecting dbh" if $DEBUG;
+        if ($DBH && !$DBH->{AutoCommit}) {
+            carp "WARNING: Transaction left dangling at disconnect";
+            _dump_txn_stack($DBH);
+        }
         $DBH->disconnect if $DBH;
         $DBH = undef;
         return;
@@ -132,18 +139,93 @@ Forces the DBI connection to close.  Useful for scripts to avoid deadlocks.
 
 =head2 invalidate_dbh
 
-Make the next call to C<get_dbh()> ping the database.  If the ping fails, a
-reconnect will occur.  This should be used before sleeping or entering a
-blocking-wait state (e.g. at apache request boundaries)
+Make the next call to C<get_dbh()> ping the database and rollback any
+outstanding transaction(s).  If the ping fails, a reconnect will occur.  This
+should be used before sleeping or entering a blocking-wait state (e.g. at
+apache request boundaries)
 
 =cut
 
     sub invalidate_dbh {
         warn "Invalidating dbh" if $DEBUG;
+        if ($DBH && !$DBH->{AutoCommit}) {
+            carp "WARNING: Transaction left dangling at end of request, ".
+                 "rolling back";
+            _dump_txn_stack($DBH);
+            $DBH->rollback();
+        }
         $NEEDS_PING = 1
     }
 }
 
+=head1 Transactions
+
+Currently we support just one level of transaction.  Call sql_in_transaction
+to check.
+
+=head2 sql_in_transaction()
+
+Returns true if we currently in a transaction
+
+=head2 sql_begin_work()
+
+Starts a transaction, so sql_execute will not auto-commit.
+
+=head2 sql_commit()
+
+Commit a transaction started by the calling code.
+
+=head2 sql_rollback()
+
+Rollback a transaction started by the calling code.
+
+=cut
+
+
+sub sql_in_transaction { 
+    my $dbh = get_dbh();
+    return $dbh->{AutoCommit} ? 0 : 1;
+}
+sub sql_begin_work {
+    my $dbh = get_dbh();
+    croak "Already in a transaction!" unless $dbh->{AutoCommit};
+    warn "Beginning transaction" if $DEBUG;
+    $dbh->begin_work();
+    push @{$dbh->{'private_Socialtext::SQL'}{txn_stack}}, [caller];
+}
+sub sql_commit {
+    my $dbh = get_dbh();
+    if ($dbh->{AutoCommit}) {
+        carp "commit while outside of transaction";
+        return;
+    }
+    carp "Committing transaction" if $DEBUG;
+    pop @{$dbh->{'private_Socialtext::SQL'}{txn_stack}};
+    return $dbh->commit();
+}
+sub sql_rollback {
+    my $dbh = get_dbh();
+    if ($dbh->{AutoCommit}) {
+        carp "rollback while outside of transaction";
+        return;
+    }
+    carp "Rolling back transaction" if $DEBUG;
+    pop @{$dbh->{'private_Socialtext::SQL'}{txn_stack}};
+    return $dbh->rollback();
+}
+
+sub _dump_txn_stack {
+    my $dbh = shift;
+    my @w = ("Transaction stack:\n");
+    my $stack = $dbh->{'private_Socialtext::SQL'}{txn_stack};
+    foreach my $caller (@$stack) {
+        push @w, "\tFile: $caller->[1], Line: $caller->[2] ($caller->[0])\n";
+    }
+    warn join('',@w); # so as to just call 'warn' once
+    @$stack = ();
+}
+
+=head1 Querying
 
 =head2 sql_execute( $SQL, @BIND )
 
@@ -208,10 +290,6 @@ sub _sql_execute {
     my $dbh = get_dbh();
     Socialtext::Timer->Continue('sql_execute');
 
-    my $in_tx = sql_in_transaction();
-    warn "In transaction at start of sql_execute() - $in_tx" 
-        if $in_tx and $DEBUG;
-
     my ($sth, $rv);
     if ($DEBUG or $TRACE_SQL) {
         my (undef, $file, $line) = caller($Level);
@@ -240,21 +318,8 @@ sub _sql_execute {
     };
 
     if (my $err = $@) {
-        unless ($in_tx) {
-            warn "Rolling back in sql_execute()" if $DEBUG;
-            sql_rollback();
-        }
         Socialtext::Timer->Pause('sql_execute');
         die "$@\n";
-    }
-
-    # Unless the caller has explicitly specified a transaction via
-    # sql_begin_work(), we will commit each chunk.
-    # If the caller is using a transaction, they are responsible for
-    # committing or rolling back
-    unless ($in_tx) {
-        warn "Committing in sql_execute()" if $DEBUG;
-        sql_commit();
     }
 
     Socialtext::Timer->Pause('sql_execute');
@@ -302,51 +367,7 @@ sub sql_singlevalue {
     return $value;
 }
 
-=head2 sql_in_transaction()
-
-Returns true if we currently in a transaction
-
-=head2 sql_begin_work()
-
-Starts a transaction, so sql_execute will not auto-commit.
-
-=head2 sql_commit()
-
-Commit a transaction started by the calling code.
-
-=head2 sql_rollback()
-
-Rollback a transaction started by the calling code.
-
-=cut
-
-# Only allow 1 transaction at a time, ignore nested transactions.  This
-# may or may not be a good strategy.  Ponder.
-{
-    sub sql_in_transaction { 
-        return $DBH{st_in_transaction};
-    }
-
-    sub sql_begin_work {
-        if ($DBH{st_in_transaction}) {
-            croak "Already in a transaction!";
-        }
-        warn "Beginning transaction" if $DEBUG;
-        $DBH{st_in_transaction}++;
-    }
-    sub sql_commit {
-        my $dbh = get_dbh();
-        $DBH{st_in_transaction}-- if $DBH{st_in_transaction};
-        warn "Committing transaction" if $DEBUG;
-        return $dbh->commit()
-    }
-    sub sql_rollback {
-        my $dbh = get_dbh();
-        $DBH{st_in_transaction}-- if $DBH{st_in_transaction};
-        warn "Rolling back transaction" if $DEBUG;
-        return $dbh->rollback()
-    }
-}
+=head1 Utility
 
 =head2 sql_convert_to_boolean()
 

@@ -85,7 +85,16 @@ CREATE TABLE "Account" (
     is_system_created boolean DEFAULT false NOT NULL,
     skin_name varchar(30) DEFAULT 's3'::varchar NOT NULL,
     email_addresses_are_hidden boolean,
-    is_exportable boolean DEFAULT false NOT NULL
+    is_exportable boolean DEFAULT false NOT NULL,
+
+    desktop_logo_uri varchar(250) DEFAULT '/static/desktop/images/sd-logo.png',
+    desktop_header_gradient_top varchar(7) DEFAULT '#4C739B',
+    desktop_header_gradient_bottom varchar(7) DEFAULT '#506481',
+    desktop_bg_color varchar(7) DEFAULT '#FFFFFF',
+    desktop_2nd_bg_color varchar(7) DEFAULT '#F2F2F2',
+    desktop_text_color varchar(7) DEFAULT '#000000',
+    desktop_link_color varchar(7) DEFAULT '#0000FF',
+    desktop_highlight_color varchar(7) DEFAULT '#55BBFF'
 );
 
 CREATE SEQUENCE "Account___account_id"

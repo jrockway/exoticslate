@@ -214,42 +214,11 @@ sub main {
     }
 
     if ( is_target_for( "app" ) ) {
-        my $src_file = 'socialtext/search/search_config.yaml.tt2'; 
+        my $search_template = 'socialtext/search/search_config.yaml.tt2'; 
         my $live_dest_file = File::Spec->catdir($dirs{socialtext_etc},
                                                 'search/live.yaml');
-        my $rampup_dest_file = File::Spec->catdir($dirs{socialtext_etc},
-                                                  'search/rampup.yaml');
         my $src_ver = _get_search_config_version(
-            File::Spec->catdir( _get_template_root(), $src_file ) );
-
-        my $dest_is_live = 0;
-        my $fresh_install = 0;
-        if (!-e $live_dest_file) {
-            $dest_is_live = 1;
-            $fresh_install = 1;
-            if ($src_ver > 1) {
-                # "You know what that makes you? Larry?"
-                # "Lollygaggers, sir."
-                # "Lollygaggers!"
-                my $lollygagger_file
-                    = File::Spec->catdir( $dirs{socialtext_etc},
-                    'search/lollygagger' );
-                push @files,
-                    [ $src_file => $lollygagger_file, {}, 'overwrite' ],
-            }
-        }
-        else {
-            my $live_ver = _get_search_config_version( $live_dest_file );
-
-            if ( $src_ver > $live_ver ) {
-                $dest_is_live = 0;
-            }
-            else {
-                $dest_is_live = 1;
-            }
-        }
-
-        my $dest_file = ( $dest_is_live ) ? $live_dest_file : $rampup_dest_file;
+            File::Spec->catdir( _get_template_root(), $search_template ) );
 
         # if we're re-indexing a  we need to create a list of all
         # workspaces at the same time. The cronjob that processes
@@ -257,41 +226,6 @@ sub main {
         #
         # don't, however, bother doing any indexing on a dev-env.
         unless ($is_dev_install) {
-            if ( $fresh_install or ! $dest_is_live ) {
-                my $indexing_collateral_dir
-                    = Socialtext::Paths::storage_directory('indexing');
-                Socialtext::File::ensure_directory($indexing_collateral_dir);
-                my $list_of_workspaces = Socialtext::File::catfile(
-                    $indexing_collateral_dir,
-                    'workspaces-to-be-indexed'
-                );
-                eval {
-                    shell_run( "st-admin list-workspaces > $list_of_workspaces 2> /dev/null" );
-                };
-                if ($@) {
-                    warn "Looks like that failed, lets try something else.\n";
-                    # list-workspaces may fail on really old schemas, so lets
-                    # try one more time using a more direct method
-                    shell_run(q{psql -U nlw NLW }
-                        . q{-c 'select name from "Workspace"' -t }
-                        . q(| head -n -1 | awk '{print $1}' )
-                        . "> $list_of_workspaces");
-                }
-
-                my $type = ( $fresh_install ) ? 'live' : 'rampup';
-                # write out the following block to /etc/cron.d/st-process-rampup-index
-                open CRON, '>/etc/cron.d/st-process-index';
-                print CRON <<EOT;
-# Every minute, check to see if the rampup process is finished.  Flip the
-# switch if it is.  Silence stdout but not stderr, as important errors go
-# there.  Also ignore nonzero exit codes.  They don't indicate any particular
-# problem.  With this setup, root should get emailed IFF st-p-r-i hits one of
-# the die clauses; that is, either a rename() or link() call fails.
-*/1 * * * * root /usr/bin/st-process-index --type $type 2>&1 >> /var/log/st-process-index.log 
-EOT
-                close CRON;
-            }
-
             # This will set up the config for the postgres DB.
             # but only for appliance builds.
             if ( $opts{appliance} ) {
@@ -326,7 +260,7 @@ EOT
             $is_dev_install ? 'overwrite' : 0
             ],
             [
-            $src_file => $dest_file,
+            $search_template => $live_dest_file,
             { },
             'overwrite'
             ],

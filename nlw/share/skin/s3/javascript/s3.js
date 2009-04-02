@@ -130,6 +130,7 @@ $(function() {
         .lookahead({
             url: Page.workspaceUrl() + '/tags',
             params: {
+                order: 'weighted',
                 exclude_from: Socialtext.page_id
             },
             linkText: function (i) {

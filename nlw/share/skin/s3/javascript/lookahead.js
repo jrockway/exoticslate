@@ -8,6 +8,9 @@
  *       // REST url to fetch the suggestion list from
  *       url: '/data/workspaces',
  *
+ *       // Number of items to display
+ *       count: 10, //default
+ *
  *       // OR a function that returns the rest url
  *       url: function () { return '/data/workspaces' },
  *
@@ -47,8 +50,14 @@
 (function($){
     var lookaheads = [];
 
-    var FETCH_COUNT = 20;
-    var VIEW_COUNT = 5;
+    var DEFAULTS = {
+        count: 10,
+        filterName: 'filter',
+        params: { 
+            order: 'alpha',
+            count: 30, // for fetching
+        }
+    };
 
     var KEYCODES = {
         DOWN: 40,
@@ -65,7 +74,7 @@
         if (!opts.linkText) throw new Error("linkText missing");
 
         this.input = input;
-        this.opts = opts;
+        this.opts = $.extend(true, {}, DEFAULTS, opts); // deep extend
         var self = this;
 
         $(this.input)
@@ -177,7 +186,7 @@
         var re = this.filterRE(val);
 
         $.each(data, function() {
-            if (filtered.length >= VIEW_COUNT) return;
+            if (filtered.length >= self.opts.count) return;
 
             var title = self.linkTitle(this);
             if (title.match(re)) {
@@ -193,7 +202,6 @@
     };
 
     Lookahead.prototype.displayData = function (data) {
-        var opts = this.opts;
         var lookahead = this.getLookahead();
         lookahead.html('');
 
@@ -302,7 +310,7 @@
                 if (cached) {
                     filtered = this.filterData(val, cached)
                     var use_cache = cached.length == filtered.length
-                                 || filtered.length >= VIEW_COUNT;
+                                 || filtered.length >= this.opts.count;
                     if (use_cache) {
                         // save this for next time
                         this.storeCache(val, cached);
@@ -316,7 +324,6 @@
 
     Lookahead.prototype.onchange = function () {
         var self = this;
-        var opts = this.opts;
         if (this._loading_lookahead) return;
 
         var val = $(this.input).val();
@@ -331,17 +338,18 @@
             return;
         }
 
-        var url = typeof(opts.url) == 'function' ? opts.url() : opts.url;
+        var url = typeof(this.opts.url) == 'function'
+                ? this.opts.url() : this.opts.url;
 
-        var params = { order: 'alpha', count: FETCH_COUNT };
-        if (opts.filterValue) val = opts.filterValue(val);
-        var filterName = opts.filterName || 'filter';
-        params[filterName] = '\\b' + val;
-        
+        var params = this.opts.params;
+        if (this.opts.filterValue)
+            val = this.opts.filterValue(val);
+        params[this.opts.filterName] = '\\b' + val;
+
         this._loading_lookahead = true;
         $.ajax({
             url: url,
-            data: $.extend(params, opts.params),
+            data: params,
             cache: false,
             dataType: 'json',
             success: function (data) {
@@ -354,9 +362,9 @@
             error: function (xhr, textStatus, errorThrown) {
                 var lookahead = self.getLookahead();
                 self._loading_lookahead = false;
-                if (opts.onError) {
-                    var errorHandler = opts.onError[xhr.status]
-                                    || opts.onError['default'];
+                if (self.opts.onError) {
+                    var errorHandler = self.opts.onError[xhr.status]
+                                    || self.opts.onError['default'];
                     if (errorHandler) {
                         if ($.isFunction(errorHandler)) {
                             lookahead.html(
